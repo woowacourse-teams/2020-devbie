@@ -78,10 +78,12 @@ jacocoTestCoverageVerification {
             element = 'CLASS'
 
             limit {
-                counter = 'BRANCH'
+                counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
                 minimum = 0.90
             }
+
+            includes = ['*.domain.*']
         }
     }
 }
