@@ -74,6 +74,14 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
     violationRules {
+        rule {
+            element = 'CLASS'
 
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+        }
     }
 }
