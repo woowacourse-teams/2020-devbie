@@ -1,11 +1,14 @@
 <template>
   <div id="app">
-    {{ message }}
+    <navigation-bar></navigation-bar>
+    <footer-bar></footer-bar>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import NavigationBar from "./components/NavagationBar.vue";
+import FooterBar from "./components/FooterBar.vue";
 
 export default {
   data() {
@@ -13,8 +16,11 @@ export default {
       message: ""
     };
   },
+  components: {
+    NavigationBar,
+    FooterBar
+  },
   async mounted() {
-    //http://localhost:8080/api/hello
     const { data } = await axios.get("/api/hello");
     this.message = data;
   }
@@ -22,12 +28,7 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  font-family: "Do Hyeon", sans-serif;
 }
 </style>
