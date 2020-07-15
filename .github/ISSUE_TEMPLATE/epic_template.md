@@ -1,6 +1,6 @@
 ---
 name: Epic template
-about: "세부 기능을 포괄하는 Epic 생성 \U+1F5C2"
+about: "세부 기능을 포괄하는 Epic 생성 \U0001F5C2"
 title: "[EPIC] 제목"
 labels: ''
 assignees: ''
