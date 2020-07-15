@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import underdogs.devbie.oauth.service.dto.AccessTokenRequest;
 import underdogs.devbie.oauth.service.dto.AccessTokenResponse;
+import underdogs.devbie.oauth.service.dto.UserInfoResponse;
 
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Component
 public class GithubClient {
 
-    private static final String GITHUB_LOGIN_URL_PREFIX = "https://github.com/login/oauth/authorize?client_id=";
+    private static final String GITHUB_LOGIN_URL_PREFIX = "https://github.com/login/oauth/authorize?client_id=%s";
 
     @Value("${oauth.client.github.client-id}")
     private String clientId;
@@ -26,6 +27,9 @@ public class GithubClient {
 
     @Value("${oauth.client.github.token-url}")
     private String tokenUrl;
+
+    @Value("${oauth.client.github.user-info-url}")
+    private String userInfoUrl;
 
     public String fetchAccessToken(String code) {
         ClientResponse response = WebClient.create()
@@ -44,12 +48,27 @@ public class GithubClient {
 
     private void validateResponse(ClientResponse response) {
         if (!response.statusCode().is2xxSuccessful()) {
-            throw new RuntimeException("access token을 가져오는데 실패했습니다."
-                    + " response status code" + response.statusCode());
+            throw new RuntimeException("access token을 가져오는데 실패했습니다." + " response status code" + response.statusCode());
         }
     }
 
     public String fetchLoginUrl() {
-        return GITHUB_LOGIN_URL_PREFIX + clientId;
+        return String.format(GITHUB_LOGIN_URL_PREFIX, clientId);
+    }
+
+    public UserInfoResponse fetchUserInfo(String accessToken) {
+        UserInfoResponse userInfoResponse = connectWithAuthorization(accessToken, userInfoUrl)
+                .bodyToFlux(UserInfoResponse.class)
+                .blockFirst();
+
+        return Objects.requireNonNull(userInfoResponse);
+    }
+
+    private WebClient.ResponseSpec connectWithAuthorization(String accessToken, String url) {
+        return WebClient.create()
+                .get()
+                .uri(url)
+                .header("Authorization", String.format("token %s", accessToken))
+                .retrieve();
     }
 }

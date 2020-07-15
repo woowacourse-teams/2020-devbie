@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import underdogs.devbie.oauth.service.OAuthService;
+import underdogs.devbie.oauth.service.dto.UserInfoResponse;
 
 @RestController
 @RequestMapping("/api/oauth")
@@ -21,18 +22,18 @@ public class OAuthController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam(value = "code") String code) {
+    public ResponseEntity<UserInfoResponse> login(@RequestParam(value = "code") String code) {
         // code => access token (github 제공)
         String accessToken = oAuthService.fetchAccessToken(code);
 
         // access token => user info
-
+        UserInfoResponse userInfoResponse = oAuthService.fetchUserInfo(accessToken);
 
         // user info => user 저장
 
         // user info로 토큰 생성
 
         // 토큰 리턴
-        return ResponseEntity.ok(accessToken);
+        return ResponseEntity.ok(userInfoResponse);
     }
 }
