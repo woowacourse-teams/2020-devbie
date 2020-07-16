@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.service.AuthService;
 import underdogs.devbie.auth.service.dto.UserInfoResponse;
+import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
 
 @RestController
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<UserInfoResponse> login(@RequestParam(value = "code") String code) {
+    public ResponseEntity<String> login(@RequestParam(value = "code") String code) {
         // code => access token (github 제공)
         String accessToken = authService.fetchAccessToken(code);
 
@@ -33,11 +34,12 @@ public class AuthController {
         UserInfoResponse userInfoResponse = authService.fetchUserInfo(accessToken);
 
         // user info => user 저장
-        userService.saveOrUpdateUser(userInfoResponse);
+        User user = userService.saveOrUpdateUser(userInfoResponse);
 
         // user info로 토큰 생성
+        String token = authService.createToken(user);
 
         // 토큰 리턴
-        return ResponseEntity.ok(userInfoResponse);
+        return ResponseEntity.ok(token);
     }
 }

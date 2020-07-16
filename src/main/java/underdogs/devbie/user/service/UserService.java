@@ -16,11 +16,13 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void saveOrUpdateUser(UserInfoResponse userInfoResponse) {
+    public User saveOrUpdateUser(UserInfoResponse userInfoResponse) {
         User user = userRepository.findByOauthId(userInfoResponse.getId())
             .map(u -> u.updateOAuthInfo(userInfoResponse))
             .orElse(userInfoResponse.toEntity());
 
         userRepository.save(user);
+
+        return user;
     }
 }
