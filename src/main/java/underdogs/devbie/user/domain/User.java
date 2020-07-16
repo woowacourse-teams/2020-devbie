@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import underdogs.devbie.auth.service.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoResponse;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

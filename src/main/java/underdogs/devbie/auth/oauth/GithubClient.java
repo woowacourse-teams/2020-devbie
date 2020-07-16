@@ -10,9 +10,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import lombok.Getter;
 import reactor.core.publisher.Mono;
-import underdogs.devbie.auth.service.dto.AccessTokenRequest;
-import underdogs.devbie.auth.service.dto.AccessTokenResponse;
-import underdogs.devbie.auth.service.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.AccessTokenRequest;
+import underdogs.devbie.auth.dto.AccessTokenResponse;
+import underdogs.devbie.auth.dto.UserInfoResponse;
 
 @Getter
 @Component

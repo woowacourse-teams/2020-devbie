@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.auth.service.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 

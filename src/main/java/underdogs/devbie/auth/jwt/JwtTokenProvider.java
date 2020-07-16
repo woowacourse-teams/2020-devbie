@@ -9,10 +9,11 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import underdogs.devbie.auth.service.dto.UserTokenDto;
+import underdogs.devbie.auth.dto.UserTokenDto;
 
 @Component
 public class JwtTokenProvider {
+
     private final String secretKey;
     private final long validityInMilliseconds;
 

@@ -1,4 +1,4 @@
-package underdogs.devbie.auth.service.dto;
+package underdogs.devbie.auth.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,7 @@ import underdogs.devbie.user.domain.User;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UserTokenDto {
+
     private Long id;
 
     public static UserTokenDto from(User user) {
