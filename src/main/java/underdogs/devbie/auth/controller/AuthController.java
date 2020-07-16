@@ -1,35 +1,39 @@
-package underdogs.devbie.oauth.controller;
+package underdogs.devbie.auth.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import underdogs.devbie.oauth.service.OAuthService;
-import underdogs.devbie.oauth.service.dto.UserInfoResponse;
+
+import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.service.AuthService;
+import underdogs.devbie.auth.service.dto.UserInfoResponse;
+import underdogs.devbie.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/oauth")
 @RequiredArgsConstructor
-public class OAuthController {
+public class AuthController {
 
-    private final OAuthService oAuthService;
+    private final AuthService authService;
+    private final UserService userService;
 
     @GetMapping("/login-url")
     public ResponseEntity<String> fetchLoginUrl() {
-        return ResponseEntity.ok(oAuthService.fetchLoginUrl());
+        return ResponseEntity.ok(authService.fetchLoginUrl());
     }
 
     @GetMapping("/login")
     public ResponseEntity<UserInfoResponse> login(@RequestParam(value = "code") String code) {
         // code => access token (github 제공)
-        String accessToken = oAuthService.fetchAccessToken(code);
+        String accessToken = authService.fetchAccessToken(code);
 
         // access token => user info
-        UserInfoResponse userInfoResponse = oAuthService.fetchUserInfo(accessToken);
+        UserInfoResponse userInfoResponse = authService.fetchUserInfo(accessToken);
 
         // user info => user 저장
+        userService.saveOrUpdateUser(userInfoResponse);
 
         // user info로 토큰 생성
 

@@ -1,17 +1,18 @@
-package underdogs.devbie.oauth.util;
+package underdogs.devbie.auth.oauth;
 
-import lombok.Getter;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import underdogs.devbie.oauth.service.dto.AccessTokenRequest;
-import underdogs.devbie.oauth.service.dto.AccessTokenResponse;
-import underdogs.devbie.oauth.service.dto.UserInfoResponse;
 
-import java.util.Objects;
+import lombok.Getter;
+import reactor.core.publisher.Mono;
+import underdogs.devbie.auth.service.dto.AccessTokenRequest;
+import underdogs.devbie.auth.service.dto.AccessTokenResponse;
+import underdogs.devbie.auth.service.dto.UserInfoResponse;
 
 @Getter
 @Component
@@ -33,12 +34,12 @@ public class GithubClient {
 
     public String fetchAccessToken(String code) {
         ClientResponse response = WebClient.create()
-                .post().uri(tokenUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(new AccessTokenRequest(code, clientId, clientSecret)), AccessTokenRequest.class)
-                .exchange()
-                .block();
+            .post().uri(tokenUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .body(Mono.just(new AccessTokenRequest(code, clientId, clientSecret)), AccessTokenRequest.class)
+            .exchange()
+            .block();
 
         validateResponse(response);
 
@@ -58,17 +59,17 @@ public class GithubClient {
 
     public UserInfoResponse fetchUserInfo(String accessToken) {
         UserInfoResponse userInfoResponse = connectWithAuthorization(accessToken, userInfoUrl)
-                .bodyToFlux(UserInfoResponse.class)
-                .blockFirst();
+            .bodyToFlux(UserInfoResponse.class)
+            .blockFirst();
 
         return Objects.requireNonNull(userInfoResponse);
     }
 
     private WebClient.ResponseSpec connectWithAuthorization(String accessToken, String url) {
         return WebClient.create()
-                .get()
-                .uri(url)
-                .header("Authorization", String.format("token %s", accessToken))
-                .retrieve();
+            .get()
+            .uri(url)
+            .header("Authorization", String.format("token %s", accessToken))
+            .retrieve();
     }
 }

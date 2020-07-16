@@ -1,4 +1,4 @@
-package underdogs.devbie.oauth.service.dto;
+package underdogs.devbie.auth.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

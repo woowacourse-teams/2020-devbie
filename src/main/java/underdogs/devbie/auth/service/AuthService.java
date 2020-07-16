@@ -1,14 +1,15 @@
-package underdogs.devbie.oauth.service;
+package underdogs.devbie.auth.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import underdogs.devbie.oauth.service.dto.UserInfoResponse;
-import underdogs.devbie.oauth.util.GithubClient;
+import underdogs.devbie.auth.oauth.GithubClient;
+import underdogs.devbie.auth.service.dto.UserInfoResponse;
 
 @Service
 @RequiredArgsConstructor
-public class OAuthService {
+public class AuthService {
 
     private final GithubClient githubClient;
 
@@ -16,7 +17,7 @@ public class OAuthService {
         return githubClient.fetchLoginUrl();
     }
 
-    public String fetchAccessToken(@RequestParam("code") String code) {
+    public String fetchAccessToken(String code) {
         return githubClient.fetchAccessToken(code);
     }
 
