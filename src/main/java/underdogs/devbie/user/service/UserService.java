@@ -25,4 +25,9 @@ public class UserService {
 
         return user;
     }
+
+    public User findById(long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 유저입니다. id=" + userId));
+    }
 }
