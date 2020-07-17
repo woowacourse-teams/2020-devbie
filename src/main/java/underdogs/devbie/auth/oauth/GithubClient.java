@@ -20,16 +20,16 @@ public class GithubClient {
 
     private static final String GITHUB_LOGIN_URL_PREFIX = "https://github.com/login/oauth/authorize?client_id=%s";
 
-    @Value("${oauth.client.github.client-id}")
+    @Value("${oauth.client.github.client-id:sample}")
     private String clientId;
 
-    @Value("${oauth.client.github.client-secret}")
+    @Value("${oauth.client.github.client-secret:sample}")
     private String clientSecret;
 
-    @Value("${oauth.client.github.token-url}")
+    @Value("${oauth.client.github.token-url:sample}")
     private String tokenUrl;
 
-    @Value("${oauth.client.github.user-info-url}")
+    @Value("${oauth.client.github.user-info-url:sample}")
     private String userInfoUrl;
 
     public String fetchAccessToken(String code) {

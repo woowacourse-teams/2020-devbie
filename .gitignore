@@ -152,7 +152,7 @@ yarn-error.log
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,visualstudiocode,vue,vuejs
 
 # underdogs
-src/main/resources
+application-*.yml
 src/frontend/npm-v*
 .gradle
 build
