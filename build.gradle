@@ -30,7 +30,7 @@ task buildFrontend(type: NpmTask, dependsOn: setUp) {
     args = ['run', 'build']
 }
 
-processResources.dependsOn 'buildFrontend'
+//processResources.dependsOn 'buildFrontend'
 
 configurations {
     compileOnly {
@@ -45,6 +45,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'

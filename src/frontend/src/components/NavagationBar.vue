@@ -6,13 +6,28 @@
       <v-spacer></v-spacer>
       <v-btn text x-large><p class="navigation-menu">공고</p></v-btn>
       <v-btn text x-large><p class="navigation-menu">면접</p></v-btn>
-      <v-btn large color="#E8E8E8" id="login-btn">Login with Github</v-btn>
+      <v-btn large color="#E8E8E8" id="login-btn" @click="showLoginPage"
+        >Login with Github</v-btn
+      >
     </v-app-bar>
   </div>
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+
+export default {
+  methods: {
+    async showLoginPage() {
+      try {
+        const redirectUrlData = await axios.get("/api/oauth/login-url");
+        window.location.href = await redirectUrlData.data;
+      } catch (error) {
+        console.error("로그인 화면 로딩 실패");
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
