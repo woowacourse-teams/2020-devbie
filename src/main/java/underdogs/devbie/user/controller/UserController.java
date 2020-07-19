@@ -11,8 +11,8 @@ import underdogs.devbie.user.dto.UserResponse;
 @RestController
 public class UserController {
 
-	@GetMapping("/api/user")
-	public ResponseEntity<UserResponse> findUser(@LoginUser User user) {
-		return ResponseEntity.ok(UserResponse.from(user));
-	}
+    @GetMapping("/api/user")
+    public ResponseEntity<UserResponse> findUser(@LoginUser User user) {
+        return ResponseEntity.ok(UserResponse.from(user));
+    }
 }

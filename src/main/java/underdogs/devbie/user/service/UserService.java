@@ -18,7 +18,7 @@ public class UserService {
     @Transactional
     public User saveOrUpdateUser(UserInfoResponse userInfoResponse) {
         User user = userRepository.findByOauthId(userInfoResponse.getId())
-            .map(u -> u.updateOAuthInfo(userInfoResponse))
+            .map(u -> u.updateOauthInfo(userInfoResponse))
             .orElse(userInfoResponse.toEntity());
 
         userRepository.save(user);
