@@ -44,7 +44,7 @@ class AuthControllerTest extends MvcTest {
 
     @DisplayName("로그인")
     @Test
-    void login() throws Exception{
+    void login() throws Exception {
         given(authService.createToken(TEST_CODE)).willReturn(JwtTokenResponse.from(TEST_TOKEN));
 
         String url = "/api/oauth/login" + "?code=" + TEST_CODE;

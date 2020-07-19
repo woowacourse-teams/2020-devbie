@@ -11,16 +11,16 @@ public abstract class MvcTest {
     @Autowired
     protected MockMvc mockMvc;
 
-    protected ResultActions getAction(String url, String inputJson, String bearerToken) throws Exception{
+    protected ResultActions getAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
                 .perform(get(url)
-                .header("authorization", bearerToken)
-                .content(inputJson)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON));
+                        .header("authorization", bearerToken)
+                        .content(inputJson)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON));
     }
 
-    protected ResultActions postAction(String url, String inputJson, String bearerToken) throws Exception{
+    protected ResultActions postAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
                 .perform(post(url)
                         .header("authorization", bearerToken)
