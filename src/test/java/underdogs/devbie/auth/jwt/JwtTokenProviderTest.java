@@ -32,7 +32,7 @@ class JwtTokenProviderTest {
     void createToken() {
         String token = jwtTokenProvider.createToken(UserTokenDto.from(user));
 
-        assertThat(token).isNotNull();
+        assertThat(token).isNotBlank();
     }
 
     @DisplayName("jwt 토큰 복호화")
