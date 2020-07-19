@@ -55,7 +55,7 @@ class JwtTokenProviderTest {
             .hasMessage("유효하지 않은 토큰입니다.");
     }
 
-    @DisplayName("jwt 토큰 복호화 - 유효하지 않은 토큰")
+    @DisplayName("jwt 토큰 복호화 - 유효하지 않은 빈 토큰")
     @Test
     void extractInvalidSubject_WithEmptyString_Should_Throw_InvalidAuthenticationException() {
         String invalidToken = "";
