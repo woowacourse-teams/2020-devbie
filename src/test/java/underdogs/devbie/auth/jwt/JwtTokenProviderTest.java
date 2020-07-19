@@ -20,19 +20,23 @@ class JwtTokenProviderTest {
     @BeforeEach
     void setUp() {
         jwtTokenProvider = new JwtTokenProvider("secretKey", 360000);
-        user = User.builder().id(userId).oauthId("oauthId").email("email").build();
+        user = User.builder()
+            .id(userId)
+            .oauthId("oauthId")
+            .email("email")
+            .build();
     }
 
-    @Test
     @DisplayName("jwt 토큰 생성")
+    @Test
     void createToken() {
         String token = jwtTokenProvider.createToken(UserTokenDto.from(user));
 
         assertThat(token).isNotNull();
     }
 
-    @Test
     @DisplayName("jwt 토큰 복호화")
+    @Test
     void extractValidSubject() {
         String token = jwtTokenProvider.createToken(UserTokenDto.from(user));
 
@@ -41,8 +45,8 @@ class JwtTokenProviderTest {
         assertThat(extractedUserId).isEqualTo(String.valueOf(userId));
     }
 
-    @Test
     @DisplayName("jwt 토큰 복호화 - 유효하지 않은 토큰")
+    @Test
     void extractInvalidSubject_Should_Throw_InvalidAuthenticationException() {
         String invalidToken = "token";
 
