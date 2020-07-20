@@ -33,7 +33,6 @@ class UserControllerTest {
     @DisplayName("유저 정보 조회")
     @Test
     void findUser() throws Exception {
-        // given
         User user = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
@@ -43,7 +42,6 @@ class UserControllerTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        // when
         mockMvc.perform(get("/api/user")
             .header("Authorization", "bearer JWT_ACCESS_TOKEN")
             .contentType(MediaType.APPLICATION_JSON))
