@@ -27,7 +27,7 @@ public class User {
 
     private String email;
 
-    public User updateOAuthInfo(UserInfoResponse userInfoResponse) {
+    public User updateOauthInfo(UserInfoResponse userInfoResponse) {
         validateUserInfo(userInfoResponse);
         this.email = userInfoResponse.getEmail();
         return this;

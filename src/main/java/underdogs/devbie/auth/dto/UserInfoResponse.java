@@ -12,7 +12,6 @@ import underdogs.devbie.user.domain.User;
 public class UserInfoResponse {
 
     private String id;
-    private String login;
     private String email;
 
     public User toEntity() {

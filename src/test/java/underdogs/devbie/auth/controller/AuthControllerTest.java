@@ -17,16 +17,18 @@ import underdogs.devbie.auth.dto.JwtTokenResponse;
 import underdogs.devbie.auth.service.AuthService;
 
 @WebMvcTest(AuthController.class)
-class AuthControllerTest extends MvcTest {
+public class AuthControllerTest extends MvcTest {
 
+    public static final String TEST_TOKEN = "testToken";
     private static final String TEST_LOGIN_URL = "login-url";
-    private static final String TEST_TOKEN = "testToken";
     private static final String TEST_CODE = "1234";
 
     @MockBean
     private AuthService authService;
+
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
+
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
@@ -35,7 +37,7 @@ class AuthControllerTest extends MvcTest {
     void fetchLoginUrl() throws Exception {
         given(authService.fetchLoginUrl()).willReturn(TEST_LOGIN_URL);
 
-        String url = "/api/oauth/login-url";
+        String url = "/api/auth/login-url";
 
         getAction(url)
                 .andExpect(status().isOk())
@@ -48,7 +50,7 @@ class AuthControllerTest extends MvcTest {
     void login() throws Exception {
         given(authService.createToken(TEST_CODE)).willReturn(JwtTokenResponse.from(TEST_TOKEN));
 
-        String url = "/api/oauth/login" + "?code=" + TEST_CODE;
+        String url = "/api/auth/login" + "?code=" + TEST_CODE;
 
         postAction(url)
                 .andExpect(status().isOk())

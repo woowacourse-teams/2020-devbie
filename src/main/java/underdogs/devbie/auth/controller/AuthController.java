@@ -12,7 +12,7 @@ import underdogs.devbie.auth.dto.JwtTokenResponse;
 import underdogs.devbie.auth.service.AuthService;
 
 @RestController
-@RequestMapping("/api/oauth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

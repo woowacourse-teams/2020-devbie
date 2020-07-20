@@ -1,7 +1,6 @@
 package underdogs.devbie.user.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +12,7 @@ import underdogs.devbie.user.dto.UserResponse;
 public class UserController {
 
     @GetMapping("/api/user")
-    public ResponseEntity<UserResponse> test(@LoginUser User user) {
+    public ResponseEntity<UserResponse> findUser(@LoginUser User user) {
         return ResponseEntity.ok(UserResponse.from(user));
     }
 }
