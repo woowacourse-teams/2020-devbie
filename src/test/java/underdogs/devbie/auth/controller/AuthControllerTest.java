@@ -16,7 +16,6 @@ import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.auth.dto.JwtTokenResponse;
 import underdogs.devbie.auth.service.AuthService;
 
-@DisplayName("Auth컨트롤러")
 @WebMvcTest(AuthController.class)
 class AuthControllerTest extends MvcTest {
 
@@ -36,7 +35,9 @@ class AuthControllerTest extends MvcTest {
     void fetchLoginUrl() throws Exception {
         given(authService.fetchLoginUrl()).willReturn(TEST_LOGIN_URL);
 
-        getAction("/api/oauth/login-url", "", "")
+        String url = "/api/oauth/login-url";
+
+        getAction(url, "")
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(TEST_LOGIN_URL)))
                 .andDo(print());

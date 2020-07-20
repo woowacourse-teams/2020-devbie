@@ -8,14 +8,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 public abstract class MvcTest {
+
+    private static final String AUTH_HEADER = "Authorization";
+
     @Autowired
     protected MockMvc mockMvc;
 
-    protected ResultActions getAction(String url, String inputJson, String bearerToken) throws Exception {
+    protected ResultActions getAction(String url, String bearerToken) throws Exception {
         return this.mockMvc
                 .perform(get(url)
-                        .header("authorization", bearerToken)
-                        .content(inputJson)
+                        .header(AUTH_HEADER, bearerToken)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON));
     }
@@ -23,7 +25,7 @@ public abstract class MvcTest {
     protected ResultActions postAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
                 .perform(post(url)
-                        .header("authorization", bearerToken)
+                        .header(AUTH_HEADER, bearerToken)
                         .content(inputJson)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON));
