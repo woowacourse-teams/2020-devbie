@@ -9,8 +9,7 @@ import static underdogs.devbie.user.domain.UserTest.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,8 +18,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.user.domain.User;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest
 class UserControllerTest {
 
     @Autowired
@@ -52,5 +50,4 @@ class UserControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("\"email\":\"underdogs@devbie.link\"")));
     }
-
 }

@@ -11,13 +11,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 
-@SpringBootTest
 class UserServiceTest {
 
     private UserService userService;

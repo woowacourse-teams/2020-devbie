@@ -4,11 +4,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import underdogs.devbie.auth.dto.UserInfoResponse;
 
-@SpringBootTest
 public class UserTest {
 
     public static final String TEST_USER_EMAIL = "underdogs@devbie.link";
