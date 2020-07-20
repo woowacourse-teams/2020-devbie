@@ -37,7 +37,7 @@ class AuthControllerTest extends MvcTest {
 
         String url = "/api/oauth/login-url";
 
-        getAction(url, "")
+        getAction(url)
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(TEST_LOGIN_URL)))
                 .andDo(print());
@@ -50,7 +50,7 @@ class AuthControllerTest extends MvcTest {
 
         String url = "/api/oauth/login" + "?code=" + TEST_CODE;
 
-        postAction(url, "", "")
+        postAction(url)
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(TEST_TOKEN)))
                 .andDo(print());
