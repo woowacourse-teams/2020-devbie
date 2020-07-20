@@ -17,16 +17,18 @@ import underdogs.devbie.auth.dto.JwtTokenResponse;
 import underdogs.devbie.auth.service.AuthService;
 
 @WebMvcTest(AuthController.class)
-class AuthControllerTest extends MvcTest {
+public class AuthControllerTest extends MvcTest {
 
+    public static final String TEST_TOKEN = "testToken";
     private static final String TEST_LOGIN_URL = "login-url";
-    private static final String TEST_TOKEN = "testToken";
     private static final String TEST_CODE = "1234";
 
     @MockBean
     private AuthService authService;
+
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
+
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
 

@@ -9,13 +9,15 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     private UserService userService;
@@ -25,8 +27,6 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
-
         userService = new UserService(userRepository);
     }
 

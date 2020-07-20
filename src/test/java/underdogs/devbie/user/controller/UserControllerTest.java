@@ -2,27 +2,22 @@ package underdogs.devbie.user.controller;
 
 import static org.hamcrest.core.StringContains.*;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
+import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.user.domain.User;
 
 @WebMvcTest(UserController.class)
-class UserControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+class UserControllerTest extends MvcTest {
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
@@ -42,10 +37,8 @@ class UserControllerTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(get("/api/user")
-            .header("Authorization", "bearer JWT_ACCESS_TOKEN")
-            .contentType(MediaType.APPLICATION_JSON))
+        getAction("/api/user", TEST_TOKEN)
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("\"email\":\"underdogs@devbie.link\"")));
+            .andExpect(content().string(containsString(TEST_USER_EMAIL)));
     }
 }
