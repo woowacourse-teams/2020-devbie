@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <navigation-bar></navigation-bar>
-    {{ email }}
+    <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
     <router-view></router-view>
     <footer-bar></footer-bar>
   </div>
@@ -15,7 +14,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      email: ""
+      email: "",
+      isLoggedIn: false
     };
   },
   async mounted() {
@@ -29,9 +29,18 @@ export default {
         });
         const { email } = await response.data;
         this.email = email;
+        this.isLoggedIn = true;
       } catch (error) {
         localStorage.removeItem("devbieToken");
+        this.email = "";
+        this.isLoggedIn = false;
       }
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("devbieToken");
+      this.isLoggedIn = false;
     }
   },
   components: {
