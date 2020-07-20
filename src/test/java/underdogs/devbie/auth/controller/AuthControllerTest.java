@@ -37,7 +37,7 @@ public class AuthControllerTest extends MvcTest {
     void fetchLoginUrl() throws Exception {
         given(authService.fetchLoginUrl()).willReturn(TEST_LOGIN_URL);
 
-        String url = "/api/oauth/login-url";
+        String url = "/api/auth/login-url";
 
         getAction(url)
                 .andExpect(status().isOk())
@@ -50,7 +50,7 @@ public class AuthControllerTest extends MvcTest {
     void login() throws Exception {
         given(authService.createToken(TEST_CODE)).willReturn(JwtTokenResponse.from(TEST_TOKEN));
 
-        String url = "/api/oauth/login" + "?code=" + TEST_CODE;
+        String url = "/api/auth/login" + "?code=" + TEST_CODE;
 
         postAction(url)
                 .andExpect(status().isOk())
