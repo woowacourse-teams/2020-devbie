@@ -1,7 +1,14 @@
 package underdogs.devbie.notice.domain;
 
-import lombok.Getter;
+import javax.persistence.Embeddable;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Embeddable
 @Getter
 public class Company {
 

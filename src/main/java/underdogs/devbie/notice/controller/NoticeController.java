@@ -8,17 +8,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.service.NoticeService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/notices")
 public class NoticeController {
 
+    private final NoticeService noticeService;
+
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody NoticeCreateRequest request) {
+        Long noticeId = noticeService.save(request);
 
         return ResponseEntity
-            .created(URI.create("/api/notices/1"))
+            .created(URI.create(String.format("/api/notices/%d", noticeId)))
             .build();
     }
 }

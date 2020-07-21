@@ -1,9 +1,9 @@
 package underdogs.devbie.notice.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 public enum JobPosition {
     BACKEND;

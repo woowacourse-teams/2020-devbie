@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -33,13 +34,14 @@ public abstract class NoticeAcceptanceTest {
     void createNotice() {
         Map<String, Object> params = new HashMap<>();
 
-        params.put("startDate", LocalDateTime.now());
-        params.put("endDate", LocalDateTime.now());
+        params.put("startDate", String.valueOf(LocalDateTime.now()));
+        params.put("endDate", String.valueOf(LocalDateTime.now()));
         params.put("name", "underdogs");
-        params.put("salary", "50_000_000");
-        params.put("languages", Arrays.asList("java", "javascript"));
+        params.put("salary", "50000000");
+        params.put("languages", Arrays.asList("java","javascript"));
         params.put("jobPosition", JobPosition.BACKEND.name());
         params.put("image", "/static/image/underdogs");
+        params.put("description", "We are hiring!");
 
         //@formatter:off
         given().
