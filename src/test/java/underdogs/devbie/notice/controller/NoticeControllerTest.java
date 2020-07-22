@@ -20,6 +20,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 
 @WebMvcTest(controllers = NoticeController.class)
@@ -46,7 +47,7 @@ public class NoticeControllerTest extends MvcTest {
             .name("underdogs")
             .salary(50_000_000)
             .languages(Arrays.asList("java", "javascript"))
-            .jobPosition(JobPosition.BACKEND.name())
+            .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
             .startDate(String.valueOf(LocalDateTime.now()))
@@ -59,6 +60,29 @@ public class NoticeControllerTest extends MvcTest {
 
         postAction("/api/notices", inputJson, "")
             .andExpect(status().isCreated())
+            .andDo(print());
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 업데이트")
+    @Test
+    void update() throws Exception {
+        NoticeUpdateRequest request = NoticeUpdateRequest.builder()
+            .name("underdogs")
+            .salary(50_000_000)
+            .languages(Arrays.asList("java", "javascript"))
+            .jobPosition(JobPosition.BACKEND)
+            .image("/static/image/underdogs")
+            .description("We are hiring!")
+            .startDate(String.valueOf(LocalDateTime.now()))
+            .endDate(String.valueOf(LocalDateTime.now()))
+            .build();
+
+        String inputJson = objectMapper.writeValueAsString(request);
+
+        doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
+
+        putAction("/api/notices/1", inputJson, "")
+            .andExpect(status().isNoContent())
             .andDo(print());
     }
 }

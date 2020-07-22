@@ -18,7 +18,7 @@ import underdogs.devbie.notice.domain.NoticeDetail;
 @AllArgsConstructor
 @Builder
 @Getter
-public class NoticeCreateRequest {
+public class NoticeUpdateRequest {
     private String startDate;
     private String endDate;
 
@@ -30,11 +30,12 @@ public class NoticeCreateRequest {
     private String description;
     private String image;
 
-    public Notice toEntity() {
+    public Notice toEntity(Long id) {
         LocalDateTime startLocalDate = LocalDateTime.parse(startDate);
         LocalDateTime endLocalDate = LocalDateTime.parse(endDate);
 
         return Notice.builder()
+            .id(id)
             .company(new Company(name, salary))
             .duration(new Duration(startLocalDate, endLocalDate))
             .jobPosition(jobPosition)

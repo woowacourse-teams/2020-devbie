@@ -1,6 +1,5 @@
 package underdogs.devbie.notice.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,7 +34,6 @@ public class Notice extends BaseTimeEntity {
     private Duration duration;
 
     @Enumerated(EnumType.STRING)
-    @Column(insertable = false, updatable = false)
     private JobPosition jobPosition;
 
     @Embedded
@@ -43,4 +41,21 @@ public class Notice extends BaseTimeEntity {
 
     private String image;
 
+    public void update(Notice notice) {
+        if (!this.company.equals(notice.company)) {
+            this.company = notice.company;
+        }
+        if (!this.duration.equals(notice.duration)) {
+            this.duration = notice.duration;
+        }
+        if (!this.jobPosition.equals(notice.jobPosition)) {
+            this.jobPosition = notice.jobPosition;
+        }
+        if (!this.noticeDetail.equals(notice.noticeDetail)) {
+            this.noticeDetail = notice.noticeDetail;
+        }
+        if (!this.image.equals(notice.image)) {
+            this.image = notice.image;
+        }
+    }
 }

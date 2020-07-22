@@ -5,11 +5,13 @@ import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -22,6 +24,7 @@ import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDetail;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class NoticeServiceTest {
@@ -36,6 +39,7 @@ public class NoticeServiceTest {
         noticeService = new NoticeService(noticeRepository);
     }
 
+    @DisplayName("게시글 저장")
     @Test
     void save() {
         Set<String> languages = Stream.of("java", "javascript")
@@ -54,7 +58,7 @@ public class NoticeServiceTest {
             .name("underdogs")
             .salary(50_000_000)
             .languages(Arrays.asList("java", "javascript"))
-            .jobPosition(JobPosition.BACKEND.name())
+            .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
             .startDate(String.valueOf(LocalDateTime.now()))
@@ -64,5 +68,27 @@ public class NoticeServiceTest {
         Long noticeId = noticeService.save(noticeRequest);
 
         assertThat(noticeId).isEqualTo(expected.getId());
+    }
+
+    @DisplayName("게시글 업데이트")
+    @Test
+    void update() {
+        Long id = 2L;
+        NoticeUpdateRequest request = NoticeUpdateRequest.builder()
+            .name("underdogs")
+            .salary(50_000_000)
+            .languages(Arrays.asList("java", "javascript"))
+            .jobPosition(JobPosition.BACKEND)
+            .image("/static/image/underdogs")
+            .description("We are hiring!")
+            .startDate(String.valueOf(LocalDateTime.now()))
+            .endDate(String.valueOf(LocalDateTime.now()))
+            .build();
+
+        given(noticeRepository.findById(anyLong())).willReturn(Optional.of(request.toEntity(2L)));
+
+        noticeService.update(id, request);
+
+        verify(noticeRepository).findById(eq(2L));
     }
 }

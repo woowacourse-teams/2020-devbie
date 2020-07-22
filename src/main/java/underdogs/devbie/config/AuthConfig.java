@@ -22,7 +22,7 @@ public class AuthConfig implements WebMvcConfigurer {
         registry.addInterceptor(bearerAuthInterceptor)
             .addPathPatterns("/api/**")
             .excludePathPatterns("/api/auth/login", "/api/auth/login-url")
-            .excludePathPatterns("/api/notices**");
+            .excludePathPatterns("/api/notices", "/api/notices/**");
     }
 
     @Override
