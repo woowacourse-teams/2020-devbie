@@ -10,8 +10,8 @@ import underdogs.devbie.exception.CreateFailException;
 
 class QuestionTest {
 
-    public static final String TEST_QUESTION_TITLE = "test title";
-    public static final String TEST_QUESTION_CONTENT = "test content";
+    public static final QuestionTitle TEST_QUESTION_TITLE = QuestionTitle.from("test title");
+    public static final QuestionContent TEST_QUESTION_CONTENT = QuestionContent.from("test content");
 
     @DisplayName("Question 빌더 테스트 - title이 없을 때 예외 발생")
     @Test
@@ -52,11 +52,13 @@ class QuestionTest {
             .content(TEST_QUESTION_CONTENT)
             .build();
 
-        question.updateQuestionInfo("Changed Title", "Changed Content");
+        QuestionTitle changedQuestionTitle = QuestionTitle.from("Changed Title");
+        QuestionContent changedQuestionContent = QuestionContent.from("Changed Content");
+        question.updateQuestionInfo(changedQuestionTitle, changedQuestionContent);
 
         assertAll(
-            () -> assertEquals("Changed Title", question.getTitle()),
-            () -> assertEquals("Changed Content", question.getContent())
+            () -> assertEquals(changedQuestionTitle, question.getTitle()),
+            () -> assertEquals(changedQuestionContent, question.getContent())
         );
     }
 
@@ -69,7 +71,7 @@ class QuestionTest {
             .content(TEST_QUESTION_CONTENT)
             .build();
 
-        assertThat(question.getVisits()).isEqualTo(0L);
+        assertThat(question.getVisits().getValue()).isEqualTo(0L);
     }
 
     @DisplayName("조회수 증가")
@@ -83,6 +85,6 @@ class QuestionTest {
 
         question.increaseVisits();
 
-        assertThat(question.getVisits()).isEqualTo(1L);
+        assertThat(question.getVisits().getValue()).isEqualTo(1L);
     }
 }

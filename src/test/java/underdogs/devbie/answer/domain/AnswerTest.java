@@ -9,7 +9,7 @@ import underdogs.devbie.exception.CreateFailException;
 
 class AnswerTest {
 
-    public static final String TEST_ANSWER_CONTENT = "test answer content";
+    public static final AnswerContent TEST_ANSWER_CONTENT = AnswerContent.from("test answer content");
 
     @DisplayName("Answer 빌더 테스트 - userId 없을 때 예외 발생")
     @Test
@@ -50,8 +50,9 @@ class AnswerTest {
             .content(TEST_ANSWER_CONTENT)
             .build();
 
-        answer.updateContent("Changed Content");
+        AnswerContent changedContent = AnswerContent.from("Changed Content");
+        answer.updateContent(changedContent);
 
-        assertThat(answer.getContent()).isEqualTo("Changed Content");
+        assertThat(answer.getContent()).isEqualTo(changedContent);
     }
 }

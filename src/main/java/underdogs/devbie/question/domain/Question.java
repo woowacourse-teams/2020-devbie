@@ -2,6 +2,7 @@ package underdogs.devbie.question.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,33 +26,36 @@ public class Question extends BaseTimeEntity {
 
     private Long userId;
 
-    private String title;
+    @Embedded
+    private QuestionTitle title;
 
-    private String content;
+    @Embedded
+    private QuestionContent content;
 
-    private Long visits;
+    @Embedded
+    private Visits visits;
 
     @Builder
-    public Question(Long userId, String title, String content) {
+    public Question(Long userId, QuestionTitle title, QuestionContent content) {
         validateParameters(userId, title, content);
         this.userId = userId;
         this.title = title;
         this.content = content;
-        this.visits = 0L;
+        this.visits = Visits.init();
     }
 
-    private void validateParameters(Long userId, String title, String content) {
+    private void validateParameters(Long userId, QuestionTitle title, QuestionContent content) {
         if (Objects.isNull(userId) | Objects.isNull(title) | Objects.isNull(content)) {
             throw new CreateFailException();
         }
     }
 
-    public void updateQuestionInfo(String title, String content) {
+    public void updateQuestionInfo(QuestionTitle title, QuestionContent content) {
         this.title = title;
         this.content = content;
     }
 
     public void increaseVisits() {
-        this.visits++;
+        this.visits.increase();
     }
 }
