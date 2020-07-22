@@ -22,25 +22,25 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
     private String title;
 
     private String content;
 
-    private Long userId;
-
     private Long visits;
 
     @Builder
-    public Question(String title, String content, Long userId) {
-        validateParameters(title, content, userId);
+    public Question(Long userId, String title, String content) {
+        validateParameters(userId, title, content);
+        this.userId = userId;
         this.title = title;
         this.content = content;
-        this.userId = userId;
         this.visits = 0L;
     }
 
-    private void validateParameters(String title, String content, Long userId) {
-        if (Objects.isNull(title) | Objects.isNull(content) | Objects.isNull(userId)) {
+    private void validateParameters(Long userId, String title, String content) {
+        if (Objects.isNull(userId) | Objects.isNull(title) | Objects.isNull(content)) {
             throw new CreateFailException();
         }
     }

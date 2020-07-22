@@ -10,15 +10,15 @@ import underdogs.devbie.exception.CreateFailException;
 
 class QuestionTest {
 
-    public static final String TEST_TITLE = "test title";
-    public static final String TEST_CONTENT = "test content";
+    public static final String TEST_QUESTION_TITLE = "test title";
+    public static final String TEST_QUESTION_CONTENT = "test content";
 
     @DisplayName("Question 빌더 테스트 - title이 없을 때 예외 발생")
     @Test
     void questionBuilderWithoutTitle() {
         assertThatThrownBy(() -> Question.builder()
-            .content(TEST_CONTENT)
             .userId(1L)
+            .content(TEST_QUESTION_CONTENT)
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -27,8 +27,8 @@ class QuestionTest {
     @Test
     void questionBuilderWithoutContent() {
         assertThatThrownBy(() -> Question.builder()
-            .title(TEST_TITLE)
             .userId(1L)
+            .title(TEST_QUESTION_TITLE)
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -37,8 +37,8 @@ class QuestionTest {
     @Test
     void questionBuilderWithoutAuthor() {
         assertThatThrownBy(() -> Question.builder()
-            .title(TEST_TITLE)
-            .content(TEST_CONTENT)
+            .title(TEST_QUESTION_TITLE)
+            .content(TEST_QUESTION_CONTENT)
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -47,9 +47,9 @@ class QuestionTest {
     @Test
     void updateQuestionInfo() {
         Question question = Question.builder()
-            .title(TEST_TITLE)
-            .content(TEST_CONTENT)
             .userId(1L)
+            .title(TEST_QUESTION_TITLE)
+            .content(TEST_QUESTION_CONTENT)
             .build();
 
         question.updateQuestionInfo("Changed Title", "Changed Content");
@@ -64,9 +64,9 @@ class QuestionTest {
     @Test
     void initValueOfVisits() {
         Question question = Question.builder()
-            .title(TEST_TITLE)
-            .content(TEST_CONTENT)
             .userId(1L)
+            .title(TEST_QUESTION_TITLE)
+            .content(TEST_QUESTION_CONTENT)
             .build();
 
         assertThat(question.getVisits()).isEqualTo(0L);
@@ -76,9 +76,9 @@ class QuestionTest {
     @Test
     void increaseVisits() {
         Question question = Question.builder()
-            .title(TEST_TITLE)
-            .content(TEST_CONTENT)
             .userId(1L)
+            .title(TEST_QUESTION_TITLE)
+            .content(TEST_QUESTION_CONTENT)
             .build();
 
         question.increaseVisits();
