@@ -5,11 +5,12 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Recommendation {
+public abstract class Recommendation extends BaseTimeEntity {
 
     private Long userId;
 
