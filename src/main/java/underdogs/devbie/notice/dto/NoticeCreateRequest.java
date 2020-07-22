@@ -1,5 +1,6 @@
 package underdogs.devbie.notice.dto;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,11 +31,14 @@ public class NoticeCreateRequest {
     private String image;
 
     public Notice toEntity() {
+        LocalDateTime startLocalDate = LocalDateTime.parse(startDate);
+        LocalDateTime endLocalDate = LocalDateTime.parse(endDate);
+
         return Notice.builder()
             .company(new Company(name, salary))
-            .duration(new Duration(startDate, endDate))
+            .duration(new Duration(startLocalDate, endLocalDate))
             .jobPosition(JobPosition.valueOf(jobPosition))
-            .noticeDetail(new NoticeDetail(new HashSet<>(languages), jobPosition, description))
+            .noticeDetail(new NoticeDetail(new HashSet<>(languages), description))
             .image(image)
             .build();
     }

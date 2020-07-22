@@ -25,8 +25,6 @@ public class NoticeDetail {
     @CollectionTable(joinColumns = @JoinColumn(name = "notice_id"), name = "language")
     private Set<String> languages;
 
-    private String jobPosition;
-
     @Lob
     @Column(columnDefinition = "CLOB")
     private String description;

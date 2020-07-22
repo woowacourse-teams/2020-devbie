@@ -1,5 +1,7 @@
 package underdogs.devbie.notice.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Duration {
 
-    private String startDate;
+    private LocalDateTime startDate;
 
-    private String endDate;
+    private LocalDateTime endDate;
 }
