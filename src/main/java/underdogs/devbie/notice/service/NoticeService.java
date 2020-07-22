@@ -11,10 +11,12 @@ import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
+    @Transactional
     public Long save(NoticeCreateRequest request) {
         Notice savedNotice = noticeRepository.save(request.toEntity());
         return savedNotice.getId();

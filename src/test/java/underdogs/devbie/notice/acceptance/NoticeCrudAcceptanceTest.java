@@ -3,7 +3,7 @@ package underdogs.devbie.notice.acceptance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class NoticeUploadAcceptanceTest extends NoticeAcceptanceTest {
+public class NoticeCrudAcceptanceTest extends NoticeAcceptanceTest {
     // Feature: 공고 관리
     //
     //  Scenario: 공고를 관리한다.

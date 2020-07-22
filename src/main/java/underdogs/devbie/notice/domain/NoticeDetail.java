@@ -11,14 +11,17 @@ import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Embeddable
 @Getter
+@EqualsAndHashCode
 public class NoticeDetail {
 
     @Embedded
@@ -29,20 +32,4 @@ public class NoticeDetail {
     @Lob
     @Column(columnDefinition = "CLOB")
     private String description;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        NoticeDetail that = (NoticeDetail)o;
-        return Objects.equals(languages, that.languages) &&
-            Objects.equals(description, that.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(languages, description);
-    }
 }

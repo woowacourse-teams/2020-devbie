@@ -31,7 +31,8 @@ public class NoticeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody NoticeUpdateRequest noticeUpdateRequest) {
+    public ResponseEntity<Void> update(@PathVariable Long id,
+        @RequestBody NoticeUpdateRequest noticeUpdateRequest) {
         noticeService.update(id, noticeUpdateRequest);
         return ResponseEntity
             .noContent()
