@@ -1,16 +1,17 @@
 package underdogs.devbie.answer.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import underdogs.devbie.exception.CreateFailException;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Objects;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import underdogs.devbie.exception.CreateFailException;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

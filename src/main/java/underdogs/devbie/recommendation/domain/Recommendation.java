@@ -1,18 +1,31 @@
 package underdogs.devbie.recommendation.domain;
 
+import java.util.Objects;
+
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import underdogs.devbie.exception.CreateFailException;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Recommendation {
 
     private Long userId;
 
     private RecommendationType recommendationType;
+
+    public Recommendation(Long userId, RecommendationType recommendationType) {
+        validateParameters(userId, recommendationType);
+        this.userId = userId;
+        this.recommendationType = recommendationType;
+    }
+
+    private void validateParameters(Long userId, RecommendationType recommendationType) {
+        if (Objects.isNull(userId) | Objects.isNull(recommendationType)) {
+            throw new CreateFailException();
+        }
+    }
 
     public boolean hasRecommendationTypeOf(RecommendationType recommendationType) {
         return this.recommendationType.is(recommendationType);

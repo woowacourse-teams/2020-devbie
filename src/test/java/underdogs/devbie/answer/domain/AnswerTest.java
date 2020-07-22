@@ -1,12 +1,11 @@
 package underdogs.devbie.answer.domain;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import underdogs.devbie.exception.CreateFailException;
-import underdogs.devbie.question.domain.Question;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import underdogs.devbie.exception.CreateFailException;
 
 class AnswerTest {
 
@@ -26,10 +25,10 @@ class AnswerTest {
     @Test
     void answerBuilderWithoutQuestionId() {
         assertThatThrownBy(() -> Answer.builder()
-                .userId(1L)
-                .content(TEST_ANSWER_CONTENT)
-                .build())
-                .isInstanceOf(CreateFailException.class);
+            .userId(1L)
+            .content(TEST_ANSWER_CONTENT)
+            .build())
+            .isInstanceOf(CreateFailException.class);
     }
 
     @DisplayName("Answer 빌더 테스트 - questionId 없을 때 예외 발생")

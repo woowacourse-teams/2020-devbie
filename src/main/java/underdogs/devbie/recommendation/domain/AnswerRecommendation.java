@@ -16,23 +16,23 @@ import underdogs.devbie.exception.CreateFailException;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class QuestionRecommendation extends Recommendation {
+public class AnswerRecommendation extends Recommendation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long questionId;
+    private Long answerId;
 
     @Builder
-    public QuestionRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
+    public AnswerRecommendation(Long answerId, Long userId, RecommendationType recommendationType) {
         super(userId, recommendationType);
-        validateParameters(questionId);
-        this.questionId = questionId;
+        validateParameters(answerId);
+        this.answerId = answerId;
     }
 
-    private void validateParameters(Long questionId) {
-        if (Objects.isNull(questionId)) {
+    private void validateParameters(Long answerId) {
+        if (Objects.isNull(answerId)) {
             throw new CreateFailException();
         }
     }
