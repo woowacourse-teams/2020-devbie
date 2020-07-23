@@ -15,13 +15,18 @@ import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import underdogs.devbie.notice.domain.Company;
+import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class NoticeAcceptanceTest {
+    private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
+
     @LocalServerPort
     public int port;
     private NoticeCreateRequest noticeCreateRequest;
@@ -42,19 +47,19 @@ public abstract class NoticeAcceptanceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate(String.valueOf(LocalDateTime.of(2020, 7, 7, 10, 10)))
+            .endDate(String.valueOf(LocalDateTime.of(2020, 7, 11, 10, 10)))
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
-            .name("underdogs")
+            .name("bossdog")
             .salary(60_000_000)
             .languages(Arrays.asList("java", "javascript", "C++"))
-            .jobPosition(JobPosition.BACKEND)
-            .image("/static/image/underdogs")
+            .jobPosition(JobPosition.FRONTEND)
+            .image("/static/image/bossdog")
             .description("You are hired!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate(updatedDuration.getStartDate().toString())
+            .endDate(updatedDuration.getEndDate().toString())
             .build();
     }
 
@@ -118,6 +123,30 @@ public abstract class NoticeAcceptanceTest {
             () -> assertThat(noticeResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
             () -> assertThat(noticeResponse.getLanguages()).contains("java", "javascript")
+        );
+    }
+
+    void readNoticeDetail() {
+        //@formatter:off
+        NoticeDetailResponse result = given().
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            get("/api/notices/1").
+            then().
+            log().all()
+            .statusCode(HttpStatus.OK.value())
+            .extract().as(NoticeDetailResponse.class);
+        //@formatter:on
+
+        assertAll(
+            () -> assertThat(result.getId()).isEqualTo(1L),
+            () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
+            () -> assertThat(result.getDuration()).isEqualTo(updatedDuration),
+            () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
+            () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
+            () -> assertThat(result.getNoticeDetail().getDescription()).isEqualTo("You are hired!"),
+            () -> assertThat(result.getNoticeDetail().getLanguages()).contains("java", "javascript", "C++")
         );
     }
 }

@@ -26,6 +26,7 @@ import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDetail;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
@@ -130,6 +131,35 @@ public class NoticeServiceTest {
             () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponses.get(0).getLanguages()).contains("java", "javascript"),
             () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND)
+        );
+    }
+
+    @DisplayName("게시글 하나 조회")
+    @Test
+    void read() {
+        Set<String> languages = Stream.of("java", "javascript")
+            .collect(Collectors.toSet());
+        Notice expected = Notice.builder()
+            .id(1L)
+            .company(new Company("underdogs", 50_000_000))
+            .jobPosition(JobPosition.BACKEND)
+            .noticeDetail(new NoticeDetail(languages, "We are hiring!"))
+            .image("/static/image/underdogs")
+            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .build();
+
+        given(noticeRepository.findById(anyLong())).willReturn(Optional.of(expected));
+
+        NoticeDetailResponse noticeDetailResponse = noticeService.read(1L);
+
+        assertAll(
+            () -> assertThat(noticeDetailResponse.getId()).isEqualTo(1L),
+            () -> assertThat(noticeDetailResponse.getCompany().getName()).isEqualTo("underdogs"),
+            () -> assertThat(noticeDetailResponse.getCompany().getSalary()).isEqualTo(50_000_000),
+            () -> assertThat(noticeDetailResponse.getImage()).isEqualTo("/static/image/underdogs"),
+            () -> assertThat(noticeDetailResponse.getNoticeDetail().getLanguages()).contains("java", "javascript"),
+            () -> assertThat(noticeDetailResponse.getNoticeDetail().getDescription()).isEqualTo("We are hiring!"),
+            () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
         );
     }
 }

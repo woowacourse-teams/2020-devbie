@@ -24,6 +24,7 @@ public class NoticeCrudAcceptanceTest extends NoticeAcceptanceTest {
         createNotice();
         readAllNotice();
         updateNotice();
+        readNoticeDetail();
         deleteNotice();
     }
 }

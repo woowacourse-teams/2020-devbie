@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
@@ -55,5 +56,11 @@ public class NoticeController {
     public ResponseEntity<List<NoticeResponse>> readAll() {
         List<NoticeResponse> noticeResponses = noticeService.readAll();
         return ResponseEntity.ok(noticeResponses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NoticeDetailResponse> readAll(@PathVariable Long id) {
+        NoticeDetailResponse noticeDetailResponse = noticeService.read(id);
+        return ResponseEntity.ok(noticeDetailResponse);
     }
 }

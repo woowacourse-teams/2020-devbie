@@ -20,8 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.notice.domain.Company;
+import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.NoticeDetail;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
@@ -116,6 +120,35 @@ public class NoticeControllerTest extends MvcTest {
             .andExpect(jsonPath("$.[0].jobPosition").value("BACKEND"))
             .andExpect(jsonPath("$.[0].languages[0]").value("java"))
             .andExpect(jsonPath("$.[0].languages[1]").value("javascript"))
+            .andDo(print());
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 하나 조회")
+    @Test
+    void read() throws Exception {
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = LocalDateTime.now();
+        NoticeDetailResponse noticeDetailResponse = NoticeDetailResponse.builder()
+            .id(1L)
+            .company(new Company("bossdog", 60_000_000))
+            .duration(new Duration(startDate, endDate))
+            .jobPosition(JobPosition.FRONTEND)
+            .image("/static/image/bossdog")
+            .noticeDetail(new NoticeDetail(new HashSet<>(Arrays.asList("java", "javascript")), "You are hired!"))
+            .build();
+
+        given(noticeService.read(anyLong())).willReturn(noticeDetailResponse);
+
+        getAction("/api/notices/1")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(1L))
+            .andExpect(jsonPath("$.company.name").value("bossdog"))
+            .andExpect(jsonPath("$.company.salary").value(60_000_000))
+            .andExpect(jsonPath("$.image").value("/static/image/bossdog"))
+            .andExpect(jsonPath("$.jobPosition").value("FRONTEND"))
+            .andExpect(jsonPath("$.noticeDetail.description").value("You are hired!"))
+            .andExpect(jsonPath("$.noticeDetail.languages[0]").value("java"))
+            .andExpect(jsonPath("$.noticeDetail.languages[1]").value("javascript"))
             .andDo(print());
     }
 }

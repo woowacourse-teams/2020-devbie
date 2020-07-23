@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
@@ -39,5 +40,10 @@ public class NoticeService {
     public List<NoticeResponse> readAll() {
         List<Notice> notices = noticeRepository.findAll();
         return NoticeResponse.toList(notices);
+    }
+
+    public NoticeDetailResponse read(Long id) {
+        Notice notice = noticeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return NoticeDetailResponse.from(notice);
     }
 }
