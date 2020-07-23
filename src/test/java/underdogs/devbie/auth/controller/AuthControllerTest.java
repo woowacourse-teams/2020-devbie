@@ -40,9 +40,9 @@ public class AuthControllerTest extends MvcTest {
         String url = "/api/auth/login-url";
 
         getAction(url)
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(TEST_LOGIN_URL)))
-                .andDo(print());
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString(TEST_LOGIN_URL)))
+            .andDo(print());
     }
 
     @DisplayName("로그인")
@@ -53,8 +53,8 @@ public class AuthControllerTest extends MvcTest {
         String url = "/api/auth/login" + "?code=" + TEST_CODE;
 
         postAction(url)
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(TEST_TOKEN)))
-                .andDo(print());
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString(TEST_TOKEN)))
+            .andDo(print());
     }
 }
