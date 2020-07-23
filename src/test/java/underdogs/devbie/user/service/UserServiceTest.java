@@ -33,7 +33,7 @@ class UserServiceTest {
     @DisplayName("Oauth로부터 User 모델 신규 저장 및 업데이트")
     @Test
     void saveOrUpdateOauthUser() {
-        User mockUser =  User.builder()
+        User mockUser = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
@@ -53,7 +53,7 @@ class UserServiceTest {
     @DisplayName("Id로 유저 조회")
     @Test
     void findById() {
-        User mockUser =  User.builder()
+        User mockUser = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
