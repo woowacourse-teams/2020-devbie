@@ -11,7 +11,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.auth.exception.InvalidAuthenticationException;
 import underdogs.devbie.auth.exception.UserNotFoundException;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
