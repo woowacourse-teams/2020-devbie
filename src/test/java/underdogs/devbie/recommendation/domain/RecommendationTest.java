@@ -24,8 +24,8 @@ class RecommendationTest {
     @DisplayName("추천 플래그 토글")
     @Test
     void toggleIsRecommendedFlag() {
-        QuestionRecommendation recommendation = QuestionRecommendation.builder()
-            .questionId(1L)
+        AnswerRecommendation recommendation = AnswerRecommendation.builder()
+            .answerId(1L)
             .userId(1L)
             .recommendationType(RecommendationType.RECOMMENDED)
             .build();
