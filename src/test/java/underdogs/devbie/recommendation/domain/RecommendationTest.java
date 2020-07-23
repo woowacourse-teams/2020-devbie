@@ -10,11 +10,8 @@ class RecommendationTest {
     @DisplayName("추천 플래그가 같은지 확인")
     @Test
     void isMatchedRecommended() {
-        QuestionRecommendation recommendation = QuestionRecommendation.builder()
-            .questionId(1L)
-            .userId(1L)
-            .recommendationType(RecommendationType.RECOMMENDED)
-            .build();
+        QuestionRecommendation recommendation =
+            QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
 
         boolean result = recommendation.hasRecommendationTypeOf(RecommendationType.RECOMMENDED);
 
@@ -24,11 +21,8 @@ class RecommendationTest {
     @DisplayName("추천 플래그 토글")
     @Test
     void toggleIsRecommendedFlag() {
-        AnswerRecommendation recommendation = AnswerRecommendation.builder()
-            .answerId(1L)
-            .userId(1L)
-            .recommendationType(RecommendationType.RECOMMENDED)
-            .build();
+        QuestionRecommendation recommendation =
+            QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
 
         recommendation.toggleRecommended();
 

@@ -9,36 +9,34 @@ import underdogs.devbie.exception.CreateFailException;
 
 class AnswerRecommendationTest {
 
-    @DisplayName("AnswerRecommendation 빌더 테스트 - userId가 없을 때 예외 발생")
+    @DisplayName("AnswerRecommendation 생성 테스트 - userId가 없을 때 예외 발생")
     @Test
-    void recommendationBuilderWithoutUserId() {
+    void recommendationInitializeWithoutUserId() {
         assertThatThrownBy(() ->
-            AnswerRecommendation.builder()
-                .answerId(1L)
-                .recommendationType(RecommendationType.RECOMMENDED)
-                .build()
+            AnswerRecommendation.of(1L, null, RecommendationType.RECOMMENDED)
         ).isInstanceOf(CreateFailException.class);
     }
 
-    @DisplayName("AnswerRecommendation 빌더 테스트 - recommendationType 없을 때 예외 발생")
+    @DisplayName("AnswerRecommendation 생성 테스트 - recommendationType 없을 때 예외 발생")
     @Test
-    void recommendationBuilderWithoutRecommendationType() {
+    void recommendationInitializeWithoutRecommendationType() {
         assertThatThrownBy(() ->
-            AnswerRecommendation.builder()
-                .userId(1L)
-                .answerId(1L)
-                .build()
+            AnswerRecommendation.of(1L, 1L, null)
         ).isInstanceOf(CreateFailException.class);
     }
 
-    @DisplayName("AnswerRecommendation 빌더 테스트 - answerId가 없을 때 예외 발생")
+    @DisplayName("AnswerRecommendation 생성 테스트 - answerId가 없을 때 예외 발생")
     @Test
-    void answerRecommendationBuilderWithoutAnswerId() {
+    void recommendationInitializeWithoutAnswerId() {
         assertThatThrownBy(() ->
-            AnswerRecommendation.builder()
-                .userId(1L)
-                .recommendationType(RecommendationType.RECOMMENDED)
-                .build()
+            AnswerRecommendation.of(null, 1L, RecommendationType.RECOMMENDED)
         ).isInstanceOf(CreateFailException.class);
+    }
+
+    @DisplayName("AnswerRecommendation 생성 테스트")
+    @Test
+    void recommendationInitialize() {
+        assertThat(AnswerRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED))
+            .isInstanceOf(AnswerRecommendation.class);
     }
 }

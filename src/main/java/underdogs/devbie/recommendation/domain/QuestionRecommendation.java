@@ -24,14 +24,17 @@ public class QuestionRecommendation extends Recommendation {
 
     private Long questionId;
 
-    @Builder
-    public QuestionRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
+    private QuestionRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
         super(userId, recommendationType);
-        validateParameters(questionId);
         this.questionId = questionId;
     }
 
-    private void validateParameters(Long questionId) {
+    public static QuestionRecommendation of(Long questionId, Long userId, RecommendationType recommendationType) {
+        validateParameters(questionId);
+        return new QuestionRecommendation(questionId, userId, recommendationType);
+    }
+
+    private static void validateParameters(Long questionId) {
         if (Objects.isNull(questionId)) {
             throw new CreateFailException();
         }

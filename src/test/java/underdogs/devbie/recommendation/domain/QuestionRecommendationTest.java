@@ -9,36 +9,34 @@ import underdogs.devbie.exception.CreateFailException;
 
 class QuestionRecommendationTest {
 
-    @DisplayName("QuestionRecommendation 빌더 테스트 - userId가 없을 때 예외 발생")
+    @DisplayName("QuestionRecommendation 생성 테스트 - userId가 없을 때 예외 발생")
     @Test
-    void recommendationBuilderWithoutUserId() {
+    void recommendationInitializeWithoutUserId() {
         assertThatThrownBy(() ->
-            QuestionRecommendation.builder()
-                .questionId(1L)
-                .recommendationType(RecommendationType.RECOMMENDED)
-                .build()
+            QuestionRecommendation.of(1L, null, RecommendationType.RECOMMENDED)
         ).isInstanceOf(CreateFailException.class);
     }
 
-    @DisplayName("QuestionRecommendation 빌더 테스트 - recommendationType 없을 때 예외 발생")
+    @DisplayName("QuestionRecommendation 생성 테스트 - recommendationType 없을 때 예외 발생")
     @Test
-    void recommendationBuilderWithoutRecommendationType() {
+    void recommendationInitializeWithoutRecommendationType() {
         assertThatThrownBy(() ->
-            QuestionRecommendation.builder()
-                .userId(1L)
-                .questionId(1L)
-                .build()
+            QuestionRecommendation.of(1L, 1L, null)
         ).isInstanceOf(CreateFailException.class);
     }
 
-    @DisplayName("QuestionRecommendation 빌더 테스트 - questionId가 없을 때 예외 발생")
+    @DisplayName("QuestionRecommendation 생성 테스트 - questionId가 없을 때 예외 발생")
     @Test
-    void questionRecommendationBuilderWithoutQuestionId() {
+    void questionRecommendationInitializeWithoutQuestionId() {
         assertThatThrownBy(() ->
-            QuestionRecommendation.builder()
-                .userId(1L)
-                .recommendationType(RecommendationType.RECOMMENDED)
-                .build()
+            QuestionRecommendation.of(null, 1L, RecommendationType.RECOMMENDED)
         ).isInstanceOf(CreateFailException.class);
+    }
+
+    @DisplayName("QuestionRecommendation 생성 테스트")
+    @Test
+    void recommendationInitialize() {
+        assertThat(QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED))
+            .isInstanceOf(QuestionRecommendation.class);
     }
 }
