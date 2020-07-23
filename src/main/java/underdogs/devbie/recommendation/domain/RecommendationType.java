@@ -1,7 +1,9 @@
 package underdogs.devbie.recommendation.domain;
 
 public enum RecommendationType {
-    RECOMMENDED, NON_RECOMMENDED;
+
+    RECOMMENDED,
+    NON_RECOMMENDED;
 
     public boolean is(RecommendationType recommendationType) {
         return this == recommendationType;
