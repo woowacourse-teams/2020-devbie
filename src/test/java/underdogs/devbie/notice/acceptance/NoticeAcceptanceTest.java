@@ -17,13 +17,19 @@ import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class NoticeAcceptanceTest {
-    final NoticeCreateRequest noticeCreateRequest;
-    final NoticeUpdateRequest noticeUpdateRequest;
-
     @LocalServerPort
     public int port;
+    private NoticeCreateRequest noticeCreateRequest;
+    private NoticeUpdateRequest noticeUpdateRequest;
 
-    public NoticeAcceptanceTest() {
+    static RequestSpecification given() {
+        return RestAssured.given().log().all();
+    }
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.port = port;
+
         noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
@@ -47,15 +53,6 @@ public abstract class NoticeAcceptanceTest {
             .build();
     }
 
-    public static RequestSpecification given() {
-        return RestAssured.given().log().all();
-    }
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
-
     void createNotice() {
         //@formatter:off
         given().
@@ -70,7 +67,7 @@ public abstract class NoticeAcceptanceTest {
         //@formatter:on
     }
 
-    public void updateNotice() {
+    void updateNotice() {
         //@formatter:off
         given().
             body(noticeUpdateRequest).
