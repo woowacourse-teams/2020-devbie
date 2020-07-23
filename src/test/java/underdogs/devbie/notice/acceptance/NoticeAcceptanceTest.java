@@ -1,7 +1,11 @@
 package underdogs.devbie.notice.acceptance;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +17,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -90,5 +95,29 @@ public abstract class NoticeAcceptanceTest {
             .log().all()
             .statusCode(HttpStatus.NO_CONTENT.value());
         //@formatter:on
+    }
+
+    void readAllNotice() {
+        //@formatter:off
+        List<NoticeResponse> result = given().
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+            get("/api/notices").
+        then().
+            log().all()
+            .statusCode(HttpStatus.OK.value())
+            .extract().jsonPath().getList(".", NoticeResponse.class);
+        //@formatter:on
+
+        assertThat(result).isNotEmpty();
+        NoticeResponse noticeResponse = result.get(0);
+        assertAll(
+            () -> assertThat(noticeResponse.getId()).isEqualTo(1L),
+            () -> assertThat(noticeResponse.getName()).isEqualTo("underdogs"),
+            () -> assertThat(noticeResponse.getImage()).isEqualTo("/static/image/underdogs"),
+            () -> assertThat(noticeResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
+            () -> assertThat(noticeResponse.getLanguages()).contains("java", "javascript")
+        );
     }
 }

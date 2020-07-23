@@ -1,5 +1,7 @@
 package underdogs.devbie.notice.domain;
 
+import java.util.Set;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -58,5 +60,13 @@ public class Notice extends BaseTimeEntity {
         if (!this.image.equals(notice.image)) {
             this.image = notice.image;
         }
+    }
+
+    public String getCompanyName() {
+        return company.getName();
+    }
+
+    public Set<String> getLanguages() {
+        return noticeDetail.getLanguages();
     }
 }

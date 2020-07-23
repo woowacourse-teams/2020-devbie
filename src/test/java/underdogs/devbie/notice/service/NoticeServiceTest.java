@@ -1,10 +1,12 @@
 package underdogs.devbie.notice.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +26,7 @@ import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDetail;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @ExtendWith(MockitoExtension.class)
@@ -100,5 +103,33 @@ public class NoticeServiceTest {
         noticeService.delete(1L);
 
         verify(noticeRepository).deleteById(eq(1L));
+    }
+
+    @DisplayName("게시글 전체 조회")
+    @Test
+    void readAll() {
+        Set<String> languages = Stream.of("java", "javascript")
+            .collect(Collectors.toSet());
+        Notice expected = Notice.builder()
+            .id(1L)
+            .company(new Company("underdogs", 50_000_000))
+            .jobPosition(JobPosition.BACKEND)
+            .noticeDetail(new NoticeDetail(languages, "We are hiring!"))
+            .image("/static/image/underdogs")
+            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .build();
+        given(noticeRepository.findAll()).willReturn(Arrays.asList(expected));
+
+        List<NoticeResponse> noticeResponses = noticeService.readAll();
+
+        assertAll(
+            () -> assertThat(noticeResponses).isNotEmpty(),
+            () -> assertThat(noticeResponses).hasSize(1),
+            () -> assertThat(noticeResponses.get(0).getId()).isEqualTo(1L),
+            () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
+            () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains("java", "javascript"),
+            () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND)
+        );
     }
 }

@@ -1,6 +1,5 @@
 package underdogs.devbie.notice.domain;
 
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;

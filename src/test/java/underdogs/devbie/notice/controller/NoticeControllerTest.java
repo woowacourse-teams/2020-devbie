@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 
@@ -89,6 +92,30 @@ public class NoticeControllerTest extends MvcTest {
 
         deleteAction("/api/notices/1", "bearer token")
             .andExpect(status().isNoContent())
+            .andDo(print());
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 전체 조회")
+    @Test
+    void readAll() throws Exception {
+        List<NoticeResponse> noticeResponses = Arrays.asList(NoticeResponse.builder()
+            .id(1L)
+            .name("underdogs")
+            .image("/static/image/underdogs")
+            .jobPosition(JobPosition.BACKEND)
+            .languages(new HashSet<>(Arrays.asList("java", "javascript")))
+            .build());
+
+        given(noticeService.readAll()).willReturn(noticeResponses);
+
+        getAction("/api/notices")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].id").value(1L))
+            .andExpect(jsonPath("$.[0].name").value("underdogs"))
+            .andExpect(jsonPath("$.[0].image").value("/static/image/underdogs"))
+            .andExpect(jsonPath("$.[0].jobPosition").value("BACKEND"))
+            .andExpect(jsonPath("$.[0].languages[0]").value("java"))
+            .andExpect(jsonPath("$.[0].languages[1]").value("javascript"))
             .andDo(print());
     }
 }

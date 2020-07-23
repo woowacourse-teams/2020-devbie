@@ -1,9 +1,11 @@
 package underdogs.devbie.notice.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 
@@ -46,5 +49,11 @@ public class NoticeController {
         return ResponseEntity
             .noContent()
             .build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<NoticeResponse>> readAll() {
+        List<NoticeResponse> noticeResponses = noticeService.readAll();
+        return ResponseEntity.ok(noticeResponses);
     }
 }

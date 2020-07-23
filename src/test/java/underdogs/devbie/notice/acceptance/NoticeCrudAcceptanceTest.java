@@ -10,6 +10,9 @@ public class NoticeCrudAcceptanceTest extends NoticeAcceptanceTest {
     //      When 공고 1개를 추가 요청한다.
     //      Then 공고가 업로드 되었다.
     //
+    //      When 공고 전체를 조회 요청한다.
+    //      Then 공고 전체가 조회된다.
+    //
     //      When 공고를 수정한다.
     //      Then 공고가 수정 되었다.
     //
@@ -19,6 +22,7 @@ public class NoticeCrudAcceptanceTest extends NoticeAcceptanceTest {
     @Test
     void notice() {
         createNotice();
+        readAllNotice();
         updateNotice();
         deleteNotice();
     }

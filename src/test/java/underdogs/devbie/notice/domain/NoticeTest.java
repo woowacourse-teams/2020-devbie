@@ -30,12 +30,13 @@ public class NoticeTest {
         final Company expectedCompany = new Company("bossdog", 45_000_000);
         NoticeDetail expectedDetail = new NoticeDetail(languages, "You are hired");
         String expectedImage = "/static/image/bossdog";
+        JobPosition expectedJobPosition = JobPosition.FRONTEND;
         Notice updatedNotice = Notice.builder()
             .id(1L)
             .company(expectedCompany)
-            .jobPosition(JobPosition.BACKEND)
             .noticeDetail(expectedDetail)
             .image(expectedImage)
+            .jobPosition(expectedJobPosition)
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
 
@@ -45,7 +46,6 @@ public class NoticeTest {
             () -> assertThat(notice.getCompany()).isEqualTo(expectedCompany),
             () -> assertThat(notice.getNoticeDetail()).isEqualTo(expectedDetail),
             () -> assertThat(notice.getImage()).isEqualTo(expectedImage)
-
         );
 
     }
