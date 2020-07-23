@@ -91,4 +91,14 @@ public class NoticeServiceTest {
 
         verify(noticeRepository).findById(eq(2L));
     }
+
+    @DisplayName("게시글 삭제")
+    @Test
+    void delete() {
+        doNothing().when(noticeRepository).deleteById(anyLong());
+
+        noticeService.delete(1L);
+
+        verify(noticeRepository).deleteById(eq(1L));
+    }
 }

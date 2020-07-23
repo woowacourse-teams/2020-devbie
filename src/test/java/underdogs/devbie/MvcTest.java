@@ -53,4 +53,12 @@ public abstract class MvcTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON));
     }
+
+    protected ResultActions deleteAction(String url, String bearerToken) throws Exception {
+        return this.mockMvc
+            .perform(delete(url)
+                .header(AUTH_HEADER, bearerToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
 }

@@ -3,6 +3,7 @@ package underdogs.devbie.notice.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +35,14 @@ public class NoticeController {
     public ResponseEntity<Void> update(@PathVariable Long id,
         @RequestBody NoticeUpdateRequest noticeUpdateRequest) {
         noticeService.update(id, noticeUpdateRequest);
+        return ResponseEntity
+            .noContent()
+            .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        noticeService.delete(id);
         return ResponseEntity
             .noContent()
             .build();

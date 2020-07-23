@@ -27,4 +27,9 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         notice.update(noticeUpdateRequest.toEntity(id));
     }
+
+    @Transactional
+    public void delete(Long id) {
+        noticeRepository.deleteById(id);
+    }
 }

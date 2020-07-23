@@ -26,19 +26,15 @@ import underdogs.devbie.notice.service.NoticeService;
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     private NoticeService noticeService;
-
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
-
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
-
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     @DisplayName("시용자 요청을 받아 게시글 저장")
     @Test
@@ -58,7 +54,7 @@ public class NoticeControllerTest extends MvcTest {
 
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
-        postAction("/api/notices", inputJson, "")
+        postAction("/api/notices", inputJson, "bearer token")
             .andExpect(status().isCreated())
             .andDo(print());
     }
@@ -81,7 +77,17 @@ public class NoticeControllerTest extends MvcTest {
 
         doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
-        putAction("/api/notices/1", inputJson, "")
+        putAction("/api/notices/1", inputJson, "bearer token")
+            .andExpect(status().isNoContent())
+            .andDo(print());
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 삭제")
+    @Test
+    void delete() throws Exception {
+        doNothing().when(noticeService).delete(anyLong());
+
+        deleteAction("/api/notices/1", "bearer token")
             .andExpect(status().isNoContent())
             .andDo(print());
     }

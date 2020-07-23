@@ -79,4 +79,16 @@ public abstract class NoticeAcceptanceTest {
             .statusCode(HttpStatus.NO_CONTENT.value());
         //@formatter:on
     }
+
+    void deleteNotice() {
+        //@formatter:off
+        given().
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+        when().
+            delete("/api/notices/1").
+        then()
+            .log().all()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+        //@formatter:on
+    }
 }

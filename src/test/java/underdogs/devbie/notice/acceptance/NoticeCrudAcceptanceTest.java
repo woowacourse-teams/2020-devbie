@@ -12,10 +12,14 @@ public class NoticeCrudAcceptanceTest extends NoticeAcceptanceTest {
     //
     //      When 공고를 수정한다.
     //      Then 공고가 수정 되었다.
+    //
+    //      When 공고를 삭제한다.
+    //      Then 공고가 삭제되었다.
     @DisplayName("공고 인수테스트")
     @Test
     void notice() {
         createNotice();
         updateNotice();
+        deleteNotice();
     }
 }
