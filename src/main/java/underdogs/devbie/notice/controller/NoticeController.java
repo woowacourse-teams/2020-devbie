@@ -3,6 +3,8 @@ package underdogs.devbie.notice.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,7 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody NoticeCreateRequest request) {
+    public ResponseEntity<Void> save(@Valid @RequestBody NoticeCreateRequest request) {
         Long noticeId = noticeService.save(request);
         return ResponseEntity
             .created(URI.create(String.format("/api/notices/%d", noticeId)))
@@ -37,7 +39,7 @@ public class NoticeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id,
-        @RequestBody NoticeUpdateRequest noticeUpdateRequest) {
+        @Valid @RequestBody NoticeUpdateRequest noticeUpdateRequest) {
         noticeService.update(id, noticeUpdateRequest);
         return ResponseEntity
             .noContent()

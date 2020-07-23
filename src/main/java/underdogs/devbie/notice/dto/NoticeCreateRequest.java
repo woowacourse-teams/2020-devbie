@@ -4,11 +4,16 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -19,16 +24,21 @@ import underdogs.devbie.notice.domain.NoticeDetail;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
+@Setter
 public class NoticeCreateRequest {
 
     private String startDate;
     private String endDate;
 
+    @NotBlank
     private String name;
+    @Min(1)
     private Integer salary;
+    @NotEmpty
     private List<String> languages;
 
     private JobPosition jobPosition;
+    @NotBlank
     private String description;
     private String image;
 

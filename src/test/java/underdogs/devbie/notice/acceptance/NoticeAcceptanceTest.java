@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class NoticeAcceptanceTest {
+public class NoticeAcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
 
     @LocalServerPort
@@ -63,7 +65,31 @@ public abstract class NoticeAcceptanceTest {
             .build();
     }
 
-    void createNotice() {
+    // Feature: 공고 관리
+    //
+    //  Scenario: 공고를 관리한다.
+    //      When 공고 1개를 추가 요청한다.
+    //      Then 공고가 업로드 되었다.
+    //
+    //      When 공고 전체를 조회 요청한다.
+    //      Then 공고 전체가 조회된다.
+    //
+    //      When 공고를 수정한다.
+    //      Then 공고가 수정 되었다.
+    //
+    //      When 공고를 삭제한다.
+    //      Then 공고가 삭제되었다.
+    @DisplayName("공고 인수테스트")
+    @Test
+    void notice() {
+        createNotice();
+        readAllNotice();
+        updateNotice();
+        readNoticeDetail();
+        deleteNotice();
+    }
+
+    private void createNotice() {
         //@formatter:off
         given().
             body(noticeCreateRequest).
@@ -77,7 +103,7 @@ public abstract class NoticeAcceptanceTest {
         //@formatter:on
     }
 
-    void updateNotice() {
+    private void updateNotice() {
         //@formatter:off
         given().
             body(noticeUpdateRequest).
@@ -90,7 +116,7 @@ public abstract class NoticeAcceptanceTest {
         //@formatter:on
     }
 
-    void deleteNotice() {
+    private void deleteNotice() {
         //@formatter:off
         given().
             contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -102,7 +128,7 @@ public abstract class NoticeAcceptanceTest {
         //@formatter:on
     }
 
-    void readAllNotice() {
+    private void readAllNotice() {
         //@formatter:off
         List<NoticeResponse> result = given().
             contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -126,7 +152,7 @@ public abstract class NoticeAcceptanceTest {
         );
     }
 
-    void readNoticeDetail() {
+    private void readNoticeDetail() {
         //@formatter:off
         NoticeDetailResponse result = given().
             contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -142,7 +168,6 @@ public abstract class NoticeAcceptanceTest {
         assertAll(
             () -> assertThat(result.getId()).isEqualTo(1L),
             () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
-            () -> assertThat(result.getDuration()).isEqualTo(updatedDuration),
             () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
             () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(result.getNoticeDetail().getDescription()).isEqualTo("You are hired!"),

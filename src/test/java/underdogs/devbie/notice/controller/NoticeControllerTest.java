@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +44,13 @@ public class NoticeControllerTest extends MvcTest {
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
-    @DisplayName("시용자 요청을 받아 게시글 저장")
-    @Test
-    void save() throws Exception {
-        NoticeCreateRequest noticeRequest = NoticeCreateRequest.builder()
+    private NoticeCreateRequest noticeCreateRequest;
+
+    private NoticeUpdateRequest noticeUpdateRequest;
+
+    @BeforeEach
+    void setUp() {
+        noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
             .languages(Arrays.asList("java", "javascript"))
@@ -57,7 +61,23 @@ public class NoticeControllerTest extends MvcTest {
             .endDate(String.valueOf(LocalDateTime.now()))
             .build();
 
-        String inputJson = objectMapper.writeValueAsString(noticeRequest);
+        noticeUpdateRequest = NoticeUpdateRequest.builder()
+            .name("underdogs")
+            .salary(50_000_000)
+            .languages(Arrays.asList("java", "javascript"))
+            .jobPosition(JobPosition.BACKEND)
+            .image("/static/image/underdogs")
+            .description("We are hiring!")
+            .startDate(String.valueOf(LocalDateTime.now()))
+            .endDate(String.valueOf(LocalDateTime.now()))
+            .build();
+        ;
+    }
+
+    @DisplayName("시용자 요청을 받아 게시글 저장")
+    @Test
+    void save() throws Exception {
+        String inputJson = objectMapper.writeValueAsString(noticeCreateRequest);
 
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
@@ -66,27 +86,72 @@ public class NoticeControllerTest extends MvcTest {
             .andDo(print());
     }
 
+    @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 이름")
+    @Test
+    void saveRequestWithInvalidName() throws Exception {
+        noticeCreateRequest.setName("");
+        validateNoticeCreateRequest();
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 연봉")
+    @Test
+    void saveRequestWithInvalidSalary() throws Exception {
+        noticeCreateRequest.setSalary(0);
+        validateNoticeCreateRequest();
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 프로그래밍 언어")
+    @Test
+    void saveRequestWithInvalidLanguages() throws Exception {
+        noticeCreateRequest.setLanguages(Arrays.asList());
+        validateNoticeCreateRequest();
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 회사 설명")
+    @Test
+    void saveRequestWithInvalidDescription() throws Exception {
+        noticeCreateRequest.setDescription("");
+        validateNoticeCreateRequest();
+    }
+
     @DisplayName("사용자 요청을 받아 게시글 업데이트")
     @Test
     void update() throws Exception {
-        NoticeUpdateRequest request = NoticeUpdateRequest.builder()
-            .name("underdogs")
-            .salary(50_000_000)
-            .languages(Arrays.asList("java", "javascript"))
-            .jobPosition(JobPosition.BACKEND)
-            .image("/static/image/underdogs")
-            .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
-            .build();
-
-        String inputJson = objectMapper.writeValueAsString(request);
+        String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
 
         doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
         putAction("/api/notices/1", inputJson, "bearer token")
             .andExpect(status().isNoContent())
             .andDo(print());
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 이름")
+    @Test
+    void updateRequestWithInvalidName() throws Exception {
+        noticeUpdateRequest.setName("");
+        validateUpdateRequest();
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 연봉")
+    @Test
+    void updateRequestWithInvalidSalary() throws Exception {
+        noticeUpdateRequest.setSalary(0);
+        validateUpdateRequest();
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 프로그래밍 언어")
+    @Test
+    void updateRequestWithInvalidLanguages() throws Exception {
+        noticeUpdateRequest.setLanguages(Arrays.asList());
+        validateUpdateRequest();
+    }
+
+    @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 설명")
+    @Test
+    void updateRequestWithInvalidDescription() throws Exception {
+        noticeUpdateRequest.setDescription("");
+        validateUpdateRequest();
     }
 
     @DisplayName("사용자 요청을 받아 게시글 삭제")
@@ -149,6 +214,25 @@ public class NoticeControllerTest extends MvcTest {
             .andExpect(jsonPath("$.noticeDetail.description").value("You are hired!"))
             .andExpect(jsonPath("$.noticeDetail.languages[0]").value("java"))
             .andExpect(jsonPath("$.noticeDetail.languages[1]").value("javascript"))
+            .andDo(print());
+    }
+
+    private void validateNoticeCreateRequest() throws Exception {
+        String inputJson = objectMapper.writeValueAsString(noticeCreateRequest);
+        given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
+
+        postAction("/api/notices", inputJson, "bearer token")
+            .andExpect(status().is4xxClientError())
+            .andDo(print());
+    }
+
+    private void validateUpdateRequest() throws Exception {
+        String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
+
+        doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
+
+        putAction("/api/notices/1", inputJson, "bearer token")
+            .andExpect(status().is4xxClientError())
             .andDo(print());
     }
 }
