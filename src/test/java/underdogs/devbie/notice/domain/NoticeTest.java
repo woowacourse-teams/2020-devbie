@@ -4,12 +4,16 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import underdogs.devbie.notice.expception.CreateFailException;
 
 public class NoticeTest {
 
@@ -47,6 +51,18 @@ public class NoticeTest {
             () -> assertThat(notice.getNoticeDetail()).isEqualTo(expectedDetail),
             () -> assertThat(notice.getImage()).isEqualTo(expectedImage)
         );
+    }
 
+    @DisplayName("Notice 생성 테스트 - Image가 비었으면 예외 발생")
+    @Test
+    void name() {
+        assertThatThrownBy(() -> Notice.builder()
+            .company(new Company("underdogs", 50_000_000))
+            .jobPosition(JobPosition.BACKEND)
+            .noticeDetail(new NoticeDetail(new HashSet<>(Arrays.asList("C++")), "We are hiring!"))
+            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .build()
+        )
+            .isInstanceOf(CreateFailException.class);
     }
 }
