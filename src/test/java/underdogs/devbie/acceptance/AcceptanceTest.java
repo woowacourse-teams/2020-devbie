@@ -82,6 +82,20 @@ abstract class AcceptanceTest {
         // @formatter:on
     }
 
+    protected <T> void patch(String path, String inputJson) {
+        // @formatter:off
+        given().
+                body(inputJson).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                patch(path).
+        then().
+                log().all().
+                statusCode(HttpStatus.OK.value());
+        // @formatter:on
+    }
+
     protected <T> void delete(String path) {
         // @formatter:off
         given().
