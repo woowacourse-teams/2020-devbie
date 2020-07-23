@@ -12,10 +12,10 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-abstract class AcceptanceTest {
+public abstract class AcceptanceTest {
 
     @LocalServerPort
-    private int port;
+    protected int port;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +78,7 @@ abstract class AcceptanceTest {
                 put(path).
         then().
                 log().all().
-                statusCode(HttpStatus.OK.value());
+                statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 
@@ -92,7 +92,7 @@ abstract class AcceptanceTest {
                 patch(path).
         then().
                 log().all().
-                statusCode(HttpStatus.OK.value());
+                statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 
