@@ -23,7 +23,7 @@ public abstract class Recommendation extends BaseTimeEntity {
     }
 
     private void validateParameters(Long userId, RecommendationType recommendationType) {
-        if (Objects.isNull(userId) | Objects.isNull(recommendationType)) {
+        if (Objects.isNull(userId) || Objects.isNull(recommendationType)) {
             throw new CreateFailException();
         }
     }

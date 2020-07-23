@@ -45,7 +45,7 @@ public class Question extends BaseTimeEntity {
     }
 
     private void validateParameters(Long userId, QuestionTitle title, QuestionContent content) {
-        if (Objects.isNull(userId) | Objects.isNull(title) | Objects.isNull(content)) {
+        if (Objects.isNull(userId) || Objects.isNull(title) || Objects.isNull(content)) {
             throw new CreateFailException();
         }
     }
