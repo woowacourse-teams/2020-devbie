@@ -1,7 +1,6 @@
 package underdogs.devbie.acceptance;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +26,10 @@ abstract class AcceptanceTest {
         return RestAssured.given().log().all();
     }
 
-    protected <T> void post(String path, Map<String, String> params) {
+    protected <T> void post(String path, String inputJson) {
         // @formatter:off
         given().
-                body(params).
+                body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
@@ -69,10 +68,10 @@ abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void put(String path, Map<String, String> params) {
+    protected <T> void put(String path, String inputJson) {
         // @formatter:off
         given().
-                body(params).
+                body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         when().
