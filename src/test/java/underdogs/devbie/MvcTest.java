@@ -16,32 +16,32 @@ public abstract class MvcTest {
 
     protected ResultActions getAction(String url) throws Exception {
         return this.mockMvc
-                .perform(get(url)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON));
+            .perform(get(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     protected ResultActions getAction(String url, String bearerToken) throws Exception {
         return this.mockMvc
-                .perform(get(url)
-                        .header(AUTH_HEADER, bearerToken)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON));
+            .perform(get(url)
+                .header(AUTH_HEADER, bearerToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     protected ResultActions postAction(String url) throws Exception {
         return this.mockMvc
-                .perform(post(url)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON));
+            .perform(post(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     protected ResultActions postAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
-                .perform(post(url)
-                        .header(AUTH_HEADER, bearerToken)
-                        .content(inputJson)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON));
+            .perform(post(url)
+                .header(AUTH_HEADER, bearerToken)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }
