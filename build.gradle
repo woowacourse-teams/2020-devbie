@@ -91,16 +91,16 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
     violationRules {
-//        rule {
-//            element = 'CLASS'
-//
-//            limit {
-//                counter = 'INSTRUCTION'
-//                value = 'COVEREDRATIO'
-//                minimum = 0.50
-//            }
-//
-//            includes = ['*.domain.*']
-//        }
+        rule {
+            element = 'CLASS'
+
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.50
+            }
+
+            includes = ['*.domain.*']
+        }
     }
 }
