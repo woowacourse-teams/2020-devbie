@@ -5,13 +5,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import underdogs.devbie.answer.domain.Answer;
+import underdogs.devbie.answer.domain.Answers;
 import underdogs.devbie.answer.domain.repository.AnswerRepository;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
+import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.user.domain.User;
 
 @Service
 @AllArgsConstructor
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
@@ -20,5 +22,10 @@ public class AnswerService {
     public Long save(User user, AnswerCreateRequest request) {
         Answer answer = request.toEntity(user.getId());
         return answerRepository.save(answer).getId();
+    }
+
+    public AnswerResponses readAll() {
+        Answers answers = Answers.from(answerRepository.findAll());
+        return AnswerResponses.from(answers);
     }
 }
