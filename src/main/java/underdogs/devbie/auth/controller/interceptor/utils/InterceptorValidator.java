@@ -8,8 +8,8 @@ import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 
 public class InterceptorValidator {
 
-    public boolean isValid(Object handler) {
+    public boolean isNotValid(Object handler) {
         NoValidate noValidate = ((HandlerMethod) handler).getMethodAnnotation(NoValidate.class);
-        return Objects.isNull(noValidate);
+        return Objects.nonNull(noValidate);
     }
 }
