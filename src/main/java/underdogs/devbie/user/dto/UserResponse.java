@@ -1,11 +1,12 @@
 package underdogs.devbie.user.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import underdogs.devbie.user.domain.User;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
 public class UserResponse {
