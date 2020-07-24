@@ -52,18 +52,4 @@ public class NoticeTest {
             () -> assertThat(notice.getImage()).isEqualTo(expectedImage)
         );
     }
-
-    @DisplayName("Notice 생성 테스트 - Image가 비었으면 예외 발생")
-    @Test
-    void name() {
-        assertThatThrownBy(() -> Notice.builder()
-            .company(new Company("underdogs", 50_000_000))
-            .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(
-                new NoticeDescription(new HashSet<>(Arrays.asList(Language.CPP.getName())), "We are hiring!"))
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
-            .build()
-        )
-            .isInstanceOf(CreateFailException.class);
-    }
 }
