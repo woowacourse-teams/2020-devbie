@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public class QuestionResponses {
 
-    List<QuestionResponse> responses = new ArrayList<>();
+    List<QuestionResponse> questions = new ArrayList<>();
 
-    public static QuestionResponses from(List<QuestionResponse> responses) {
-        return new QuestionResponses(responses);
+    public static QuestionResponses from(List<QuestionResponse> questions) {
+        return new QuestionResponses(questions);
     }
 }

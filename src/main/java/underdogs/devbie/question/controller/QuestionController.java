@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,16 @@ public class QuestionController {
             .body(responses);
     }
 
+    @GetMapping(params = "keyword")
+    public ResponseEntity<QuestionResponses> searchByTitle(
+        @RequestParam("keyword") String keyword
+    ) {
+        QuestionResponses responses = questionService.searchByTitle(keyword);
+        return ResponseEntity
+            .ok()
+            .body(responses);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<QuestionResponse> read(@PathVariable("id") Long id) {
         QuestionResponse response = questionService.read(id);
@@ -78,5 +89,4 @@ public class QuestionController {
             .noContent()
             .build();
     }
-
 }

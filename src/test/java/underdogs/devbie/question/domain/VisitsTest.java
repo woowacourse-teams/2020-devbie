@@ -12,7 +12,7 @@ class VisitsTest {
     void init() {
         Visits initialVisits = Visits.init();
 
-        assertThat(initialVisits.getValue()).isEqualTo(0L);
+        assertThat(initialVisits.getVisitCount()).isEqualTo(0L);
     }
 
     @DisplayName("Visits - value 증가")
@@ -21,7 +21,7 @@ class VisitsTest {
         Visits initialVisits = Visits.init();
         initialVisits.increase();
 
-        assertThat(initialVisits.getValue()).isEqualTo(1L);
+        assertThat(initialVisits.getVisitCount()).isEqualTo(1L);
     }
 
     @DisplayName("Visits - equals")

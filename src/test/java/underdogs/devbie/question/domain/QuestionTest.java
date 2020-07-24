@@ -73,7 +73,7 @@ class QuestionTest {
             .content(TEST_QUESTION_CONTENT)
             .build();
 
-        assertThat(question.getVisits().getValue()).isEqualTo(0L);
+        assertThat(question.getVisits().getVisitCount()).isEqualTo(0L);
     }
 
     @DisplayName("조회수 증가")
@@ -87,6 +87,6 @@ class QuestionTest {
 
         question.increaseVisits();
 
-        assertThat(question.getVisits().getValue()).isEqualTo(1L);
+        assertThat(question.getVisits().getVisitCount()).isEqualTo(1L);
     }
 }

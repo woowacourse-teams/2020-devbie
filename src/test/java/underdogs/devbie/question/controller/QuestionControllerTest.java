@@ -40,11 +40,9 @@ class QuestionControllerTest extends MvcTest {
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
-    private User user;
-
     @BeforeEach
     void setUp() {
-        user = User.builder()
+        User user = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
@@ -129,5 +127,30 @@ class QuestionControllerTest extends MvcTest {
             .andExpect(status().isNoContent());
 
         verify(questionService).delete(eq(1L), eq(1L));
+    }
+
+    @DisplayName("질문 검색 - 제목에 포함된 키워드")
+    @Test
+    void search() throws Exception {
+        QuestionResponse response1 = QuestionResponse.builder()
+            .questionId(1L)
+            .title("스택과 큐의 차이")
+            .content(TEST_QUESTION_CONTENT)
+            .build();
+
+        QuestionResponse response2 = QuestionResponse.builder()
+            .questionId(2L)
+            .title("오버스택플로우")
+            .content(TEST_QUESTION_CONTENT)
+            .build();
+
+        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(response1, response2));
+
+        given(questionService.searchByTitle(anyString())).willReturn(responses);
+
+        getAction("/api/questions?keyword=스택")
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("스택과 큐의 차이")))
+            .andExpect(content().string(containsString("오버스택플로우")));
     }
 }

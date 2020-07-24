@@ -39,6 +39,11 @@ public class QuestionService {
         return QuestionResponse.from(question);
     }
 
+    private Question readOne(Long questionId) {
+        return questionRepository.findById(questionId)
+            .orElseThrow(QuestionNotExistedException::new);
+    }
+
     @Transactional
     public void update(Long userId, Long questionId, QuestionUpdateRequest request) {
         Question question = readOne(questionId);
@@ -65,8 +70,9 @@ public class QuestionService {
         questionRepository.deleteById(questionId);
     }
 
-    private Question readOne(Long questionId) {
-        return questionRepository.findById(questionId)
-            .orElseThrow(QuestionNotExistedException::new);
+    public QuestionResponses searchByTitle(String keyword) {
+        List<Question> questions = questionRepository.findByTitleLike(keyword);
+        List<QuestionResponse> questionResponses = QuestionResponse.listFrom(questions);
+        return QuestionResponses.from(questionResponses);
     }
 }

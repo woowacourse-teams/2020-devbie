@@ -80,7 +80,7 @@ class QuestionServiceTest {
 
         QuestionResponses responses = questionService.readAll();
 
-        QuestionResponse response = responses.getResponses().get(0);
+        QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
             () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
@@ -150,5 +150,32 @@ class QuestionServiceTest {
         questionService.delete(1L, 1L);
 
         verify(questionRepository).findById(eq(1L));
+    }
+
+    @DisplayName("질문 검색 - 제목에 포함된 키워드")
+    @Test
+    void searchByTitle() {
+        Question question1 = Question.builder()
+            .userId(1L)
+            .title(QuestionTitle.from("스택과 큐의 차이"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .build();
+
+        Question question2 = Question.builder()
+            .userId(2L)
+            .title(QuestionTitle.from("오버스택플로우"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .build();
+
+        List<Question> questions = Lists.newArrayList(question1, question2);
+
+        given(questionRepository.findByTitleLike(anyString())).willReturn(questions);
+
+        QuestionResponses responses = questionService.searchByTitle("스택");
+
+        assertAll(
+            () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
+            () -> assertThat(responses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
+        );
     }
 }
