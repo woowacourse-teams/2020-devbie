@@ -1,7 +1,6 @@
 package underdogs.devbie.answer.controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.core.StringContains.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -26,6 +25,7 @@ import underdogs.devbie.answer.domain.Answers;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
+import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.service.AnswerService;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
@@ -141,5 +141,42 @@ public class AnswerControllerTest extends MvcTest {
             () -> assertEquals(actual.get(0).getQuestionId(), 3L),
             () -> assertEquals(actual.get(0).getContent(), TEST_ANSWER_CONTENT)
         );
+    }
+
+    @DisplayName("Answer id로 하나의 Answer 조회")
+    @Test
+    void read() throws Exception {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(2L)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerService.read(anyLong())).willReturn(AnswerResponse.from(expectAnswer));
+
+        MvcResult mvcResult = getAction(String.format("/api/answers/%d", 1L)).andReturn();
+
+        AnswerResponse answerResponse = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(),
+            AnswerResponse.class);
+
+        assertThat(answerResponse).isNotNull();
+        assertAll(
+            () -> assertEquals(answerResponse.getId(), 1L),
+            () -> assertEquals(answerResponse.getUserId(), 2L),
+            () -> assertEquals(answerResponse.getQuestionId(), 3L),
+            () -> assertEquals(answerResponse.getContent(), TEST_ANSWER_CONTENT)
+        );
+    }
+
+    @DisplayName("Answer 수정")
+    @Test
+    void update() throws Exception {
+        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest("Changed Request");
+        willDoNothing().given(answerService).update(any(User.class), anyLong(), any(AnswerUpdateRequest.class));
+
+        patchAction(String.format("/api/answers/%d", 1L), OBJECT_MAPPER.writeValueAsString(answerUpdateRequest),
+            TEST_TOKEN);
+
+        verify(answerService).update(any(User.class), eq(1L), any(AnswerUpdateRequest.class));
     }
 }

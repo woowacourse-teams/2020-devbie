@@ -16,7 +16,7 @@ public class AnswerResponse {
     private Long questionId;
     private String content;
 
-    public static AnswerResponse of(Answer answer) {
+    public static AnswerResponse from(Answer answer) {
         return new AnswerResponse(answer.getId(), answer.getUserId(), answer.getQuestionId(),
             answer.getContent().getContent());
     }

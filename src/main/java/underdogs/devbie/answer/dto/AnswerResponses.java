@@ -18,7 +18,7 @@ public class AnswerResponses {
 
     public static AnswerResponses from(Answers answers) {
         List<AnswerResponse> answerResponses = answers.getAnswers().stream()
-            .map(AnswerResponse::of)
+            .map(AnswerResponse::from)
             .collect(Collectors.toList());
         return new AnswerResponses(answerResponses);
     }

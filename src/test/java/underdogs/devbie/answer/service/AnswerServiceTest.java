@@ -8,6 +8,7 @@ import static underdogs.devbie.user.domain.UserTest.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,11 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.domain.AnswerContent;
-import underdogs.devbie.answer.domain.Answers;
 import underdogs.devbie.answer.domain.repository.AnswerRepository;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
+import underdogs.devbie.answer.dto.AnswerUpdateRequest;
+import underdogs.devbie.answer.exception.AnswerNotExistedException;
+import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
 import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +65,7 @@ class AnswerServiceTest {
         assertThat(id).isEqualTo(expected.getId());
     }
 
-    @DisplayName("면접 전체 조회")
+    @DisplayName("면접 답변 전체 조회")
     @Test
     void readAll() {
         Answer expectAnswer = Answer.builder()
@@ -84,5 +87,120 @@ class AnswerServiceTest {
             () -> assertThat(actual.get(0).getQuestionId()).isEqualTo(3L),
             () -> assertThat(actual.get(0).getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
+    }
+
+    @DisplayName("하나의 면접 답 조회")
+    @Test
+    void read() throws Exception {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(2L)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong()))
+            .willReturn(Optional.of(expectAnswer));
+
+        AnswerResponse actual = answerService.read(1L);
+
+        assertAll(
+            () -> assertThat(actual).isNotNull(),
+            () -> assertEquals(actual.getId(), 1L),
+            () -> assertEquals(actual.getUserId(), 2L),
+            () -> assertEquals(actual.getQuestionId(), 3L),
+            () -> assertEquals(actual.getContent(), TEST_ANSWER_CONTENT)
+        );
+    }
+
+    @DisplayName("하나의 면접 답 조회 실패 - 존재하지 않는 Answer")
+    @Test
+    void readFailCauseByNotExistedAnswer() throws Exception {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(2L)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willThrow(AnswerNotExistedException.class);
+
+        assertThatThrownBy(
+            () -> {
+                answerService.read(1L);
+            }
+        );
+    }
+
+    @DisplayName("면접 답변 수정")
+    @Test
+    void update() {
+        User user = User.builder()
+            .id(USER_ID)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+        String changedAnswerContent = "Changed Answer Content";
+        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(3L)
+            .content(AnswerContent.from(changedAnswerContent))
+            .build();
+        given(answerRepository.findById(anyLong()))
+            .willReturn(Optional.of(expectAnswer));
+
+        Long requestedUpdateRequestId = 1L;
+        answerService.update(user, requestedUpdateRequestId, answerUpdateRequest);
+
+        AnswerResponse updatedAnswer = answerService.read(requestedUpdateRequestId);
+        assertAll(
+            () -> assertEquals(updatedAnswer.getId(), requestedUpdateRequestId),
+            () -> assertEquals(updatedAnswer.getUserId(), expectAnswer.getUserId()),
+            () -> assertEquals(updatedAnswer.getQuestionId(), expectAnswer.getQuestionId()),
+            () -> assertEquals(updatedAnswer.getContent(), changedAnswerContent)
+        );
+    }
+
+    @DisplayName("면접 답변 수정 실패 - 존재 하지 않는 answerId")
+    @Test
+    void updateFailCauseByNotExistedAnswer() {
+        User user = User.builder()
+            .id(USER_ID)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+        String changedAnswerContent = "Changed Answer Content";
+        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
+        given(answerRepository.findById(anyLong())).willThrow(AnswerNotExistedException.class);
+
+        Long requestedUpdateRequestId = 30L;
+        assertThatThrownBy(() -> {
+            answerService.update(user, requestedUpdateRequestId, answerUpdateRequest);
+        }).isInstanceOf(AnswerNotExistedException.class);
+    }
+
+    @DisplayName("면접 답변 수정 실패 - 권한 없는 요청")
+    @Test
+    void updateFailCauseByNoAuthor() {
+        User user = User.builder()
+            .id(USER_ID)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+        String changedAnswerContent = "Changed Answer Content";
+        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
+        Long anotherUserId = USER_ID + 1;
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(anotherUserId)
+            .questionId(3L)
+            .content(AnswerContent.from(changedAnswerContent))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+        Long requestedUpdateRequestId = 1L;
+
+        assertThatThrownBy(() -> {
+            answerService.update(user, requestedUpdateRequestId, answerUpdateRequest);
+        }).isInstanceOf(NotMatchedAnswerAuthorException.class);
     }
 }

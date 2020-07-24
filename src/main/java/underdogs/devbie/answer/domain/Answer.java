@@ -49,4 +49,8 @@ public class Answer extends BaseTimeEntity {
     public void updateContent(AnswerContent content) {
         this.content = content;
     }
+
+    public boolean isNotMatched(Long userId) {
+        return !this.userId.equals(userId);
+    }
 }
