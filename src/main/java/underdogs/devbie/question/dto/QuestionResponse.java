@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import underdogs.devbie.question.domain.Question;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
 public class QuestionResponse {
