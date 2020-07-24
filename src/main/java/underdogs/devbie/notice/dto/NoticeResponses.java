@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class NoticeResponses {
+
     private final List<NoticeResponse> noticeResponses;
 
     public static NoticeResponses from(List<NoticeResponse> noticeResponses) {

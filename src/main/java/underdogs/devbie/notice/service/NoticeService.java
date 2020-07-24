@@ -13,6 +13,7 @@ import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
+import underdogs.devbie.notice.expception.NoticeNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +29,9 @@ public class NoticeService {
     }
 
     @Transactional
-    public void update(Long id, NoticeUpdateRequest noticeUpdateRequest) {
-        Notice notice = noticeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        notice.update(noticeUpdateRequest.toEntity(id));
+    public void update(Long id, NoticeUpdateRequest request) {
+        Notice notice = noticeRepository.findById(id).orElseThrow(NoticeNotFoundException::new);
+        notice.update(request.toEntity(id));
     }
 
     @Transactional
@@ -44,7 +45,7 @@ public class NoticeService {
     }
 
     public NoticeDetailResponse read(Long id) {
-        Notice notice = noticeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Notice notice = noticeRepository.findById(id).orElseThrow(NoticeNotFoundException::new);
         return NoticeDetailResponse.from(notice);
     }
 }

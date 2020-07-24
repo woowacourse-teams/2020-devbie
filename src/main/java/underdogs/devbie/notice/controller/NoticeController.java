@@ -39,8 +39,8 @@ public class NoticeController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id,
-        @Valid @RequestBody NoticeUpdateRequest noticeUpdateRequest) {
-        noticeService.update(id, noticeUpdateRequest);
+        @Valid @RequestBody NoticeUpdateRequest request) {
+        noticeService.update(id, request);
         return ResponseEntity
             .noContent()
             .build();
@@ -56,13 +56,13 @@ public class NoticeController {
 
     @GetMapping
     public ResponseEntity<NoticeResponses> readAll() {
-        NoticeResponses noticeResponses = noticeService.readAll();
-        return ResponseEntity.ok(noticeResponses);
+        NoticeResponses responses = noticeService.readAll();
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<NoticeDetailResponse> readAll(@PathVariable Long id) {
-        NoticeDetailResponse noticeDetailResponse = noticeService.read(id);
-        return ResponseEntity.ok(noticeDetailResponse);
+        NoticeDetailResponse response = noticeService.read(id);
+        return ResponseEntity.ok(response);
     }
 }

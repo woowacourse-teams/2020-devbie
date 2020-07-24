@@ -3,6 +3,7 @@ package underdogs.devbie.notice.domain;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,7 +16,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.notice.expception.CreateFailException;
 
@@ -23,7 +23,6 @@ import underdogs.devbie.notice.expception.CreateFailException;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-@Setter
 public class Notice extends BaseTimeEntity {
 
     @Id
@@ -31,23 +30,28 @@ public class Notice extends BaseTimeEntity {
     private Long id;
 
     @Embedded
+    @Column(nullable = false)
     private Company company;
 
     @Embedded
+    @Column(nullable = true)
     private Duration duration;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private JobPosition jobPosition;
 
     @Embedded
+    @Column(nullable = false)
     private NoticeDescription noticeDescription;
 
+    @Column(nullable = true)
     private String image;
 
     @Builder
     private Notice(Long id, Company company, Duration duration, JobPosition jobPosition,
         NoticeDescription noticeDescription, String image) {
-        validateParameters(company, duration, jobPosition, noticeDescription, image);
+        validateParameters(company, jobPosition, noticeDescription);
         this.id = id;
         this.company = company;
         this.duration = duration;
@@ -56,33 +60,21 @@ public class Notice extends BaseTimeEntity {
         this.image = image;
     }
 
-    private void validateParameters(Company company, Duration duration, JobPosition jobPosition,
-        NoticeDescription noticeDescription, String image) {
+    private void validateParameters(Company company, JobPosition jobPosition,
+        NoticeDescription noticeDescription) {
         if (Objects.isNull(company)
-            || Objects.isNull(duration)
             || Objects.isNull(jobPosition)
-            || Objects.isNull(noticeDescription)
-            || Objects.isNull(image) || image.isEmpty()) {
+            || Objects.isNull(noticeDescription)) {
             throw new CreateFailException();
         }
     }
 
     public void update(Notice notice) {
-        if (!this.company.equals(notice.company)) {
-            this.company = notice.company;
-        }
-        if (!this.duration.equals(notice.duration)) {
-            this.duration = notice.duration;
-        }
-        if (!this.jobPosition.equals(notice.jobPosition)) {
-            this.jobPosition = notice.jobPosition;
-        }
-        if (!this.noticeDescription.equals(notice.noticeDescription)) {
-            this.noticeDescription = notice.noticeDescription;
-        }
-        if (!this.image.equals(notice.image)) {
-            this.image = notice.image;
-        }
+        this.company = notice.company;
+        this.duration = notice.duration;
+        this.jobPosition = notice.jobPosition;
+        this.noticeDescription = notice.noticeDescription;
+        this.image = notice.image;
     }
 
     public String getCompanyName() {

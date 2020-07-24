@@ -28,18 +28,23 @@ import underdogs.devbie.notice.domain.NoticeDescription;
 public class NoticeUpdateRequest {
 
     private String startDate;
+
     private String endDate;
 
     @NotBlank
     private String name;
+
     @Min(1)
     private Integer salary;
+
     @NotEmpty
     private List<String> languages;
 
     private JobPosition jobPosition;
+
     @NotBlank
     private String description;
+
     private String image;
 
     public Notice toEntity(Long id) {

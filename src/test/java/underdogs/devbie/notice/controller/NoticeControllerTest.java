@@ -3,6 +3,7 @@ package underdogs.devbie.notice.controller;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -83,7 +84,7 @@ public class NoticeControllerTest extends MvcTest {
 
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
-        postAction("/api/notices", inputJson, "bearer token")
+        postAction("/api/notices", inputJson, TEST_TOKEN)
             .andExpect(status().isCreated())
             .andDo(print());
     }
@@ -123,7 +124,7 @@ public class NoticeControllerTest extends MvcTest {
 
         doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
-        patchAction("/api/notices/1", inputJson, "bearer token")
+        patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().isNoContent())
             .andDo(print());
     }
@@ -161,7 +162,7 @@ public class NoticeControllerTest extends MvcTest {
     void delete() throws Exception {
         doNothing().when(noticeService).delete(anyLong());
 
-        deleteAction("/api/notices/1", "bearer token")
+        deleteAction("/api/notices/1", TEST_TOKEN)
             .andExpect(status().isNoContent())
             .andDo(print());
     }
@@ -225,7 +226,7 @@ public class NoticeControllerTest extends MvcTest {
         String inputJson = objectMapper.writeValueAsString(noticeCreateRequest);
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
-        postAction("/api/notices", inputJson, "bearer token")
+        postAction("/api/notices", inputJson, TEST_TOKEN)
             .andExpect(status().is4xxClientError())
             .andDo(print());
     }
@@ -235,7 +236,7 @@ public class NoticeControllerTest extends MvcTest {
 
         doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
-        patchAction("/api/notices/1", inputJson, "bearer token")
+        patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().is4xxClientError())
             .andDo(print());
     }

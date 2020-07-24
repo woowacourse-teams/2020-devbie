@@ -28,6 +28,7 @@ import underdogs.devbie.notice.domain.NoticeDescription;
 public class NoticeCreateRequest {
 
     private String startDate;
+
     private String endDate;
 
     @NotBlank
@@ -43,6 +44,7 @@ public class NoticeCreateRequest {
 
     @NotBlank
     private String description;
+
     private String image;
 
     public Notice toEntity() {
