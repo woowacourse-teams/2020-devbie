@@ -9,10 +9,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
+import underdogs.devbie.auth.dto.UserTokenDto;
+import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -21,6 +24,7 @@ import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
+import underdogs.devbie.user.domain.User;
 
 public class NoticeAcceptanceTest extends AcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
@@ -30,6 +34,14 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     private NoticeCreateRequest noticeCreateRequest;
 
     private NoticeUpdateRequest noticeUpdateRequest;
+
+    @Value("${security.jwt.token.secret-key:sample}")
+    String secretKey;
+
+    @Value("${security.jwt.token.expire-length:300}")
+    long validityInMillisecond;
+
+    private String token;
 
     /*
     Feature: 공고 관리
@@ -50,6 +62,9 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     @DisplayName("공고 인수테스트")
     @Test
     void notice() throws JsonProcessingException {
+        token = new JwtTokenProvider(secretKey, validityInMillisecond).createToken(
+            UserTokenDto.from(User.builder().id(1L).build()));
+
         noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
@@ -80,15 +95,15 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     }
 
     private void createNotice() throws JsonProcessingException {
-        post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
+        post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest), token);
     }
 
     private void updateNotice() throws JsonProcessingException {
-        patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
+        patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest), token);
     }
 
     private void deleteNotice() {
-        delete("/api/notices/1");
+        delete("/api/notices/1", token);
     }
 
     private void readAllNotice() {

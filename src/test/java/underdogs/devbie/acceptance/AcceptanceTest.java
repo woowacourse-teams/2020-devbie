@@ -26,9 +26,11 @@ public abstract class AcceptanceTest {
         RestAssured.port = port;
     }
 
-    protected <T> void post(String path, String inputJson) {
+    protected <T> void post(String path, String inputJson, String token) {
         // @formatter:off
         given().
+                auth().
+                oauth2(token).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -68,9 +70,11 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void put(String path, String inputJson) {
+    protected <T> void put(String path, String inputJson, String token) {
         // @formatter:off
         given().
+                auth().
+                oauth2(token).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -82,9 +86,11 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void patch(String path, String inputJson) {
+    protected <T> void patch(String path, String inputJson, String token) {
         // @formatter:off
         given().
+                auth().
+                oauth2(token).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -96,9 +102,11 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void delete(String path) {
+    protected <T> void delete(String path, String token) {
         // @formatter:off
         given().
+                auth().
+                oauth2(token).
         when().
                 delete(path).
         then().
