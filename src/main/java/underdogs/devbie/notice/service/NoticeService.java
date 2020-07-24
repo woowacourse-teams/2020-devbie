@@ -11,6 +11,7 @@ import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
+import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @Service
@@ -37,9 +38,9 @@ public class NoticeService {
         noticeRepository.deleteById(id);
     }
 
-    public List<NoticeResponse> readAll() {
+    public NoticeResponses readAll() {
         List<Notice> notices = noticeRepository.findAll();
-        return NoticeResponse.toList(notices);
+        return NoticeResponses.from(NoticeResponse.listFrom(notices));
     }
 
     public NoticeDetailResponse read(Long id) {

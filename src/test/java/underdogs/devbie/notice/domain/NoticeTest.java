@@ -20,25 +20,25 @@ public class NoticeTest {
     @DisplayName("공고 업데이트")
     @Test
     void update() {
-        Set<String> languages = Stream.of("java", "javascript")
+        Set<String> languages = Stream.of(Language.JAVA.getName(), Language.JAVASCRIPT.getName())
             .collect(Collectors.toSet());
         Notice notice = Notice.builder()
             .id(1L)
             .company(new Company("underdogs", 50_000_000))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDetail(new NoticeDetail(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
 
         final Company expectedCompany = new Company("bossdog", 45_000_000);
-        NoticeDetail expectedDetail = new NoticeDetail(languages, "You are hired");
+        NoticeDescription expectedDetail = new NoticeDescription(languages, "You are hired");
         String expectedImage = "/static/image/bossdog";
         JobPosition expectedJobPosition = JobPosition.FRONTEND;
         Notice updatedNotice = Notice.builder()
             .id(1L)
             .company(expectedCompany)
-            .noticeDetail(expectedDetail)
+            .noticeDescription(expectedDetail)
             .image(expectedImage)
             .jobPosition(expectedJobPosition)
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
@@ -48,7 +48,7 @@ public class NoticeTest {
 
         assertAll(
             () -> assertThat(notice.getCompany()).isEqualTo(expectedCompany),
-            () -> assertThat(notice.getNoticeDetail()).isEqualTo(expectedDetail),
+            () -> assertThat(notice.getNoticeDescription()).isEqualTo(expectedDetail),
             () -> assertThat(notice.getImage()).isEqualTo(expectedImage)
         );
     }
@@ -59,7 +59,8 @@ public class NoticeTest {
         assertThatThrownBy(() -> Notice.builder()
             .company(new Company("underdogs", 50_000_000))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDetail(new NoticeDetail(new HashSet<>(Arrays.asList("C++")), "We are hiring!"))
+            .noticeDescription(
+                new NoticeDescription(new HashSet<>(Arrays.asList(Language.CPP.getName())), "We are hiring!"))
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build()
         )

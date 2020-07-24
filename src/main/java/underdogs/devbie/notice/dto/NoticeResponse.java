@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 
 @NoArgsConstructor
@@ -24,15 +25,22 @@ public class NoticeResponse {
     private JobPosition jobPosition;
     private String image;
 
-    public static List<NoticeResponse> toList(List<Notice> notices) {
+    public static List<NoticeResponse> listFrom(List<Notice> notices) {
         return notices.stream()
             .map(notice -> NoticeResponse.builder()
                 .id(notice.getId())
                 .name(notice.getCompanyName())
                 .image(notice.getImage())
-                .languages(notice.getLanguages())
+                .languages(collectLanguageName(notice))
                 .jobPosition(notice.getJobPosition())
                 .build())
             .collect(Collectors.toList());
+    }
+
+    private static Set<String> collectLanguageName(Notice notice) {
+        return notice.getLanguages()
+            .stream()
+            .map(Language::getName)
+            .collect(Collectors.toSet());
     }
 }

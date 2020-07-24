@@ -12,12 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
@@ -31,10 +30,6 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     private NoticeCreateRequest noticeCreateRequest;
 
     private NoticeUpdateRequest noticeUpdateRequest;
-
-    static RequestSpecification given() {
-        return RestAssured.given().log().all();
-    }
 
     /*
     Feature: 공고 관리
@@ -58,7 +53,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
-            .languages(Arrays.asList("java", "javascript"))
+            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
@@ -69,7 +64,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("bossdog")
             .salary(60_000_000)
-            .languages(Arrays.asList("java", "javascript", "C++"))
+            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName(), Language.CPP.getName()))
             .jobPosition(JobPosition.FRONTEND)
             .image("/static/image/bossdog")
             .description("You are hired!")
@@ -106,7 +101,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             () -> assertThat(noticeResponse.getName()).isEqualTo("underdogs"),
             () -> assertThat(noticeResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
-            () -> assertThat(noticeResponse.getLanguages()).contains("java", "javascript")
+            () -> assertThat(noticeResponse.getLanguages()).contains(Language.JAVA.getName(),
+                Language.JAVASCRIPT.getName())
         );
     }
 
@@ -118,8 +114,9 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
             () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
             () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
-            () -> assertThat(result.getNoticeDetail().getDescription()).isEqualTo("You are hired!"),
-            () -> assertThat(result.getNoticeDetail().getLanguages()).contains("java", "javascript", "C++")
+            () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
+            () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getName(),
+                Language.JAVASCRIPT.getName(), Language.CPP.getName())
         );
     }
 }

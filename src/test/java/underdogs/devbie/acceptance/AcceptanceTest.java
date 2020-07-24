@@ -17,13 +17,13 @@ public abstract class AcceptanceTest {
     @LocalServerPort
     protected int port;
 
+    private static RequestSpecification given() {
+        return RestAssured.given().log().all();
+    }
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-    }
-
-    private static RequestSpecification given() {
-        return RestAssured.given().log().all();
     }
 
     protected <T> void post(String path, String inputJson) {
@@ -64,7 +64,7 @@ public abstract class AcceptanceTest {
                     statusCode(HttpStatus.OK.value()).
                     extract().
                     jsonPath().
-                    getList(".", responseType);
+                    getList("noticeResponses", responseType);
         // @formatter:on
     }
 

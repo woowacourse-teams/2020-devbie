@@ -24,10 +24,13 @@ import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
-import underdogs.devbie.notice.domain.NoticeDetail;
+import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
+import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 
@@ -35,12 +38,16 @@ import underdogs.devbie.notice.service.NoticeService;
 public class NoticeControllerTest extends MvcTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     MockMvc mockMvc;
+
     @MockBean
     private NoticeService noticeService;
+
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
+
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
@@ -53,7 +60,7 @@ public class NoticeControllerTest extends MvcTest {
         noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
-            .languages(Arrays.asList("java", "javascript"))
+            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
@@ -64,7 +71,7 @@ public class NoticeControllerTest extends MvcTest {
         noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
-            .languages(Arrays.asList("java", "javascript"))
+            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
@@ -172,19 +179,19 @@ public class NoticeControllerTest extends MvcTest {
             .name("underdogs")
             .image("/static/image/underdogs")
             .jobPosition(JobPosition.BACKEND)
-            .languages(new HashSet<>(Arrays.asList("java", "javascript")))
+            .languages(new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName())))
             .build());
 
-        given(noticeService.readAll()).willReturn(noticeResponses);
+        given(noticeService.readAll()).willReturn(NoticeResponses.from(noticeResponses));
 
         getAction("/api/notices")
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.[0].id").value(1L))
-            .andExpect(jsonPath("$.[0].name").value("underdogs"))
-            .andExpect(jsonPath("$.[0].image").value("/static/image/underdogs"))
-            .andExpect(jsonPath("$.[0].jobPosition").value("BACKEND"))
-            .andExpect(jsonPath("$.[0].languages[0]").value("java"))
-            .andExpect(jsonPath("$.[0].languages[1]").value("javascript"))
+            .andExpect(jsonPath("$.noticeResponses[0].id").value(1L))
+            .andExpect(jsonPath("$.noticeResponses[0].name").value("underdogs"))
+            .andExpect(jsonPath("$.noticeResponses[0].image").value("/static/image/underdogs"))
+            .andExpect(jsonPath("$.noticeResponses[0].jobPosition").value("BACKEND"))
+            .andExpect(jsonPath("$.noticeResponses[0].languages[0]").value(Language.JAVA.getName()))
+            .andExpect(jsonPath("$.noticeResponses[0].languages[1]").value(Language.JAVASCRIPT.getName()))
             .andDo(print());
     }
 
@@ -199,7 +206,11 @@ public class NoticeControllerTest extends MvcTest {
             .duration(new Duration(startDate, endDate))
             .jobPosition(JobPosition.FRONTEND)
             .image("/static/image/bossdog")
-            .noticeDetail(new NoticeDetail(new HashSet<>(Arrays.asList("java", "javascript")), "You are hired!"))
+            .noticeDescription(
+                new NoticeDescriptionResponse(
+                    new NoticeDescription(
+                        new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName())),
+                        "You are hired!")))
             .build();
 
         given(noticeService.read(anyLong())).willReturn(noticeDetailResponse);
@@ -211,9 +222,7 @@ public class NoticeControllerTest extends MvcTest {
             .andExpect(jsonPath("$.company.salary").value(60_000_000))
             .andExpect(jsonPath("$.image").value("/static/image/bossdog"))
             .andExpect(jsonPath("$.jobPosition").value("FRONTEND"))
-            .andExpect(jsonPath("$.noticeDetail.description").value("You are hired!"))
-            .andExpect(jsonPath("$.noticeDetail.languages[0]").value("java"))
-            .andExpect(jsonPath("$.noticeDetail.languages[1]").value("javascript"))
+            .andExpect(jsonPath("$.noticeDescription.content").value("You are hired!"))
             .andDo(print());
     }
 

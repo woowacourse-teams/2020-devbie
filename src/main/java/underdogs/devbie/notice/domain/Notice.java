@@ -25,37 +25,43 @@ import underdogs.devbie.notice.expception.CreateFailException;
 @Getter
 @Setter
 public class Notice extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Embedded
     private Company company;
+
     @Embedded
     private Duration duration;
+
     @Enumerated(EnumType.STRING)
     private JobPosition jobPosition;
+
     @Embedded
-    private NoticeDetail noticeDetail;
+    private NoticeDescription noticeDescription;
+
     private String image;
 
     @Builder
     private Notice(Long id, Company company, Duration duration, JobPosition jobPosition,
-        NoticeDetail noticeDetail, String image) {
-        validateParameters(company, duration, jobPosition, noticeDetail, image);
+        NoticeDescription noticeDescription, String image) {
+        validateParameters(company, duration, jobPosition, noticeDescription, image);
         this.id = id;
         this.company = company;
         this.duration = duration;
         this.jobPosition = jobPosition;
-        this.noticeDetail = noticeDetail;
+        this.noticeDescription = noticeDescription;
         this.image = image;
     }
 
     private void validateParameters(Company company, Duration duration, JobPosition jobPosition,
-        NoticeDetail noticeDetail, String image) {
+        NoticeDescription noticeDescription, String image) {
         if (Objects.isNull(company)
             || Objects.isNull(duration)
             || Objects.isNull(jobPosition)
-            || Objects.isNull(noticeDetail)
+            || Objects.isNull(noticeDescription)
             || Objects.isNull(image) || image.isEmpty()) {
             throw new CreateFailException();
         }
@@ -71,8 +77,8 @@ public class Notice extends BaseTimeEntity {
         if (!this.jobPosition.equals(notice.jobPosition)) {
             this.jobPosition = notice.jobPosition;
         }
-        if (!this.noticeDetail.equals(notice.noticeDetail)) {
-            this.noticeDetail = notice.noticeDetail;
+        if (!this.noticeDescription.equals(notice.noticeDescription)) {
+            this.noticeDescription = notice.noticeDescription;
         }
         if (!this.image.equals(notice.image)) {
             this.image = notice.image;
@@ -83,7 +89,7 @@ public class Notice extends BaseTimeEntity {
         return company.getName();
     }
 
-    public Set<String> getLanguages() {
-        return noticeDetail.getLanguages();
+    public Set<Language> getLanguages() {
+        return noticeDescription.getLanguages();
     }
 }

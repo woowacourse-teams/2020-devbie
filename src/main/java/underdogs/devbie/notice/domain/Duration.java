@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import underdogs.devbie.notice.expception.InvalidDurationException;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
@@ -27,7 +28,7 @@ public class Duration {
 
     private void validateParameters(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("시작일은 종료일 이전이어야 합니다.");
+            throw new InvalidDurationException();
         }
     }
 }

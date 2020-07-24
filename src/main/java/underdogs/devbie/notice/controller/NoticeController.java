@@ -1,7 +1,6 @@
 package underdogs.devbie.notice.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
-import underdogs.devbie.notice.dto.NoticeResponse;
+import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 
@@ -55,8 +54,8 @@ public class NoticeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NoticeResponse>> readAll() {
-        List<NoticeResponse> noticeResponses = noticeService.readAll();
+    public ResponseEntity<NoticeResponses> readAll() {
+        NoticeResponses noticeResponses = noticeService.readAll();
         return ResponseEntity.ok(noticeResponses);
     }
 

@@ -9,25 +9,25 @@ import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Notice;
-import underdogs.devbie.notice.domain.NoticeDetail;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class NoticeDetailResponse {
+
     private Long id;
     private Company company;
     private Duration duration;
     private JobPosition jobPosition;
-    private NoticeDetail noticeDetail;
+    private NoticeDescriptionResponse noticeDescription;
     private String image;
 
     public static NoticeDetailResponse from(Notice notice) {
         return NoticeDetailResponse.builder()
             .id(notice.getId())
             .company(notice.getCompany())
-            .noticeDetail(notice.getNoticeDetail())
+            .noticeDescription(new NoticeDescriptionResponse(notice.getNoticeDescription()))
             .jobPosition(notice.getJobPosition())
             .image(notice.getImage())
             .duration(notice.getDuration())
