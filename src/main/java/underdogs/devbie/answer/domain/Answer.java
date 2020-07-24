@@ -32,8 +32,9 @@ public class Answer extends BaseTimeEntity {
     private AnswerContent content;
 
     @Builder
-    public Answer(Long userId, Long questionId, AnswerContent content) {
+    public Answer(Long id, Long userId, Long questionId, AnswerContent content) {
         validateParameters(userId, questionId, content);
+        this.id = id;
         this.userId = userId;
         this.questionId = questionId;
         this.content = content;
