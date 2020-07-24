@@ -30,43 +30,56 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
          When 답변을 삭제한다.
          Then 답변이 삭제되었다.
      */
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-    private AnswerCreateRequest answerCreateRequest;
-    private AnswerResponses answerResponses;
-    private AnswerUpdateRequest answerUpdateRequest;
-
-    @DisplayName("면접 답변 인수테스트")
-    @Test
-    void answer() throws JsonProcessingException {
-        answerCreateRequest = new AnswerCreateRequest(1L, "test content");
-
-        createAnswer();
-        readAllAnswer();
-        updateAnswer();
-    }
-
-    private void createAnswer() throws JsonProcessingException {
-        post("/api/answers", OBJECT_MAPPER.writeValueAsString(answerCreateRequest));
-    }
-
-    private void readAllAnswer() {
-        answerResponses = get("/api/answers", AnswerResponses.class);
-
-        assertNotNull(answerResponses);
-        assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
-        AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
-        assertAll(
-            () -> assertEquals(answerResponse.getId(), 1L),
-            () -> assertEquals(answerResponse.getQuestionId(), answerCreateRequest.getQuestionId()),
-            () -> assertEquals(answerResponse.getContent(), answerCreateRequest.getContent())
-        );
-    }
-
-    private void updateAnswer() throws JsonProcessingException {
-        Long id = answerResponses.getAnswerResponses().get(0).getId();
-        answerUpdateRequest = new AnswerUpdateRequest("Changed Content");
-
-        patch(String.format("/api/answers/%d", id), OBJECT_MAPPER.writeValueAsString(answerUpdateRequest));
-    }
+    // private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    // private static final String CHANGED_CONTENT = "Changed Content";
+    //
+    // private AnswerCreateRequest answerCreateRequest;
+    // private AnswerResponses answerResponses;
+    // private AnswerUpdateRequest answerUpdateRequest;
+    //
+    // @DisplayName("면접 답변 인수테스트")
+    // @Test
+    // void answer() throws JsonProcessingException {
+    //     answerCreateRequest = new AnswerCreateRequest(1L, "test content");
+    //
+    //     createAnswer();
+    //     readAllAnswer();
+    //     updateAnswer();
+    //     readAnswer();
+    // }
+    //
+    // private void createAnswer() throws JsonProcessingException {
+    //     post("/api/answers", OBJECT_MAPPER.writeValueAsString(answerCreateRequest));
+    // }
+    //
+    // private void readAllAnswer() {
+    //     answerResponses = get("/api/answers", AnswerResponses.class);
+    //
+    //     assertNotNull(answerResponses);
+    //     assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
+    //     AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
+    //     assertAll(
+    //         () -> assertEquals(answerResponse.getId(), 1L),
+    //         () -> assertEquals(answerResponse.getQuestionId(), answerCreateRequest.getQuestionId()),
+    //         () -> assertEquals(answerResponse.getContent(), answerCreateRequest.getContent())
+    //     );
+    // }
+    //
+    // private void updateAnswer() throws JsonProcessingException {
+    //     Long id = answerResponses.getAnswerResponses().get(0).getId();
+    //     answerUpdateRequest = new AnswerUpdateRequest(CHANGED_CONTENT);
+    //
+    //     patch(String.format("/api/answers/%d", id), OBJECT_MAPPER.writeValueAsString(answerUpdateRequest));
+    // }
+    //
+    // private void readAnswer() {
+    //     Long id = answerResponses.getAnswerResponses().get(0).getId();
+    //     AnswerResponse answerResponse = get(String.format("/api/answers/%d", id), AnswerResponse.class);
+    //
+    //     assertAll(
+    //         () -> assertEquals(answerResponse.getId(), 1L),
+    //         () -> assertEquals(answerResponse.getQuestionId(), answerCreateRequest.getQuestionId()),
+    //         () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
+    //     );
+    // }
 }

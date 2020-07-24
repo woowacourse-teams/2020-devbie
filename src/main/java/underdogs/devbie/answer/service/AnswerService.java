@@ -37,6 +37,7 @@ public class AnswerService {
     @Transactional
     public void update(User user, Long id, AnswerUpdateRequest request) {
         Answer answer = readOne(id);
+
         validateAuthentication(user, answer);
 
         AnswerContent updateRequestedContent = AnswerContent.from(request.getContent());
@@ -57,8 +58,17 @@ public class AnswerService {
         return answerRepository.findById(id)
             .orElseThrow(AnswerNotExistedException::new);
     }
-    // zzz
+
     public AnswerResponse read(Long id) {
         return AnswerResponse.from(readOne(id));
+    }
+
+    @Transactional
+    public void delete(User user, Long id) {
+        Answer answer = readOne(id);
+
+        validateAuthentication(user, answer);
+
+        answerRepository.delete(answer);
     }
 }

@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,12 +55,20 @@ public class AnswerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AnswerResponse> update(
+    public ResponseEntity<Void> update(
         @LoginUser User user,
         @PathVariable(value = "id") Long id,
         @RequestBody AnswerUpdateRequest request
     ) {
         answerService.update(user, id, request);
+
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable(value = "id") Long id) {
+        answerService.delete(user, id);
 
         return ResponseEntity.noContent()
             .build();

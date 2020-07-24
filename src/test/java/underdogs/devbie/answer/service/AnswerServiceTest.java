@@ -173,9 +173,8 @@ class AnswerServiceTest {
         AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
         given(answerRepository.findById(anyLong())).willThrow(AnswerNotExistedException.class);
 
-        Long requestedUpdateRequestId = 30L;
         assertThatThrownBy(() -> {
-            answerService.update(user, requestedUpdateRequestId, answerUpdateRequest);
+            answerService.update(user, 30L, answerUpdateRequest);
         }).isInstanceOf(AnswerNotExistedException.class);
     }
 
@@ -197,10 +196,75 @@ class AnswerServiceTest {
             .content(AnswerContent.from(changedAnswerContent))
             .build();
         given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
-        Long requestedUpdateRequestId = 1L;
 
         assertThatThrownBy(() -> {
-            answerService.update(user, requestedUpdateRequestId, answerUpdateRequest);
+            answerService.update(user, 1L, answerUpdateRequest);
         }).isInstanceOf(NotMatchedAnswerAuthorException.class);
+    }
+
+    @DisplayName("면접 답변 삭제 실패 - 권한 없는 요청")
+    @Test
+    void deleteFailCauseByNoAuthor() {
+        User user = User.builder()
+            .id(USER_ID)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+        Long anotherUserId = USER_ID + 1;
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(anotherUserId)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+
+        assertThatThrownBy(() -> {
+            answerService.delete(user, 1L);
+        }).isInstanceOf(NotMatchedAnswerAuthorException.class);
+    }
+
+    @DisplayName("면접 답변 삭제 실패 - 권한 없는 요청")
+    @Test
+    void deleteFailCauseByNotExistedAnswer() {
+        User user = User.builder()
+            .id(USER_ID)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+        Long anotherUserId = USER_ID + 1;
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(anotherUserId)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+
+        assertThatThrownBy(() -> {
+            answerService.delete(user, 30L);
+        }).isInstanceOf(NotMatchedAnswerAuthorException.class);
+    }
+
+    @DisplayName("면접 답변 삭제 성공")
+    @Test
+    void delete() {
+        User user = User.builder()
+            .id(USER_ID)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+
+        answerService.delete(user, 1L);
+
+        verify(answerRepository).findById(eq(1L));
+        verify(answerRepository).delete(expectAnswer);
     }
 }

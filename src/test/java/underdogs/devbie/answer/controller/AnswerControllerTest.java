@@ -179,4 +179,14 @@ public class AnswerControllerTest extends MvcTest {
 
         verify(answerService).update(any(User.class), eq(1L), any(AnswerUpdateRequest.class));
     }
+
+    @DisplayName("Answer 삭제")
+    @Test
+    void delete() throws Exception {
+        willDoNothing().given(answerService).delete(any(User.class), anyLong());
+
+        deleteAction(String.format("/api/answers/%d", 1L), TEST_TOKEN);
+
+        verify(answerService).delete(any(User.class), eq(1L));
+    }
 }
