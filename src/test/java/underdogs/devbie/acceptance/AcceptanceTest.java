@@ -1,5 +1,7 @@
 package underdogs.devbie.acceptance;
 
+import static underdogs.devbie.MvcTest.*;
+
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +42,39 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
+    protected <T> void post(String path, String inputJson, String bearerToken) {
+        // @formatter:off
+        given().
+                header(AUTH_HEADER, bearerToken).
+                body(inputJson).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+                post(path).
+        then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value());
+        // @formatter:on
+    }
+
     protected <T> T get(String path, Class<T> responseType) {
         // @formatter:off
         return
             given().
+            when().
+                    get(path).
+            then().
+                    log().all().
+                    statusCode(HttpStatus.OK.value()).
+                    extract().as(responseType);
+        // @formatter:on
+    }
+
+    protected <T> T get(String path, Class<T> responseType, String beaerToken) {
+        // @formatter:off
+        return
+            given().
+                    header(AUTH_HEADER, beaerToken).
             when().
                     get(path).
             then().
@@ -68,9 +99,26 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void put(String path, String inputJson) {
+    protected <T> List<T> getAll(String path, Class<T> responseType, String bearerToken) {
+        // @formatter:off
+        return
+            given().
+                    header(AUTH_HEADER, bearerToken).
+            when().
+                    get(path).
+            then().
+                    log().all().
+                    statusCode(HttpStatus.OK.value()).
+                    extract().
+                    jsonPath().
+                    getList(".", responseType);
+        // @formatter:on
+    }
+
+    protected <T> void put(String path, String inputJson, String bearerToken) {
         // @formatter:off
         given().
+                header(AUTH_HEADER, bearerToken).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -82,9 +130,10 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void patch(String path, String inputJson) {
+    protected <T> void patch(String path, String inputJson, String bearerToken) {
         // @formatter:off
         given().
+                header(AUTH_HEADER, bearerToken).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -96,9 +145,10 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void delete(String path) {
+    protected <T> void delete(String path, String bearerToken) {
         // @formatter:off
         given().
+                header(AUTH_HEADER, bearerToken).
         when().
                 delete(path).
         then().
