@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public abstract class MvcTest {
 
-    private static final String AUTH_HEADER = "Authorization";
+    public static final String AUTH_HEADER = "Authorization";
 
     @Autowired
     protected MockMvc mockMvc;
@@ -41,6 +41,32 @@ public abstract class MvcTest {
             .perform(post(url)
                 .header(AUTH_HEADER, bearerToken)
                 .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    protected ResultActions putAction(String url, String inputJson, String bearerToken) throws Exception {
+        return this.mockMvc
+            .perform(put(url)
+                .header(AUTH_HEADER, bearerToken)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    protected ResultActions patchAction(String url, String inputJson, String bearerToken) throws Exception {
+        return this.mockMvc
+            .perform(patch(url)
+                .header(AUTH_HEADER, bearerToken)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    protected ResultActions deleteAction(String url, String bearerToken) throws Exception {
+        return this.mockMvc
+            .perform(delete(url)
+                .header(AUTH_HEADER, bearerToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON));
     }
