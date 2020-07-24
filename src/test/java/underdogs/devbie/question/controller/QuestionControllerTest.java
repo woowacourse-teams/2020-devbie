@@ -8,8 +8,6 @@ import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
-import java.util.List;
-
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +21,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
+import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.service.QuestionService;
 import underdogs.devbie.user.domain.User;
@@ -79,7 +78,7 @@ class QuestionControllerTest extends MvcTest {
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
             .build();
-        List<QuestionResponse> responses = Lists.newArrayList(response);
+        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(response));
 
         given(questionService.readAll()).willReturn(responses);
 
@@ -110,7 +109,6 @@ class QuestionControllerTest extends MvcTest {
     @Test
     void update() throws Exception {
         QuestionUpdateRequest request = QuestionUpdateRequest.builder()
-            .questionId(1L)
             .title("Changed Title")
             .content("Changed Content")
             .build();
@@ -118,7 +116,7 @@ class QuestionControllerTest extends MvcTest {
 
         willDoNothing().given(questionService).update(anyLong(), anyLong(), any(QuestionUpdateRequest.class));
 
-        patchAction("/api/questions/" + request.getQuestionId(), inputJson, TEST_TOKEN)
+        patchAction("/api/questions/1", inputJson, TEST_TOKEN)
             .andExpect(status().isNoContent());
 
         verify(questionService).update(eq(1L), eq(1L), any(QuestionUpdateRequest.class));

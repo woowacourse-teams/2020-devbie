@@ -1,7 +1,6 @@
 package underdogs.devbie.question.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,9 +16,6 @@ import underdogs.devbie.question.domain.QuestionTitle;
 @Builder
 @Getter
 public class QuestionUpdateRequest {
-
-    @NotNull
-    private Long questionId;
 
     @NotBlank
     private String title;

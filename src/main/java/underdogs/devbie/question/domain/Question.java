@@ -36,7 +36,7 @@ public class Question extends BaseTimeEntity {
     private Visits visits;
 
     @Builder
-    public Question(Long userId, QuestionTitle title, QuestionContent content) {
+    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content) {
         validateParameters(userId, title, content);
         this.userId = userId;
         this.title = title;
@@ -50,9 +50,9 @@ public class Question extends BaseTimeEntity {
         }
     }
 
-    public void updateQuestionInfo(QuestionTitle title, QuestionContent content) {
-        this.title = title;
-        this.content = content;
+    public void updateQuestionInfo(Question question) {
+        this.title = question.title;
+        this.content = question.content;
     }
 
     public void increaseVisits() {

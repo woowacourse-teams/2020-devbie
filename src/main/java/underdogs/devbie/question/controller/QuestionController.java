@@ -1,7 +1,6 @@
 package underdogs.devbie.question.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -43,10 +42,10 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity<QuestionResponses> readAll() {
-        List<QuestionResponse> responses = questionService.readAll();
+        QuestionResponses responses = questionService.readAll();
         return ResponseEntity
             .ok()
-            .body(QuestionResponses.from(responses));
+            .body(responses);
     }
 
     @GetMapping("/{id}")
