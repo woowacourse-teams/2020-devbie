@@ -84,7 +84,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     }
 
     private void updateNotice() throws JsonProcessingException {
-        put("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
+        patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
     }
 
     private void deleteNotice() {

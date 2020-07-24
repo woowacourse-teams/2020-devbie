@@ -12,10 +12,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
@@ -38,9 +36,6 @@ import underdogs.devbie.notice.service.NoticeService;
 public class NoticeControllerTest extends MvcTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Autowired
-    MockMvc mockMvc;
 
     @MockBean
     private NoticeService noticeService;
@@ -128,7 +123,7 @@ public class NoticeControllerTest extends MvcTest {
 
         doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
-        putAction("/api/notices/1", inputJson, "bearer token")
+        patchAction("/api/notices/1", inputJson, "bearer token")
             .andExpect(status().isNoContent())
             .andDo(print());
     }
@@ -240,7 +235,7 @@ public class NoticeControllerTest extends MvcTest {
 
         doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
-        putAction("/api/notices/1", inputJson, "bearer token")
+        patchAction("/api/notices/1", inputJson, "bearer token")
             .andExpect(status().is4xxClientError())
             .andDo(print());
     }
