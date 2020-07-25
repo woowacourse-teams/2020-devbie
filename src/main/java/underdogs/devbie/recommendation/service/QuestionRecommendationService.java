@@ -49,4 +49,12 @@ public class QuestionRecommendationService {
         // 왜 그러지?
         questionRecommendationRepository.save(questionRecommendation);
     }
+
+    public void deleteRecommendation(Long questionId, Long userId) {
+        QuestionRecommendation questionRecommendation = questionRecommendationRepository
+            .findByQuestionIdAndUserId(questionId, userId)
+            .orElseThrow(IllegalArgumentException::new);
+
+        questionRecommendationRepository.delete(questionRecommendation);
+    }
 }

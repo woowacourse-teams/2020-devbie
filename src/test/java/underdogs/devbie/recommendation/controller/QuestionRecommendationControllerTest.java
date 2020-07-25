@@ -69,4 +69,20 @@ class QuestionRecommendationControllerTest extends MvcTest {
         patchAction("/api/recommendation/question/1", inputJson, "")
             .andExpect(status().isNoContent());
     }
+
+    @Test
+    void deleteRecommendation() throws Exception {
+        User user = User.builder()
+            .id(1L)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
+
+        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
+        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        deleteAction("/api/recommendation/question/1", "", "")
+            .andExpect(status().isNoContent());
+    }
 }

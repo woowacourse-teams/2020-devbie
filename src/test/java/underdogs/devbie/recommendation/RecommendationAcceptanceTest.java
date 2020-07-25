@@ -73,6 +73,20 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
         // 2번 질문에 추천 수가 1이다
         question2Count = recommendationCount(2L).getRecommendedCount();
         assertThat(question2Count).isEqualTo(1L);
+
+        // 1번 질문의 추천 기록을 삭제한다
+        deleteRecommendation(1L);
+
+        // 2번 질문의 추천 기록을 삭제한다
+        deleteRecommendation(2L);
+
+        // 1번 질문에 비추천 수가 0이다
+        question1Count = recommendationCount(1L).getNonRecommendedCount();
+        assertThat(question1Count).isEqualTo(0L);
+
+        // 2번 질문에 추천 수가 0이다
+        question2Count = recommendationCount(2L).getRecommendedCount();
+        assertThat(question2Count).isEqualTo(0L);
     }
 
     void recommend(Long questionId) {
@@ -97,5 +111,9 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     void toggleToNonRecommended(Long questionId) {
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, NON_RECOMMENDATION);
         patch(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
+    }
+
+    void deleteRecommendation(Long questionId) {
+        delete(QUESTION_RECOMMENDATION_URI + questionId);
     }
 }

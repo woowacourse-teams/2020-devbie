@@ -45,11 +45,23 @@ class QuestionRecommendationServiceTest {
     @Test
     void toggleRecommendation() {
         QuestionRecommendation recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
-        given(questionRecommendationRepository.findByQuestionIdAndUserId(anyLong(), anyLong())).willReturn(
-            Optional.of(recommendation));
+        given(questionRecommendationRepository.findByQuestionIdAndUserId(anyLong(), anyLong()))
+            .willReturn(Optional.of(recommendation));
 
         questionRecommendationService.toggleRecommendation(1L, 1L, RecommendationType.NON_RECOMMENDED);
 
         verify(questionRecommendationRepository).findByQuestionIdAndUserId(anyLong(), anyLong());
+    }
+
+    @Test
+    void deleteRecommendation() {
+        QuestionRecommendation recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
+        given(questionRecommendationRepository.findByQuestionIdAndUserId(anyLong(), anyLong()))
+            .willReturn(Optional.of(recommendation));
+
+        questionRecommendationService.deleteRecommendation(1L, 1L);
+
+        verify(questionRecommendationRepository).findByQuestionIdAndUserId(anyLong(), anyLong());
+        verify(questionRecommendationRepository).delete(any());
     }
 }
