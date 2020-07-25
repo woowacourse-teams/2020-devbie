@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import underdogs.devbie.exception.AlreadyExistException;
+import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -34,7 +35,7 @@ public class AnswerRecommendationService {
         AnswerRecommendation answerRecommendation = answerRecommendations
             .findByAnswerIdAndUserId(questionId, userId)
             .filter(recommendation -> recommendation.hasRecommendationTypeOf(recommendationType.toggleType()))
-            .orElseThrow(IllegalArgumentException::new);
+            .orElseThrow(NotExistException::new);
 
         answerRecommendation.toggleRecommended();
 
@@ -45,7 +46,7 @@ public class AnswerRecommendationService {
     public void deleteRecommendation(Long questionId, Long userId) {
         AnswerRecommendation answerRecommendation = answerRecommendations
             .findByAnswerIdAndUserId(questionId, userId)
-            .orElseThrow(IllegalArgumentException::new);
+            .orElseThrow(NotExistException::new);
 
         answerRecommendations.delete(answerRecommendation);
     }
