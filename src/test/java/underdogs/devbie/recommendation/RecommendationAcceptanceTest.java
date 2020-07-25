@@ -60,6 +60,19 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
         // 1번 질문을 다시 추천한다
         // 이미 추천하거나 비추한 질문에 대한 postFail이 존재하지 않아서 인수테스트에서 확인 x
 
+        // 1번 질문을 비추천으로 변경한다
+        toggleToNonRecommended(1L);
+
+        // 2번 질문을 추천으로 변경한다
+        toggleToRecommended(2L);
+
+        // 1번 질문에 비추천 수가 1이다
+        question1Count = recommendationCount(1L).getNonRecommendedCount();
+        assertThat(question1Count).isEqualTo(1L);
+
+        // 2번 질문에 추천 수가 1이다
+        question2Count = recommendationCount(2L).getRecommendedCount();
+        assertThat(question2Count).isEqualTo(1L);
     }
 
     void recommend(Long questionId) {
@@ -74,5 +87,15 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
 
     RecommendationResponse recommendationCount(Long questionId) {
         return get(QUESTION_RECOMMENDATION_URI + questionId, RecommendationResponse.class);
+    }
+
+    void toggleToRecommended(Long questionId) {
+        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
+        patch(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
+    }
+
+    void toggleToNonRecommended(Long questionId) {
+        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, NON_RECOMMENDATION);
+        patch(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
     }
 }

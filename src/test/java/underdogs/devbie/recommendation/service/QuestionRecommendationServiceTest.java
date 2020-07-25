@@ -1,6 +1,8 @@
 package underdogs.devbie.recommendation.service;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
@@ -34,8 +37,19 @@ class QuestionRecommendationServiceTest {
 
     @Test
     void createRecommendation() {
-        questionRecommendationService.createRecommendation(1L, "RECOMMENDED", 1L);
+        questionRecommendationService.createRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
 
         verify(questionRecommendationRepository).save(any());
+    }
+
+    @Test
+    void toggleRecommendation() {
+        QuestionRecommendation recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
+        given(questionRecommendationRepository.findByQuestionIdAndUserId(anyLong(), anyLong())).willReturn(
+            Optional.of(recommendation));
+
+        questionRecommendationService.toggleRecommendation(1L, 1L, RecommendationType.NON_RECOMMENDED);
+
+        verify(questionRecommendationRepository).findByQuestionIdAndUserId(anyLong(), anyLong());
     }
 }

@@ -24,11 +24,10 @@ public class QuestionRecommendationService {
         return new RecommendationResponse(recommendedCount, nonRecommendedCount);
     }
 
-    public void createRecommendation(Long questionId, String recommendationType, Long userId) {
+    public void createRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
         validateNotExist(questionId, userId);
 
-        questionRecommendationRepository.save(
-            QuestionRecommendation.of(questionId, userId, RecommendationType.from(recommendationType)));
+        questionRecommendationRepository.save(QuestionRecommendation.of(questionId, userId, recommendationType));
     }
 
     private void validateNotExist(Long questionId, Long userId) {
@@ -36,5 +35,18 @@ public class QuestionRecommendationService {
             .ifPresent(x -> {
                 throw new AlreadyExistException();
             });
+    }
+
+    public void toggleRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
+        QuestionRecommendation questionRecommendation = questionRecommendationRepository
+            .findByQuestionIdAndUserId(questionId, userId)
+            .filter(recommendation -> recommendation.hasRecommendationTypeOf(recommendationType.toggleType()))
+            .orElseThrow(IllegalArgumentException::new);
+
+        questionRecommendation.toggleRecommended();
+
+        // save 안 해주면 저장이 되지 않는다
+        // 왜 그러지?
+        questionRecommendationRepository.save(questionRecommendation);
     }
 }
