@@ -12,4 +12,10 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
+services:
+  - mysql
+
+before_install
+  - mysql -u root --password="" < test/resources/data.sql
+
 script: "./gradlew clean build"
