@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="margin: 50px 150px 50px 150px">
     <v-row align="">
       <v-row justify="space-around">
-        <v-col md>
+        <v-col cols="2" md>
           <v-btn>채용</v-btn>
           <v-btn>교육</v-btn>
         </v-col>
@@ -12,7 +12,6 @@
             hide-details
             label="직군"
             menu-props="auto"
-            s
             single-line
             v-model="e2"
           ></v-select>
@@ -33,7 +32,6 @@
       </v-row>
     </v-row>
 
-    <!--    <v-container fluid>-->
     <v-row dense>
       <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
         <v-card>

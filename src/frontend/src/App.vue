@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
-    <router-view></router-view>
+    <router-view style="min-height: calc(100vh - 100px);"></router-view>
     <footer-bar></footer-bar>
   </div>
 </template>
