@@ -9,8 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.answer.domain.Answers;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class AnswerResponses {
 

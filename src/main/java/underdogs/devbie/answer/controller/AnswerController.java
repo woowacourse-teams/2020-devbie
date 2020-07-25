@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
@@ -26,17 +26,17 @@ import underdogs.devbie.user.domain.User;
 
 @RestController
 @RequestMapping("/api/answers")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AnswerController {
 
     private final AnswerService answerService;
 
     @PostMapping
-    public ResponseEntity<Void> save(@LoginUser User user,
-        @RequestBody @Valid AnswerCreateRequest answerCreateRequest) {
-        Long id = answerService.save(user, answerCreateRequest);
+    public ResponseEntity<Void> save(@LoginUser User user, @RequestBody @Valid AnswerCreateRequest request) {
+        Long id = answerService.save(user, request);
 
-        return ResponseEntity.created(URI.create(String.format("/api/answers/%d", id)))
+        return ResponseEntity
+            .created(URI.create(String.format("/api/answers/%d", id)))
             .build();
     }
 
@@ -62,7 +62,8 @@ public class AnswerController {
     ) {
         answerService.update(user, id, request);
 
-        return ResponseEntity.noContent()
+        return ResponseEntity
+            .noContent()
             .build();
     }
 
@@ -70,7 +71,8 @@ public class AnswerController {
     public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable(value = "id") Long id) {
         answerService.delete(user, id);
 
-        return ResponseEntity.noContent()
+        return ResponseEntity
+            .noContent()
             .build();
     }
 }

@@ -3,7 +3,7 @@ package underdogs.devbie.answer.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.domain.AnswerContent;
 import underdogs.devbie.answer.domain.Answers;
@@ -17,7 +17,7 @@ import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
 import underdogs.devbie.user.domain.User;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AnswerService {
 
@@ -69,6 +69,6 @@ public class AnswerService {
 
         validateAuthentication(user, answer);
 
-        answerRepository.delete(answer);
+        answerRepository.deleteById(answer.getId());
     }
 }

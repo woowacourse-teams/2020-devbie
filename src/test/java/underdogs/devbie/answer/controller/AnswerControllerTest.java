@@ -63,7 +63,7 @@ public class AnswerControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 Answer 생성")
     @Test
     void save() throws Exception {
-        AnswerCreateRequest answerCreateRequest = new AnswerCreateRequest(1L, TEST_ANSWER_CONTENT);
+        AnswerCreateRequest answerCreateRequest = AnswerCreateRequest.of(1L, TEST_ANSWER_CONTENT);
 
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
         given(answerService.save(user, answerCreateRequest)).willReturn(1L);
@@ -76,7 +76,7 @@ public class AnswerControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 Answer 저장 시 예외 발생 - 유효 하지 않은 Question Id")
     @Test
     void save2() throws Exception {
-        AnswerCreateRequest answerCreateRequest = new AnswerCreateRequest(null, TEST_ANSWER_CONTENT);
+        AnswerCreateRequest answerCreateRequest = AnswerCreateRequest.of(null, TEST_ANSWER_CONTENT);
 
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
         given(answerService.save(user, answerCreateRequest)).willReturn(1L);
@@ -90,7 +90,7 @@ public class AnswerControllerTest extends MvcTest {
     @Test
     void saveWithInvalidContent() throws Exception {
         String EMPTY_CONTENT = "";
-        AnswerCreateRequest answerCreateRequest = new AnswerCreateRequest(1L, EMPTY_CONTENT);
+        AnswerCreateRequest answerCreateRequest = AnswerCreateRequest.of(1L, EMPTY_CONTENT);
 
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
         given(answerService.save(user, answerCreateRequest)).willReturn(1L);
@@ -103,7 +103,7 @@ public class AnswerControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 Answer 저장 시 예외 발생 - 유효 하지 않은 Null Content")
     @Test
     void saveWithInvalidContent2() throws Exception {
-        AnswerCreateRequest answerCreateRequest = new AnswerCreateRequest(1L, null);
+        AnswerCreateRequest answerCreateRequest = AnswerCreateRequest.of(1L, null);
 
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
         given(answerService.save(user, answerCreateRequest)).willReturn(1L);
@@ -171,7 +171,7 @@ public class AnswerControllerTest extends MvcTest {
     @DisplayName("Answer 수정")
     @Test
     void update() throws Exception {
-        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest("Changed Request");
+        AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from("Changed Request");
         willDoNothing().given(answerService).update(any(User.class), anyLong(), any(AnswerUpdateRequest.class));
 
         patchAction(String.format("/api/answers/%d", 1L), OBJECT_MAPPER.writeValueAsString(answerUpdateRequest),

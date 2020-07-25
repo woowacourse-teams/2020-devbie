@@ -18,15 +18,21 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
 
     /*
     Feature: 면접 답변 관리
+
      Scenario: 면접 답변을 관리한다.
+
          When 질문에 해당하는 답변 1개를 추가 요청한다.
          Then 답변이 업로드 되었다.
+
          When 질문에 해당하는 답변 전체를 조회 요청한다.
          Then 답변 전체가 조회된다.
+
          When 답변 내용을 수정한다.
          Then 답변이 수정 되었다.
+
          When 질문에 해당하는 답변 1개를 조회 요청한다.
          Then 답변 1개가 조회된다.
+
          When 답변을 삭제한다.
          Then 답변이 삭제되었다.
      */

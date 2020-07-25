@@ -57,7 +57,7 @@ class AnswerServiceTest {
             .questionId(QUESTION_ID)
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
-        AnswerCreateRequest answerCreateRequest = new AnswerCreateRequest(QUESTION_ID, TEST_ANSWER_CONTENT);
+        AnswerCreateRequest answerCreateRequest = AnswerCreateRequest.of(QUESTION_ID, TEST_ANSWER_CONTENT);
         given(answerRepository.save(any(Answer.class))).willReturn(expected);
 
         Long id = answerService.save(user, answerCreateRequest);
@@ -114,20 +114,10 @@ class AnswerServiceTest {
 
     @DisplayName("하나의 면접 답 조회 실패 - 존재하지 않는 Answer")
     @Test
-    void readFailCauseByNotExistedAnswer() throws Exception {
-        Answer expectAnswer = Answer.builder()
-            .id(1L)
-            .userId(2L)
-            .questionId(3L)
-            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
-            .build();
+    void readFailCauseByNotExistedAnswer() {
         given(answerRepository.findById(anyLong())).willThrow(AnswerNotExistedException.class);
 
-        assertThatThrownBy(
-            () -> {
-                answerService.read(1L);
-            }
-        );
+        assertThatThrownBy(() -> answerService.read(1L));
     }
 
     @DisplayName("면접 답변 수정")
@@ -139,7 +129,7 @@ class AnswerServiceTest {
             .email(TEST_USER_EMAIL)
             .build();
         String changedAnswerContent = "Changed Answer Content";
-        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
+        AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(changedAnswerContent);
         Answer expectAnswer = Answer.builder()
             .id(1L)
             .userId(USER_ID)
@@ -170,12 +160,11 @@ class AnswerServiceTest {
             .email(TEST_USER_EMAIL)
             .build();
         String changedAnswerContent = "Changed Answer Content";
-        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
+        AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(changedAnswerContent);
         given(answerRepository.findById(anyLong())).willThrow(AnswerNotExistedException.class);
 
-        assertThatThrownBy(() -> {
-            answerService.update(user, 30L, answerUpdateRequest);
-        }).isInstanceOf(AnswerNotExistedException.class);
+        assertThatThrownBy(() -> answerService.update(user, 30L, answerUpdateRequest))
+            .isInstanceOf(AnswerNotExistedException.class);
     }
 
     @DisplayName("면접 답변 수정 실패 - 권한 없는 요청")
@@ -187,7 +176,7 @@ class AnswerServiceTest {
             .email(TEST_USER_EMAIL)
             .build();
         String changedAnswerContent = "Changed Answer Content";
-        AnswerUpdateRequest answerUpdateRequest = new AnswerUpdateRequest(changedAnswerContent);
+        AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(changedAnswerContent);
         Long anotherUserId = USER_ID + 1;
         Answer expectAnswer = Answer.builder()
             .id(1L)
@@ -219,12 +208,11 @@ class AnswerServiceTest {
             .build();
         given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
 
-        assertThatThrownBy(() -> {
-            answerService.delete(user, 1L);
-        }).isInstanceOf(NotMatchedAnswerAuthorException.class);
+        assertThatThrownBy(() -> answerService.delete(user, 1L))
+            .isInstanceOf(NotMatchedAnswerAuthorException.class);
     }
 
-    @DisplayName("면접 답변 삭제 실패 - 권한 없는 요청")
+    @DisplayName("면접 답변 삭제 실패 - 존재하지 않는 면접 답변")
     @Test
     void deleteFailCauseByNotExistedAnswer() {
         User user = User.builder()
@@ -241,9 +229,8 @@ class AnswerServiceTest {
             .build();
         given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
 
-        assertThatThrownBy(() -> {
-            answerService.delete(user, 30L);
-        }).isInstanceOf(NotMatchedAnswerAuthorException.class);
+        assertThatThrownBy(() -> answerService.delete(user, 30L))
+            .isInstanceOf(NotMatchedAnswerAuthorException.class);
     }
 
     @DisplayName("면접 답변 삭제 성공")
@@ -265,6 +252,6 @@ class AnswerServiceTest {
         answerService.delete(user, 1L);
 
         verify(answerRepository).findById(eq(1L));
-        verify(answerRepository).delete(expectAnswer);
+        verify(answerRepository).deleteById(expectAnswer.getId());
     }
 }
