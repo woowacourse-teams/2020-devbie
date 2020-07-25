@@ -83,6 +83,8 @@ class QuestionServiceTest {
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
             () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
+            () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
+            () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent())
         );
@@ -97,6 +99,8 @@ class QuestionServiceTest {
 
         assertAll(
             () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
+            () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
+            () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent())
         );

@@ -17,12 +17,16 @@ import underdogs.devbie.question.domain.Question;
 public class QuestionResponse {
 
     private Long questionId;
+    private Long userId;
+    private Long visits;
     private String title;
     private String content;
 
     public static QuestionResponse from(Question question) {
         return QuestionResponse.builder()
             .questionId(question.getId())
+            .userId(question.getUserId())
+            .visits(question.getVisits().getVisitCount())
             .title(question.getTitle().getTitle())
             .content(question.getContent().getContent())
             .build();

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -41,6 +42,7 @@ public class QuestionController {
             .build();
     }
 
+    @NoValidate
     @GetMapping
     public ResponseEntity<QuestionResponses> readAll() {
         QuestionResponses responses = questionService.readAll();
@@ -49,6 +51,7 @@ public class QuestionController {
             .body(responses);
     }
 
+    @NoValidate
     @GetMapping(params = "keyword")
     public ResponseEntity<QuestionResponses> searchByTitle(
         @RequestParam("keyword") String keyword
@@ -59,6 +62,7 @@ public class QuestionController {
             .body(responses);
     }
 
+    @NoValidate
     @GetMapping("/{id}")
     public ResponseEntity<QuestionResponse> read(@PathVariable("id") Long id) {
         QuestionResponse response = questionService.read(id);

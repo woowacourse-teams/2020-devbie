@@ -1,7 +1,5 @@
 package underdogs.devbie.acceptance;
 
-import static underdogs.devbie.MvcTest.*;
-
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +16,7 @@ import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.user.domain.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AcceptanceTest {
+public abstract class AcceptanceTest {
 
     @LocalServerPort
     protected int port;
@@ -59,7 +57,7 @@ public class AcceptanceTest {
     protected <T> void post(String path, String inputJson, String bearerToken) {
         // @formatter:off
         given().
-                header(AUTH_HEADER, bearerToken).
+                auth().oauth2(bearerToken).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -88,7 +86,7 @@ public class AcceptanceTest {
         // @formatter:off
         return
             given().
-                    header(AUTH_HEADER, beaerToken).
+                    auth().oauth2(bearerToken).
             when().
                     get(path).
             then().
@@ -117,7 +115,7 @@ public class AcceptanceTest {
         // @formatter:off
         return
             given().
-                    header(AUTH_HEADER, bearerToken).
+                    auth().oauth2(bearerToken).
             when().
                     get(path).
             then().
@@ -132,7 +130,7 @@ public class AcceptanceTest {
     protected <T> void put(String path, String inputJson, String bearerToken) {
         // @formatter:off
         given().
-                header(AUTH_HEADER, bearerToken).
+                auth().oauth2(bearerToken).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -147,7 +145,7 @@ public class AcceptanceTest {
     protected <T> void patch(String path, String inputJson, String bearerToken) {
         // @formatter:off
         given().
-                header(AUTH_HEADER, bearerToken).
+                auth().oauth2(bearerToken).
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
@@ -162,7 +160,7 @@ public class AcceptanceTest {
     protected <T> void delete(String path, String bearerToken) {
         // @formatter:off
         given().
-                header(AUTH_HEADER, bearerToken).
+                auth().oauth2(bearerToken).
         when().
                 delete(path).
         then().
