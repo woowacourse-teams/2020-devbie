@@ -1,0 +1,1 @@
+insert into user (id, ouathId, email)  values (1, 123456, 'atest@atest.com');
