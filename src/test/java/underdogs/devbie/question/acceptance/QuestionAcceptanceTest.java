@@ -66,7 +66,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             .content(TEST_QUESTION_CONTENT)
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
-        post("/api/questions", inputJsonForCreate, bearerToken);
+        post("/api/questions", inputJsonForCreate);
     }
 
     private QuestionResponses readAllQuestions() {
@@ -106,7 +106,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             .content("Changed Content")
             .build();
         String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
-        patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate, bearerToken);
+        patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
         QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
             QuestionResponse.class);
         assertAll(
@@ -118,7 +118,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
     }
 
     private void deleteQuestion(QuestionResponse firstQuestion) {
-        delete("/api/questions/" + firstQuestion.getQuestionId(), bearerToken);
+        delete("/api/questions/" + firstQuestion.getQuestionId());
         QuestionResponses questions = get("/api/questions", QuestionResponses.class);
         assertThat(questions.getQuestions()).hasSize(1);
     }

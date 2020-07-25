@@ -21,22 +21,22 @@ import underdogs.devbie.user.dto.UserCreateRequest;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
+    protected final ObjectMapper objectMapper = new ObjectMapper();
+
     @LocalServerPort
     protected int port;
 
-    private static RequestSpecification given() {
-        return RestAssured.given().log().all();
-    }
+    protected String bearerToken;
 
     @Value("${security.jwt.token.secret-key:sample}")
     private String secret;
 
-    @Value("${security.jwt.token.expire-length:300}")
+    @Value("${security.jwt.token.expire-length:300000}")
     private long seconds;
 
-    protected final ObjectMapper objectMapper = new ObjectMapper();
-
-    protected String bearerToken;
+    private static RequestSpecification given() {
+        return RestAssured.given().log().all();
+    }
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
@@ -55,20 +55,6 @@ public abstract class AcceptanceTest {
     }
 
     protected <T> void post(String path, String inputJson) {
-        // @formatter:off
-        given().
-                body(inputJson).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(path).
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value());
-        // @formatter:on
-    }
-
-    protected <T> void post(String path, String inputJson, String bearerToken) {
         // @formatter:off
         given().
                 auth().oauth2(bearerToken).
@@ -103,19 +89,6 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
-            when().
-                    get(path).
-            then().
-                    log().all().
-                    statusCode(HttpStatus.OK.value()).
-                    extract().as(responseType);
-        // @formatter:on
-    }
-
-    protected <T> T get(String path, Class<T> responseType, String beaerToken) {
-        // @formatter:off
-        return
-            given().
                     auth().oauth2(bearerToken).
             when().
                     get(path).
@@ -130,21 +103,6 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
-            when().
-                    get(path).
-            then().
-                    log().all().
-                    statusCode(HttpStatus.OK.value()).
-                    extract().
-                    jsonPath().
-                    getList(".", responseType);
-        // @formatter:on
-    }
-
-    protected <T> List<T> getAll(String path, Class<T> responseType, String bearerToken) {
-        // @formatter:off
-        return
-            given().
                     auth().oauth2(bearerToken).
             when().
                     get(path).
@@ -157,7 +115,7 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void put(String path, String inputJson, String bearerToken) {
+    protected <T> void put(String path, String inputJson) {
         // @formatter:off
         given().
                 auth().oauth2(bearerToken).
@@ -172,7 +130,7 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void patch(String path, String inputJson, String bearerToken) {
+    protected <T> void patch(String path, String inputJson) {
         // @formatter:off
         given().
                 auth().oauth2(bearerToken).
@@ -187,7 +145,7 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void delete(String path, String bearerToken) {
+    protected <T> void delete(String path) {
         // @formatter:off
         given().
                 auth().oauth2(bearerToken).
