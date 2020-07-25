@@ -16,7 +16,7 @@ import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.user.domain.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AcceptanceTest {
+public abstract class AcceptanceTest {
 
     @LocalServerPort
     protected int port;
