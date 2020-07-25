@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
+import underdogs.devbie.user.dto.UserCreateRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,11 @@ public class UserService {
     public User findById(long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 유저입니다. id=" + userId));
+    }
+
+    @Transactional
+    public Long saveWithoutOAuthId(UserCreateRequest request) {
+        User savedUser = userRepository.save(request.toEntity());
+        return savedUser.getId();
     }
 }

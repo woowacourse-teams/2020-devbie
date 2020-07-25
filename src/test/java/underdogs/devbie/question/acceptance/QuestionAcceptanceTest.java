@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -20,8 +19,6 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
     public static final String TEST_QUESTION_CONTENT = "test_question_content";
     public static final String TEST_TITLE_FOR_SEARCH = "테스트용 검색 타이틀";
     public static final String SEARCH_KEYWORD = "검색";
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*
     Feature: 질문 관리
