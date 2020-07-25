@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.AllArgsConstructor;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 import underdogs.devbie.recommendation.service.QuestionRecommendationService;
@@ -37,11 +36,10 @@ public class QuestionRecommendationController {
     @PostMapping("/{id}")
     public ResponseEntity<Void> createRecommendation(
         @PathVariable("id") Long questionId,
-        @RequestBody RecommendationRequest recommendationRequest,
+        @RequestBody RecommendationRequest request,
         @LoginUser User user
     ) {
-        RecommendationType recommendationType = RecommendationType.from(recommendationRequest.getRecommendationType());
-        questionRecommendationService.createRecommendation(questionId, user.getId(), recommendationType);
+        questionRecommendationService.createRecommendation(questionId, user.getId(), request.getRecommendationType());
 
         return ResponseEntity
             .created(URI.create("api/recommendation/question/" + questionId))
@@ -51,11 +49,10 @@ public class QuestionRecommendationController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> toggleRecommendation(
         @PathVariable("id") Long questionId,
-        @RequestBody RecommendationRequest recommendationRequest,
+        @RequestBody RecommendationRequest request,
         @LoginUser User user
     ) {
-        RecommendationType recommendationType = RecommendationType.from(recommendationRequest.getRecommendationType());
-        questionRecommendationService.toggleRecommendation(questionId, user.getId(), recommendationType);
+        questionRecommendationService.toggleRecommendation(questionId, user.getId(), request.getRecommendationType());
 
         return ResponseEntity.noContent().build();
     }

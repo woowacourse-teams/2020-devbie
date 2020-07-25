@@ -1,5 +1,7 @@
 package underdogs.devbie.recommendation.service;
 
+import static underdogs.devbie.recommendation.domain.RecommendationType.*;
+
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -13,48 +15,38 @@ import underdogs.devbie.recommendation.dto.RecommendationResponse;
 @AllArgsConstructor
 public class QuestionRecommendationService {
 
-    private QuestionRecommendationRepository questionRecommendationRepository;
+    private QuestionRecommendationRepository questionRecommendations;
 
     public RecommendationResponse count(Long questionId) {
-        Long recommendedCount = questionRecommendationRepository.countByQuestionIdAndAndRecommendationType(questionId,
-            RecommendationType.RECOMMENDED);
-        Long nonRecommendedCount = questionRecommendationRepository.countByQuestionIdAndAndRecommendationType(
-            questionId, RecommendationType.NON_RECOMMENDED);
-
-        return new RecommendationResponse(recommendedCount, nonRecommendedCount);
+        return new RecommendationResponse(
+            questionRecommendations.countByQuestionIdAndAndRecommendationType(questionId, RECOMMENDED),
+            questionRecommendations.countByQuestionIdAndAndRecommendationType(questionId, NON_RECOMMENDED));
     }
 
     public void createRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
-        validateNotExist(questionId, userId);
+        questionRecommendations.findByQuestionIdAndUserId(questionId, userId)
+            .ifPresent(x -> new AlreadyExistException());
 
-        questionRecommendationRepository.save(QuestionRecommendation.of(questionId, userId, recommendationType));
-    }
-
-    private void validateNotExist(Long questionId, Long userId) {
-        questionRecommendationRepository.findByQuestionIdAndUserId(questionId, userId)
-            .ifPresent(x -> {
-                throw new AlreadyExistException();
-            });
+        questionRecommendations.save(QuestionRecommendation.of(questionId, userId, recommendationType));
     }
 
     public void toggleRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
-        QuestionRecommendation questionRecommendation = questionRecommendationRepository
+        QuestionRecommendation questionRecommendation = questionRecommendations
             .findByQuestionIdAndUserId(questionId, userId)
             .filter(recommendation -> recommendation.hasRecommendationTypeOf(recommendationType.toggleType()))
             .orElseThrow(IllegalArgumentException::new);
 
         questionRecommendation.toggleRecommended();
 
-        // save 안 해주면 저장이 되지 않는다
-        // 왜 그러지?
-        questionRecommendationRepository.save(questionRecommendation);
+        // save 안 해주면 저장이 되지 않는다???
+        questionRecommendations.save(questionRecommendation);
     }
 
     public void deleteRecommendation(Long questionId, Long userId) {
-        QuestionRecommendation questionRecommendation = questionRecommendationRepository
+        QuestionRecommendation questionRecommendation = questionRecommendations
             .findByQuestionIdAndUserId(questionId, userId)
             .orElseThrow(IllegalArgumentException::new);
 
-        questionRecommendationRepository.delete(questionRecommendation);
+        questionRecommendations.delete(questionRecommendation);
     }
 }
