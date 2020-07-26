@@ -77,7 +77,7 @@ dependencies {
 test {
     useJUnitPlatform()
     testLogging {
-        events "passed", "skipped", "failed"
+        events "failed"
         exceptionFormat "full"
     }
     finalizedBy 'jacocoTestReport'
