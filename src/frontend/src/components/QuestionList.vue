@@ -7,10 +7,7 @@
         class="question"
       >
         <p class="visits">조회수 : {{ question.visits }}</p>
-        <router-link
-          :to="`/api/questions/${question.questionId}`"
-          class="title"
-        >
+        <router-link :to="`/questions/${question.questionId}`" class="title">
           Q. {{ question.title }}
         </router-link>
       </li>

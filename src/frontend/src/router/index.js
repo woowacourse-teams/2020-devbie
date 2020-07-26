@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import LoginPage from "../components/LoginPage";
-import QuestionView from "../views/QuestionView";
+import QuestionListView from "../views/QuestionListView";
+import QuestionDetailView from "../views/QuestionDetailView";
 
 Vue.use(VueRouter);
 
@@ -16,7 +17,12 @@ export const router = new VueRouter({
     {
       path: "/questions",
       name: "questions",
-      component: QuestionView
+      component: QuestionListView
+    },
+    {
+      path: "/questions/:id",
+      name: "question",
+      component: QuestionDetailView
     }
   ]
 });
