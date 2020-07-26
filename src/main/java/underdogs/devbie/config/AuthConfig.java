@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
@@ -12,7 +12,7 @@ import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 
 @Configuration
 @RequiredArgsConstructor
-public class AuthConfig implements WebMvcConfigurer {
+public class AuthConfig extends WebMvcConfigurationSupport {
 
     private final BearerAuthInterceptor bearerAuthInterceptor;
     private final LoginUserArgumentResolver loginUserArgumentResolver;

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
-    <router-view></router-view>
+    <transition name="page">
+      <router-view></router-view>
+    </transition>
     <footer-bar></footer-bar>
   </div>
 </template>
@@ -22,7 +24,7 @@ export default {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {
-        const response = await axios.get("/api/user", {
+        const response = await axios.get("/api/users", {
           headers: {
             Authorization: `bearer ${token}`
           }
@@ -53,5 +55,13 @@ export default {
 <style>
 body {
   font-family: "Do Hyeon", sans-serif;
+}
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
 }
 </style>
