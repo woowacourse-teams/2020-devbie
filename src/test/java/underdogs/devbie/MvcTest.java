@@ -36,6 +36,14 @@ public abstract class MvcTest {
                 .contentType(MediaType.APPLICATION_JSON));
     }
 
+    protected ResultActions postAction(String url, String inputJson) throws Exception {
+        return this.mockMvc
+            .perform(post(url)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
     protected ResultActions postAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
             .perform(post(url)

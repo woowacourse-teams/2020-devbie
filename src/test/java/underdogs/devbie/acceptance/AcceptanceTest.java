@@ -3,6 +3,7 @@ package underdogs.devbie.acceptance;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,9 @@ import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import underdogs.devbie.auth.dto.UserTokenDto;
+import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.user.domain.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
@@ -17,13 +21,23 @@ public abstract class AcceptanceTest {
     @LocalServerPort
     protected int port;
 
+    private static RequestSpecification given() {
+        return RestAssured.given().log().all();
+    }
+
+    @Value("${security.jwt.token.secret-key:sample}")
+    private String secret;
+
+    @Value("${security.jwt.token.expire-length:300}")
+    private long seconds;
+
+    protected String bearerToken;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-    }
-
-    private static RequestSpecification given() {
-        return RestAssured.given().log().all();
+        UserTokenDto userTokenDto = UserTokenDto.from(User.builder().id(1L).build());
+        bearerToken = new JwtTokenProvider(secret, seconds).createToken(userTokenDto);
     }
 
     protected <T> void post(String path, String inputJson) {

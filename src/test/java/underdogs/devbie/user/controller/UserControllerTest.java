@@ -37,7 +37,7 @@ class UserControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        getAction("/api/user", TEST_TOKEN)
+        getAction("/api/users", TEST_TOKEN)
             .andExpect(status().isOk())
             .andExpect(content().string(containsString(TEST_USER_EMAIL)));
     }
