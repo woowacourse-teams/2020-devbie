@@ -12,7 +12,7 @@ import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
-import underdogs.devbie.question.exception.NotMatchedAuthorException;
+import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.question.exception.QuestionNotExistedException;
 
 @Service
@@ -48,11 +48,15 @@ public class QuestionService {
     public void update(Long userId, Long questionId, QuestionUpdateRequest request) {
         Question question = readOne(questionId);
 
-        if (isNotAuthorOfQuestion(userId, question)) {
-            throw new NotMatchedAuthorException();
-        }
+        validateQuestionAuthor(userId, question);
 
         question.updateQuestionInfo(request.toEntity(userId));
+    }
+
+    private void validateQuestionAuthor(Long userId, Question question) {
+        if (isNotAuthorOfQuestion(userId, question)) {
+            throw new NotMatchedQuestionAuthorException();
+        }
     }
 
     private boolean isNotAuthorOfQuestion(Long userId, Question question) {
@@ -63,9 +67,7 @@ public class QuestionService {
     public void delete(Long userId, Long questionId) {
         Question question = readOne(questionId);
 
-        if (isNotAuthorOfQuestion(userId, question)) {
-            throw new NotMatchedAuthorException();
-        }
+        validateQuestionAuthor(userId, question);
 
         questionRepository.deleteById(questionId);
     }

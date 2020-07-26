@@ -25,7 +25,7 @@ import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
-import underdogs.devbie.question.exception.NotMatchedAuthorException;
+import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -116,7 +116,7 @@ class QuestionServiceTest {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
         assertThatThrownBy(() -> questionService.update(2L, 1L, request))
-            .isInstanceOf(NotMatchedAuthorException.class);
+            .isInstanceOf(NotMatchedQuestionAuthorException.class);
     }
 
     @DisplayName("질문 수정")
@@ -143,7 +143,7 @@ class QuestionServiceTest {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
         assertThatThrownBy(() -> questionService.delete(2L, 1L))
-            .isInstanceOf(NotMatchedAuthorException.class);
+            .isInstanceOf(NotMatchedQuestionAuthorException.class);
     }
 
     @DisplayName("질문 삭제")
