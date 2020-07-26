@@ -47,8 +47,7 @@ public class QuestionController {
     public ResponseEntity<QuestionResponses> readAll() {
         QuestionResponses responses = questionService.readAll();
         return ResponseEntity
-            .ok()
-            .body(responses);
+            .ok(responses);
     }
 
     @NoValidate
@@ -58,8 +57,7 @@ public class QuestionController {
     ) {
         QuestionResponses responses = questionService.searchByTitle(keyword);
         return ResponseEntity
-            .ok()
-            .body(responses);
+            .ok(responses);
     }
 
     @NoValidate
@@ -67,8 +65,7 @@ public class QuestionController {
     public ResponseEntity<QuestionResponse> read(@PathVariable("id") Long id) {
         QuestionResponse response = questionService.read(id);
         return ResponseEntity
-            .ok()
-            .body(response);
+            .ok(response);
     }
 
     @PatchMapping("/{id}")

@@ -28,7 +28,8 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserResponse> findUser(@LoginUser User user) {
-        return ResponseEntity.ok(UserResponse.from(user));
+        return ResponseEntity
+            .ok(UserResponse.from(user));
     }
 
     @NoValidate

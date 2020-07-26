@@ -23,7 +23,6 @@ public class UserService {
             .orElse(userInfoResponse.toEntity());
 
         userRepository.save(user);
-
         return user;
     }
 
