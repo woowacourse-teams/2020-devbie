@@ -43,7 +43,9 @@ public abstract class AcceptanceTest {
         RestAssured.port = port;
 
         Long userId = createUser();
-        UserTokenDto userTokenDto = UserTokenDto.from(User.builder().id(userId).build());
+        UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
+            .id(userId)
+            .build());
         bearerToken = new JwtTokenProvider(secret, seconds).createToken(userTokenDto);
     }
 
