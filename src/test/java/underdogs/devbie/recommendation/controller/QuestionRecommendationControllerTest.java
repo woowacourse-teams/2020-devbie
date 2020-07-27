@@ -87,7 +87,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        deleteAction("/api/recommendation-question/1", "", "")
+        deleteAction("/api/recommendation-question/1", "")
             .andExpect(status().isNoContent());
     }
 }

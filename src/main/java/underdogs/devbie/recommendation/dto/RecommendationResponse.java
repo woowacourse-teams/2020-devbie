@@ -27,7 +27,8 @@ public class RecommendationResponse {
             .stream()
             .collect(Collectors.groupingBy(Recommendation::getRecommendationType, summingLong(x -> 1L)));
 
-        return new RecommendationResponse(nullToZero(counting.get(RECOMMENDED)), nullToZero(counting.get(NON_RECOMMENDED)));
+        return new RecommendationResponse(nullToZero(counting.get(RECOMMENDED)),
+            nullToZero(counting.get(NON_RECOMMENDED)));
     }
 
     public static RecommendationResponse fromQuestionRecommendation(List<QuestionRecommendation> recommendations) {
@@ -35,7 +36,8 @@ public class RecommendationResponse {
             .stream()
             .collect(Collectors.groupingBy(Recommendation::getRecommendationType, summingLong(x -> 1L)));
 
-        return new RecommendationResponse(nullToZero(counting.get(RECOMMENDED)), nullToZero(counting.get(NON_RECOMMENDED)));
+        return new RecommendationResponse(nullToZero(counting.get(RECOMMENDED)),
+            nullToZero(counting.get(NON_RECOMMENDED)));
     }
 
     private static long nullToZero(Long number) {

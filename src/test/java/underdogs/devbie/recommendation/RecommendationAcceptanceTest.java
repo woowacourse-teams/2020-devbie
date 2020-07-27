@@ -1,19 +1,14 @@
 package underdogs.devbie.recommendation;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 import underdogs.devbie.user.domain.User;
 
@@ -25,12 +20,6 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     public static final String NON_RECOMMENDATION = "NON_RECOMMENDED";
     public static final String QUESTION_RECOMMENDATION_URI = "/api/recommendation-question/";
 
-    @MockBean
-    BearerAuthInterceptor bearerAuthInterceptor;
-
-    @MockBean
-    LoginUserArgumentResolver loginUserArgumentResolver;
-
     @DisplayName("추천 인수 테스트")
     @Test
     void manageRecommendation() {
@@ -40,10 +29,6 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
-
-        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
-        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
-        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         // 1번 질문을 추천 한다
         recommend(1L);

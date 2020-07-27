@@ -49,7 +49,8 @@ class AnswerRecommendationServiceTest {
     @Test
     void toggleRecommendation() {
         AnswerRecommendation recommendation = AnswerRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
-        given(answerRecommendations.findByAnswerIdAndUserId(anyLong(), anyLong())).willReturn(Optional.of(recommendation));
+        given(answerRecommendations.findByAnswerIdAndUserId(anyLong(), anyLong())).willReturn(
+            Optional.of(recommendation));
 
         answerRecommendationService.toggleRecommendation(1L, 1L, RecommendationType.NON_RECOMMENDED);
 
@@ -60,7 +61,8 @@ class AnswerRecommendationServiceTest {
     @Test
     void deleteRecommendation() {
         AnswerRecommendation recommendation = AnswerRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
-        given(answerRecommendations.findByAnswerIdAndUserId(anyLong(), anyLong())).willReturn(Optional.of(recommendation));
+        given(answerRecommendations.findByAnswerIdAndUserId(anyLong(), anyLong())).willReturn(
+            Optional.of(recommendation));
 
         answerRecommendationService.deleteRecommendation(1L, 1L);
 

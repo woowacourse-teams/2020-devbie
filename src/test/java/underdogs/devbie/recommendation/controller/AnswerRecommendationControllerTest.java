@@ -31,7 +31,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
 
     @DisplayName("추천 수 조회")
     @Test
-    void count() throws Exception{
+    void count() throws Exception {
         getAction("/api/recommendation-answer/1")
             .andExpect(status().isOk());
     }
@@ -87,7 +87,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        deleteAction("/api/recommendation-answer/1", "", "")
+        deleteAction("/api/recommendation-answer/1", "")
             .andExpect(status().isNoContent());
     }
 }

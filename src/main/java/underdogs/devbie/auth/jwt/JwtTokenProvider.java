@@ -23,7 +23,7 @@ public class JwtTokenProvider {
 
     public JwtTokenProvider(
         @Value("${security.jwt.token.secret-key:sample}") String secretKey,
-        @Value("${security.jwt.token.expire-length:300}") long validityInMilliseconds
+        @Value("${security.jwt.token.expire-length:300000}") long validityInMilliseconds
     ) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.validityInMilliseconds = validityInMilliseconds;

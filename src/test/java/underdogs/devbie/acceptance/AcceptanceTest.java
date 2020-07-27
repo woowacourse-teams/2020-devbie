@@ -3,40 +3,89 @@ package underdogs.devbie.acceptance;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import underdogs.devbie.auth.dto.UserTokenDto;
+import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.dto.UserCreateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
+    protected final ObjectMapper objectMapper = new ObjectMapper();
+
     @LocalServerPort
     protected int port;
 
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
+    protected String bearerToken;
+
+    protected Long userId;
+
+    @Value("${security.jwt.token.secret-key:sample}")
+    private String secret;
+
+    @Value("${security.jwt.token.expire-length:300000}")
+    private long seconds;
 
     private static RequestSpecification given() {
         return RestAssured.given().log().all();
     }
 
+    @BeforeEach
+    void setUp() throws JsonProcessingException {
+        RestAssured.port = port;
+
+        userId = createUser();
+        UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
+            .id(userId)
+            .build());
+        bearerToken = new JwtTokenProvider(secret, seconds).createToken(userTokenDto);
+    }
+
+    private Long createUser() throws JsonProcessingException {
+        UserCreateRequest userCreateRequest = UserCreateRequest.builder()
+            .email("atdd@atdd.com")
+            .build();
+        return post("/api/users", objectMapper.writeValueAsString(userCreateRequest), Long.class);
+    }
+
     protected <T> void post(String path, String inputJson) {
         // @formatter:off
         given().
+            auth().oauth2(bearerToken).
+            body(inputJson).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+            post(path).
+        then().
+            log().all().
+            statusCode(HttpStatus.CREATED.value());
+        // @formatter:on
+    }
+
+    protected <T> T post(String path, String inputJson, Class<T> responseType) {
+        // @formatter:off
+        return
+            given().
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
+            when().
                 post(path).
-        then().
+            then().
                 log().all().
-                statusCode(HttpStatus.CREATED.value());
+                statusCode(HttpStatus.CREATED.value()).
+                extract().as(responseType);
         // @formatter:on
     }
 
@@ -44,12 +93,13 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
+                auth().oauth2(bearerToken).
             when().
-                    get(path).
+                get(path).
             then().
-                    log().all().
-                    statusCode(HttpStatus.OK.value()).
-                    extract().as(responseType);
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().as(responseType);
         // @formatter:on
     }
 
@@ -57,53 +107,57 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
+                auth().oauth2(bearerToken).
             when().
-                    get(path).
+                get(path).
             then().
-                    log().all().
-                    statusCode(HttpStatus.OK.value()).
-                    extract().
-                    jsonPath().
-                    getList(".", responseType);
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().
+                jsonPath().
+                getList(".", responseType);
         // @formatter:on
     }
 
     protected <T> void put(String path, String inputJson) {
         // @formatter:off
         given().
-                body(inputJson).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
+            auth().oauth2(bearerToken).
+            body(inputJson).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-                put(path).
+            put(path).
         then().
-                log().all().
-                statusCode(HttpStatus.NO_CONTENT.value());
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 
     protected <T> void patch(String path, String inputJson) {
         // @formatter:off
         given().
-                body(inputJson).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
+            auth().oauth2(bearerToken).
+            body(inputJson).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-                patch(path).
+            patch(path).
         then().
-                log().all().
-                statusCode(HttpStatus.NO_CONTENT.value());
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 
     protected <T> void delete(String path) {
         // @formatter:off
         given().
+            auth().oauth2(bearerToken).
         when().
-                delete(path).
+            delete(path).
         then().
-                log().all().
-                statusCode(HttpStatus.NO_CONTENT.value());
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 }
