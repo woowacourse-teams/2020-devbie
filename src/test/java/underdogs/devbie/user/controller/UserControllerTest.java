@@ -51,8 +51,6 @@ class UserControllerTest extends MvcTest {
     @DisplayName("유저 정보 조회")
     @Test
     void findUser() throws Exception {
-
-
         getAction("/api/users", TEST_TOKEN)
             .andExpect(status().isOk())
             .andExpect(content().string(containsString(TEST_USER_EMAIL)));

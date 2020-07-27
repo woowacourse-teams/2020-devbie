@@ -46,6 +46,7 @@ class QuestionControllerTest extends MvcTest {
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
+
         given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
