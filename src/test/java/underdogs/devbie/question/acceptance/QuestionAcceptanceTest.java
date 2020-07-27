@@ -3,8 +3,11 @@ package underdogs.devbie.question.acceptance;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
@@ -47,17 +50,30 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
      */
 
     @DisplayName("면접 질문 인수테스트")
-    @Test
-    void manageQuestion() throws JsonProcessingException {
-        createQuestion(TEST_QUESTION_TITLE);
-        createQuestion(TEST_TITLE_FOR_SEARCH);
-        QuestionResponses questions = readAllQuestions();
+    @TestFactory
+    Stream<DynamicTest> manageQuestion() {
+        return Stream.of(
+            DynamicTest.dynamicTest("질문 두 개 생성", () -> {
+                createQuestion(TEST_QUESTION_TITLE);
+                createQuestion(TEST_TITLE_FOR_SEARCH);
+            }),
+            DynamicTest.dynamicTest("전체 질문 조회", this::readAllQuestions),
+            DynamicTest.dynamicTest("특정 질문 검색", () -> searchQuestion(SEARCH_KEYWORD)),
+            DynamicTest.dynamicTest("질문 조회", () -> {
+                QuestionResponse firstQuestion = fetchFirstQuestion();
+                readQuestion(firstQuestion);
+            }),
+            DynamicTest.dynamicTest("질문 수정", () -> {
+                QuestionResponse firstQuestion = fetchFirstQuestion();
+                updateQuestion(firstQuestion);
+            }),
+            DynamicTest.dynamicTest("질문 삭제", () -> {
+                QuestionResponse firstQuestion = fetchFirstQuestion();
+                deleteQuestion(firstQuestion);
+            })
 
-        QuestionResponse firstQuestion = questions.getQuestions().get(0);
-        searchQuestion(SEARCH_KEYWORD);
-        readQuestion(firstQuestion);
-        updateQuestion(firstQuestion);
-        deleteQuestion(firstQuestion);
+        );
+
     }
 
     private void createQuestion(String title) throws JsonProcessingException {
@@ -79,6 +95,11 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             () -> assertThat(firstQuestion.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );
         return questions;
+    }
+
+    private QuestionResponse fetchFirstQuestion() {
+        QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+        return questions.getQuestions().get(0);
     }
 
     private void searchQuestion(String keyword) {

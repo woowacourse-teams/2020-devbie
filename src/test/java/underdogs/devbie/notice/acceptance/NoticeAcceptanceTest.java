@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,8 +55,28 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
          Then 공고가 삭제되었다.
      */
     @DisplayName("공고 인수테스트")
-    @Test
-    void notice() throws JsonProcessingException {
+    @TestFactory
+    Stream<DynamicTest> notice() {
+        return Stream.of(
+            DynamicTest.dynamicTest("공고 게시글을 생성한다.", () -> {
+                createNotice();
+            }),
+            DynamicTest.dynamicTest("공고 게시글 전체를 조회한다.", () -> {
+                readAllNotice();
+            }),
+            DynamicTest.dynamicTest("공고 게시글을 수정한다.", () -> {
+                updateNotice();
+            }),
+            DynamicTest.dynamicTest("공고 게시글 하나르 상세 조회한다.", () -> {
+                readNoticeDetail();
+            }),
+            DynamicTest.dynamicTest("공고 게시글을 삭제한다.", () -> {
+                deleteNotice();
+            })
+        );
+    }
+
+    private void createNotice() throws JsonProcessingException {
         NoticeCreateRequest noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
@@ -66,6 +88,10 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             .endDate(String.valueOf(LocalDateTime.of(2020, 7, 11, 10, 10)))
             .build();
 
+        post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
+    }
+
+    private void updateNotice() throws JsonProcessingException {
         NoticeUpdateRequest noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("bossdog")
             .salary(60_000_000)
@@ -77,18 +103,6 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             .endDate(updatedDuration.getEndDate().toString())
             .build();
 
-        createNotice(noticeCreateRequest);
-        readAllNotice();
-        updateNotice(noticeUpdateRequest);
-        readNoticeDetail();
-        deleteNotice();
-    }
-
-    private void createNotice(NoticeCreateRequest noticeCreateRequest) throws JsonProcessingException {
-        post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
-    }
-
-    private void updateNotice(NoticeUpdateRequest noticeUpdateRequest) throws JsonProcessingException {
         patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
     }
 
