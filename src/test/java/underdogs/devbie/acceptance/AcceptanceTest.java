@@ -28,6 +28,8 @@ public abstract class AcceptanceTest {
 
     protected String bearerToken;
 
+    protected Long userId;
+
     @Value("${security.jwt.token.secret-key:sample}")
     private String secret;
 
@@ -42,7 +44,7 @@ public abstract class AcceptanceTest {
     void setUp() throws JsonProcessingException {
         RestAssured.port = port;
 
-        Long userId = createUser();
+        userId = createUser();
         UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
             .id(userId)
             .build());
