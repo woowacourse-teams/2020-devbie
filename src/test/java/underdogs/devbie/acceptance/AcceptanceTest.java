@@ -30,8 +30,6 @@ public abstract class AcceptanceTest {
 
     protected String bearerToken;
 
-    protected Long userId;
-
     @Value("${security.jwt.token.secret-key:sample}")
     private String secret;
 
