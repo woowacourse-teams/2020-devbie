@@ -27,7 +27,7 @@ public class NoticeDetailResponse {
         return NoticeDetailResponse.builder()
             .id(notice.getId())
             .company(notice.getCompany())
-            .noticeDescription(new NoticeDescriptionResponse(notice.getNoticeDescription()))
+            .noticeDescription(NoticeDescriptionResponse.from(notice.getNoticeDescription()))
             .jobPosition(notice.getJobPosition())
             .image(notice.getImage())
             .duration(notice.getDuration())
