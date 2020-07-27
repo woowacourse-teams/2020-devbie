@@ -10,8 +10,8 @@ function fetchQuestionList() {
   return axios.get(`${config.baseUrl}/api/questions`);
 }
 
-function fetchQuestion(questionId) {
+function fetchQuestionDetail(questionId) {
   return axios.get(`${config.baseUrl}/api/questions/${questionId}`);
 }
 
-export { fetchQuestionList, fetchQuestion };
+export { fetchQuestionList, fetchQuestionDetail };
