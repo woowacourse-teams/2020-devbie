@@ -1,10 +1,11 @@
 package underdogs.devbie.recommendation.service;
 
-import static underdogs.devbie.recommendation.domain.RecommendationType.*;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import underdogs.devbie.exception.AlreadyExistException;
 import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
@@ -13,10 +14,11 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 @Service
-@AllArgsConstructor
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class AnswerRecommendationService {
 
-    private AnswerRecommendationRepository answerRecommendations;
+    private final AnswerRecommendationRepository answerRecommendations;
 
     public RecommendationResponse count(Long answerId) {
         return new RecommendationResponse(
@@ -24,6 +26,7 @@ public class AnswerRecommendationService {
             answerRecommendations.countByAnswerIdAndAndRecommendationType(answerId, NON_RECOMMENDED));
     }
 
+    @Transactional
     public void createRecommendation(Long answerId, Long userId, RecommendationType recommendationType) {
         answerRecommendations.findByAnswerIdAndUserId(answerId, userId)
             .ifPresent(x -> new AlreadyExistException());
@@ -31,6 +34,7 @@ public class AnswerRecommendationService {
         answerRecommendations.save(AnswerRecommendation.of(answerId, userId, recommendationType));
     }
 
+    @Transactional
     public void toggleRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
         AnswerRecommendation answerRecommendation = answerRecommendations
             .findByAnswerIdAndUserId(questionId, userId)
@@ -38,11 +42,9 @@ public class AnswerRecommendationService {
             .orElseThrow(NotExistException::new);
 
         answerRecommendation.toggleRecommended();
-
-        // save 안 해주면 저장이 되지 않는다???
-        answerRecommendations.save(answerRecommendation);
     }
 
+    @Transactional
     public void deleteRecommendation(Long questionId, Long userId) {
         AnswerRecommendation answerRecommendation = answerRecommendations
             .findByAnswerIdAndUserId(questionId, userId)

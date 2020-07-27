@@ -3,7 +3,6 @@ package underdogs.devbie.recommendation.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,20 +10,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 import underdogs.devbie.recommendation.service.QuestionRecommendationService;
 import underdogs.devbie.user.domain.User;
 
-@Controller
-@RequestMapping("/api/recommendation/question")
-@AllArgsConstructor
+@RestController
+@RequestMapping("/api/recommendation-question")
+@RequiredArgsConstructor
 public class QuestionRecommendationController {
 
-    private QuestionRecommendationService questionRecommendationService;
+    private final QuestionRecommendationService questionRecommendationService;
 
     @GetMapping("/{id}")
     public ResponseEntity<RecommendationResponse> count(@PathVariable("id") Long questionId) {

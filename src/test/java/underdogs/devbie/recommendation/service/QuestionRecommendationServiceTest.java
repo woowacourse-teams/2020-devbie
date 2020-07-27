@@ -33,8 +33,7 @@ class QuestionRecommendationServiceTest {
     void count() {
         questionRecommendationService.count(1L);
 
-        verify(questionRecommendationRepository).countByQuestionIdAndAndRecommendationType(anyLong(), eq(RecommendationType.RECOMMENDED));
-        verify(questionRecommendationRepository).countByQuestionIdAndAndRecommendationType(anyLong(), eq(RecommendationType.NON_RECOMMENDED));
+        verify(questionRecommendationRepository).findByQuestionId(anyLong());
     }
 
     @DisplayName("추천 생성")

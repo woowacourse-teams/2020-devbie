@@ -1,10 +1,11 @@
 package underdogs.devbie.recommendation.service;
 
-import static underdogs.devbie.recommendation.domain.RecommendationType.*;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import underdogs.devbie.exception.AlreadyExistException;
 import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
@@ -13,10 +14,11 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 @Service
-@AllArgsConstructor
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class QuestionRecommendationService {
 
-    private QuestionRecommendationRepository questionRecommendations;
+    private final QuestionRecommendationRepository questionRecommendations;
 
     public RecommendationResponse count(Long questionId) {
         return new RecommendationResponse(
@@ -24,6 +26,7 @@ public class QuestionRecommendationService {
             questionRecommendations.countByQuestionIdAndAndRecommendationType(questionId, NON_RECOMMENDED));
     }
 
+    @Transactional
     public void createRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
         questionRecommendations.findByQuestionIdAndUserId(questionId, userId)
             .ifPresent(x -> new AlreadyExistException());
@@ -31,6 +34,7 @@ public class QuestionRecommendationService {
         questionRecommendations.save(QuestionRecommendation.of(questionId, userId, recommendationType));
     }
 
+    @Transactional
     public void toggleRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
         QuestionRecommendation questionRecommendation = questionRecommendations
             .findByQuestionIdAndUserId(questionId, userId)
@@ -38,11 +42,9 @@ public class QuestionRecommendationService {
             .orElseThrow(NotExistException::new);
 
         questionRecommendation.toggleRecommended();
-
-        // save 안 해주면 저장이 되지 않는다???
-        questionRecommendations.save(questionRecommendation);
     }
 
+    @Transactional
     public void deleteRecommendation(Long questionId, Long userId) {
         QuestionRecommendation questionRecommendation = questionRecommendations
             .findByQuestionIdAndUserId(questionId, userId)

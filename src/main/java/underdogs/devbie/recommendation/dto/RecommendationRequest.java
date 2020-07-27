@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Getter
 public class RecommendationRequest {
 
     private RecommendationType recommendationType;
 }
+
+

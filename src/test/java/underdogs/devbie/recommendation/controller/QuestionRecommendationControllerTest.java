@@ -32,7 +32,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
     @DisplayName("추천 수 조회")
     @Test
     void count() throws Exception {
-        getAction("/api/recommendation/question/1")
+        getAction("/api/recommendation-question/1")
             .andExpect(status().isOk());
     }
 
@@ -51,7 +51,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
 
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
 
-        postAction("/api/recommendation/question/1", inputJson, "")
+        postAction("/api/recommendation-question/1", inputJson, "")
             .andExpect(status().isCreated());
     }
 
@@ -70,7 +70,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
 
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
 
-        patchAction("/api/recommendation/question/1", inputJson, "")
+        patchAction("/api/recommendation-question/1", inputJson, "")
             .andExpect(status().isNoContent());
     }
 
@@ -87,7 +87,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        deleteAction("/api/recommendation/question/1", "", "")
+        deleteAction("/api/recommendation-question/1", "", "")
             .andExpect(status().isNoContent());
     }
 }

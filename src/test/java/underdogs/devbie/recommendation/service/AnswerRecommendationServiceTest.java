@@ -34,8 +34,7 @@ class AnswerRecommendationServiceTest {
     void count() {
         answerRecommendationService.count(1L);
 
-        verify(answerRecommendations).countByAnswerIdAndAndRecommendationType(anyLong(), eq(RecommendationType.RECOMMENDED));
-        verify(answerRecommendations).countByAnswerIdAndAndRecommendationType(anyLong(), eq(RecommendationType.NON_RECOMMENDED));
+        verify(answerRecommendations).findByAnswerId(anyLong());
     }
 
     @DisplayName("추천 생성")

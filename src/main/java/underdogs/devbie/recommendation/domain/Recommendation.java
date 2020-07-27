@@ -13,8 +13,8 @@ import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
 @MappedSuperclass
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public abstract class Recommendation extends BaseTimeEntity {
 
     protected Long userId;
