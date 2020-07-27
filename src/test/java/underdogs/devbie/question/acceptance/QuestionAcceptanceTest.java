@@ -74,7 +74,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         QuestionResponse firstQuestion = questions.getQuestions().get(0);
         assertAll(
             () -> assertThat(questions.getQuestions()).hasSize(2),
-            () -> assertThat(firstQuestion.getUserId()).isEqualTo(1L),
+            () -> assertThat(firstQuestion.getUserId()).isEqualTo(userId),
             () -> assertThat(firstQuestion.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(firstQuestion.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );
@@ -93,7 +93,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
             QuestionResponse.class);
         assertAll(
-            () -> assertThat(questionResponse.getUserId()).isEqualTo(1L),
+            () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
             () -> assertThat(questionResponse.getVisits()).isEqualTo(0L),
             () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
@@ -110,7 +110,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
             QuestionResponse.class);
         assertAll(
-            () -> assertThat(updatedQuestion.getUserId()).isEqualTo(1L),
+            () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
             () -> assertThat(updatedQuestion.getVisits()).isEqualTo(0L),
             () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
             () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")

@@ -21,6 +21,7 @@ import underdogs.devbie.user.dto.UserCreateRequest;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
+    protected Long userId;
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
     @LocalServerPort
@@ -42,7 +43,7 @@ public abstract class AcceptanceTest {
     void setUp() throws JsonProcessingException {
         RestAssured.port = port;
 
-        Long userId = createUser();
+        userId = createUser();
         UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
             .id(userId)
             .build());
