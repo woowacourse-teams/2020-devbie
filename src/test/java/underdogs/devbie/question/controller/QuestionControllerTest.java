@@ -21,6 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.question.domain.Question;
+import underdogs.devbie.question.domain.QuestionContent;
+import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -73,12 +76,13 @@ class QuestionControllerTest extends MvcTest {
     @DisplayName("질문 목록 조회")
     @Test
     void readAll() throws Exception {
-        QuestionResponse response = QuestionResponse.builder()
-            .questionId(1L)
-            .title(TEST_QUESTION_TITLE)
-            .content(TEST_QUESTION_CONTENT)
+        Question question = Question.builder()
+            .id(1L)
+            .userId(1L)
+            .title(QuestionTitle.from(TEST_QUESTION_TITLE))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
             .build();
-        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(response));
+        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
 
         given(questionService.readAll()).willReturn(responses);
 
@@ -102,6 +106,8 @@ class QuestionControllerTest extends MvcTest {
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
             .build();
+
+        given(questionService.read(anyLong())).willReturn(response);
 
         MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId())
             .andExpect(status().isOk())
@@ -144,19 +150,21 @@ class QuestionControllerTest extends MvcTest {
     @DisplayName("질문 검색 - 제목에 포함된 키워드")
     @Test
     void search() throws Exception {
-        QuestionResponse response1 = QuestionResponse.builder()
-            .questionId(1L)
-            .title("스택과 큐의 차이")
-            .content(TEST_QUESTION_CONTENT)
+        Question question1 = Question.builder()
+            .id(1L)
+            .userId(1L)
+            .title(QuestionTitle.from("스택과 큐의 차이"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
             .build();
 
-        QuestionResponse response2 = QuestionResponse.builder()
-            .questionId(2L)
-            .title("오버스택플로우")
-            .content(TEST_QUESTION_CONTENT)
+        Question question2 = Question.builder()
+            .id(2L)
+            .userId(1L)
+            .title(QuestionTitle.from("오버스택플로우"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
             .build();
 
-        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(response1, response2));
+        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));
 
         given(questionService.searchByTitle(anyString())).willReturn(responses);
 
