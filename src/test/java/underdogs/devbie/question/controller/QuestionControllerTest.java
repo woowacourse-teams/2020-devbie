@@ -1,6 +1,5 @@
 package underdogs.devbie.question.controller;
 
-import static org.hamcrest.core.StringContains.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -82,8 +81,8 @@ class QuestionControllerTest extends MvcTest {
 
         getAction("/api/questions")
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString(TEST_QUESTION_TITLE)))
-            .andExpect(content().string(containsString(TEST_QUESTION_CONTENT)));
+            .andExpect(jsonPath("$.questions[0].title").value(TEST_QUESTION_TITLE))
+            .andExpect(jsonPath("$.questions[0].content").value(TEST_QUESTION_CONTENT));
     }
 
     @DisplayName("질문 조회")
@@ -99,8 +98,8 @@ class QuestionControllerTest extends MvcTest {
 
         getAction("/api/questions/" + response.getQuestionId())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString(TEST_QUESTION_TITLE)))
-            .andExpect(content().string(containsString(TEST_QUESTION_CONTENT)));
+            .andExpect(jsonPath("$.title").value(TEST_QUESTION_TITLE))
+            .andExpect(jsonPath("$.content").value(TEST_QUESTION_CONTENT));
     }
 
     @DisplayName("질문 수정")
@@ -150,7 +149,7 @@ class QuestionControllerTest extends MvcTest {
 
         getAction("/api/questions?keyword=스택")
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("스택과 큐의 차이")))
-            .andExpect(content().string(containsString("오버스택플로우")));
+            .andExpect(jsonPath("$.questions[0].title").value("스택과 큐의 차이"))
+            .andExpect(jsonPath("$.questions[1].title").value("오버스택플로우"));
     }
 }
