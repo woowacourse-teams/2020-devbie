@@ -71,4 +71,9 @@ public class AnswerService {
 
         answerRepository.deleteById(answer.getId());
     }
+
+    public AnswerResponses readByQuestionId(Long questionId) {
+        Answers answers = Answers.from(answerRepository.findByQuestionId(questionId));
+        return AnswerResponses.from(answers);
+    }
 }

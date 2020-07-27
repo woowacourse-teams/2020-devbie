@@ -89,6 +89,30 @@ class AnswerServiceTest {
         );
     }
 
+    @DisplayName("질문 아이디로 답변 전체 조회")
+    @Test
+    void readAllByQuestionId() {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(2L)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findByQuestionId(anyLong())).willReturn(Collections.singletonList(expectAnswer));
+
+        AnswerResponses answerResponses = answerService.readByQuestionId(expectAnswer.getQuestionId());
+
+        assertThat(answerResponses).isNotNull();
+        assertThat(answerResponses.getAnswerResponses()).isNotNull();
+        List<AnswerResponse> actual = answerResponses.getAnswerResponses();
+        assertAll(
+            () -> assertThat(actual.get(0).getId()).isEqualTo(1L),
+            () -> assertThat(actual.get(0).getUserId()).isEqualTo(2L),
+            () -> assertThat(actual.get(0).getQuestionId()).isEqualTo(3L),
+            () -> assertThat(actual.get(0).getContent()).isEqualTo(TEST_ANSWER_CONTENT)
+        );
+    }
+
     @DisplayName("하나의 면접 답 조회")
     @Test
     void read() throws Exception {

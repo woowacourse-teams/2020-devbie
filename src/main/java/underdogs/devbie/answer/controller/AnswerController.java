@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
@@ -52,6 +54,12 @@ public class AnswerController {
     @GetMapping("/{id}")
     public ResponseEntity<AnswerResponse> read(@PathVariable(value = "id") Long id) {
         return ResponseEntity.ok(answerService.read(id));
+    }
+
+    @NoValidate
+    @GetMapping(params = "questionId")
+    public ResponseEntity<AnswerResponses> readByQuestionId(@RequestParam(value = "questionId") Long questionId) {
+        return ResponseEntity.ok(answerService.readByQuestionId(questionId));
     }
 
     @PatchMapping("/{id}")

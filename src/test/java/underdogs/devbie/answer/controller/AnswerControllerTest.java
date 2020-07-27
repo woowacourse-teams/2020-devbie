@@ -186,4 +186,29 @@ public class AnswerControllerTest extends MvcTest {
 
         verify(answerService).delete(any(User.class), eq(1L));
     }
+
+    @DisplayName("QuestionId로 Answer들 가져오기")
+    @Test
+    void searchByQuestionId() throws Exception {
+        Answer expectedAnswerItem = Answer.builder()
+            .userId(1L)
+            .questionId(1L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        AnswerResponses expected = AnswerResponses.from(Answers.from(Collections.singletonList(expectedAnswerItem)));
+        given(answerService.readByQuestionId(expectedAnswerItem.getQuestionId())).willReturn(expected);
+        MvcResult result = getAction(String.format("/api/answers?questionId=%d", expectedAnswerItem.getQuestionId()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        AnswerResponses answerResponses = OBJECT_MAPPER.readValue(response, AnswerResponses.class);
+
+        assertAll(
+            () -> assertThat(answerResponses).isNotNull(),
+            () -> assertThat(answerResponses.getAnswerResponses()).isNotEmpty(),
+            () -> assertThat(answerResponses.getAnswerResponses().get(0).getQuestionId())
+                .isEqualTo(expectedAnswerItem.getQuestionId())
+        );
+    }
 }
