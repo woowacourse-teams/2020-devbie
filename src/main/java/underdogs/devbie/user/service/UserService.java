@@ -36,4 +36,9 @@ public class UserService {
         User savedUser = userRepository.save(request.toEntity());
         return savedUser.getId();
     }
+
+    @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
 }

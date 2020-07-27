@@ -2,6 +2,7 @@ package underdogs.devbie.acceptance;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,11 +51,20 @@ public abstract class AcceptanceTest {
         bearerToken = new JwtTokenProvider(secret, seconds).createToken(userTokenDto);
     }
 
+    @AfterEach
+    void tearDown() {
+        deleteUser();
+    }
+
     private Long createUser() throws JsonProcessingException {
         UserCreateRequest userCreateRequest = UserCreateRequest.builder()
             .email("atdd@atdd.com")
             .build();
         return post("/api/users", objectMapper.writeValueAsString(userCreateRequest), Long.class);
+    }
+
+    private void deleteUser() {
+        delete("/api/users/" + userId);
     }
 
     protected <T> void post(String path, String inputJson) {
