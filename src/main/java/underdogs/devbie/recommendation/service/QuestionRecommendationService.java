@@ -21,9 +21,9 @@ public class QuestionRecommendationService {
     private final QuestionRecommendationRepository questionRecommendations;
 
     public RecommendationResponse count(Long questionId) {
-        return new RecommendationResponse(
-            questionRecommendations.countByQuestionIdAndAndRecommendationType(questionId, RECOMMENDED),
-            questionRecommendations.countByQuestionIdAndAndRecommendationType(questionId, NON_RECOMMENDED));
+        List<QuestionRecommendation> recommendations = questionRecommendations.findByQuestionId(questionId);
+
+        return RecommendationResponse.fromQuestionRecommendation(recommendations);
     }
 
     @Transactional

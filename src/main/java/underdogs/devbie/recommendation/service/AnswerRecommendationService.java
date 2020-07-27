@@ -21,9 +21,9 @@ public class AnswerRecommendationService {
     private final AnswerRecommendationRepository answerRecommendations;
 
     public RecommendationResponse count(Long answerId) {
-        return new RecommendationResponse(
-            answerRecommendations.countByAnswerIdAndAndRecommendationType(answerId, RECOMMENDED),
-            answerRecommendations.countByAnswerIdAndAndRecommendationType(answerId, NON_RECOMMENDED));
+        List<AnswerRecommendation> recommendations = answerRecommendations.findByAnswerId(answerId);
+
+        return RecommendationResponse.fromAnswerRecommendation(recommendations);
     }
 
     @Transactional
