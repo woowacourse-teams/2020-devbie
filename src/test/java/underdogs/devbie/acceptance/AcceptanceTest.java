@@ -63,9 +63,9 @@ public abstract class AcceptanceTest {
             body(inputJson).
             contentType(MediaType.APPLICATION_JSON_VALUE).
             accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
+        when().
             post(path).
-            then().
+        then().
             log().all().
             statusCode(HttpStatus.CREATED.value());
         // @formatter:on
@@ -78,9 +78,9 @@ public abstract class AcceptanceTest {
                 body(inputJson).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
+            when().
                 post(path).
-                then().
+            then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
                 extract().as(responseType);
@@ -92,9 +92,9 @@ public abstract class AcceptanceTest {
         return
             given().
                 auth().oauth2(bearerToken).
-                when().
+            when().
                 get(path).
-                then().
+            then().
                 log().all().
                 statusCode(HttpStatus.OK.value()).
                 extract().as(responseType);
@@ -106,9 +106,9 @@ public abstract class AcceptanceTest {
         return
             given().
                 auth().oauth2(bearerToken).
-                when().
+            when().
                 get(path).
-                then().
+            then().
                 log().all().
                 statusCode(HttpStatus.OK.value()).
                 extract().
@@ -124,9 +124,9 @@ public abstract class AcceptanceTest {
             body(inputJson).
             contentType(MediaType.APPLICATION_JSON_VALUE).
             accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
+        when().
             put(path).
-            then().
+        then().
             log().all().
             statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
@@ -139,9 +139,9 @@ public abstract class AcceptanceTest {
             body(inputJson).
             contentType(MediaType.APPLICATION_JSON_VALUE).
             accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
+        when().
             patch(path).
-            then().
+        then().
             log().all().
             statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
@@ -151,9 +151,9 @@ public abstract class AcceptanceTest {
         // @formatter:off
         given().
             auth().oauth2(bearerToken).
-            when().
+        when().
             delete(path).
-            then().
+        then().
             log().all().
             statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
