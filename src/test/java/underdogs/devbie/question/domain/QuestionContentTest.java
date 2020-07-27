@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class QuestionContentTest {
 
-    private static final String TEST_QUESTION_CONTENT = "Test Content";
+    public static final String TEST_QUESTION_CONTENT = "Test Content";
 
     @DisplayName("QuestionContent - from")
     @Test

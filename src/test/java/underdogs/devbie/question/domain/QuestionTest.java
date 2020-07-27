@@ -51,14 +51,16 @@ class QuestionTest {
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
             .build();
-
-        QuestionTitle changedQuestionTitle = QuestionTitle.from("Changed Title");
-        QuestionContent changedQuestionContent = QuestionContent.from("Changed Content");
-        question.updateQuestionInfo(changedQuestionTitle, changedQuestionContent);
+        Question changeQuestion = Question.builder()
+            .userId(1L)
+            .title(QuestionTitle.from("Changed Title"))
+            .content(QuestionContent.from("Changed Content"))
+            .build();
+        question.updateQuestionInfo(changeQuestion);
 
         assertAll(
-            () -> assertEquals(changedQuestionTitle, question.getTitle()),
-            () -> assertEquals(changedQuestionContent, question.getContent())
+            () -> assertThat(question.getTitle()).isEqualTo(changeQuestion.getTitle()),
+            () -> assertThat(question.getContent()).isEqualTo(changeQuestion.getContent())
         );
     }
 
@@ -71,7 +73,7 @@ class QuestionTest {
             .content(TEST_QUESTION_CONTENT)
             .build();
 
-        assertThat(question.getVisits().getValue()).isEqualTo(0L);
+        assertThat(question.getVisits().getVisitCount()).isEqualTo(0L);
     }
 
     @DisplayName("조회수 증가")
@@ -85,6 +87,6 @@ class QuestionTest {
 
         question.increaseVisits();
 
-        assertThat(question.getVisits().getValue()).isEqualTo(1L);
+        assertThat(question.getVisits().getVisitCount()).isEqualTo(1L);
     }
 }

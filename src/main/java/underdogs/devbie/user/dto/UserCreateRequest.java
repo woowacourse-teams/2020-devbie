@@ -1,22 +1,25 @@
-package underdogs.devbie.auth.dto;
+package underdogs.devbie.user.dto;
+
+import javax.validation.constraints.NotBlank;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.user.domain.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Getter
-public class UserInfoResponse {
+public class UserCreateRequest {
 
-    private String id;
+    @NotBlank
     private String email;
 
     public User toEntity() {
         return User.builder()
-            .oauthId(id)
             .email(email)
             .build();
     }
