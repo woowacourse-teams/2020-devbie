@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class Visits {
 
-    private Long value;
+    private Long visitCount;
 
     public static Visits init() {
         return new Visits(0L);
     }
 
     public void increase() {
-        this.value++;
+        this.visitCount++;
     }
 }

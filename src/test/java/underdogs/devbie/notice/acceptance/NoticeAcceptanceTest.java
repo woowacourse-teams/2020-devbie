@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.auth.dto.UserTokenDto;
-import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -23,8 +20,8 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
+import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
-import underdogs.devbie.user.domain.User;
 
 public class NoticeAcceptanceTest extends AcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
@@ -58,9 +55,6 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     @DisplayName("공고 인수테스트")
     @Test
     void notice() throws JsonProcessingException {
-        token = new JwtTokenProvider(secretKey, validityInMillisecond).createToken(
-            UserTokenDto.from(User.builder().id(1L).build()));
-
         NoticeCreateRequest noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
@@ -91,22 +85,22 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     }
 
     private void createNotice(NoticeCreateRequest noticeCreateRequest) throws JsonProcessingException {
-        post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest), token);
+        post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
     }
 
     private void updateNotice(NoticeUpdateRequest noticeUpdateRequest) throws JsonProcessingException {
-        patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest), token);
+        patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
     }
 
     private void deleteNotice() {
-        delete("/api/notices/1", token);
+        delete("/api/notices/1");
     }
 
     private void readAllNotice() {
-        List<NoticeResponse> result = getAll("/api/notices", NoticeResponse.class);
+        NoticeResponses noticeResponses = get("/api/notices", NoticeResponses.class);
 
-        assertThat(result).isNotEmpty();
-        NoticeResponse noticeResponse = result.get(0);
+        NoticeResponse noticeResponse = noticeResponses.getNoticeResponses().get(0);
+
         assertAll(
             () -> assertThat(noticeResponse.getId()).isEqualTo(1L),
             () -> assertThat(noticeResponse.getName()).isEqualTo("underdogs"),
