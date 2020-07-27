@@ -2,18 +2,24 @@ package underdogs.devbie.recommendation.domain;
 
 import java.util.Objects;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.MappedSuperclass;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
-@Getter
+@MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public abstract class Recommendation extends BaseTimeEntity {
 
-    private Long userId;
+    protected Long userId;
 
+    @Enumerated(EnumType.STRING)
     private RecommendationType recommendationType;
 
     public Recommendation(Long userId, RecommendationType recommendationType) {

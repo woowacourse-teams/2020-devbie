@@ -55,4 +55,16 @@ class AnswerTest {
 
         assertThat(answer.getContent()).isEqualTo(changedContent);
     }
+
+    @DisplayName("Answer userId 비교")
+    @Test
+    void isMatched() {
+        Answer answer = Answer.builder()
+            .userId(1L)
+            .questionId(1L)
+            .content(TEST_ANSWER_CONTENT)
+            .build();
+
+        assertThat(answer.isNotMatched(1L)).isFalse();
+    }
 }
