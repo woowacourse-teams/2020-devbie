@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;

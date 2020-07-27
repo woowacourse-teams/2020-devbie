@@ -130,7 +130,7 @@ class QuestionServiceTest {
 
         questionService.update(1L, 1L, request);
 
-        QuestionResponse  response = questionService.read(1L);
+        QuestionResponse response = questionService.read(1L);
         assertAll(
             () -> assertThat(response.getTitle()).isEqualTo(request.getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(request.getContent())
