@@ -30,8 +30,7 @@ public class QuestionService {
 
     public QuestionResponses readAll() {
         List<Question> questions = questionRepository.findAll();
-        List<QuestionResponse> questionResponses = QuestionResponse.listFrom(questions);
-        return QuestionResponses.from(questionResponses);
+        return QuestionResponses.from(questions);
     }
 
     public QuestionResponse read(Long id) {
@@ -74,7 +73,6 @@ public class QuestionService {
 
     public QuestionResponses searchByTitle(String keyword) {
         List<Question> questions = questionRepository.findByTitleLike(keyword);
-        List<QuestionResponse> questionResponses = QuestionResponse.listFrom(questions);
-        return QuestionResponses.from(questionResponses);
+        return QuestionResponses.from(questions);
     }
 }
