@@ -20,7 +20,7 @@ public class NoticeResponses {
 
     private List<NoticeResponse> noticeResponses;
 
-    public static NoticeResponses from(List<Notice> notices) {
+    public static NoticeResponses listFrom(List<Notice> notices) {
         List<NoticeResponse> response = notices.stream()
             .map(notice -> NoticeResponse.builder()
                 .id(notice.getId())

@@ -31,10 +31,6 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private NoticeCreateRequest noticeCreateRequest;
-
-    private NoticeUpdateRequest noticeUpdateRequest;
-
     @Value("${security.jwt.token.secret-key:sample}")
     String secretKey;
 
@@ -65,7 +61,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         token = new JwtTokenProvider(secretKey, validityInMillisecond).createToken(
             UserTokenDto.from(User.builder().id(1L).build()));
 
-        noticeCreateRequest = NoticeCreateRequest.builder()
+        NoticeCreateRequest noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
@@ -76,7 +72,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             .endDate(String.valueOf(LocalDateTime.of(2020, 7, 11, 10, 10)))
             .build();
 
-        noticeUpdateRequest = NoticeUpdateRequest.builder()
+        NoticeUpdateRequest noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("bossdog")
             .salary(60_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName(), Language.CPP.getName()))
@@ -87,18 +83,18 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             .endDate(updatedDuration.getEndDate().toString())
             .build();
 
-        createNotice();
+        createNotice(noticeCreateRequest);
         readAllNotice();
-        updateNotice();
+        updateNotice(noticeUpdateRequest);
         readNoticeDetail();
         deleteNotice();
     }
 
-    private void createNotice() throws JsonProcessingException {
+    private void createNotice(NoticeCreateRequest noticeCreateRequest) throws JsonProcessingException {
         post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest), token);
     }
 
-    private void updateNotice() throws JsonProcessingException {
+    private void updateNotice(NoticeUpdateRequest noticeUpdateRequest) throws JsonProcessingException {
         patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest), token);
     }
 

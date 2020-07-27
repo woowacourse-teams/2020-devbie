@@ -10,7 +10,6 @@ import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
-import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.expception.NoticeNotFoundException;
@@ -41,7 +40,7 @@ public class NoticeService {
 
     public NoticeResponses readAll() {
         List<Notice> notices = noticeRepository.findAll();
-        return NoticeResponses.from(NoticeResponse.listFrom(notices));
+        return NoticeResponses.listFrom(notices);
     }
 
     public NoticeDetailResponse read(Long id) {

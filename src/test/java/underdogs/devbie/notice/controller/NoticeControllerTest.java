@@ -1,5 +1,7 @@
 package underdogs.devbie.notice.controller;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -15,8 +17,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
@@ -24,6 +29,7 @@ import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
@@ -53,6 +59,9 @@ public class NoticeControllerTest extends MvcTest {
 
     @BeforeEach
     void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
             .salary(50_000_000)
@@ -170,25 +179,34 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 게시글 전체 조회")
     @Test
     void readAll() throws Exception {
-        List<NoticeResponse> noticeResponses = Arrays.asList(NoticeResponse.builder()
+        List<Notice> notices = Arrays.asList(Notice.builder()
             .id(1L)
-            .name("underdogs")
+            .company(new Company("underdogs", 2000))
             .image("/static/image/underdogs")
             .jobPosition(JobPosition.BACKEND)
-            .languages(new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName())))
+            .noticeDescription(new NoticeDescription(
+                new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+                , "hi"))
             .build());
 
-        given(noticeService.readAll()).willReturn(NoticeResponses.from(noticeResponses));
+        given(noticeService.readAll()).willReturn(NoticeResponses.listFrom(notices));
 
-        getAction("/api/notices")
+        MvcResult mvcResult = getAction("/api/notices")
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.noticeResponses[0].id").value(1L))
-            .andExpect(jsonPath("$.noticeResponses[0].name").value("underdogs"))
-            .andExpect(jsonPath("$.noticeResponses[0].image").value("/static/image/underdogs"))
-            .andExpect(jsonPath("$.noticeResponses[0].jobPosition").value("BACKEND"))
-            .andExpect(jsonPath("$.noticeResponses[0].languages[0]").value(Language.JAVA.getName()))
-            .andExpect(jsonPath("$.noticeResponses[0].languages[1]").value(Language.JAVASCRIPT.getName()))
-            .andDo(print());
+            .andReturn();
+
+        List<NoticeResponse> noticeResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
+            NoticeResponses.class)
+            .getNoticeResponses();
+
+        assertAll(
+            () -> assertThat(noticeResponses.get(0).getId()).isEqualTo(1L),
+            () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
+            () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
+            () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND),
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getName(),
+                Language.JAVASCRIPT.getName())
+        );
     }
 
     @DisplayName("사용자 요청을 받아 게시글 하나 조회")
@@ -211,15 +229,22 @@ public class NoticeControllerTest extends MvcTest {
 
         given(noticeService.read(anyLong())).willReturn(noticeDetailResponse);
 
-        getAction("/api/notices/1")
+        MvcResult mvcResult = getAction("/api/notices/1")
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(1L))
-            .andExpect(jsonPath("$.company.name").value("bossdog"))
-            .andExpect(jsonPath("$.company.salary").value(60_000_000))
-            .andExpect(jsonPath("$.image").value("/static/image/bossdog"))
-            .andExpect(jsonPath("$.jobPosition").value("FRONTEND"))
-            .andExpect(jsonPath("$.noticeDescription.content").value("You are hired!"))
-            .andDo(print());
+            .andReturn();
+
+        NoticeDetailResponse noticeDetailResponse1 = objectMapper.readValue(
+            mvcResult.getResponse().getContentAsString(),
+            NoticeDetailResponse.class);
+
+        assertAll(
+            () -> assertThat(noticeDetailResponse1.getId()).isEqualTo(1L),
+            () -> assertThat(noticeDetailResponse1.getCompany().getName()).isEqualTo("bossdog"),
+            () -> assertThat(noticeDetailResponse1.getCompany().getSalary()).isEqualTo(60_000_000),
+            () -> assertThat(noticeDetailResponse1.getImage()).isEqualTo("/static/image/bossdog"),
+            () -> assertThat(noticeDetailResponse1.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
+            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!")
+        );
     }
 
     private void validateNoticeCreateRequest() throws Exception {

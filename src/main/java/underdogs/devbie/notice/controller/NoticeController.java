@@ -62,7 +62,7 @@ public class NoticeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NoticeDetailResponse> readAll(@PathVariable Long id) {
+    public ResponseEntity<NoticeDetailResponse> read(@PathVariable Long id) {
         NoticeDetailResponse response = noticeService.read(id);
         return ResponseEntity.ok(response);
     }

@@ -22,7 +22,7 @@ public class Company {
 
     private Integer salary;
 
-    public Company(String name, int salary) {
+    public Company(String name, Integer salary) {
         validateParameters(name, salary);
         this.name = name;
         this.salary = salary;
