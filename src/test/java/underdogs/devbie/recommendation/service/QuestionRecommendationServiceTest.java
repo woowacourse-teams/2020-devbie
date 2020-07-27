@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.*;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -27,6 +28,7 @@ class QuestionRecommendationServiceTest {
         this.questionRecommendationService = new QuestionRecommendationService(questionRecommendationRepository);
     }
 
+    @DisplayName("추천 수 조회")
     @Test
     void count() {
         questionRecommendationService.count(1L);
@@ -35,6 +37,7 @@ class QuestionRecommendationServiceTest {
         verify(questionRecommendationRepository).countByQuestionIdAndAndRecommendationType(anyLong(), eq(RecommendationType.NON_RECOMMENDED));
     }
 
+    @DisplayName("추천 생성")
     @Test
     void createRecommendation() {
         questionRecommendationService.createRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
@@ -42,6 +45,7 @@ class QuestionRecommendationServiceTest {
         verify(questionRecommendationRepository).save(any());
     }
 
+    @DisplayName("추천 토글")
     @Test
     void toggleRecommendation() {
         QuestionRecommendation recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
@@ -53,6 +57,7 @@ class QuestionRecommendationServiceTest {
         verify(questionRecommendationRepository).findByQuestionIdAndUserId(anyLong(), anyLong());
     }
 
+    @DisplayName("추천 삭제")
     @Test
     void deleteRecommendation() {
         QuestionRecommendation recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);

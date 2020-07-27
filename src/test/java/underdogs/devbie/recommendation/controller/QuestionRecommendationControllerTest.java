@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static underdogs.devbie.recommendation.RecommendationAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,12 +29,14 @@ class QuestionRecommendationControllerTest extends MvcTest {
     @MockBean
     private QuestionRecommendationService questionRecommendationService;
 
+    @DisplayName("추천 수 조회")
     @Test
     void count() throws Exception {
         getAction("/api/recommendation/question/1")
             .andExpect(status().isOk());
     }
 
+    @DisplayName("추천 생성")
     @Test
     void createRecommendation() throws Exception {
         User user = User.builder()
@@ -52,6 +55,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
             .andExpect(status().isCreated());
     }
 
+    @DisplayName("추천 토글")
     @Test
     void toggleRecommendation() throws Exception {
         User user = User.builder()
@@ -70,6 +74,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
             .andExpect(status().isNoContent());
     }
 
+    @DisplayName("추천 삭제")
     @Test
     void deleteRecommendation() throws Exception {
         User user = User.builder()

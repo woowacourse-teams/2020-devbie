@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,6 +31,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     @MockBean
     LoginUserArgumentResolver loginUserArgumentResolver;
 
+    @DisplayName("추천 인수 테스트")
     @Test
     void manageRecommendation() {
         // 인가 부분 Mock 처리
