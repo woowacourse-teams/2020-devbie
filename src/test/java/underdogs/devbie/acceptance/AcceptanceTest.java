@@ -59,15 +59,15 @@ public abstract class AcceptanceTest {
     protected <T> void post(String path, String inputJson) {
         // @formatter:off
         given().
-                auth().oauth2(bearerToken).
-                body(inputJson).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                post(path).
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value());
+            auth().oauth2(bearerToken).
+            body(inputJson).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            post(path).
+            then().
+            log().all().
+            statusCode(HttpStatus.CREATED.value());
         // @formatter:on
     }
 
@@ -75,15 +75,15 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
-                    body(inputJson).
-                    contentType(MediaType.APPLICATION_JSON_VALUE).
-                    accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-                    post(path).
-            then().
-                    log().all().
-                    statusCode(HttpStatus.CREATED.value()).
-                    extract().as(responseType);
+                body(inputJson).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+                when().
+                post(path).
+                then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value()).
+                extract().as(responseType);
         // @formatter:on
     }
 
@@ -91,13 +91,13 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
-                    auth().oauth2(bearerToken).
-            when().
-                    get(path).
-            then().
-                    log().all().
-                    statusCode(HttpStatus.OK.value()).
-                    extract().as(responseType);
+                auth().oauth2(bearerToken).
+                when().
+                get(path).
+                then().
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().as(responseType);
         // @formatter:on
     }
 
@@ -105,57 +105,57 @@ public abstract class AcceptanceTest {
         // @formatter:off
         return
             given().
-                    auth().oauth2(bearerToken).
-            when().
-                    get(path).
-            then().
-                    log().all().
-                    statusCode(HttpStatus.OK.value()).
-                    extract().
-                    jsonPath().
-                    getList(".", responseType);
+                auth().oauth2(bearerToken).
+                when().
+                get(path).
+                then().
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().
+                jsonPath().
+                getList(".", responseType);
         // @formatter:on
     }
 
     protected <T> void put(String path, String inputJson) {
         // @formatter:off
         given().
-                auth().oauth2(bearerToken).
-                body(inputJson).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                put(path).
-        then().
-                log().all().
-                statusCode(HttpStatus.NO_CONTENT.value());
+            auth().oauth2(bearerToken).
+            body(inputJson).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            put(path).
+            then().
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 
     protected <T> void patch(String path, String inputJson) {
         // @formatter:off
         given().
-                auth().oauth2(bearerToken).
-                body(inputJson).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-                patch(path).
-        then().
-                log().all().
-                statusCode(HttpStatus.NO_CONTENT.value());
+            auth().oauth2(bearerToken).
+            body(inputJson).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            patch(path).
+            then().
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 
     protected <T> void delete(String path) {
         // @formatter:off
         given().
-                auth().oauth2(bearerToken).
-        when().
-                delete(path).
-        then().
-                log().all().
-                statusCode(HttpStatus.NO_CONTENT.value());
+            auth().oauth2(bearerToken).
+            when().
+            delete(path).
+            then().
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
         // @formatter:on
     }
 }
