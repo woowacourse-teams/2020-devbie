@@ -160,7 +160,7 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 게시글 삭제")
     @Test
     void delete() throws Exception {
-        doNothing().when(noticeService).delete(anyLong());
+        willDoNothing().given(noticeService).delete(anyLong());
 
         deleteAction("/api/notices/1", TEST_TOKEN)
             .andExpect(status().isNoContent())
@@ -227,14 +227,14 @@ public class NoticeControllerTest extends MvcTest {
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
         postAction("/api/notices", inputJson, TEST_TOKEN)
-            .andExpect(status().is4xxClientError())
+            .andExpect(status().isBadRequest())
             .andDo(print());
     }
 
     private void validateUpdateRequest() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
 
-        doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
+        willDoNothing().given(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().is4xxClientError())

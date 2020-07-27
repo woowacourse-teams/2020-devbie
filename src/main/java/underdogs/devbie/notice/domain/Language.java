@@ -25,7 +25,8 @@ public enum Language {
     private String name;
 
     public static Language from(String input) {
-        return Arrays.stream(values()).filter(language -> language.name.equals(input))
+        return Arrays.stream(values())
+            .filter(language -> language.name.equals(input))
             .findFirst()
             .orElseThrow(NoSuchLanguageException::new);
     }

@@ -10,8 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.notice.expception.CreateFailException;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode
 public class Company {

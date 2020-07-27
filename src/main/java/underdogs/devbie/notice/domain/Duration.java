@@ -10,8 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.notice.expception.InvalidDurationException;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode
 public class Duration {

@@ -19,8 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.notice.expception.CreateFailException;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode
 public class NoticeDescription {
@@ -36,7 +36,8 @@ public class NoticeDescription {
 
     public NoticeDescription(Set<String> languages, String content) {
         validateParameters(languages, content);
-        this.languages = languages.stream().map(Language::from).collect(Collectors.toSet());
+        this.languages = languages.stream()
+            .map(Language::from).collect(Collectors.toSet());
         this.content = content;
     }
 

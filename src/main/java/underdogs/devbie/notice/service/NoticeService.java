@@ -45,7 +45,8 @@ public class NoticeService {
     }
 
     public NoticeDetailResponse read(Long id) {
-        Notice notice = noticeRepository.findById(id).orElseThrow(NoticeNotFoundException::new);
+        Notice notice = noticeRepository.findById(id)
+            .orElseThrow(NoticeNotFoundException::new);
         return NoticeDetailResponse.from(notice);
     }
 }
