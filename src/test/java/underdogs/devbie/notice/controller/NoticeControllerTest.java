@@ -203,7 +203,7 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.FRONTEND)
             .image("/static/image/bossdog")
             .noticeDescription(
-                new NoticeDescriptionResponse(
+                NoticeDescriptionResponse.from(
                     new NoticeDescription(
                         new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName())),
                         "You are hired!")))

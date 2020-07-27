@@ -16,8 +16,8 @@ import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.expception.NoticeNotFoundException;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;

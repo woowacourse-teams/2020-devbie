@@ -1,7 +1,6 @@
 package underdogs.devbie.notice.domain;
 
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -75,13 +74,5 @@ public class Notice extends BaseTimeEntity {
         this.jobPosition = notice.jobPosition;
         this.noticeDescription = notice.noticeDescription;
         this.image = notice.image;
-    }
-
-    public String getCompanyName() {
-        return company.getName();
-    }
-
-    public Set<Language> getLanguages() {
-        return noticeDescription.getLanguages();
     }
 }

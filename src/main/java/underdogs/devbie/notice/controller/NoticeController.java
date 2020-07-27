@@ -22,8 +22,8 @@ import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/notices")
+@RequiredArgsConstructor
 public class NoticeController {
 
     private final NoticeService noticeService;
