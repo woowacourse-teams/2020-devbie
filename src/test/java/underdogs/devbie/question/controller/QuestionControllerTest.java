@@ -1,5 +1,7 @@
 package underdogs.devbie.question.controller;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
@@ -79,10 +82,16 @@ class QuestionControllerTest extends MvcTest {
 
         given(questionService.readAll()).willReturn(responses);
 
-        getAction("/api/questions")
+        MvcResult mvcResult = getAction("/api/questions/")
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.questions[0].title").value(TEST_QUESTION_TITLE))
-            .andExpect(jsonPath("$.questions[0].content").value(TEST_QUESTION_CONTENT));
+            .andReturn();
+        String value = mvcResult.getResponse().getContentAsString();
+        QuestionResponses questionResponses = objectMapper.readValue(value, QuestionResponses.class);
+
+        assertAll(
+            () -> assertThat(questionResponses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
+            () -> assertThat(questionResponses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+        );
     }
 
     @DisplayName("질문 조회")
@@ -94,12 +103,16 @@ class QuestionControllerTest extends MvcTest {
             .content(TEST_QUESTION_CONTENT)
             .build();
 
-        given(questionService.read(anyLong())).willReturn(response);
-
-        getAction("/api/questions/" + response.getQuestionId())
+        MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.title").value(TEST_QUESTION_TITLE))
-            .andExpect(jsonPath("$.content").value(TEST_QUESTION_CONTENT));
+            .andReturn();
+        String value = mvcResult.getResponse().getContentAsString();
+        QuestionResponse questionResponse = objectMapper.readValue(value, QuestionResponse.class);
+
+        assertAll(
+            () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
+            () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+        );
     }
 
     @DisplayName("질문 수정")
@@ -147,9 +160,15 @@ class QuestionControllerTest extends MvcTest {
 
         given(questionService.searchByTitle(anyString())).willReturn(responses);
 
-        getAction("/api/questions?keyword=스택")
+        MvcResult mvcResult = getAction("/api/questions?keyword=스택")
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.questions[0].title").value("스택과 큐의 차이"))
-            .andExpect(jsonPath("$.questions[1].title").value("오버스택플로우"));
+            .andReturn();
+        String value = mvcResult.getResponse().getContentAsString();
+        QuestionResponses questionResponses = objectMapper.readValue(value, QuestionResponses.class);
+
+        assertAll(
+            () -> assertThat(questionResponses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
+            () -> assertThat(questionResponses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
+        );
     }
 }
