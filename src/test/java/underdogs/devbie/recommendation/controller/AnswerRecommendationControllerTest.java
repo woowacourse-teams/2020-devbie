@@ -20,6 +20,8 @@ import underdogs.devbie.user.domain.User;
 @WebMvcTest(AnswerRecommendationController.class)
 class AnswerRecommendationControllerTest extends MvcTest {
 
+    private static final String URL = "/api/recommendation-answer?objectId=1";
+
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
 
@@ -32,7 +34,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
     @DisplayName("추천 수 조회")
     @Test
     void count() throws Exception {
-        getAction("/api/recommendation-answer/1")
+        getAction(URL)
             .andExpect(status().isOk());
     }
 
@@ -51,7 +53,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
 
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
 
-        postAction("/api/recommendation-answer/1", inputJson, "")
+        postAction(URL, inputJson, "")
             .andExpect(status().isCreated());
     }
 
@@ -70,7 +72,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
 
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
 
-        patchAction("/api/recommendation-answer/1", inputJson, "")
+        patchAction(URL, inputJson, "")
             .andExpect(status().isNoContent());
     }
 
@@ -87,7 +89,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        deleteAction("/api/recommendation-answer/1", "")
+        deleteAction(URL, "")
             .andExpect(status().isNoContent());
     }
 }

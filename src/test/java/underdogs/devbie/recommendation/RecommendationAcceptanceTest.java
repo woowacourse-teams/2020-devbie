@@ -18,7 +18,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     public static final String RECOMMENDATION_TYPE_FORMAT = "{\"recommendationType\":\"%s\"}";
     public static final String RECOMMENDATION = "RECOMMENDED";
     public static final String NON_RECOMMENDATION = "NON_RECOMMENDED";
-    public static final String QUESTION_RECOMMENDATION_URI = "/api/recommendation-question/";
+    public static final String QUESTION_RECOMMENDATION_URI = "/api/recommendation-question?objectId=";
 
     @DisplayName("추천 인수 테스트")
     @Test

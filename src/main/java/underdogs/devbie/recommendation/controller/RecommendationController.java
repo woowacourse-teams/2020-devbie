@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
@@ -20,16 +20,16 @@ public abstract class RecommendationController {
 
     protected RecommendationService recommendationService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RecommendationResponse> count(@PathVariable("id") Long objectId) {
+    @GetMapping
+    public ResponseEntity<RecommendationResponse> count(@RequestParam Long objectId) {
         RecommendationResponse recommendationResponse = recommendationService.count(objectId);
 
         return ResponseEntity.ok(recommendationResponse);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     public ResponseEntity<Void> createRecommendation(
-        @PathVariable("id") Long objectId,
+        @RequestParam Long objectId,
         @RequestBody RecommendationRequest request,
         @LoginUser User user
     ) {
@@ -40,9 +40,9 @@ public abstract class RecommendationController {
             .build();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping
     public ResponseEntity<Void> toggleRecommendation(
-        @PathVariable("id") Long objectId,
+        @RequestParam Long objectId,
         @RequestBody RecommendationRequest request,
         @LoginUser User user
     ) {
@@ -51,9 +51,9 @@ public abstract class RecommendationController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public ResponseEntity<Void> deleteRecommendation(
-        @PathVariable("id") Long objectId,
+        @RequestParam Long objectId,
         @LoginUser User user
     ) {
         recommendationService.deleteRecommendation(objectId, user.getId());
