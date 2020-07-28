@@ -1,5 +1,6 @@
 package underdogs.devbie.user.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.user.domain.UserTest.*;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
+import underdogs.devbie.user.dto.UserCreateRequest;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -25,47 +27,58 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    private User user;
+
     @BeforeEach
     void setUp() {
         userService = new UserService(userRepository);
+
+        user = User.builder()
+            .id(1L)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
     }
 
     @DisplayName("Oauth로부터 User 모델 신규 저장 및 업데이트")
     @Test
     void saveOrUpdateOauthUser() {
-        User mockUser = User.builder()
-            .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         UserInfoResponse userInfoResponse = new UserInfoResponse(TEST_OAUTH_ID, TEST_USER_EMAIL);
-        given(userRepository.findByOauthId(any())).willReturn(Optional.of(mockUser));
+        given(userRepository.findByOauthId(any())).willReturn(Optional.of(user));
 
-        User user = userService.saveOrUpdateUser(userInfoResponse);
+        User savedUser = userService.saveOrUpdateUser(userInfoResponse);
 
         assertAll(
-            () -> assertEquals(1L, user.getId()),
-            () -> assertEquals(TEST_OAUTH_ID, user.getOauthId()),
-            () -> assertEquals(TEST_USER_EMAIL, user.getEmail())
+            () -> assertThat(savedUser.getId()).isEqualTo(1L),
+            () -> assertThat(savedUser.getOauthId()).isEqualTo(TEST_OAUTH_ID),
+            () -> assertThat(savedUser.getEmail()).isEqualTo(TEST_USER_EMAIL)
         );
     }
 
     @DisplayName("Id로 유저 조회")
     @Test
     void findById() {
-        User mockUser = User.builder()
-            .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
-        given(userRepository.findById(any())).willReturn(Optional.of(mockUser));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
-        User user = userService.findById(mockUser.getId());
+        User findUser = userService.findById(1L);
 
         assertAll(
-            () -> assertEquals(1L, user.getId()),
-            () -> assertEquals(TEST_OAUTH_ID, user.getOauthId()),
-            () -> assertEquals(TEST_USER_EMAIL, user.getEmail())
+            () -> assertThat(findUser.getId()).isEqualTo(1L),
+            () -> assertThat(findUser.getOauthId()).isEqualTo(TEST_OAUTH_ID),
+            () -> assertThat(findUser.getEmail()).isEqualTo(TEST_USER_EMAIL)
         );
+    }
+
+    @DisplayName("유저 생성 - OAuthId 없이")
+    @Test
+    void saveUserWithoutOAuthId() {
+        UserCreateRequest request = UserCreateRequest.builder()
+            .email("atdd@atdd.com")
+            .build();
+        given(userRepository.save(any(User.class))).willReturn(user);
+
+        Long userId = userService.saveWithoutOAuthId(request);
+
+        assertThat(userId).isEqualTo(user.getId());
     }
 }

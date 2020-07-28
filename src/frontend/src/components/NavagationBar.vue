@@ -6,7 +6,7 @@
       >
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="$router.push('notice')" text x-large
+      <v-btn @click="$router.push('/notice')" text x-large
         ><p class="navigation-menu">공고</p></v-btn
       >
       <v-btn text x-large><p class="navigation-menu">면접</p></v-btn>

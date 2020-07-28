@@ -1,12 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import LoginPage from "../views/LoginPage";
+import QuestionListView from "../views/QuestionListView";
+import QuestionDetailView from "../views/QuestionDetailView";
 import MainPage from "../views/MainPage";
-import NoticeMainPage from "../views/NoticeMainPage";
+import NoticeMainPage from "../views/NoticeListView";
 
 Vue.use(VueRouter);
 
-const router = new VueRouter({
+export const router = new VueRouter({
   mode: "history",
   routes: [
     {
@@ -20,9 +21,14 @@ const router = new VueRouter({
       component: NoticeMainPage
     },
     {
-      path: "/login",
-      name: "login",
-      component: LoginPage
+      path: "/questions",
+      name: "questions",
+      component: QuestionListView
+    },
+    {
+      path: "/questions/:id",
+      name: "question",
+      component: QuestionDetailView
     }
   ]
 });
