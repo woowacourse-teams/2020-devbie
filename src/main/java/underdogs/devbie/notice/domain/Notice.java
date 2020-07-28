@@ -20,7 +20,6 @@ import underdogs.devbie.notice.expception.CreateFailException;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
 public class Notice extends BaseTimeEntity {
 
