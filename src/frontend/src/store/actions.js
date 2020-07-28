@@ -3,7 +3,8 @@ import {
   fetchQuestionDetail,
   fetchQuestionRecommendation,
   createQuestion,
-  updateQuestion
+  updateQuestion,
+  deleteQuestion
 } from "../api";
 
 export default {
@@ -43,6 +44,14 @@ export default {
   async UPDATE_QUESTION({ commit }, payload) {
     try {
       await updateQuestion(payload.request, payload.id);
+      commit();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async DELETE_QUESTION({ commit }, questionId) {
+    try {
+      await deleteQuestion(questionId);
       commit();
     } catch (error) {
       console.log(error);

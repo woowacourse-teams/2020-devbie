@@ -37,10 +37,21 @@ function updateQuestion(request, questionId) {
     }
   });
 }
+
+function deleteQuestion(questionId) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.delete(`${config.baseUrl}/api/questions/${questionId}`, {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  });
+}
+
 export {
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
   createQuestion,
-  updateQuestion
+  updateQuestion,
+  deleteQuestion
 };

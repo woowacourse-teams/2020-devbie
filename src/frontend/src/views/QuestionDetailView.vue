@@ -7,6 +7,9 @@
       <router-link :to="`/edit-question/${this.$route.params.id}`"
         ><v-btn color="#DAEBEA" class="menu-btn">수정하기</v-btn></router-link
       >
+      <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn"
+        >삭제하기</v-btn
+      >
     </div>
     <question-detail id="question-detail"></question-detail>
   </div>
@@ -18,6 +21,15 @@ import QuestionDetail from "../components/QuestionDetail";
 export default {
   components: {
     QuestionDetail
+  },
+  methods: {
+    async onDeleteQuestion() {
+      if (confirm("정말 삭제하시겠습니까?")) {
+        const questionId = this.$route.params.id;
+        await this.$store.dispatch("DELETE_QUESTION", questionId);
+        window.location.href = `/questions`;
+      }
+    }
   }
 };
 </script>

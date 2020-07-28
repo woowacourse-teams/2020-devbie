@@ -64,11 +64,8 @@ export default {
 .question-form {
   display: flex;
   justify-content: center;
-  position: relative;
 }
 .inner {
-  position: absolute;
-  top: 200px;
   width: 600px;
 }
 .inner .inner-card {
