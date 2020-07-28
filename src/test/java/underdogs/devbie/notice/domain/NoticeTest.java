@@ -20,6 +20,8 @@ public class NoticeTest {
             .collect(Collectors.toSet());
         Notice notice = Notice.builder()
             .id(1L)
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .company(new Company("underdogs", 50_000_000))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
@@ -33,6 +35,8 @@ public class NoticeTest {
         JobPosition expectedJobPosition = JobPosition.FRONTEND;
         Notice updatedNotice = Notice.builder()
             .id(1L)
+            .title("우테코 모집")
+            .noticeType(NoticeType.EDUCATION)
             .company(expectedCompany)
             .noticeDescription(expectedDetail)
             .image(expectedImage)

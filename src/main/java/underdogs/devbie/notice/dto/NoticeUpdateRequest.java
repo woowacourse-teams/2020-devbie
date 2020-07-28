@@ -19,6 +19,7 @@ import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
+import underdogs.devbie.notice.domain.NoticeType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,6 +31,11 @@ public class NoticeUpdateRequest {
     private String startDate;
 
     private String endDate;
+
+    @NotBlank
+    private String title;
+
+    private NoticeType noticeType;
 
     @NotBlank
     private String name;
@@ -53,6 +59,8 @@ public class NoticeUpdateRequest {
 
         return Notice.builder()
             .id(id)
+            .title(title)
+            .noticeType(noticeType)
             .company(new Company(name, salary))
             .duration(new Duration(startLocalDate, endLocalDate))
             .jobPosition(jobPosition)

@@ -17,6 +17,7 @@ import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
@@ -57,6 +58,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     void notice() throws JsonProcessingException {
         NoticeCreateRequest noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
@@ -68,6 +71,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
         NoticeUpdateRequest noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("bossdog")
+            .title("우테코 모집")
+            .noticeType(NoticeType.EDUCATION)
             .salary(60_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName(), Language.CPP.getName()))
             .jobPosition(JobPosition.FRONTEND)
