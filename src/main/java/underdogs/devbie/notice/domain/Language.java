@@ -11,7 +11,7 @@ import underdogs.devbie.notice.expception.NoSuchLanguageException;
 @AllArgsConstructor
 @Getter
 public enum Language {
-    
+
     C("C"),
     CPP("C++"),
     JAVA("JAVA"),
