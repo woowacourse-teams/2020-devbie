@@ -2,6 +2,7 @@ package underdogs.devbie.question.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.util.stream.Stream;
 
@@ -53,21 +54,21 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> manageQuestion() {
         return Stream.of(
-            DynamicTest.dynamicTest("질문 두 개 생성", () -> {
+            dynamicTest("질문 두 개 생성", () -> {
                 createQuestion(TEST_QUESTION_TITLE);
                 createQuestion(TEST_TITLE_FOR_SEARCH);
             }),
-            DynamicTest.dynamicTest("전체 질문 조회", this::readAllQuestions),
-            DynamicTest.dynamicTest("특정 질문 검색", () -> searchQuestion(SEARCH_KEYWORD)),
-            DynamicTest.dynamicTest("질문 조회", () -> {
+            dynamicTest("전체 질문 조회", this::readAllQuestions),
+            dynamicTest("특정 질문 검색", () -> searchQuestion(SEARCH_KEYWORD)),
+            dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
                 readQuestion(firstQuestion);
             }),
-            DynamicTest.dynamicTest("질문 수정", () -> {
+            dynamicTest("질문 수정", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
                 updateQuestion(firstQuestion);
             }),
-            DynamicTest.dynamicTest("질문 삭제", () -> {
+            dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
                 deleteQuestion(firstQuestion);
             })

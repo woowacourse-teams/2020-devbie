@@ -1,6 +1,7 @@
 package underdogs.devbie.recommendation;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.util.stream.Stream;
 
@@ -25,7 +26,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> manageRecommendation() {
         return Stream.of(
-            DynamicTest.dynamicTest("1번 질문 추천", () -> {
+            dynamicTest("1번 질문 추천", () -> {
                 // 1번 질문을 추천 한다
                 recommend(1L);
 
@@ -33,7 +34,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 Long question1Count = recommendationCount(1L).getRecommendedCount();
                 assertThat(question1Count).isEqualTo(1L);
             }),
-            DynamicTest.dynamicTest("2번 질문 비추천", () -> {
+            dynamicTest("2번 질문 비추천", () -> {
                 // 2번 질문을 비추천 한다
                 nonRecommend(2L);
 
@@ -41,7 +42,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 Long question2Count = recommendationCount(2L).getNonRecommendedCount();
                 assertThat(question2Count).isEqualTo(1L);
             }),
-            DynamicTest.dynamicTest("1번 질문 비추천", () -> {
+            dynamicTest("1번 질문 비추천", () -> {
                 // 1번 질문을 비추천으로 변경한다
                 toggleToNonRecommended(1L);
 
@@ -49,7 +50,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 Long question1Count = recommendationCount(1L).getNonRecommendedCount();
                 assertThat(question1Count).isEqualTo(1L);
             }),
-            DynamicTest.dynamicTest("2번 질문 추천", () -> {
+            dynamicTest("2번 질문 추천", () -> {
                 // 2번 질문을 추천으로 변경한다
                 toggleToRecommended(2L);
 
@@ -57,14 +58,14 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 Long question2Count = recommendationCount(2L).getRecommendedCount();
                 assertThat(question2Count).isEqualTo(1L);
             }),
-            DynamicTest.dynamicTest("1번 질문 추천 기록 삭제", () -> {
+            dynamicTest("1번 질문 추천 기록 삭제", () -> {
                 // 1번 질문의 추천 기록을 삭제한다
                 deleteRecommendation(1L);
 
                 // 1번 질문에 비추천 수가 0이다
                 Long question1Count = recommendationCount(1L).getNonRecommendedCount();
                 assertThat(question1Count).isEqualTo(0L);
-            }), DynamicTest.dynamicTest("2번 질문 추천 기록 삭제", () -> {
+            }), dynamicTest("2번 질문 추천 기록 삭제", () -> {
                 // 2번 질문의 추천 기록을 삭제한다
                 deleteRecommendation(2L);
 

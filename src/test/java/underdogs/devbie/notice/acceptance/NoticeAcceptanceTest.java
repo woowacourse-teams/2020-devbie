@@ -2,6 +2,7 @@ package underdogs.devbie.notice.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -58,19 +59,19 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> notice() {
         return Stream.of(
-            DynamicTest.dynamicTest("공고 게시글을 생성한다.", () -> {
+            dynamicTest("공고 게시글을 생성한다.", () -> {
                 createNotice();
             }),
-            DynamicTest.dynamicTest("공고 게시글 전체를 조회한다.", () -> {
+            dynamicTest("공고 게시글 전체를 조회한다.", () -> {
                 readAllNotice();
             }),
-            DynamicTest.dynamicTest("공고 게시글을 수정한다.", () -> {
+            dynamicTest("공고 게시글을 수정한다.", () -> {
                 updateNotice();
             }),
-            DynamicTest.dynamicTest("공고 게시글 하나르 상세 조회한다.", () -> {
+            dynamicTest("공고 게시글 하나르 상세 조회한다.", () -> {
                 readNoticeDetail();
             }),
-            DynamicTest.dynamicTest("공고 게시글을 삭제한다.", () -> {
+            dynamicTest("공고 게시글을 삭제한다.", () -> {
                 deleteNotice();
             })
         );
