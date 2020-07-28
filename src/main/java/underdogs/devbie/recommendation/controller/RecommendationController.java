@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import underdogs.devbie.auth.controller.resolver.LoginUser;
+import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 import underdogs.devbie.recommendation.service.RecommendationService;
@@ -17,11 +18,27 @@ public abstract class RecommendationController {
 
     protected RecommendationService recommendationService;
 
-    @GetMapping
-    public ResponseEntity<RecommendationResponse> count(@RequestParam Long objectId) {
-        RecommendationResponse recommendationResponse = recommendationService.count(objectId);
+    @GetMapping(params = {"objectId", "userId"})
+    public ResponseEntity<RecommendationResponse> getMyRecommendation(
+        @RequestParam Long objectId,
+        @RequestParam Long userId,
+        @LoginUser User user
+    ) {
+        validateUser(userId, user);
+        return ResponseEntity.ok(recommendationService.search(objectId, userId));
+    }
 
-        return ResponseEntity.ok(recommendationResponse);
+    private void validateUser(Long userId, User user) {
+        if (!user.getId().equals(userId)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @GetMapping(params = {"objectId"})
+    public ResponseEntity<RecommendationCountResponse> count(@RequestParam Long objectId) {
+        RecommendationCountResponse recommendationCountResponse = recommendationService.count(objectId);
+
+        return ResponseEntity.ok(recommendationCountResponse);
     }
 
     @PutMapping
@@ -44,5 +61,4 @@ public abstract class RecommendationController {
 
         return ResponseEntity.noContent().build();
     }
-
 }

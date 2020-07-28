@@ -10,24 +10,34 @@ import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
+import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 public abstract class RecommendationService<T extends Recommendation> {
 
     protected RecommendationRepository recommendationRepository;
 
-    public RecommendationResponse count(Long objectId) {
+    public RecommendationResponse search(Long objectId, Long userId) {
+        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
+
+        String recommendationType = optRecommendation
+            .map(recommendation -> recommendation.getRecommendationType().name())
+            .orElse("NOT_EXIST");
+
+        return new RecommendationResponse(recommendationType);
+    }
+
+    public RecommendationCountResponse count(Long objectId) {
         List<QuestionRecommendation> recommendations = recommendationRepository.findByObjectId(objectId);
 
-        return RecommendationResponse.fromQuestionRecommendation(recommendations);
+        return RecommendationCountResponse.fromRecommendation(recommendations);
     }
 
     @Transactional
     public void deleteRecommendation(Long objectId, Long userId) {
-        Optional<Recommendation> optionalRecommendation =
-            recommendationRepository.findByObjectAndUserId(objectId, userId);
+        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        Recommendation recommendation = optionalRecommendation.orElseThrow(NotExistException::new);
+        Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
 
         recommendationRepository.delete(recommendation);
     }

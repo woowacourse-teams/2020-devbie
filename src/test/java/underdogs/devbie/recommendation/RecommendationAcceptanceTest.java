@@ -1,7 +1,6 @@
 package underdogs.devbie.recommendation;
 
 import static org.assertj.core.api.Assertions.*;
-import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,8 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.acceptance.AcceptanceTest;
+import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
-import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
 public class RecommendationAcceptanceTest extends AcceptanceTest {
@@ -23,13 +22,6 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     @DisplayName("추천 인수 테스트")
     @Test
     void manageRecommendation() {
-        // 인가 부분 Mock 처리
-        User user = User.builder()
-            .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
-
         // 1번 질문을 추천 한다
         recommend(1L);
 
@@ -40,12 +32,28 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
         Long question1Count = recommendationCount(1L).getRecommendedCount();
         assertThat(question1Count).isEqualTo(1L);
 
+        // 1번 질문에 추천이 눌려있다
+        String question1Type = searchRecommendation(1L, userId).getRecommendationType();
+        assertThat(question1Type).isEqualTo("RECOMMENDED");
+
         // 2번 질문에 비추천 수가 1이다
         Long question2Count = recommendationCount(2L).getNonRecommendedCount();
         assertThat(question2Count).isEqualTo(1L);
 
+        // 2번 질문에 비 추천이 눌려있다
+        String question2Type = searchRecommendation(2L, userId).getRecommendationType();
+        assertThat(question2Type).isEqualTo("NON_RECOMMENDED");
+
+        // 3번 질문에 아무것도 눌려있지 않다
+        String question3Type = searchRecommendation(3L, userId).getRecommendationType();
+        assertThat(question3Type).isEqualTo("NOT_EXIST");
+
         // 1번 질문을 다시 추천한다
-        // 이미 추천하거나 비추한 질문에 대한 postFail이 존재하지 않아서 인수테스트에서 확인 x
+        recommend(1L);
+
+        // 다시 추천해도 추천수가 증가하지 않는다
+        question1Count = recommendationCount(1L).getRecommendedCount();
+        assertThat(question1Count).isEqualTo(1L);
 
         // 1번 질문을 비추천으로 변경한다
         nonRecommend(1L);
@@ -86,8 +94,12 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
         put(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
     }
 
-    RecommendationResponse recommendationCount(Long questionId) {
-        return get(QUESTION_RECOMMENDATION_URI + questionId, RecommendationResponse.class);
+    RecommendationResponse searchRecommendation(Long questionId, Long userId) {
+        return get(QUESTION_RECOMMENDATION_URI + questionId + "&userId=" + userId, RecommendationResponse.class);
+    }
+
+    RecommendationCountResponse recommendationCount(Long questionId) {
+        return get(QUESTION_RECOMMENDATION_URI + questionId, RecommendationCountResponse.class);
     }
 
     void deleteRecommendation(Long questionId) {
