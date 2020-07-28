@@ -22,54 +22,66 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     public static final String NON_RECOMMENDATION = "NON_RECOMMENDED";
     public static final String QUESTION_RECOMMENDATION_URI = "/api/recommendation-question/";
 
+    /*
+    Feature: 면접 질문 답변 추천 관리
+
+     Scenario: 면접 질문 답변의 추천을 관리한다.
+
+         When 1번 질문을 추천한다.
+         Then 1번 질문의 추천수가 +1 증가했다.
+
+         When 2번 질문을 비추천한다.
+         Then 2번 질문의 추천수가 -1 감소했다.
+
+         When 1번 질문을 비추천한다.
+         Then 1번 질문의 추천수가 -1 감소했다.
+
+         When 2번 질문을 추천한다.
+         Then 2번 질문의 추천수가 +1 증가했다.
+
+         When 1번 질문의 추천수를 삭제한다.
+         Then 1번 질문의 추천수가 0이 되었다.
+
+         When 2번 질문의 추천수를 삭제한다.
+         Then 2번 질문의 추천수가 0이 되었다.
+     */
+
     @DisplayName("추천 인수 테스트")
     @TestFactory
     Stream<DynamicTest> manageRecommendation() {
         return Stream.of(
             dynamicTest("1번 질문 추천", () -> {
-                // 1번 질문을 추천 한다
                 recommend(1L);
 
-                // 1번 질문에 추천 수가 1이다
                 Long question1Count = recommendationCount(1L).getRecommendedCount();
                 assertThat(question1Count).isEqualTo(1L);
             }),
             dynamicTest("2번 질문 비추천", () -> {
-                // 2번 질문을 비추천 한다
                 nonRecommend(2L);
 
-                // 2번 질문에 비추천 수가 1이다
                 Long question2Count = recommendationCount(2L).getNonRecommendedCount();
                 assertThat(question2Count).isEqualTo(1L);
             }),
             dynamicTest("1번 질문 비추천", () -> {
-                // 1번 질문을 비추천으로 변경한다
                 toggleToNonRecommended(1L);
 
-                // 1번 질문에 비추천 수가 1이다
                 Long question1Count = recommendationCount(1L).getNonRecommendedCount();
                 assertThat(question1Count).isEqualTo(1L);
             }),
             dynamicTest("2번 질문 추천", () -> {
-                // 2번 질문을 추천으로 변경한다
                 toggleToRecommended(2L);
 
-                // 2번 질문에 추천 수가 1이다
                 Long question2Count = recommendationCount(2L).getRecommendedCount();
                 assertThat(question2Count).isEqualTo(1L);
             }),
             dynamicTest("1번 질문 추천 기록 삭제", () -> {
-                // 1번 질문의 추천 기록을 삭제한다
                 deleteRecommendation(1L);
 
-                // 1번 질문에 비추천 수가 0이다
                 Long question1Count = recommendationCount(1L).getNonRecommendedCount();
                 assertThat(question1Count).isEqualTo(0L);
             }), dynamicTest("2번 질문 추천 기록 삭제", () -> {
-                // 2번 질문의 추천 기록을 삭제한다
                 deleteRecommendation(2L);
 
-                // 2번 질문에 추천 수가 0이다
                 Long question2Count = recommendationCount(2L).getRecommendedCount();
                 assertThat(question2Count).isEqualTo(0L);
             })
