@@ -1,15 +1,14 @@
 package underdogs.devbie.recommendation.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import underdogs.devbie.exception.NotExistException;
-import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
+import underdogs.devbie.recommendation.domain.Recommendations;
 import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
@@ -24,9 +23,9 @@ public abstract class RecommendationService<T extends Recommendation> {
     }
 
     public RecommendationCountResponse count(Long objectId) {
-        List<QuestionRecommendation> recommendations = recommendationRepository.findByObjectId(objectId);
+        Recommendations recommendations = Recommendations.from(recommendationRepository.findByObjectId(objectId));
 
-        return RecommendationCountResponse.fromRecommendation(recommendations);
+        return RecommendationCountResponse.from(recommendations);
     }
 
     @Transactional

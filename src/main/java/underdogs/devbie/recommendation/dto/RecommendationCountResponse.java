@@ -20,19 +20,10 @@ public class RecommendationCountResponse {
     private Long recommendedCount;
     private Long nonRecommendedCount;
 
-    public static RecommendationCountResponse fromRecommendation(List<? extends Recommendation> recommendations) {
-        Map<RecommendationType, Long> counting = recommendations
-            .stream()
-            .collect(Collectors.groupingBy(Recommendation::getRecommendationType, summingLong(x -> 1L)));
+    public static RecommendationCountResponse from(Recommendations recommendations) {
+        Long recommendationCount = recommendations.countRecommended();
+        Long nonRecommendationCount = recommendations.countNonRecommended();
 
-        return new RecommendationCountResponse(nullToZero(counting.get(RECOMMENDED)),
-            nullToZero(counting.get(NON_RECOMMENDED)));
-    }
-
-    private static long nullToZero(Long number) {
-        if (Objects.isNull(number)) {
-            return 0L;
-        }
-        return number;
+        return new RecommendationCountResponse(recommendationCount, nonRecommendationCount);
     }
 }
