@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.AdminUser;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -63,12 +64,14 @@ public class NoticeController {
             .build();
     }
 
+    @NoValidate
     @GetMapping
     public ResponseEntity<NoticeResponses> readAll() {
         NoticeResponses responses = noticeService.readAll();
         return ResponseEntity.ok(responses);
     }
 
+    @NoValidate
     @GetMapping("/{id}")
     public ResponseEntity<NoticeDetailResponse> read(@PathVariable Long id) {
         NoticeDetailResponse response = noticeService.read(id);
