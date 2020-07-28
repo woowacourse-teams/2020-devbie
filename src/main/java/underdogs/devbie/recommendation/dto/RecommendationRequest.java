@@ -13,5 +13,3 @@ public class RecommendationRequest {
 
     private RecommendationType recommendationType;
 }
-
-

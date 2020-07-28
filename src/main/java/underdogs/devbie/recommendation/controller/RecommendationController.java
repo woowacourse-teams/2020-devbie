@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
@@ -34,6 +35,7 @@ public abstract class RecommendationController {
         }
     }
 
+    @NoValidate
     @GetMapping(params = {"objectId"})
     public ResponseEntity<RecommendationCountResponse> count(@RequestParam Long objectId) {
         RecommendationCountResponse recommendationCountResponse = recommendationService.count(objectId);
