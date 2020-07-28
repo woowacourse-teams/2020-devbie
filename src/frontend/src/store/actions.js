@@ -1,6 +1,6 @@
 import {
-  fetchQuestionDetail,
   fetchQuestionList,
+  fetchQuestionDetail,
   fetchQuestionRecommendation
 } from "../api";
 
