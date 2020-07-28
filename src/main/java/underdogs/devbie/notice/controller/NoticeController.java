@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.resolver.AdminUser;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -29,7 +30,10 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody NoticeCreateRequest request) {
+    public ResponseEntity<Void> save(
+        @AdminUser Boolean isAdmin,
+        @Valid @RequestBody NoticeCreateRequest request
+    ) {
         Long noticeId = noticeService.save(request);
         return ResponseEntity
             .created(URI.create(String.format("/api/notices/%d", noticeId)))
@@ -38,6 +42,7 @@ public class NoticeController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
+        @AdminUser Boolean isAdmin,
         @PathVariable Long id,
         @Valid @RequestBody NoticeUpdateRequest request
     ) {
@@ -48,7 +53,10 @@ public class NoticeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(
+        @AdminUser Boolean isAdmin,
+        @PathVariable Long id
+    ) {
         noticeService.delete(id);
         return ResponseEntity
             .noContent()

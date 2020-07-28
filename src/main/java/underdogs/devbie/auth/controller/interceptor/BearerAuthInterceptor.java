@@ -32,6 +32,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         String role = claims.get("role").toString();
 
         request.setAttribute("userId", userId);
+        request.setAttribute("role", role);
         return true;
     }
 }

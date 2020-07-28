@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.controller.resolver.AdminUserArgumentResolver;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
@@ -38,8 +39,6 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
-import underdogs.devbie.user.domain.Role;
-import underdogs.devbie.user.domain.User;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
@@ -55,24 +54,18 @@ public class NoticeControllerTest extends MvcTest {
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
+    @MockBean
+    private AdminUserArgumentResolver adminUserArgumentResolver;
+
     private NoticeCreateRequest noticeCreateRequest;
 
     private NoticeUpdateRequest noticeUpdateRequest;
 
-    private User user;
-
     @BeforeEach
     void setUp() {
-        user = User.builder()
-            .id(1L)
-            .oauthId("TEST_USER")
-            .email("TEST_EMAIL")
-            .role(Role.USER)
-            .build();
-
         given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
-        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
+        given(adminUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(Boolean.TRUE);
+        given(adminUserArgumentResolver.supportsParameter(any())).willReturn(true);
 
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
