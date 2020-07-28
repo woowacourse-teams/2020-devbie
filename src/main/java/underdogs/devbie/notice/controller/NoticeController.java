@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
-import underdogs.devbie.auth.controller.resolver.AdminUser;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -32,7 +31,6 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<Void> save(
-        @AdminUser Boolean isAdmin,
         @Valid @RequestBody NoticeCreateRequest request
     ) {
         Long noticeId = noticeService.save(request);
@@ -43,7 +41,6 @@ public class NoticeController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
-        @AdminUser Boolean isAdmin,
         @PathVariable Long id,
         @Valid @RequestBody NoticeUpdateRequest request
     ) {
@@ -55,7 +52,6 @@ public class NoticeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
-        @AdminUser Boolean isAdmin,
         @PathVariable Long id
     ) {
         noticeService.delete(id);
