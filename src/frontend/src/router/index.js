@@ -4,6 +4,7 @@ import QuestionListView from "../views/QuestionListView";
 import QuestionDetailView from "../views/QuestionDetailView";
 import MainPage from "../views/MainPage";
 import NoticeMainPage from "../views/NoticeListView";
+import LoginPage from "../views/LoginPage";
 
 Vue.use(VueRouter);
 
@@ -14,6 +15,11 @@ export const router = new VueRouter({
       path: "/",
       name: "main",
       component: MainPage
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage
     },
     {
       path: "/notice",

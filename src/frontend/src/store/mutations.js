@@ -7,5 +7,8 @@ export default {
   },
   SET_QUESTION_RECOMMENDATION(state, data) {
     state.questionRecommendation = data;
+  },
+  SET_NOTICES(state, data) {
+    state.notices = data;
   }
 };

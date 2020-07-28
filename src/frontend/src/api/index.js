@@ -20,4 +20,13 @@ function fetchQuestionRecommendation(questionId) {
   );
 }
 
-export { fetchQuestionList, fetchQuestionDetail, fetchQuestionRecommendation };
+function fetchNotices() {
+  return axios.get(`${config.baseUrl}/api/notices`);
+}
+
+export {
+  fetchQuestionList,
+  fetchQuestionDetail,
+  fetchQuestionRecommendation,
+  fetchNotices
+};

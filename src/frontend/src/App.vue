@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <v-app>
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
     <transition name="page">
       <router-view></router-view>
     </transition>
     <footer-bar></footer-bar>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -53,15 +53,7 @@ export default {
 </script>
 
 <style>
-body {
+#app {
   font-family: "Do Hyeon", sans-serif;
-}
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.5s;
-}
-.page-enter,
-.page-leave-to {
-  opacity: 0;
 }
 </style>

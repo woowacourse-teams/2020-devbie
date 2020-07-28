@@ -1,7 +1,8 @@
 import {
   fetchQuestionList,
   fetchQuestionDetail,
-  fetchQuestionRecommendation
+  fetchQuestionRecommendation,
+  fetchNotices
 } from "../api";
 
 export default {
@@ -26,6 +27,14 @@ export default {
       const { data } = await fetchQuestionRecommendation(id);
       console.log(data);
       commit("SET_QUESTION_RECOMMENDATION", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_NOTICES({ commit }) {
+    try {
+      const { data } = await fetchNotices();
+      commit("SET_NOTICES", data);
     } catch (error) {
       console.log(error);
     }
