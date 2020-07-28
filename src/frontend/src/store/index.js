@@ -7,12 +7,16 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    loginUser: [],
     questions: [],
     question: [],
     questionRecommendation: [],
     questionId: []
   },
   getters: {
+    fetchedLoginUser(state) {
+      return state.loginUser;
+    },
     fetchedQuestions(state) {
       return state.questions;
     },

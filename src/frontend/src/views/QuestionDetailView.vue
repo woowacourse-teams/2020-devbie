@@ -4,23 +4,37 @@
       <router-link :to="`/questions`"
         ><v-btn color="#DAEBEA" class="menu-btn">돌아가기</v-btn></router-link
       >
-      <router-link :to="`/edit-question/${this.$route.params.id}`"
-        ><v-btn color="#DAEBEA" class="menu-btn">수정하기</v-btn></router-link
-      >
-      <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn"
-        >삭제하기</v-btn
-      >
+      <div class="author-btn" v-if="author">
+        <router-link :to="`/edit-question/${this.$route.params.id}`"
+          ><v-btn color="#DAEBEA" class="menu-btn">수정하기</v-btn></router-link
+        >
+        <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn"
+          >삭제하기</v-btn
+        >
+      </div>
     </div>
-    <question-detail id="question-detail"></question-detail>
+    <question-detail
+      @fetchUserId="isAuthor"
+      id="question-detail"
+    ></question-detail>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import QuestionDetail from "../components/QuestionDetail";
 
 export default {
   components: {
     QuestionDetail
+  },
+  data() {
+    return {
+      author: false
+    };
+  },
+  computed: {
+    ...mapGetters(["fetchedLoginUser"])
   },
   methods: {
     async onDeleteQuestion() {
@@ -29,6 +43,9 @@ export default {
         await this.$store.dispatch("DELETE_QUESTION", questionId);
         window.location.href = `/questions`;
       }
+    },
+    isAuthor(userId) {
+      return (this.author = userId === this.fetchedLoginUser.id);
     }
   }
 };
@@ -52,6 +69,11 @@ a {
 }
 .menu-btn {
   margin-top: 30px;
+}
+.author-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 #question-detail {
   flex-grow: 8;

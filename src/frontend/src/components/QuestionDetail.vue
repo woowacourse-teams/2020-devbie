@@ -41,10 +41,11 @@ export default {
     ...mapGetters(["fetchedQuestion"]),
     ...mapGetters(["fetchedQuestionRecommendation"])
   },
-  created() {
+  async created() {
     const questionId = this.$route.params.id;
-    this.$store.dispatch("FETCH_QUESTION", questionId);
-    this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
+    await this.$store.dispatch("FETCH_QUESTION", questionId);
+    await this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
+    await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
 };
 </script>

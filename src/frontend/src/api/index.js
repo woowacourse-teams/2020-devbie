@@ -6,6 +6,15 @@ const config = {
 };
 
 // 2. API 함수들을 정의
+function fetchLoginUser() {
+  const token = localStorage.getItem("devbieToken");
+  return axios.get("/api/users", {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  });
+}
+
 function fetchQuestionList() {
   return axios.get(`${config.baseUrl}/api/questions`);
 }
@@ -48,6 +57,7 @@ function deleteQuestion(questionId) {
 }
 
 export {
+  fetchLoginUser,
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,

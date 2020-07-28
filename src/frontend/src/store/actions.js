@@ -1,4 +1,5 @@
 import {
+  fetchLoginUser,
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
@@ -8,6 +9,14 @@ import {
 } from "../api";
 
 export default {
+  async FETCH_LOGIN_USER({ commit }) {
+    try {
+      const { data } = await fetchLoginUser();
+      commit("SET_LOGIN_USER", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async FETCH_QUESTIONS({ commit }) {
     try {
       const { data } = await fetchQuestionList();
