@@ -2,9 +2,13 @@ package underdogs.devbie.answer.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.DynamicTest.*;
+
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,15 +49,25 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
     private static final String ACCEPTANCE_TEST_CONTENT = "ACCEPTANCE_TEST_CONTENT";
 
     @DisplayName("면접 답변 인수테스트")
-    @Test
-    void answer() throws JsonProcessingException {
-        createAnswer();
-        AnswerResponses answerResponses = readAllAnswer();
-        readAnswerByQuestionId();
-        AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
-        updateAnswer(answerResponse.getId());
-        readAnswer(answerResponse.getId());
-        deleteAnswer(answerResponse.getId());
+    @TestFactory
+    Stream<DynamicTest> answer() {
+        return Stream.of(
+            dynamicTest("답변 생성", () -> createAnswer()),
+            dynamicTest("전체 답변 조회", () -> readAllAnswer()),
+            dynamicTest("질문 id로 답변 조회", () -> readAnswerByQuestionId(QUESTION_ID)),
+            dynamicTest("답변 수정", () -> {
+                AnswerResponse answerResponse = fetchFirstAnswer();
+                updateAnswer(answerResponse.getId());
+            }),
+            dynamicTest("수정한 답변 조회", () -> {
+                AnswerResponse answerResponse = fetchFirstAnswer();
+                readAnswer(answerResponse.getId());
+            }),
+            dynamicTest("답변 삭제", () -> {
+                AnswerResponse answerResponse = fetchFirstAnswer();
+                deleteAnswer(answerResponse.getId());
+            })
+        );
     }
 
     private void createAnswer() throws JsonProcessingException {
@@ -75,8 +89,13 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
         return answerResponses;
     }
 
-    private void readAnswerByQuestionId() {
-        AnswerResponses answerResponses = get(String.format("/api/answers?questionId=%d", QUESTION_ID),
+    private AnswerResponse fetchFirstAnswer() {
+        AnswerResponses answerResponses = get("/api/answers", AnswerResponses.class);
+        return answerResponses.getAnswerResponses().get(0);
+    }
+
+    private void readAnswerByQuestionId(long questionId) {
+        AnswerResponses answerResponses = get(String.format("/api/answers?questionId=%d", questionId),
             AnswerResponses.class);
 
         assertNotNull(answerResponses);
@@ -84,7 +103,7 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
         AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
         assertAll(
             () -> assertEquals(answerResponse.getId(), 1L),
-            () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
+            () -> assertEquals(answerResponse.getQuestionId(), questionId),
             () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
         );
     }
