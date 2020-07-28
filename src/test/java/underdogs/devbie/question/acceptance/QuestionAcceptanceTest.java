@@ -94,7 +94,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             QuestionResponse.class);
         assertAll(
             () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
-            () -> assertThat(questionResponse.getVisits()).isEqualTo(0L),
+            () -> assertThat(questionResponse.getVisits()).isEqualTo(1L),
             () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );
@@ -111,7 +111,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             QuestionResponse.class);
         assertAll(
             () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
-            () -> assertThat(updatedQuestion.getVisits()).isEqualTo(0L),
+            () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
             () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
             () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")
         );
