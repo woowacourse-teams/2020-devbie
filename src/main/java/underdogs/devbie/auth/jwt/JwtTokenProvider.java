@@ -30,8 +30,9 @@ public class JwtTokenProvider {
     }
 
     public String createToken(UserTokenDto userTokenDto) {
-        String subject = String.valueOf(userTokenDto.getId());
-        Claims claims = Jwts.claims().setSubject(subject);
+        Claims claims = Jwts.claims();
+        claims.put("userId", String.valueOf(userTokenDto.getId()));
+        claims.put("role", userTokenDto.getRole().toString());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -44,10 +45,10 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public String extractValidSubject(String token) {
+    public Claims extractValidSubject(String token) {
         validateToken(token);
 
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     private void validateToken(String token) {

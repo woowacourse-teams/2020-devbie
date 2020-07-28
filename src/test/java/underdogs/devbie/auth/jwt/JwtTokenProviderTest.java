@@ -7,8 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import io.jsonwebtoken.Claims;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.exception.InvalidAuthenticationException;
+import underdogs.devbie.user.domain.Role;
 import underdogs.devbie.user.domain.User;
 
 class JwtTokenProviderTest {
@@ -27,6 +29,7 @@ class JwtTokenProviderTest {
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
+            .role(Role.USER)
             .build();
         String token = jwtTokenProvider.createToken(UserTokenDto.from(user));
 
@@ -40,10 +43,12 @@ class JwtTokenProviderTest {
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
+            .role(Role.USER)
             .build();
         String token = jwtTokenProvider.createToken(UserTokenDto.from(user));
 
-        String extractedUserId = jwtTokenProvider.extractValidSubject(token);
+        Claims claims = jwtTokenProvider.extractValidSubject(token);
+        String extractedUserId = claims.get("userId").toString();
 
         assertThat(extractedUserId).isEqualTo(String.valueOf(1L));
     }

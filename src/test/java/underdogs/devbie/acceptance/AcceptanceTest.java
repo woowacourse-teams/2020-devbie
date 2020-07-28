@@ -15,6 +15,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.user.domain.Role;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 
@@ -47,6 +48,7 @@ public abstract class AcceptanceTest {
         userId = createUser();
         UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
             .id(userId)
+            .role(Role.USER)
             .build());
         bearerToken = new JwtTokenProvider(secret, seconds).createToken(userTokenDto);
     }
