@@ -4,6 +4,9 @@ import java.util.Objects;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import lombok.AccessLevel;
@@ -15,7 +18,11 @@ import underdogs.devbie.exception.CreateFailException;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public abstract class Recommendation extends BaseTimeEntity {
+public class Recommendation extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     protected Long userId;
 
