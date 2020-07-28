@@ -40,21 +40,9 @@ class AnswerRecommendationServiceTest {
     @DisplayName("추천 생성")
     @Test
     void createRecommendation() {
-        answerRecommendationService.createRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
+        answerRecommendationService.createOrUpdateRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
 
         // verify(answerRecommendations).save(any());
-    }
-
-    @DisplayName("추천 토글")
-    @Test
-    void toggleRecommendation() {
-        AnswerRecommendation recommendation = AnswerRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
-        given(answerRecommendations.findByObjectAndUserId(anyLong(), anyLong())).willReturn(
-            Optional.of(recommendation));
-
-        answerRecommendationService.toggleRecommendation(1L, 1L, RecommendationType.NON_RECOMMENDED);
-
-        verify(answerRecommendations).findByObjectAndUserId(anyLong(), anyLong());
     }
 
     @DisplayName("추천 삭제")

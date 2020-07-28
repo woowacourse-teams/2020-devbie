@@ -38,7 +38,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
             .andExpect(status().isOk());
     }
 
-    @DisplayName("추천 생성")
+    @DisplayName("추천")
     @Test
     void createRecommendation() throws Exception {
         User user = User.builder()
@@ -53,26 +53,7 @@ class AnswerRecommendationControllerTest extends MvcTest {
 
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
 
-        postAction(URL, inputJson, "")
-            .andExpect(status().isCreated());
-    }
-
-    @DisplayName("추천 토글")
-    @Test
-    void toggleRecommendation() throws Exception {
-        User user = User.builder()
-            .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
-
-        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
-        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
-        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-
-        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
-
-        patchAction(URL, inputJson, "")
+        putAction(URL, inputJson, "")
             .andExpect(status().isNoContent());
     }
 

@@ -1,9 +1,10 @@
 package underdogs.devbie.recommendation.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import underdogs.devbie.exception.AlreadyExistException;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -17,10 +18,17 @@ public class QuestionRecommendationService extends RecommendationService {
     }
 
     @Override
-    public void createRecommendation(Long objectId, Long userId, RecommendationType recommendationType) {
-        recommendationRepository.findByObjectAndUserId(objectId, userId)
-            .ifPresent(x -> new AlreadyExistException());
+    public void createOrUpdateRecommendation(Long objectId, Long userId, RecommendationType recommendationType) {
+        Optional<QuestionRecommendation> optionalQuestionRecommendation =
+            recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        recommendationRepository.save(QuestionRecommendation.of(objectId, userId, recommendationType));
+        QuestionRecommendation questionRecommendation =
+            optionalQuestionRecommendation.orElse(QuestionRecommendation.of(objectId, userId, recommendationType));
+
+        if (!questionRecommendation.hasRecommendationTypeOf(recommendationType)) {
+            questionRecommendation.toggleRecommended();
+        }
+
+        recommendationRepository.save(questionRecommendation);
     }
 }
