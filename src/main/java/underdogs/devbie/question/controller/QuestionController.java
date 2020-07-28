@@ -74,6 +74,7 @@ public class QuestionController {
         @PathVariable("id") Long id,
         @Valid @RequestBody QuestionUpdateRequest request
     ) {
+        System.out.println(request.getTitle() + request.getContent() + ">>>>>");
         questionService.update(user.getId(), id, request);
         return ResponseEntity
             .noContent()

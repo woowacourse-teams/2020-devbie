@@ -1,9 +1,6 @@
 <template>
   <div class="question-detail">
     <div class="inner">
-      <router-link class="back-link" :to="`/questions`"
-        ><v-btn color="#DAEBEA">돌아가기</v-btn></router-link
-      >
       <div class="question-header">
         <div class="question-title">
           <h1>
@@ -53,9 +50,6 @@ export default {
 </script>
 
 <style scoped>
-.back-link {
-  text-decoration: none;
-}
 .question-detail {
   display: flex;
   flex-direction: column;

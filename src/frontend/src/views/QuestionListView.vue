@@ -2,7 +2,7 @@
   <div class="interview">
     <question-filters id="question-filters"></question-filters>
     <question-list id="question-list"></question-list>
-    <router-link id="question-create" :to="`/create-questions`"
+    <router-link id="question-create" :to="`/create-question`"
       ><v-btn color="#DAEBEA">질문 올리기</v-btn>
     </router-link>
   </div>

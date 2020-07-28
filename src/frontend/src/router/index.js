@@ -4,6 +4,7 @@ import LoginPage from "../components/LoginPage";
 import QuestionListView from "../views/QuestionListView";
 import QuestionDetailView from "../views/QuestionDetailView";
 import QuestionCreateView from "../views/QuestionCreateView";
+import QuestionEditView from "../views/QuestionEditView";
 
 Vue.use(VueRouter);
 
@@ -26,9 +27,14 @@ export const router = new VueRouter({
       component: QuestionDetailView
     },
     {
-      path: "/create-questions",
-      name: "create-questions",
+      path: "/create-question",
+      name: "create-question",
       component: QuestionCreateView
+    },
+    {
+      path: "/edit-question/:id",
+      name: "edit-question",
+      component: QuestionEditView
     }
   ]
 });

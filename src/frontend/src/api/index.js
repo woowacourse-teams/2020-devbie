@@ -29,9 +29,18 @@ function createQuestion(request) {
   });
 }
 
+function updateQuestion(request, questionId) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.patch(`${config.baseUrl}/api/questions/${questionId}`, request, {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  });
+}
 export {
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
-  createQuestion
+  createQuestion,
+  updateQuestion
 };

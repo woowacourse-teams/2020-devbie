@@ -1,15 +1,15 @@
 <template>
   <div>
-    <question-form></question-form>
+    <create-form></create-form>
   </div>
 </template>
 
 <script>
-import QuestionForm from "../components/QuestionForm";
+import CreateForm from "../components/CreateForm";
 
 export default {
   components: {
-    QuestionForm
+    CreateForm
   }
 };
 </script>

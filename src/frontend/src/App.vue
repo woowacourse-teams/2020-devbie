@@ -56,6 +56,9 @@ export default {
 body {
   font-family: "Do Hyeon", sans-serif;
 }
+a {
+  text-decoration: none;
+}
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.5s;

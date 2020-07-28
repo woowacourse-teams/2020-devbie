@@ -2,7 +2,8 @@ import {
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
-  createQuestion
+  createQuestion,
+  updateQuestion
 } from "../api";
 
 export default {
@@ -35,6 +36,14 @@ export default {
       const response = await createQuestion(request);
       const id = response["headers"].location.split("/")[3];
       commit("SET_NEW_QUESTION_ID", id);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async UPDATE_QUESTION({ commit }, payload) {
+    try {
+      await updateQuestion(payload.request, payload.id);
+      commit();
     } catch (error) {
       console.log(error);
     }
