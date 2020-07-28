@@ -6,9 +6,9 @@
 </template>
 
 <script>
-  import QuestionDetail from "../components/QuestionDetail";
+import QuestionDetail from "../components/QuestionDetail";
 
-  export default {
+export default {
   components: {
     QuestionDetail
   }

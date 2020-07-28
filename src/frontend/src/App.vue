@@ -9,11 +9,11 @@
 </template>
 
 <script>
-  import NavigationBar from "./components/NavagationBar.vue";
-  import FooterBar from "./components/FooterBar.vue";
-  import axios from "axios";
+import NavigationBar from "./components/NavagationBar.vue";
+import FooterBar from "./components/FooterBar.vue";
+import axios from "axios";
 
-  export default {
+export default {
   data() {
     return {
       email: "",

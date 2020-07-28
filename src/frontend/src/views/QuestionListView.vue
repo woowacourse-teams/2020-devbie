@@ -6,11 +6,11 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
-  import QuestionFilters from "../components/QuestionFilters";
-  import QuestionList from "../components/QuestionList";
+import { mapGetters } from "vuex";
+import QuestionFilters from "../components/QuestionFilters";
+import QuestionList from "../components/QuestionList";
 
-  export default {
+export default {
   components: {
     QuestionFilters,
     QuestionList

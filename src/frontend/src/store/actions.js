@@ -1,4 +1,8 @@
-import {fetchQuestionDetail, fetchQuestionList, fetchQuestionRecommendation} from "../api";
+import {
+  fetchQuestionDetail,
+  fetchQuestionList,
+  fetchQuestionRecommendation
+} from "../api";
 
 export default {
   async FETCH_QUESTIONS({ commit }) {
