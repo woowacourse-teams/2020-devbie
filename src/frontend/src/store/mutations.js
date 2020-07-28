@@ -7,5 +7,8 @@ export default {
   },
   SET_QUESTION_RECOMMENDATION(state, data) {
     state.questionRecommendation = data;
+  },
+  SET_NEW_QUESTION_ID(state, data) {
+    state.questionId = data;
   }
 };

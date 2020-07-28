@@ -20,4 +20,18 @@ function fetchQuestionRecommendation(questionId) {
   );
 }
 
-export { fetchQuestionList, fetchQuestionDetail, fetchQuestionRecommendation };
+function createQuestion(request) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.post(`${config.baseUrl}/api/questions`, request, {
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  });
+}
+
+export {
+  fetchQuestionList,
+  fetchQuestionDetail,
+  fetchQuestionRecommendation,
+  createQuestion
+};

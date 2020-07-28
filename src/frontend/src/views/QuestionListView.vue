@@ -2,6 +2,9 @@
   <div class="interview">
     <question-filters id="question-filters"></question-filters>
     <question-list id="question-list"></question-list>
+    <router-link :to="`/create-questions`"
+      ><v-btn>질문 올리기</v-btn>
+    </router-link>
   </div>
 </template>
 

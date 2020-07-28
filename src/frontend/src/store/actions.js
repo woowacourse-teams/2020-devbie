@@ -1,7 +1,8 @@
 import {
   fetchQuestionList,
   fetchQuestionDetail,
-  fetchQuestionRecommendation
+  fetchQuestionRecommendation,
+  createQuestion
 } from "../api";
 
 export default {
@@ -24,8 +25,16 @@ export default {
   async FETCH_QUESTION_RECOMMENDATION({ commit }, id) {
     try {
       const { data } = await fetchQuestionRecommendation(id);
-      console.log(data);
       commit("SET_QUESTION_RECOMMENDATION", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async CREATE_QUESTION({ commit }, request) {
+    try {
+      const response = await createQuestion(request);
+      const id = response["headers"].location.split("/")[3];
+      commit("SET_NEW_QUESTION_ID", id);
     } catch (error) {
       console.log(error);
     }
