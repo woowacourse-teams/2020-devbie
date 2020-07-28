@@ -33,8 +33,10 @@ public class QuestionService {
         return QuestionResponses.from(questions);
     }
 
+    @Transactional
     public QuestionResponse read(Long id) {
         Question question = readOne(id);
+        question.increaseVisits();
         return QuestionResponse.from(question);
     }
 
