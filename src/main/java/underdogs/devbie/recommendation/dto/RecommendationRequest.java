@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class RecommendationRequest {
 

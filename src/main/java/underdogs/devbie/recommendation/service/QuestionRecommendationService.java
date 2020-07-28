@@ -3,14 +3,12 @@ package underdogs.devbie.recommendation.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Service
-@Transactional(readOnly = true)
 public class QuestionRecommendationService extends RecommendationService {
 
     public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository) {

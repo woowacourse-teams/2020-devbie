@@ -12,6 +12,7 @@ import underdogs.devbie.recommendation.domain.Recommendations;
 import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
+@Transactional(readOnly = true)
 public abstract class RecommendationService<T extends Recommendation> {
 
     protected RecommendationRepository recommendationRepository;

@@ -1,19 +1,13 @@
 package underdogs.devbie.recommendation.dto;
 
-import static java.util.stream.Collectors.*;
-import static underdogs.devbie.recommendation.domain.RecommendationType.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import underdogs.devbie.recommendation.domain.Recommendation;
-import underdogs.devbie.recommendation.domain.RecommendationType;
+import lombok.NoArgsConstructor;
+import underdogs.devbie.recommendation.domain.Recommendations;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class RecommendationCountResponse {
 

@@ -18,7 +18,7 @@ import underdogs.devbie.exception.CreateFailException;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Recommendation extends BaseTimeEntity {
+public abstract class Recommendation extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
