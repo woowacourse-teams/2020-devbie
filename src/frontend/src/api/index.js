@@ -14,4 +14,10 @@ function fetchQuestionDetail(questionId) {
   return axios.get(`${config.baseUrl}/api/questions/${questionId}`);
 }
 
-export { fetchQuestionList, fetchQuestionDetail };
+function fetchQuestionRecommendation(questionId) {
+  return axios.get(
+    `${config.baseUrl}/api/recommendation-question/${questionId}`
+  );
+}
+
+export { fetchQuestionList, fetchQuestionDetail, fetchQuestionRecommendation };

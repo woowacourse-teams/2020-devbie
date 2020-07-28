@@ -1,4 +1,8 @@
-import { fetchQuestionList, fetchQuestionDetail } from "../api";
+import {
+  fetchQuestionList,
+  fetchQuestionDetail,
+  fetchQuestionRecommendation
+} from "../api";
 
 export default {
   async FETCH_QUESTIONS({ commit }) {
@@ -13,6 +17,15 @@ export default {
     try {
       const { data } = await fetchQuestionDetail(id);
       commit("SET_QUESTION", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_QUESTION_RECOMMENDATION({ commit }, id) {
+    try {
+      const { data } = await fetchQuestionRecommendation(id);
+      console.log(data);
+      commit("SET_QUESTION_RECOMMENDATION", data);
     } catch (error) {
       console.log(error);
     }

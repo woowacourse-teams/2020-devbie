@@ -4,5 +4,8 @@ export default {
   },
   SET_QUESTION(state, data) {
     state.question = data;
+  },
+  SET_QUESTION_RECOMMENDATION(state, data) {
+    state.questionRecommendation = data;
   }
 };

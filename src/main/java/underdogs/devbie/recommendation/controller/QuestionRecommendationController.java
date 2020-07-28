@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
@@ -26,6 +27,7 @@ public class QuestionRecommendationController {
 
     private final QuestionRecommendationService questionRecommendationService;
 
+    @NoValidate
     @GetMapping("/{id}")
     public ResponseEntity<RecommendationResponse> count(@PathVariable("id") Long questionId) {
         RecommendationResponse recommendationResponse = questionRecommendationService.count(questionId);

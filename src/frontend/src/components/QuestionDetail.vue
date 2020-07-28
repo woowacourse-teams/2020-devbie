@@ -9,16 +9,20 @@
         </div>
         <div class="question-info">
           <p class="infos">
-            <i class="fas fa-user-edit"></i> {{ fetchedQuestion.userId }}
+            <i class="fas fa-user-edit"></i>
+            {{ fetchedQuestion.userId }}
           </p>
           <p class="infos">
-            <i class="fas fa-eye"></i> {{ fetchedQuestion.visits }}
+            <i class="fas fa-eye"></i>
+            {{ fetchedQuestion.visits }}
           </p>
           <p class="infos">
-            <i class="far fa-thumbs-up"></i> {{ fetchedQuestion.visits }}
+            <i class="far fa-thumbs-up"></i>
+            {{ fetchedQuestionRecommendation.recommendedCount }}
           </p>
           <p class="infos">
-            <i class="far fa-thumbs-down"></i> {{ fetchedQuestion.visits }}
+            <i class="far fa-thumbs-down"></i>
+            {{ fetchedQuestionRecommendation.nonRecommendedCount }}
           </p>
         </div>
       </div>
@@ -34,11 +38,13 @@ import { mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["fetchedQuestion"])
+    ...mapGetters(["fetchedQuestion"]),
+    ...mapGetters(["fetchedQuestionRecommendation"])
   },
   created() {
     const questionId = this.$route.params.id;
     this.$store.dispatch("FETCH_QUESTION", questionId);
+    this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
   }
 };
 </script>
