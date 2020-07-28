@@ -20,11 +20,7 @@ public abstract class RecommendationService<T extends Recommendation> {
     public RecommendationResponse search(Long objectId, Long userId) {
         Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        String recommendationType = optRecommendation
-            .map(recommendation -> recommendation.getRecommendationType().name())
-            .orElse("NOT_EXIST");
-
-        return new RecommendationResponse(recommendationType);
+        return RecommendationResponse.from(optRecommendation);
     }
 
     public RecommendationCountResponse count(Long objectId) {
