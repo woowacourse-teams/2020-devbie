@@ -16,8 +16,8 @@ import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.question.exception.QuestionNotExistedException;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
@@ -33,8 +33,10 @@ public class QuestionService {
         return QuestionResponses.from(questions);
     }
 
+    @Transactional
     public QuestionResponse read(Long id) {
         Question question = readOne(id);
+        question.increaseVisits();
         return QuestionResponse.from(question);
     }
 
