@@ -70,6 +70,7 @@ public class ReadableRequestWrapperFilter implements Filter {
                 InputStream is = request.getInputStream();
                 this.rawData = IOUtils.toByteArray(is);
 
+                // body 파싱
                 String collect = this.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
                 if (StringUtils.isEmpty(collect)) {
                     return;
