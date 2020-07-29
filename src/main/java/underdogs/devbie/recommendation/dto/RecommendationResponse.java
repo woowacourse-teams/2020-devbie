@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.Recommendation;
@@ -17,6 +18,7 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @AllArgsConstructor
 @Getter
+@ToString
 public class RecommendationResponse {
 
     private Long recommendedCount;

@@ -10,14 +10,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.config.BaseTimeEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Getter
 @Builder
+@Getter
+@ToString
 public class User extends BaseTimeEntity {
 
     @Id

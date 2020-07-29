@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -25,6 +26,7 @@ import underdogs.devbie.notice.domain.NoticeDescription;
 @Builder
 @Getter
 @Setter
+@ToString
 public class NoticeUpdateRequest {
 
     private String startDate;
