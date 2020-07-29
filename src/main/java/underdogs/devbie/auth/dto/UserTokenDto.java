@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import underdogs.devbie.user.domain.Role;
+import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,9 +14,9 @@ public class UserTokenDto {
 
     private Long id;
 
-    private Role role;
+    private RoleType roleType;
 
     public static UserTokenDto from(User user) {
-        return new UserTokenDto(user.getId(), user.getRole());
+        return new UserTokenDto(user.getId(), user.getRoleType());
     }
 }

@@ -32,7 +32,7 @@ public class JwtTokenProvider {
     public String createToken(UserTokenDto userTokenDto) {
         Claims claims = Jwts.claims();
         claims.put("userId", String.valueOf(userTokenDto.getId()));
-        claims.put("role", userTokenDto.getRole().toString());
+        claims.put("role", userTokenDto.getRoleType().toString());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);

@@ -26,13 +26,17 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         if (interceptorValidator.isNotValid(handler)) {
             return true;
         }
+
         String token = authExtractor.extract(request, "bearer");
         Claims claims = jwtTokenProvider.extractValidSubject(token);
         String userId = claims.get("userId").toString();
         String role = claims.get("role").toString();
 
+        if (interceptorValidator.hasRoleAnnotation(handler)) {
+            return interceptorValidator.checkRole(handler, role);
+        }
+
         request.setAttribute("userId", userId);
-        request.setAttribute("role", role);
         return true;
     }
 }
