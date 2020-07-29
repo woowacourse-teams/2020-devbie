@@ -2,7 +2,7 @@
   <div class="filter-box">
     <v-select
       class="filters"
-      :items="e1"
+      :items="position"
       hide-details
       label="직군"
       menu-props="auto"
@@ -12,9 +12,9 @@
     <v-select
       class="filters"
       v-model="e1"
-      :items="states"
+      :items="languages"
       menu-props="auto"
-      label="Select"
+      label="언어"
       hide-details
       single-line
     ></v-select>
@@ -45,7 +45,9 @@ export default {
         "Arizona",
         "Arkansas",
         "California"
-      ]
+      ],
+      languages: ["C", "C++", "JAVA"],
+      position: ["프론트엔드", "백엔드", "인프라"]
     };
   }
 };
@@ -58,7 +60,7 @@ export default {
   justify-content: center;
 }
 .filters {
-  margin: 0;
   padding: 0;
+  margin: 0 50px 0 0;
 }
 </style>

@@ -30,6 +30,10 @@ export default {
   display: flex;
   align-content: center;
   justify-content: center;
+  margin-bottom: 50px;
+}
+.filters > * {
+  margin-right: 120px;
 }
 .search-bar {
   margin: 0;
