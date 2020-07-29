@@ -46,7 +46,6 @@ public abstract class AcceptanceTest {
         RestAssured.port = port;
 
         userId = createUser();
-        //Todo: Role.USER 테스트도 추가하기
         UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
             .id(userId)
             .roleType(RoleType.ADMIN)
