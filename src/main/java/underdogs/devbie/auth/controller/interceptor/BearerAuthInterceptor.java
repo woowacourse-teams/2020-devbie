@@ -33,7 +33,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         String role = claims.get("role").toString();
 
         if (interceptorValidator.hasRoleAnnotation(handler)) {
-            return interceptorValidator.checkRole(handler, role);
+            interceptorValidator.validateRole(handler, role);
         }
 
         request.setAttribute("userId", userId);

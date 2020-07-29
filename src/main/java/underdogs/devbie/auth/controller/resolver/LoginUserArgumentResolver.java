@@ -30,7 +30,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String userId = (String)webRequest.getAttribute("userId", SCOPE_REQUEST);
 
-        // todo: 구지 있어야할까?
         if (StringUtils.isEmpty(userId)) {
             throw new IllegalArgumentException();
         }
