@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
+import underdogs.devbie.auth.exception.InvalidAuthenticationException;
 import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
@@ -31,7 +32,7 @@ public abstract class RecommendationController {
 
     private void validateUser(Long userId, User user) {
         if (!user.getId().equals(userId)) {
-            throw new IllegalArgumentException();
+            throw new InvalidAuthenticationException();
         }
     }
 
