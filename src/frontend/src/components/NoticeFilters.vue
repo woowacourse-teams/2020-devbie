@@ -25,27 +25,6 @@
 export default {
   data() {
     return {
-      e1: "Florida",
-      e2: "Texas",
-      e3: null,
-      e4: null,
-      items: [
-        { text: "State 1" },
-        { text: "State 2" },
-        { text: "State 3" },
-        { text: "State 4" },
-        { text: "State 5" },
-        { text: "State 6" },
-        { text: "State 7" }
-      ],
-      states: [
-        "Alabama",
-        "Alaska",
-        "American Samoa",
-        "Arizona",
-        "Arkansas",
-        "California"
-      ],
       languages: ["C", "C++", "JAVA"],
       position: ["프론트엔드", "백엔드", "인프라"]
     };
