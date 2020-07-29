@@ -25,6 +25,8 @@ public class NoticeResponses {
             .map(notice -> NoticeResponse.builder()
                 .id(notice.getId())
                 .name(notice.getCompany().getName())
+                .title(notice.getTitle())
+                .noticeType(notice.getNoticeType())
                 .image(notice.getImage())
                 .languages(collectLanguageName(notice))
                 .jobPosition(notice.getJobPosition())

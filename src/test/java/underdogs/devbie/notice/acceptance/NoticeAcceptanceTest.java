@@ -109,6 +109,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(noticeResponse.getId()).isEqualTo(1L),
             () -> assertThat(noticeResponse.getName()).isEqualTo("underdogs"),
+            () -> assertThat(noticeResponse.getTitle()).isEqualTo("언더독스 채용"),
+            () -> assertThat(noticeResponse.getNoticeType()).isEqualTo(NoticeType.JOB),
             () -> assertThat(noticeResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
             () -> assertThat(noticeResponse.getLanguages()).contains(Language.JAVA.getName(),
@@ -122,6 +124,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(result.getId()).isEqualTo(1L),
             () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
+            () -> assertThat(result.getTitle()).isEqualTo("우테코 모집"),
+            () -> assertThat(result.getNoticeType()).isEqualTo(NoticeType.EDUCATION),
             () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
             () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),

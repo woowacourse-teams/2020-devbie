@@ -9,6 +9,7 @@ import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Notice;
+import underdogs.devbie.notice.domain.NoticeType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,6 +19,8 @@ public class NoticeDetailResponse {
 
     private Long id;
     private Company company;
+    private String title;
+    private NoticeType noticeType;
     private Duration duration;
     private JobPosition jobPosition;
     private NoticeDescriptionResponse noticeDescription;
@@ -27,6 +30,8 @@ public class NoticeDetailResponse {
         return NoticeDetailResponse.builder()
             .id(notice.getId())
             .company(notice.getCompany())
+            .title(notice.getTitle())
+            .noticeType(notice.getNoticeType())
             .noticeDescription(NoticeDescriptionResponse.from(notice.getNoticeDescription()))
             .jobPosition(notice.getJobPosition())
             .image(notice.getImage())

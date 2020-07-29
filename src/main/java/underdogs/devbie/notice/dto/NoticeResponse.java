@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.NoticeType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,6 +18,8 @@ public class NoticeResponse {
 
     private Long id;
     private String name;
+    private String title;
+    private NoticeType noticeType;
     private Set<String> languages;
     private JobPosition jobPosition;
     private String image;
