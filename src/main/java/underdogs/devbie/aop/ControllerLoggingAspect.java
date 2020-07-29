@@ -12,16 +12,17 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
-@ControllerAdvice
+@Component
 @Aspect
 @Slf4j
-class LoggerAspect {
+class ControllerLoggingAspect {
+
     @Pointcut("execution(* underdogs.devbie..*Controller.*(..))")
     public void loggerPointCut() {
     }
