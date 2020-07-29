@@ -33,9 +33,7 @@ public class NoticeController {
 
     @Role(role = {RoleType.ADMIN})
     @PostMapping
-    public ResponseEntity<Void> save(
-        @Valid @RequestBody NoticeCreateRequest request
-    ) {
+    public ResponseEntity<Void> save(@Valid @RequestBody NoticeCreateRequest request) {
         Long noticeId = noticeService.save(request);
         return ResponseEntity
             .created(URI.create(String.format("/api/notices/%d", noticeId)))
@@ -56,9 +54,7 @@ public class NoticeController {
 
     @Role(role = {RoleType.ADMIN})
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-        @PathVariable Long id
-    ) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         noticeService.delete(id);
         return ResponseEntity
             .noContent()

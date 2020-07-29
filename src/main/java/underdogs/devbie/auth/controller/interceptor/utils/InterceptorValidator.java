@@ -17,12 +17,7 @@ public class InterceptorValidator {
         return Objects.nonNull(noValidate);
     }
 
-    public boolean hasRoleAnnotation(Object handler) {
-        Role methodAnnotation = ((HandlerMethod)handler).getMethodAnnotation(Role.class);
-        return Objects.nonNull(methodAnnotation);
-    }
-
-    public void validateRole(Object handler, String role) {
+    public boolean isValidRole(Object handler, String role) {
         Role methodAnnotation = ((HandlerMethod)handler).getMethodAnnotation(Role.class);
         RoleType roleType = RoleType.valueOf(role);
 
@@ -30,5 +25,7 @@ public class InterceptorValidator {
             .contains(roleType)) {
             throw new InvalidAuthorizationException();
         }
+
+        return true;
     }
 }
