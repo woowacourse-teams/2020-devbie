@@ -5,7 +5,11 @@
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text x-large><p class="navigation-menu">공고</p></v-btn>
-      <v-btn text x-large><p class="navigation-menu">면접</p></v-btn>
+      <router-link :to="`/questions`"
+        ><v-btn text x-large
+          ><p class="navigation-menu">면접</p></v-btn
+        ></router-link
+      >
       <template v-if="isLoggedIn">
         <v-avatar color="primary">image</v-avatar>
         <v-btn @click="logout">Logout</v-btn>
@@ -52,6 +56,8 @@ export default {
 .navigation-menu {
   font-size: 24px;
   color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
 #login-btn {

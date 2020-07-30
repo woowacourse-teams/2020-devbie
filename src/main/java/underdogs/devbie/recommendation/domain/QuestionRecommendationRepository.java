@@ -4,12 +4,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface QuestionRecommendationRepository extends JpaRepository<QuestionRecommendation, Long> {
+public interface QuestionRecommendationRepository extends
+    JpaRepository<QuestionRecommendation, Long>,
+    RecommendationRepository<QuestionRecommendation> {
 
-    Long countByQuestionIdAndRecommendationType(Long questionId, RecommendationType recommendationType);
+    @Override
+    @Query("select q from QuestionRecommendation q "
+        + "where q.questionId = :questionId")
+    List<QuestionRecommendation> findByObjectId(Long questionId);
 
-    List<QuestionRecommendation> findByQuestionId(Long questionId);
-
-    Optional<QuestionRecommendation> findByQuestionIdAndUserId(Long questionId, Long userId);
+    @Override
+    @Query("select q from QuestionRecommendation q "
+        + "where q.questionId = :questionId  "
+        + "and q.userId = :userId")
+    Optional<QuestionRecommendation> findByObjectAndUserId(Long questionId, Long userId);
 }
