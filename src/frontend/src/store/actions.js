@@ -1,11 +1,12 @@
 import {
-  fetchLoginUser,
-  fetchQuestionList,
-  fetchQuestionDetail,
-  fetchQuestionRecommendation,
   createQuestion,
-  updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  fetchLoginUser,
+  fetchNoticeDetail,
+  fetchQuestionDetail,
+  fetchQuestionList,
+  fetchQuestionRecommendation,
+  updateQuestion
 } from "../api";
 
 export default {
@@ -36,6 +37,7 @@ export default {
   async FETCH_QUESTION_RECOMMENDATION({ commit }, id) {
     try {
       const { data } = await fetchQuestionRecommendation(id);
+      console.log(data);
       commit("SET_QUESTION_RECOMMENDATION", data);
     } catch (error) {
       console.log(error);
@@ -62,6 +64,15 @@ export default {
     try {
       await deleteQuestion(questionId);
       commit();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_NOTICE({ commit }, id) {
+    try {
+      const { data } = await fetchNoticeDetail(id);
+      console.log(data);
+      commit("SET_NOTICE", data);
     } catch (error) {
       console.log(error);
     }

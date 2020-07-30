@@ -16,5 +16,8 @@ export default {
   },
   SET_NEW_QUESTION_ID(state, data) {
     state.questionId = data;
+  },
+  SET_NOTICE(state, data) {
+    state.notice = data;
   }
 };

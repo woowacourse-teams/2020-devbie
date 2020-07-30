@@ -56,11 +56,16 @@ function deleteQuestion(questionId) {
   });
 }
 
+function fetchNoticeDetail(noticeId) {
+  return axios.get(`${config.baseUrl}/api/notices/${noticeId}`);
+}
+
 export {
   fetchLoginUser,
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
+  fetchNoticeDetail,
   createQuestion,
   updateQuestion,
   deleteQuestion
