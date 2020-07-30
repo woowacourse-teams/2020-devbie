@@ -1,5 +1,5 @@
 <template>
-  <div>메인</div>
+  <div>Hello 우테코!</div>
 </template>
 
 <script>
