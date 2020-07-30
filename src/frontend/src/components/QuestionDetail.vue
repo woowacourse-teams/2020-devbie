@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="question-content">
-        <p>내용 : {{ fetchedQuestion.content }}</p>
+        <p>{{ fetchedQuestion.content }}</p>
       </div>
     </div>
   </div>

@@ -6,15 +6,21 @@
           class="input-box"
           label="질문 제목"
           counter="30"
+          autofocus
           required
           v-model="title"
         ></v-text-field>
-        <v-text-field
+        <v-textarea
           class="input-box"
           label="질문 내용"
+          counter
+          no-resize
+          clearable
+          rows="2"
+          row-height="1"
           required
           v-model="content"
-        ></v-text-field>
+        ></v-textarea>
         <v-card-actions>
           <v-spacer></v-spacer>
           <router-link :to="`/questions`" class="form-link"

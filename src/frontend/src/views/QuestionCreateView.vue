@@ -1,6 +1,7 @@
 <template>
   <div>
-    <create-form></create-form>
+    <h2 class="title">질문 작성</h2>
+    <create-form id="create-form"></create-form>
   </div>
 </template>
 
@@ -14,4 +15,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.title {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+#create-form {
+  margin-top: 15px;
+}
+</style>

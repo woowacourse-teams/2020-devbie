@@ -1,24 +1,27 @@
 <template>
-  <div class="update-form">
-    <h1 id="title">질문 수정 페이지</h1>
-    <update-form></update-form>
+  <div class="edit-form">
+    <h2 class="title">질문 수정 페이지</h2>
+    <edit-form id="edit-form"></edit-form>
   </div>
 </template>
 
 <script>
-import UpdateForm from "../components/UpdateForm";
+import EditForm from "../components/EditForm";
 
 export default {
   components: {
-    UpdateForm
+    EditForm
   }
 };
 </script>
 
 <style scoped>
-#title {
+.title {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-top: 20px;
+}
+#edit-form {
+  margin-top: 15px;
 }
 </style>
