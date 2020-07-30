@@ -12,7 +12,7 @@ export const store = new Vuex.Store({
     question: [],
     questionRecommendation: [],
     answers: [],
-    questionId: []
+    questionId: [],
     notices: []
   },
   getters: {

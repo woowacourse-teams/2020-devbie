@@ -8,10 +8,7 @@ import {
   fetchQuestionList,
   fetchQuestionRecommendation,
   updateAnswer,
-  updateQuestion
-  createQuestion,
   updateQuestion,
-  deleteQuestion,
   fetchNotices
 } from "../api";
 
