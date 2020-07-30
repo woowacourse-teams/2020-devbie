@@ -2,6 +2,9 @@ export default {
   SET_LOGIN_USER(state, data) {
     state.loginUser = data;
   },
+  DELETE_LOGIN_USER(state) {
+    state.loginUser = {};
+  },
   SET_QUESTIONS(state, data) {
     state.questions = data;
   },

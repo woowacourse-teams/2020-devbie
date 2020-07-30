@@ -33,6 +33,7 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem("devbieToken");
+      this.$store.commit("DELETE_LOGIN_USER");
       this.isLoggedIn = false;
     }
   },

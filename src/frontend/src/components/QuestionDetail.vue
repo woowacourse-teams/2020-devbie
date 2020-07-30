@@ -38,8 +38,7 @@ import { mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["fetchedQuestion"]),
-    ...mapGetters(["fetchedQuestionRecommendation"])
+    ...mapGetters(["fetchedQuestion", "fetchedQuestionRecommendation"])
   },
   async created() {
     const questionId = this.$route.params.id;

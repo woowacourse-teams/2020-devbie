@@ -2,9 +2,13 @@
   <div class="interview">
     <question-filters id="question-filters"></question-filters>
     <question-list id="question-list"></question-list>
-    <router-link id="question-create" :to="`/create-question`"
-      ><v-btn color="#DAEBEA">질문 올리기</v-btn>
-    </router-link>
+    <v-btn
+      v-if="isLoggedIn"
+      id="question-create"
+      @click="$router.push('/create-question')"
+      color="#DAEBEA"
+      >질문 올리기</v-btn
+    >
   </div>
 </template>
 
@@ -18,11 +22,17 @@ export default {
     QuestionFilters,
     QuestionList
   },
+  data() {
+    return {
+      isLoggedIn: false
+    };
+  },
   computed: {
-    ...mapGetters(["fetchedQuestions"])
+    ...mapGetters(["fetchedQuestions", "fetchedLoginUser"])
   },
   created() {
     this.$store.dispatch("FETCH_QUESTIONS");
+    this.isLoggedIn = !!this.fetchedLoginUser.id;
   }
 };
 </script>
