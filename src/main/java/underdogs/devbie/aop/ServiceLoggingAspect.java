@@ -45,6 +45,7 @@ public class ServiceLoggingAspect {
             return result;
 
         } catch (Throwable throwable) {
+            log.error("AOP proceeding error", throwable);
             throw throwable;
         }
     }

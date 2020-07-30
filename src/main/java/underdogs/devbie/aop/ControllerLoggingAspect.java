@@ -46,13 +46,14 @@ class ControllerLoggingAspect {
                 params.put("request_uri", request.getRequestURI());
                 params.put("http_method", request.getMethod());
             } catch (Exception e) {
-                log.error("LoggerAspect error", e);
+                log.error("ControllerLoggerAspect error", e);
             }
             log.info("params : {}", params);
 
             return result;
 
         } catch (Throwable throwable) {
+            log.error("AOP proceeding error", throwable);
             throw throwable;
         }
     }
