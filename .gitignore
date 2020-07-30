@@ -162,4 +162,9 @@ build
 .idea
 .idea/**
 
+# log
+./logs/**
+*.gz
+
+# infra
 nohup.out
