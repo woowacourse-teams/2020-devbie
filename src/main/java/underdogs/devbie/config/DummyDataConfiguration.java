@@ -17,26 +17,14 @@ public class DummyDataConfiguration {
     @Configuration
     private class LocalDataApplicationRunner implements ApplicationRunner {
 
-        private final QuestionRepository questionRepository;
-
         private final AnswerRepository answerRepository;
 
-        public LocalDataApplicationRunner(QuestionRepository questionRepository,
-            AnswerRepository answerRepository) {
-            this.questionRepository = questionRepository;
+        public LocalDataApplicationRunner(AnswerRepository answerRepository) {
             this.answerRepository = answerRepository;
         }
 
         @Override
         public void run(ApplicationArguments args) {
-            Question question = Question.builder()
-                .id(1L)
-                .title(QuestionTitle.from("111"))
-                .content(QuestionContent.from("222"))
-                .userId(1L)
-                .build();
-
-            questionRepository.save(question);
 
             Answer ans1 = Answer.builder()
                 .userId(1L)
