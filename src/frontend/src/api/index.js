@@ -25,7 +25,7 @@ function fetchQuestionDetail(questionId) {
 
 function fetchQuestionRecommendation(questionId) {
   return axios.get(
-    `${config.baseUrl}/api/recommendation-question/${questionId}`
+    `${config.baseUrl}/api/recommendation-question?objectId=${questionId}`
   );
 }
 
