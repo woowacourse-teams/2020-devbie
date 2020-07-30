@@ -7,11 +7,9 @@
       label="직군"
       menu-props="auto"
       single-line
-      v-model="e2"
     ></v-select>
     <v-select
       class="filters"
-      v-model="e1"
       :items="languages"
       menu-props="auto"
       label="언어"
@@ -41,5 +39,7 @@ export default {
 .filters {
   padding: 0;
   margin: 0 50px 0 0;
+  width: 12em;
+  max-width: 12em;
 }
 </style>
