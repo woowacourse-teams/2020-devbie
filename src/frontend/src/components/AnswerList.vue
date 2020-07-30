@@ -37,6 +37,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-left: 20px;
+  max-width: 100%;
 }
 #count-of-answer {
   padding: 18px;

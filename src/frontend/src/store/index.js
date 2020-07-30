@@ -7,12 +7,17 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    loginUser: [],
     questions: [],
     question: [],
     questionRecommendation: [],
-    answers: []
+    answers: [],
+    questionId: []
   },
   getters: {
+    fetchedLoginUser(state) {
+      return state.loginUser;
+    },
     fetchedQuestions(state) {
       return state.questions;
     },
@@ -27,6 +32,9 @@ export const store = new Vuex.Store({
     },
     fetchedAnswer(state) {
       return id => state.answers.find(answer => answer.id === id);
+    },
+    fetchedNewCreatedQuestionId(state) {
+      return state.questionId;
     }
   },
   mutations,

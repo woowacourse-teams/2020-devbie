@@ -12,11 +12,13 @@
           v-model="fetchedAnswer.content"
         ></v-textarea>
       </div>
-      <v-btn v-if="this.updateEditFlag" @click="update">
-        수정 확인
-      </v-btn>
-      <v-btn v-else @click="updateBtnHandler">수정</v-btn>
-      <v-btn @click="deleteBtnHandler">삭제</v-btn>
+      <div>
+        <v-btn v-if="this.updateEditFlag" @click="update">
+          수정 확인
+        </v-btn>
+        <v-btn v-else @click="updateBtnHandler">수정</v-btn>
+        <v-btn @click="deleteBtnHandler">삭제</v-btn>
+      </div>
     </div>
     <hr class="answer-line" />
   </div>
@@ -77,10 +79,14 @@ export default {
   margin-top: 10px;
 }
 .answer-content {
-  flex-grow: 9;
   padding: 30px 50px;
 }
 .answer-temp {
   display: flex;
+  justify-content: space-between;
+}
+
+.answer-content-value {
+  max-width: 1100px;
 }
 </style>
