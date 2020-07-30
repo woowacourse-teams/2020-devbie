@@ -7,11 +7,13 @@ import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class QuestionRecommendation extends Recommendation {
 
     private Long questionId;

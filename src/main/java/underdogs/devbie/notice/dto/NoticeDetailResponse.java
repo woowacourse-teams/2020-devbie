@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -14,6 +15,7 @@ import underdogs.devbie.notice.domain.Notice;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
+@ToString
 public class NoticeDetailResponse {
 
     private Long id;
