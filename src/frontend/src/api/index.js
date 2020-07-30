@@ -25,8 +25,12 @@ function fetchQuestionDetail(questionId) {
 
 function fetchQuestionRecommendation(questionId) {
   return axios.get(
-    `${config.baseUrl}/api/recommendation-question/${questionId}`
+    `${config.baseUrl}/api/recommendation-question?objectId=${questionId}`
   );
+}
+
+function fetchNotices() {
+  return axios.get(`${config.baseUrl}/api/notices`);
 }
 
 function createQuestion(request) {
@@ -56,6 +60,32 @@ function deleteQuestion(questionId) {
   });
 }
 
+function fetchAnswers(questionId) {
+  return axios.get(`${config.baseUrl}/api/answers?questionId=${questionId}`);
+}
+
+function updateAnswer(answerId, content) {
+  axios.patch(
+      `${config.baseUrl}/api/answers/${answerId}`,
+      {
+        content: content
+      },
+      {
+        headers: {
+          Authorization: "bearer " + localStorage.getItem("devbieToken")
+        }
+      }
+  );
+}
+
+function deleteAnswer(answerId) {
+  axios.delete(`${config.baseUrl}/api/answers/${answerId}`, {
+    headers: {
+      Authorization: "bearer " + localStorage.getItem("devbieToken")
+    }
+  });
+}
+
 function fetchNoticeDetail(noticeId) {
   return axios.get(`${config.baseUrl}/api/notices/${noticeId}`);
 }
@@ -65,8 +95,12 @@ export {
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
+  fetchAnswers,
+  updateAnswer,
+  deleteAnswer,
   fetchNoticeDetail,
   createQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  fetchNotices
 };

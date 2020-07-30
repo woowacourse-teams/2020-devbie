@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
-    <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
-    <transition name="page">
-      <router-view></router-view>
-    </transition>
-    <footer-bar></footer-bar>
-  </div>
+  <v-app id="app">
+      <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
+      <transition name="page">
+          <router-view class="content"></router-view>
+      </transition>
+      <footer-bar></footer-bar>
+  </v-app>
 </template>
 
 <script>
@@ -45,16 +45,22 @@ export default {
 </script>
 
 <style>
-body {
-  font-family: "Do Hyeon", sans-serif;
-}
-a {
-  text-decoration: none;
-}
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.5s;
-}
+    #app {
+        font-family: "Do Hyeon", sans-serif;
+    }
+
+    .content {
+        min-height: calc(100vh - 220px);
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .page-enter-active,
+    .page-leave-active {
+        transition: opacity 0.5s;
+    }
 .page-enter,
 .page-leave-to {
   opacity: 0;

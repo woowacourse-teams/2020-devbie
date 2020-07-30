@@ -1,12 +1,15 @@
 import {
   createQuestion,
+  deleteAnswer,
   deleteQuestion,
   fetchLoginUser,
   fetchNoticeDetail,
   fetchQuestionDetail,
   fetchQuestionList,
   fetchQuestionRecommendation,
-  updateQuestion
+  updateAnswer,
+  updateQuestion,
+  fetchNotices
 } from "../api";
 
 export default {
@@ -37,7 +40,6 @@ export default {
   async FETCH_QUESTION_RECOMMENDATION({ commit }, id) {
     try {
       const { data } = await fetchQuestionRecommendation(id);
-      console.log(data);
       commit("SET_QUESTION_RECOMMENDATION", data);
     } catch (error) {
       console.log(error);
@@ -60,7 +62,7 @@ export default {
       console.log(error);
     }
   },
-  async DELETE_QUESTION({ commit }, questionId) {
+  async DELETE_QUESTION({commit}, questionId) {
     try {
       await deleteQuestion(questionId);
       commit();
@@ -68,9 +70,42 @@ export default {
       console.log(error);
     }
   },
-  async FETCH_NOTICE({ commit }, id) {
+  async FETCH_ANSWERS({commit}, questionId) {
     try {
-      const { data } = await fetchNoticeDetail(id);
+      const {data} = await fetchAnswers(questionId);
+      commit("SET_ANSWERS", data.answerResponses);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async UPDATE_ANSWER({commit}, answerId, content) {
+    try {
+      await updateAnswer(answerId, content);
+      commit("SET_ANSWER", answerId, content);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async DELETE_ANSWER({commit}, answerId) {
+    try {
+      await deleteAnswer(answerId).then(() => {
+        commit("DELETE_ANSWER", answerId);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_NOTICES({commit}) {
+    try {
+      const {data} = await fetchNotices();
+      commit("SET_NOTICES", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_NOTICE({commit}, id) {
+    try {
+      const {data} = await fetchNoticeDetail(id);
       console.log(data);
       commit("SET_NOTICE", data);
     } catch (error) {

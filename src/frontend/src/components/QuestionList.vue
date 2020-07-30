@@ -47,7 +47,8 @@ export default {
 }
 .visits {
   font-size: 14px;
-  margin-right: 10px;
+  margin-right: 13px;
+  margin-bottom: 0;
 }
 .title {
   color: #7ec699;
