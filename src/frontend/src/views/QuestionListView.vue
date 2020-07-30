@@ -32,7 +32,7 @@ export default {
   },
   created() {
     this.$store.dispatch("FETCH_QUESTIONS");
-    this.isLoggedIn = !!this.fetchedLoginUser.id;
+    this.isLoggedIn = !this.fetchedLoginUser.id;
   }
 };
 </script>

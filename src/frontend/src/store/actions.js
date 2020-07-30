@@ -5,7 +5,8 @@ import {
   fetchQuestionRecommendation,
   createQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  fetchNotices
 } from "../api";
 
 export default {
@@ -62,6 +63,14 @@ export default {
     try {
       await deleteQuestion(questionId);
       commit();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_NOTICES({ commit }) {
+    try {
+      const { data } = await fetchNotices();
+      commit("SET_NOTICES", data);
     } catch (error) {
       console.log(error);
     }

@@ -1,20 +1,22 @@
 <template>
   <div>
     <v-app-bar color="#87BDD6" name="navigation">
-      <v-app-bar-nav-icon id="logo">icon</v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="$router.push('/')" id="logo"
+        >icon</v-app-bar-nav-icon
+      >
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text x-large><p class="navigation-menu">공고</p></v-btn>
-      <router-link :to="`/questions`"
-        ><v-btn text x-large
-          ><p class="navigation-menu">면접</p></v-btn
-        ></router-link
+      <v-btn @click="$router.push('/notice')" text x-large
+        ><p class="navigation-menu">공고</p></v-btn
+      >
+      <v-btn @click="$router.push('/questions')" text x-large
+        ><p class="navigation-menu">면접</p></v-btn
       >
       <template v-if="isLoggedIn">
         <v-avatar color="primary">image</v-avatar>
         <v-btn @click="logout">Logout</v-btn>
       </template>
-      <v-btn v-else large color="#E8E8E8" id="login-btn" @click="showLoginPage"
+      <v-btn @click="showLoginPage" color="#E8E8E8" id="login-btn" large v-else
         >Login with Github
       </v-btn>
     </v-app-bar>
