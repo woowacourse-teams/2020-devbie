@@ -20,4 +20,37 @@ function fetchQuestionRecommendation(questionId) {
   );
 }
 
-export { fetchQuestionList, fetchQuestionDetail, fetchQuestionRecommendation };
+function fetchAnswers(questionId) {
+  return axios.get(`${config.baseUrl}/api/answers?questionId=${questionId}`);
+}
+
+function updateAnswer(answerId, content) {
+  axios.patch(
+    `${config.baseUrl}/api/answers/${answerId}`,
+    {
+      content: content
+    },
+    {
+      headers: {
+        Authorization: "bearer " + localStorage.getItem("devbieToken")
+      }
+    }
+  );
+}
+
+function deleteAnswer(answerId) {
+  axios.delete(`${config.baseUrl}/api/answers/${answerId}`, {
+    headers: {
+      Authorization: "bearer " + localStorage.getItem("devbieToken")
+    }
+  });
+}
+
+export {
+  fetchQuestionList,
+  fetchQuestionDetail,
+  fetchQuestionRecommendation,
+  fetchAnswers,
+  updateAnswer,
+  deleteAnswer
+};
