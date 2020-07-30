@@ -30,9 +30,6 @@ export const store = new Vuex.Store({
     fetchedAnswers(state) {
       return state.answers;
     },
-    fetchedAnswer(state) {
-      return id => state.answers.find(answer => answer.id === id);
-    },
     fetchedNewCreatedQuestionId(state) {
       return state.questionId;
     }

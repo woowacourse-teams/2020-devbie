@@ -6,7 +6,7 @@
         <answer-item
           v-for="answer in fetchedAnswers"
           v-bind:key="answer.id"
-          v-bind:answer-id="answer.id"
+          v-bind:answer="answer"
         ></answer-item>
       </div>
     </div>

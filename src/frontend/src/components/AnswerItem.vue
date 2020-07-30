@@ -1,16 +1,12 @@
 <template>
   <div class="answer-item-box">
-    <div>작성자: {{ fetchedAnswer.userId }}</div>
+    <div>작성자: {{ answer.userId }}</div>
     <div class="answer-temp">
       <div class="answer-content">
         <p class="answer-content-value" v-if="!this.updateEditFlag">
-          {{ fetchedAnswer.content }}
+          {{ answer.content }}
         </p>
-        <v-textarea
-          outlined
-          v-else
-          v-model="fetchedAnswer.content"
-        ></v-textarea>
+        <v-textarea outlined v-else v-model="answer.content"></v-textarea>
       </div>
       <div>
         <v-btn v-if="this.updateEditFlag" @click="update">
@@ -26,14 +22,7 @@
 
 <script>
 export default {
-  computed: {
-    fetchedAnswer() {
-      return this.$store.getters.fetchedAnswer(this.answerId);
-    }
-  },
-  props: {
-    answerId: Number
-  },
+  props: ["answer"],
   data: function() {
     return {
       updateEditFlag: false
@@ -41,7 +30,7 @@ export default {
   },
   methods: {
     deleteBtnHandler: function() {
-      this.$store.dispatch("DELETE_ANSWER", this.answerId);
+      this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
     updateBtnHandler: function() {
       this.updateEditFlag = !this.updateEditFlag;

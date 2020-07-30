@@ -87,8 +87,9 @@ export default {
   },
   async DELETE_ANSWER({ commit }, answerId) {
     try {
-      await deleteAnswer(answerId);
-      commit("DELETE_ANSWER", answerId);
+      await deleteAnswer(answerId).then(() => {
+        commit("DELETE_ANSWER", answerId);
+      });
     } catch (error) {
       console.log(error);
     }
