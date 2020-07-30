@@ -1,4 +1,10 @@
 export default {
+  SET_LOGIN_USER(state, data) {
+    state.loginUser = data;
+  },
+  DELETE_LOGIN_USER(state) {
+    state.loginUser = {};
+  },
   SET_QUESTIONS(state, data) {
     state.questions = data;
   },
@@ -7,5 +13,8 @@ export default {
   },
   SET_QUESTION_RECOMMENDATION(state, data) {
     state.questionRecommendation = data;
+  },
+  SET_NEW_QUESTION_ID(state, data) {
+    state.questionId = data;
   }
 };

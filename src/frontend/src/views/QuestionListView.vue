@@ -2,6 +2,13 @@
   <div class="interview">
     <question-filters id="question-filters"></question-filters>
     <question-list id="question-list"></question-list>
+    <v-btn
+      v-if="isLoggedIn"
+      id="question-create"
+      @click="$router.push('/create-question')"
+      color="#DAEBEA"
+      >질문 올리기</v-btn
+    >
   </div>
 </template>
 
@@ -15,11 +22,17 @@ export default {
     QuestionFilters,
     QuestionList
   },
+  data() {
+    return {
+      isLoggedIn: false
+    };
+  },
   computed: {
-    ...mapGetters(["fetchedQuestions"])
+    ...mapGetters(["fetchedQuestions", "fetchedLoginUser"])
   },
   created() {
     this.$store.dispatch("FETCH_QUESTIONS");
+    this.isLoggedIn = !!this.fetchedLoginUser.id;
   }
 };
 </script>
@@ -27,7 +40,7 @@ export default {
 <style scoped>
 .interview {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   max-width: 95%;
   margin: 0 auto;
@@ -37,5 +50,12 @@ export default {
 }
 #question-list {
   flex-grow: 10;
+}
+#question-create {
+  flex-grow: 1;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
 }
 </style>
