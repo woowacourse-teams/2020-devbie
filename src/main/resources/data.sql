@@ -1,12 +1,12 @@
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog', 5000, 'https://cdn.vuetifyjs.com/images/cards/house.jpg', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog1', 5000, 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog2', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog3', 5000, 'test', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog4', 5000, 'https://cdn.vuetifyjs.com/images/cards/house.jpg', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog5', 5000, 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog6', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('bossdog7', 5000, 'test', 'BACKEND','hi!');
-INSERT INTO notice(name, salary, image, job_position, content) VALUES('yeji1', 6000, 'test', 'BACKEND','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog', 5000, 'https://cdn.vuetifyjs.com/images/cards/house.jpg', 'BACKEND', 'title', 'JOB', 'hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog1', 5000, 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog2', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog3', 5000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog4', 5000, 'https://cdn.vuetifyjs.com/images/cards/house.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog5', 5000, 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog6', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog7', 5000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji1', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
 
 
 INSERT INTO language(notice_id, languages) values (1, 'CPP');

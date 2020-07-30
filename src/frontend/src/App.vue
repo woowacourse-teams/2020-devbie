@@ -49,7 +49,7 @@ export default {
   font-family: "Do Hyeon", sans-serif;
 }
 .content {
-  min-height: calc(100vh - 30vh);
+  min-height: calc(100vh - 220px);
 }
 a {
   text-decoration: none;
