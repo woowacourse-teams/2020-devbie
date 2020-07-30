@@ -161,3 +161,10 @@ src/frontend/npm-v*
 build
 .idea
 .idea/**
+
+# log
+./logs/**
+*.gz
+
+# infra
+nohup.out
