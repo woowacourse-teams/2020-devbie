@@ -11,6 +11,8 @@ export const store = new Vuex.Store({
     questions: [],
     question: [],
     questionRecommendation: [],
+    answers: [],
+    questionId: []
     notices: []
   },
   getters: {
@@ -25,6 +27,9 @@ export const store = new Vuex.Store({
     },
     fetchedQuestionRecommendation(state) {
       return state.questionRecommendation;
+    },
+    fetchedAnswers(state) {
+      return state.answers;
     },
     fetchedNewCreatedQuestionId(state) {
       return state.questionId;

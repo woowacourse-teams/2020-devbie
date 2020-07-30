@@ -1,8 +1,14 @@
 import {
+  createQuestion,
+  deleteAnswer,
+  deleteQuestion,
+  fetchAnswers,
   fetchLoginUser,
-  fetchQuestionList,
   fetchQuestionDetail,
+  fetchQuestionList,
   fetchQuestionRecommendation,
+  updateAnswer,
+  updateQuestion
   createQuestion,
   updateQuestion,
   deleteQuestion,
@@ -63,6 +69,31 @@ export default {
     try {
       await deleteQuestion(questionId);
       commit();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_ANSWERS({ commit }, questionId) {
+    try {
+      const { data } = await fetchAnswers(questionId);
+      commit("SET_ANSWERS", data.answerResponses);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async UPDATE_ANSWER({ commit }, answerId, content) {
+    try {
+      await updateAnswer(answerId, content);
+      commit("SET_ANSWER", answerId, content);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async DELETE_ANSWER({ commit }, answerId) {
+    try {
+      await deleteAnswer(answerId).then(() => {
+        commit("DELETE_ANSWER", answerId);
+      });
     } catch (error) {
       console.log(error);
     }

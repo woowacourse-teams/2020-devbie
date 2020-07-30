@@ -13,20 +13,25 @@
         >
       </div>
     </div>
-    <question-detail
-      @fetchUserId="isAuthor"
-      id="question-detail"
-    ></question-detail>
+    <div class="question-box">
+      <question-detail
+        @fetchUserId="isAuthor"
+        id="question-detail"
+      ></question-detail>
+      <answer-list></answer-list>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import QuestionDetail from "../components/QuestionDetail";
+import AnswerList from "../components/AnswerList";
 
 export default {
   components: {
-    QuestionDetail
+    QuestionDetail,
+    AnswerList
   },
   data() {
     return {
@@ -66,7 +71,9 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 200px;
 }
+
 .menu-btn {
   margin-top: 30px;
 }
@@ -75,7 +82,9 @@ a {
   flex-direction: column;
   align-items: center;
 }
-#question-detail {
+.question-box {
+  display: flex;
+  flex-direction: column;
   flex-grow: 8;
 }
 </style>
