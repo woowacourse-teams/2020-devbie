@@ -13,10 +13,12 @@ import underdogs.devbie.user.domain.User;
 @ToString
 public class UserResponse {
 
+    private Long id;
     private String email;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
+            .id(user.getId())
             .email(user.getEmail())
             .build();
     }

@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="question-content">
-        <p>내용 : {{ fetchedQuestion.content }}</p>
+        <p>{{ fetchedQuestion.content }}</p>
       </div>
     </div>
   </div>
@@ -38,13 +38,13 @@ import { mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["fetchedQuestion"]),
-    ...mapGetters(["fetchedQuestionRecommendation"])
+    ...mapGetters(["fetchedQuestion", "fetchedQuestionRecommendation"])
   },
-  created() {
+  async created() {
     const questionId = this.$route.params.id;
-    this.$store.dispatch("FETCH_QUESTION", questionId);
-    this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
+    await this.$store.dispatch("FETCH_QUESTION", questionId);
+    await this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
+    await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
 };
 </script>

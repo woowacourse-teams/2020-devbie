@@ -4,12 +4,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface AnswerRecommendationRepository extends JpaRepository<AnswerRecommendation, Long> {
+public interface AnswerRecommendationRepository extends
+    JpaRepository<AnswerRecommendation, Long>,
+    RecommendationRepository<AnswerRecommendation> {
 
-    Long countByAnswerIdAndRecommendationType(Long answerId, RecommendationType recommendationType);
+    @Override
+    @Query("select a from AnswerRecommendation a "
+        + "where a.answerId = :answerId")
+    List<AnswerRecommendation> findByObjectId(Long answerId);
 
-    List<AnswerRecommendation> findByAnswerId(Long answerId);
-
-    Optional<AnswerRecommendation> findByAnswerIdAndUserId(Long answerId, Long userId);
+    @Override
+    @Query("select a from AnswerRecommendation a " 
+        + "where a.answerId = :answerId  "
+        + "and a.userId = :userId")
+    Optional<AnswerRecommendation> findByObjectAndUserId(Long answerId, Long userId);
 }

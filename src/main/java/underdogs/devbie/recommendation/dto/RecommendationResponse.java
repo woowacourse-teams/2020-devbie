@@ -6,46 +6,31 @@ import static underdogs.devbie.recommendation.domain.RecommendationType.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
 public class RecommendationResponse {
 
-    private Long recommendedCount;
-    private Long nonRecommendedCount;
+    private String recommendationType;
 
-    public static RecommendationResponse fromAnswerRecommendation(List<AnswerRecommendation> recommendations) {
-        Map<RecommendationType, Long> counting = recommendations
-            .stream()
-            .collect(Collectors.groupingBy(Recommendation::getRecommendationType, summingLong(x -> 1L)));
+    public static RecommendationResponse from(Optional<Recommendation> recommendation) {
+        String recommendationType = recommendation
+            .map(r -> r.getRecommendationType().name())
+            .orElse("NOT_EXIST");
 
-        return new RecommendationResponse(nullToZero(counting.get(RECOMMENDED)),
-            nullToZero(counting.get(NON_RECOMMENDED)));
-    }
-
-    public static RecommendationResponse fromQuestionRecommendation(List<QuestionRecommendation> recommendations) {
-        Map<RecommendationType, Long> counting = recommendations
-            .stream()
-            .collect(Collectors.groupingBy(Recommendation::getRecommendationType, summingLong(x -> 1L)));
-
-        return new RecommendationResponse(nullToZero(counting.get(RECOMMENDED)),
-            nullToZero(counting.get(NON_RECOMMENDED)));
-    }
-
-    private static long nullToZero(Long number) {
-        if (Objects.isNull(number)) {
-            return 0L;
-        }
-        return number;
+        return new RecommendationResponse(recommendationType);
     }
 }
