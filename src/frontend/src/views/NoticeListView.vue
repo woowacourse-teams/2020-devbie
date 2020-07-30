@@ -3,7 +3,7 @@
     <div class="filters">
       <notice-type></notice-type>
       <notice-filters></notice-filters>
-      <v-text-field :rules="rules" class="search-bar"></v-text-field>
+      <v-text-field class="search-bar"></v-text-field>
     </div>
     <notice-cards></notice-cards>
   </div>
@@ -12,7 +12,7 @@
 <script>
 import NoticeType from "../components/NoticeType";
 import NoticeFilters from "../components/NoticeFilters";
-import NoticeCards from "../components/NoticeCards";
+import NoticeCards from "../components/NoticeList";
 export default {
   components: {
     NoticeType,
