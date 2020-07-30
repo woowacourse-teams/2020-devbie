@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
     <transition name="page">
       <router-view class="content"></router-view>

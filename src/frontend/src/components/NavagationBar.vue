@@ -58,6 +58,8 @@ export default {
 .navigation-menu {
   font-size: 24px;
   color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
 #login-btn {
