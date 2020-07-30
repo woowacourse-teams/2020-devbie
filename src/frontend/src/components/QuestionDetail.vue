@@ -1,4 +1,3 @@
-<script src="../store/actions.js"></script>
 <template>
   <div class="question-detail">
     <div class="inner">
