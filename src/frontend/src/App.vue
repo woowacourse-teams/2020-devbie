@@ -2,7 +2,7 @@
   <v-app>
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
     <transition name="page">
-      <router-view></router-view>
+      <router-view class="content"></router-view>
     </transition>
     <footer-bar></footer-bar>
   </v-app>
@@ -55,5 +55,8 @@ export default {
 <style>
 #app {
   font-family: "Do Hyeon", sans-serif;
+}
+.content {
+  min-height: calc(100vh - 30vh);
 }
 </style>
