@@ -9,7 +9,9 @@
       <v-btn @click="$router.push('/notice')" text x-large
         ><p class="navigation-menu">공고</p></v-btn
       >
-      <v-btn text x-large><p class="navigation-menu">면접</p></v-btn>
+      <v-btn @click="$router.push('/questions')" text x-large
+        ><p class="navigation-menu">면접</p></v-btn
+      >
       <template v-if="isLoggedIn">
         <v-avatar color="primary">image</v-avatar>
         <v-btn @click="logout">Logout</v-btn>
