@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
     <transition name="page">
-      <router-view></router-view>
+      <router-view class="content"></router-view>
     </transition>
     <footer-bar></footer-bar>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -45,8 +45,11 @@ export default {
 </script>
 
 <style>
-body {
+#app {
   font-family: "Do Hyeon", sans-serif;
+}
+.content {
+  min-height: calc(100vh - 30vh);
 }
 a {
   text-decoration: none;

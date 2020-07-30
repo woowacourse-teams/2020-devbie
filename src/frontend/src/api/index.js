@@ -29,6 +29,10 @@ function fetchQuestionRecommendation(questionId) {
   );
 }
 
+function fetchNotices() {
+  return axios.get(`${config.baseUrl}/api/notices`);
+}
+
 function createQuestion(request) {
   const token = localStorage.getItem("devbieToken");
   return axios.post(`${config.baseUrl}/api/questions`, request, {
@@ -92,5 +96,6 @@ export {
   deleteAnswer,
   createQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  fetchNotices
 };

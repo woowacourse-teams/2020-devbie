@@ -9,6 +9,10 @@ import {
   fetchQuestionRecommendation,
   updateAnswer,
   updateQuestion
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+  fetchNotices
 } from "../api";
 
 export default {
@@ -90,6 +94,14 @@ export default {
       await deleteAnswer(answerId).then(() => {
         commit("DELETE_ANSWER", answerId);
       });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_NOTICES({ commit }) {
+    try {
+      const { data } = await fetchNotices();
+      commit("SET_NOTICES", data);
     } catch (error) {
       console.log(error);
     }

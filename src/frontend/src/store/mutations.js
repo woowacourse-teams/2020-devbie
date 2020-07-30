@@ -29,6 +29,9 @@ export default {
   DELETE_ANSWER(state, id) {
     state.answers = state.answers.filter(answer => answer.id !== id);
   },
+  SET_NOTICES(state, data) {
+    state.notices = data;
+  },
   SET_NEW_QUESTION_ID(state, data) {
     state.questionId = data;
   }

@@ -4,11 +4,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import underdogs.devbie.user.domain.User;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
 @Builder
+@Getter
+@ToString
 public class UserResponse {
 
     private Long id;
