@@ -42,31 +42,9 @@ export default {
   methods: {
     deleteBtnHandler: function() {
       this.$store.dispatch("DELETE_ANSWER", this.answerId);
-      console.log(this.$store.getters.fetchedAnswers);
     },
     updateBtnHandler: function() {
-      if (this.updateEditFlag === true) {
-        this.update();
-      }
       this.updateEditFlag = !this.updateEditFlag;
-    },
-    update: async function() {
-      // try {
-      //   axios.patch(
-      //     "/api/answers/" + this.id,
-      //     {
-      //       content: this.content
-      //     },
-      //     {
-      //       headers: {
-      //         Authorization: "Bearer " + localStorage.getItem("devbieToken")
-      //       }
-      //     }
-      //   );
-      //   this.updateEditFlag = !this.updateEditFlag;
-      // } catch (error) {
-      //   console.log(error);
-      // }
     }
   }
 };
