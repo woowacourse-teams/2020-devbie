@@ -85,6 +85,18 @@ function onQuestionRecommendation(questionId, request) {
   );
 }
 
+function deleteQuestionRecommendation(questionId) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.delete(
+    `${config.baseUrl}/api/recommendation-question?objectId=${questionId}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }
+  );
+}
+
 function fetchAnswers(questionId) {
   return axios.get(`${config.baseUrl}/api/answers?questionId=${questionId}`);
 }
@@ -118,6 +130,7 @@ export {
   fetchQuestionRecommendation,
   fetchMyQuestionRecommendation,
   onQuestionRecommendation,
+  deleteQuestionRecommendation,
   fetchAnswers,
   updateAnswer,
   deleteAnswer,

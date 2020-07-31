@@ -18,7 +18,6 @@ export const store = new Vuex.Store({
   },
   getters: {
     fetchedLoginUser(state) {
-      console.log(state.loginUser.id);
       return state.loginUser;
     },
     fetchedQuestions(state) {

@@ -9,6 +9,7 @@ import {
   fetchQuestionRecommendation,
   fetchMyQuestionRecommendation,
   onQuestionRecommendation,
+  deleteQuestionRecommendation,
   updateAnswer,
   updateQuestion,
   fetchNotices
@@ -61,6 +62,14 @@ export default {
   async ON_QUESTION_RECOMMENDATION({ commit }, payload) {
     try {
       await onQuestionRecommendation(payload.questionId, payload.request);
+      commit();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async DELETE_QUESTION_RECOMMENDATION({ commit }, questionId) {
+    try {
+      await deleteQuestionRecommendation(questionId);
       commit();
     } catch (error) {
       console.log(error);

@@ -69,6 +69,7 @@ export default {
   },
   methods: {
     async onQuestionRecommendation(priorType, newType) {
+      const questionId = this.questionId;
       if (
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
@@ -76,17 +77,22 @@ export default {
         const request = {
           recommendationType: newType
         };
-        const questionId = this.questionId;
         await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
           questionId,
           request
         });
         this.userRecommended = newType;
+      } else {
         await this.$store.dispatch(
-          "FETCH_QUESTION_RECOMMENDATION",
-          this.questionId
+          "DELETE_QUESTION_RECOMMENDATION",
+          questionId
         );
+        this.userRecommended = "NOT_EXIST";
       }
+      await this.$store.dispatch(
+        "FETCH_QUESTION_RECOMMENDATION",
+        this.questionId
+      );
     }
   },
   async created() {
