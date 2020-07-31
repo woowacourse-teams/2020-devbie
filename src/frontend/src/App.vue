@@ -1,10 +1,10 @@
 <template>
   <v-app id="app">
-      <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
-      <transition name="page">
-          <router-view class="content"></router-view>
-      </transition>
-      <footer-bar></footer-bar>
+    <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
+    <transition name="page">
+      <router-view class="content"></router-view>
+    </transition>
+    <footer-bar></footer-bar>
   </v-app>
 </template>
 
@@ -22,8 +22,8 @@ export default {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {
-          await this.$store.dispatch("FETCH_LOGIN_USER");
-          this.isLoggedIn = true;
+        await this.$store.dispatch("FETCH_LOGIN_USER");
+        this.isLoggedIn = true;
       } catch (error) {
         localStorage.removeItem("devbieToken");
         this.isLoggedIn = false;
@@ -32,9 +32,9 @@ export default {
   },
   methods: {
     logout() {
-        localStorage.removeItem("devbieToken");
-        this.$store.commit("DELETE_LOGIN_USER");
-        this.isLoggedIn = false;
+      localStorage.removeItem("devbieToken");
+      this.$store.commit("DELETE_LOGIN_USER");
+      this.isLoggedIn = false;
     }
   },
   components: {
@@ -45,25 +45,25 @@ export default {
 </script>
 
 <style>
-    #app {
-        font-family: "Do Hyeon", sans-serif;
-    }
+#app {
+  font-family: "Do Hyeon", sans-serif;
+}
 
-    .content {
-        min-height: calc(100vh - 220px);
-    }
+.content {
+  min-height: calc(100vh - 220px);
+}
 
-    a {
-        text-decoration: none;
-    }
+a {
+  text-decoration: none;
+}
 
-    .page-enter-active,
-    .page-leave-active {
-        transition: opacity 0.5s;
-    }
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
+}
 
-    .page-enter,
-    .page-leave-to {
-        opacity: 0;
-    }
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
 </style>

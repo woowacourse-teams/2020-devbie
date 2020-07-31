@@ -11,44 +11,44 @@ import QuestionEditView from "../views/QuestionEditView";
 Vue.use(VueRouter);
 
 export const router = new VueRouter({
-    mode: "history",
-    routes: [
-        {
-            path: "/",
-            name: "main",
-            component: MainPage
-        },
-        {
-            path: "/login",
-            name: "login",
-            component: LoginPage
-        },
-        {
-            path: "/notice",
-            name: "notice",
-            component: NoticeMainPage
-        },
-        {
-            path: "/questions",
-            name: "questions",
-            component: QuestionListView
-        },
-        {
-            path: "/questions/:id",
-            name: "question",
-            component: QuestionDetailView
-        },
-        {
-            path: "/create-question",
-            name: "create-question",
-            component: QuestionCreateView
-        },
-        {
-            path: "/edit-question/:id",
-            name: "edit-question",
-            component: QuestionEditView
-        }
-    ]
+  mode: "history",
+  routes: [
+    {
+      path: "/",
+      name: "main",
+      component: MainPage
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage
+    },
+    {
+      path: "/notice",
+      name: "notice",
+      component: NoticeMainPage
+    },
+    {
+      path: "/questions",
+      name: "questions",
+      component: QuestionListView
+    },
+    {
+      path: "/questions/:id",
+      name: "question",
+      component: QuestionDetailView
+    },
+    {
+      path: "/create-question",
+      name: "create-question",
+      component: QuestionCreateView
+    },
+    {
+      path: "/edit-question/:id",
+      name: "edit-question",
+      component: QuestionEditView
+    }
+  ]
 });
 
 export default router;

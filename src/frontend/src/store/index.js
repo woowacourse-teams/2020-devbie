@@ -6,38 +6,38 @@ import actions from "./actions";
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-    state: {
-        loginUser: [],
-        questions: [],
-        question: [],
-        questionRecommendation: [],
-        answers: [],
-        questionId: [],
-        notices: []
+  state: {
+    loginUser: [],
+    questions: [],
+    question: [],
+    questionRecommendation: [],
+    answers: [],
+    questionId: [],
+    notices: []
+  },
+  getters: {
+    fetchedLoginUser(state) {
+      return state.loginUser;
     },
-    getters: {
-        fetchedLoginUser(state) {
-            return state.loginUser;
-        },
-        fetchedQuestions(state) {
-            return state.questions;
-        },
-        fetchedQuestion(state) {
-            return state.question;
-        },
-        fetchedQuestionRecommendation(state) {
-            return state.questionRecommendation;
-        },
-        fetchedAnswers(state) {
-            return state.answers;
-        },
-        fetchedNewCreatedQuestionId(state) {
-            return state.questionId;
-        },
-        fetchedNotices(state) {
-            return state.notices;
-        }
+    fetchedQuestions(state) {
+      return state.questions;
     },
-    mutations,
-    actions
+    fetchedQuestion(state) {
+      return state.question;
+    },
+    fetchedQuestionRecommendation(state) {
+      return state.questionRecommendation;
+    },
+    fetchedAnswers(state) {
+      return state.answers;
+    },
+    fetchedNewCreatedQuestionId(state) {
+      return state.questionId;
+    },
+    fetchedNotices(state) {
+      return state.notices;
+    }
+  },
+  mutations,
+  actions
 });
