@@ -7,6 +7,8 @@ import {
   fetchQuestionDetail,
   fetchQuestionList,
   fetchQuestionRecommendation,
+  fetchMyQuestionRecommendation,
+  onQuestionRecommendation,
   updateAnswer,
   updateQuestion,
   fetchNotices
@@ -41,6 +43,25 @@ export default {
     try {
       const { data } = await fetchQuestionRecommendation(id);
       commit("SET_QUESTION_RECOMMENDATION", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_MY_QUESTION_RECOMMENDATION({ commit }, payload) {
+    try {
+      const { data } = await fetchMyQuestionRecommendation(
+        payload.questionId,
+        payload.userId
+      );
+      commit("SET_MY_QUESTION_RECOMMENDATION", data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async ON_QUESTION_RECOMMENDATION({ commit }, payload) {
+    try {
+      await onQuestionRecommendation(payload.questionId, payload.request);
+      commit();
     } catch (error) {
       console.log(error);
     }

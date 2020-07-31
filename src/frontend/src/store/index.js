@@ -11,12 +11,14 @@ export const store = new Vuex.Store({
     questions: [],
     question: [],
     questionRecommendation: [],
+    myQuestionRecommendation: [],
     answers: [],
     questionId: [],
     notices: []
   },
   getters: {
     fetchedLoginUser(state) {
+      console.log(state.loginUser.id);
       return state.loginUser;
     },
     fetchedQuestions(state) {
@@ -27,6 +29,9 @@ export const store = new Vuex.Store({
     },
     fetchedQuestionRecommendation(state) {
       return state.questionRecommendation;
+    },
+    fetchedMyQuestionRecommendation(state) {
+      return state.myQuestionRecommendation;
     },
     fetchedAnswers(state) {
       return state.answers;

@@ -50,7 +50,6 @@ export default {
       }
     },
     isAuthor(userId) {
-      console.log(userId, this.fetchedLoginUser.id);
       return (this.author = userId === this.fetchedLoginUser.id);
     }
   }

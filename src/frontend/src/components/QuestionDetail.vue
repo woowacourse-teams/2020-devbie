@@ -17,11 +17,27 @@
             {{ fetchedQuestion.visits }}
           </p>
           <p class="infos">
-            <i class="far fa-thumbs-up"></i>
+            <i
+              :class="{
+                'recommendation-clicked': userRecommended === 'RECOMMENDED'
+              }"
+              class="far fa-thumbs-up"
+              @click="
+                onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
+              "
+            ></i>
             {{ fetchedQuestionRecommendation.recommendedCount }}
           </p>
           <p class="infos">
-            <i class="far fa-thumbs-down"></i>
+            <i
+              :class="{
+                'recommendation-clicked': userRecommended === 'NON_RECOMMENDED'
+              }"
+              class="far fa-thumbs-down recommendation"
+              @click="
+                onQuestionRecommendation('RECOMMENDED', 'NON_RECOMMENDED')
+              "
+            ></i>
             {{ fetchedQuestionRecommendation.nonRecommendedCount }}
           </p>
         </div>
@@ -37,12 +53,52 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      questionId: this.$route.params.id,
+      userRecommended: ""
+    };
+  },
   computed: {
-    ...mapGetters(["fetchedQuestion", "fetchedQuestionRecommendation"])
+    ...mapGetters([
+      "fetchedLoginUser",
+      "fetchedQuestion",
+      "fetchedQuestionRecommendation",
+      "fetchedMyQuestionRecommendation"
+    ])
+  },
+  methods: {
+    async onQuestionRecommendation(priorType, newType) {
+      if (
+        this.userRecommended === "NOT_EXIST" ||
+        this.userRecommended === priorType
+      ) {
+        const request = {
+          recommendationType: newType
+        };
+        const questionId = this.questionId;
+        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
+          questionId,
+          request
+        });
+        this.userRecommended = newType;
+        await this.$store.dispatch(
+          "FETCH_QUESTION_RECOMMENDATION",
+          this.questionId
+        );
+      }
+    }
   },
   async created() {
-    const questionId = this.$route.params.id;
-    await this.$store.dispatch("FETCH_QUESTION", questionId);
+    const questionId = this.questionId;
+    const userId = this.fetchedLoginUser.id;
+
+    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
+    await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
+      questionId,
+      userId
+    });
+    this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
     await this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
     await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
@@ -67,6 +123,9 @@ export default {
 .question-info .infos {
   font-size: 16px;
   margin-right: 15px;
+}
+.recommendation-clicked {
+  color: #7ec699;
 }
 .question-info .infos:last-child {
   margin-right: 5px;

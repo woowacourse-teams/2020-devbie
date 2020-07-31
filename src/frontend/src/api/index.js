@@ -60,6 +60,31 @@ function deleteQuestion(questionId) {
   });
 }
 
+function fetchMyQuestionRecommendation(questionId, userId) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.get(
+    `${config.baseUrl}/api/recommendation-question?objectId=${questionId}&userId=${userId}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }
+  );
+}
+
+function onQuestionRecommendation(questionId, request) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.put(
+    `${config.baseUrl}/api/recommendation-question?objectId=${questionId}`,
+    request,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }
+  );
+}
+
 function fetchAnswers(questionId) {
   return axios.get(`${config.baseUrl}/api/answers?questionId=${questionId}`);
 }
@@ -91,6 +116,8 @@ export {
   fetchQuestionList,
   fetchQuestionDetail,
   fetchQuestionRecommendation,
+  fetchMyQuestionRecommendation,
+  onQuestionRecommendation,
   fetchAnswers,
   updateAnswer,
   deleteAnswer,

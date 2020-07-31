@@ -14,6 +14,9 @@ export default {
   SET_QUESTION_RECOMMENDATION(state, data) {
     state.questionRecommendation = data;
   },
+  SET_MY_QUESTION_RECOMMENDATION(state, data) {
+    state.myQuestionRecommendation = data;
+  },
   SET_ANSWERS(state, data) {
     state.answers = data;
   },
