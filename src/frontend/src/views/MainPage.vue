@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <h2>메인 페이지 입니다.</h2>
+    <h2>Hello 우테코</h2>
   </div>
 </template>
 
