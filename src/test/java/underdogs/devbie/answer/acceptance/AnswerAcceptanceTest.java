@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
@@ -52,88 +51,76 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> answer() {
         return Stream.of(
-            dynamicTest("답변 생성", () -> createAnswer()),
-            dynamicTest("전체 답변 조회", () -> readAllAnswer()),
-            dynamicTest("질문 id로 답변 조회", () -> readAnswerByQuestionId(QUESTION_ID)),
+            dynamicTest("답변 생성", () -> {
+                AnswerCreateRequest request = AnswerCreateRequest.of(QUESTION_ID, ACCEPTANCE_TEST_CONTENT);
+                post("/api/answers", OBJECT_MAPPER.writeValueAsString(request));
+            }),
+            dynamicTest("전체 답변 조회", () -> {
+                AnswerResponses answerResponses = get("/api/answers", AnswerResponses.class);
+
+                assertNotNull(answerResponses);
+                assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
+                AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
+                assertAll(
+                    () -> assertEquals(answerResponse.getId(), 1L),
+                    () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
+                    () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
+                );
+            }),
+            dynamicTest("질문 id로 답변 조회", () -> {
+                AnswerResponses answerResponses = get(String.format("/api/answers?questionId=%d", QUESTION_ID),
+                    AnswerResponses.class);
+
+                assertNotNull(answerResponses);
+                assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
+                AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
+                assertAll(
+                    () -> assertEquals(answerResponse.getId(), 1L),
+                    () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
+                    () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
+                );
+            }),
             dynamicTest("답변 수정", () -> {
-                AnswerResponse answerResponse = fetchFirstAnswer();
-                updateAnswer(answerResponse.getId());
+                AnswerResponse firstAnswer = fetchFirstAnswer();
+                Long answerId = firstAnswer.getId();
+
+                AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(CHANGED_CONTENT);
+
+                patch(String.format("/api/answers/%d", answerId),
+                    OBJECT_MAPPER.writeValueAsString(answerUpdateRequest));
+                AnswerResponse answerResponse = get(String.format("/api/answers/%d", answerId), AnswerResponse.class);
+                assertAll(
+                    () -> assertEquals(answerResponse.getId(), answerId),
+                    () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
+                    () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
+                );
             }),
             dynamicTest("수정한 답변 조회", () -> {
-                AnswerResponse answerResponse = fetchFirstAnswer();
-                readAnswer(answerResponse.getId());
+                AnswerResponse firstAnswer = fetchFirstAnswer();
+                Long answerId = firstAnswer.getId();
+
+                AnswerResponse answerResponse = get(String.format("/api/answers/%d", answerId), AnswerResponse.class);
+
+                assertAll(
+                    () -> assertEquals(answerResponse.getId(), 1L),
+                    () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
+                    () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
+                );
             }),
             dynamicTest("답변 삭제", () -> {
-                AnswerResponse answerResponse = fetchFirstAnswer();
-                deleteAnswer(answerResponse.getId());
+                AnswerResponse firstAnswer = fetchFirstAnswer();
+                Long answerId = firstAnswer.getId();
+
+                delete(String.format("/api/answers/%d", answerId));
+
+                AnswerResponses answers = get("/api/answers", AnswerResponses.class);
+                assertThat(answers.getAnswerResponses()).hasSize(0);
             })
         );
-    }
-
-    private void createAnswer() throws JsonProcessingException {
-        AnswerCreateRequest request = AnswerCreateRequest.of(QUESTION_ID, ACCEPTANCE_TEST_CONTENT);
-        post("/api/answers", OBJECT_MAPPER.writeValueAsString(request));
-    }
-
-    private AnswerResponses readAllAnswer() {
-        AnswerResponses answerResponses = get("/api/answers", AnswerResponses.class);
-
-        assertNotNull(answerResponses);
-        assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
-        AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
-        assertAll(
-            () -> assertEquals(answerResponse.getId(), 1L),
-            () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
-            () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
-        );
-        return answerResponses;
     }
 
     private AnswerResponse fetchFirstAnswer() {
         AnswerResponses answerResponses = get("/api/answers", AnswerResponses.class);
         return answerResponses.getAnswerResponses().get(0);
-    }
-
-    private void readAnswerByQuestionId(long questionId) {
-        AnswerResponses answerResponses = get(String.format("/api/answers?questionId=%d", questionId),
-            AnswerResponses.class);
-
-        assertNotNull(answerResponses);
-        assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
-        AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
-        assertAll(
-            () -> assertEquals(answerResponse.getId(), 1L),
-            () -> assertEquals(answerResponse.getQuestionId(), questionId),
-            () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
-        );
-    }
-
-    private void updateAnswer(Long answerId) throws JsonProcessingException {
-        AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(CHANGED_CONTENT);
-
-        patch(String.format("/api/answers/%d", answerId), OBJECT_MAPPER.writeValueAsString(answerUpdateRequest));
-        AnswerResponse answerResponse = get(String.format("/api/answers/%d", answerId), AnswerResponse.class);
-        assertAll(
-            () -> assertEquals(answerResponse.getId(), answerId),
-            () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
-            () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
-        );
-    }
-
-    private void readAnswer(Long answerId) {
-        AnswerResponse answerResponse = get(String.format("/api/answers/%d", answerId), AnswerResponse.class);
-
-        assertAll(
-            () -> assertEquals(answerResponse.getId(), 1L),
-            () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
-            () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
-        );
-    }
-
-    private void deleteAnswer(Long answerId) {
-        delete(String.format("/api/answers/%d", answerId));
-
-        AnswerResponses answers = get("/api/answers", AnswerResponses.class);
-        assertThat(answers.getAnswerResponses()).hasSize(0);
     }
 }

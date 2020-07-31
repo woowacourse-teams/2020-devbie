@@ -58,21 +58,59 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 createQuestion(TEST_QUESTION_TITLE);
                 createQuestion(TEST_TITLE_FOR_SEARCH);
             }),
-            dynamicTest("전체 질문 조회", this::readAllQuestions),
-            dynamicTest("특정 질문 검색", () -> searchQuestion(SEARCH_KEYWORD)),
+            dynamicTest("전체 질문 조회", () -> {
+                QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+                QuestionResponse firstQuestion = questions.getQuestions().get(0);
+                assertAll(
+                    () -> assertThat(questions.getQuestions()).hasSize(2),
+                    () -> assertThat(firstQuestion.getUserId()).isEqualTo(userId),
+                    () -> assertThat(firstQuestion.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
+                    () -> assertThat(firstQuestion.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+                );
+            }),
+            dynamicTest("특정 질문 검색", () -> {
+                QuestionResponses searchedQuestions = get("/api/questions?keyword=" + SEARCH_KEYWORD,
+                    QuestionResponses.class);
+                assertAll(
+                    () -> assertThat(searchedQuestions.getQuestions()).hasSize(1),
+                    () -> assertThat(searchedQuestions.getQuestions().get(0).getTitle()).isEqualTo(
+                        TEST_TITLE_FOR_SEARCH)
+                );
+            }),
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
-                readQuestion(firstQuestion);
+                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
+                    QuestionResponse.class);
+                assertAll(
+                    () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
+                    () -> assertThat(questionResponse.getVisits()).isEqualTo(1L),
+                    () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
+                    () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+                );
             }),
             dynamicTest("질문 수정", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
-                updateQuestion(firstQuestion);
+                QuestionUpdateRequest updateRequest = QuestionUpdateRequest.builder()
+                    .title("Changed Title")
+                    .content("Changed Content")
+                    .build();
+                String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
+                patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
+                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
+                    QuestionResponse.class);
+                assertAll(
+                    () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
+                    () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
+                    () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
+                    () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")
+                );
             }),
             dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
-                deleteQuestion(firstQuestion);
+                delete("/api/questions/" + firstQuestion.getQuestionId());
+                QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+                assertThat(questions.getQuestions()).hasSize(1);
             })
-
         );
 
     }
@@ -86,62 +124,8 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         post("/api/questions", inputJsonForCreate);
     }
 
-    private QuestionResponses readAllQuestions() {
-        QuestionResponses questions = get("/api/questions", QuestionResponses.class);
-        QuestionResponse firstQuestion = questions.getQuestions().get(0);
-        assertAll(
-            () -> assertThat(questions.getQuestions()).hasSize(2),
-            () -> assertThat(firstQuestion.getUserId()).isEqualTo(userId),
-            () -> assertThat(firstQuestion.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
-            () -> assertThat(firstQuestion.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
-        );
-        return questions;
-    }
-
     private QuestionResponse fetchFirstQuestion() {
         QuestionResponses questions = get("/api/questions", QuestionResponses.class);
         return questions.getQuestions().get(0);
-    }
-
-    private void searchQuestion(String keyword) {
-        QuestionResponses searchedQuestions = get("/api/questions?keyword=" + keyword, QuestionResponses.class);
-        assertAll(
-            () -> assertThat(searchedQuestions.getQuestions()).hasSize(1),
-            () -> assertThat(searchedQuestions.getQuestions().get(0).getTitle()).isEqualTo(TEST_TITLE_FOR_SEARCH)
-        );
-    }
-
-    private void readQuestion(QuestionResponse firstQuestion) {
-        QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
-            QuestionResponse.class);
-        assertAll(
-            () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
-            () -> assertThat(questionResponse.getVisits()).isEqualTo(1L),
-            () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
-            () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
-        );
-    }
-
-    private void updateQuestion(QuestionResponse firstQuestion) throws JsonProcessingException {
-        QuestionUpdateRequest updateRequest = QuestionUpdateRequest.builder()
-            .title("Changed Title")
-            .content("Changed Content")
-            .build();
-        String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
-        patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
-        QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
-            QuestionResponse.class);
-        assertAll(
-            () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
-            () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
-            () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
-            () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")
-        );
-    }
-
-    private void deleteQuestion(QuestionResponse firstQuestion) {
-        delete("/api/questions/" + firstQuestion.getQuestionId());
-        QuestionResponses questions = get("/api/questions", QuestionResponses.class);
-        assertThat(questions.getQuestions()).hasSize(1);
     }
 }

@@ -1,4 +1,4 @@
-package underdogs.devbie.recommendation;
+package underdogs.devbie.recommendation.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
