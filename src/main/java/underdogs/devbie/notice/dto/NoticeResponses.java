@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 
@@ -16,6 +17,7 @@ import underdogs.devbie.notice.domain.Notice;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
+@ToString
 public class NoticeResponses {
 
     private List<NoticeResponse> noticeResponses;
@@ -25,6 +27,8 @@ public class NoticeResponses {
             .map(notice -> NoticeResponse.builder()
                 .id(notice.getId())
                 .name(notice.getCompany().getName())
+                .title(notice.getTitle())
+                .noticeType(notice.getNoticeType())
                 .image(notice.getImage())
                 .languages(collectLanguageName(notice))
                 .jobPosition(notice.getJobPosition())

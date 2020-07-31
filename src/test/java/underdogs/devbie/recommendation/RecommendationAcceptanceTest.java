@@ -1,4 +1,4 @@
-package underdogs.devbie.recommendation.acceptance;
+package underdogs.devbie.recommendation;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
@@ -8,43 +8,17 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.acceptance.AcceptanceTest;
+import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
-@ExtendWith(MockitoExtension.class)
 public class RecommendationAcceptanceTest extends AcceptanceTest {
 
     public static final String RECOMMENDATION_TYPE_FORMAT = "{\"recommendationType\":\"%s\"}";
     public static final String RECOMMENDATION = "RECOMMENDED";
     public static final String NON_RECOMMENDATION = "NON_RECOMMENDED";
-    public static final String QUESTION_RECOMMENDATION_URI = "/api/recommendation-question/";
-
-    /*
-    Feature: 면접 질문 답변 추천 관리
-
-     Scenario: 면접 질문 답변의 추천을 관리한다.
-
-         When 1번 질문을 추천한다.
-         Then 1번 질문의 추천수가 +1 증가했다.
-
-         When 2번 질문을 비추천한다.
-         Then 2번 질문의 추천수가 -1 감소했다.
-
-         When 1번 질문을 비추천한다.
-         Then 1번 질문의 추천수가 -1 감소했다.
-
-         When 2번 질문을 추천한다.
-         Then 2번 질문의 추천수가 +1 증가했다.
-
-         When 1번 질문의 추천수를 삭제한다.
-         Then 1번 질문의 추천수가 0이 되었다.
-
-         When 2번 질문의 추천수를 삭제한다.
-         Then 2번 질문의 추천수가 0이 되었다.
-     */
+    public static final String QUESTION_RECOMMENDATION_URI = "/api/recommendation-question?objectId=";
 
     @DisplayName("추천 인수 테스트")
     @TestFactory
@@ -56,20 +30,39 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 Long question1Count = recommendationCount(1L).getRecommendedCount();
                 assertThat(question1Count).isEqualTo(1L);
             }),
+            dynamicTest("1번 질문 추천 갯수 확인", () -> {
+                String question1Type = searchRecommendation(1L, userId).getRecommendationType();
+                assertThat(question1Type).isEqualTo("RECOMMENDED");
+            }),
             dynamicTest("2번 질문 비추천", () -> {
                 nonRecommend(2L);
 
                 Long question2Count = recommendationCount(2L).getNonRecommendedCount();
                 assertThat(question2Count).isEqualTo(1L);
             }),
+            dynamicTest("2번 질문 추천 갯수 확인", () -> {
+                String question2Type = searchRecommendation(2L, userId).getRecommendationType();
+                assertThat(question2Type).isEqualTo("NON_RECOMMENDED");
+            }),
+            dynamicTest("3번 질문에 아무것도 눌려있지 않다", () -> {
+                String question3Type = searchRecommendation(3L, userId).getRecommendationType();
+                assertThat(question3Type).isEqualTo("NOT_EXIST");
+            }),
+            dynamicTest("1번 질문 다시 추천해도 추천수가 증가하지 않는다", () -> {
+                recommend(1L);
+
+                Long question1Count = recommendationCount(1L).getRecommendedCount();
+                assertThat(question1Count).isEqualTo(1L);
+            }),
+
             dynamicTest("1번 질문 비추천", () -> {
-                toggleToNonRecommended(1L);
+                nonRecommend(1L);
 
                 Long question1Count = recommendationCount(1L).getNonRecommendedCount();
                 assertThat(question1Count).isEqualTo(1L);
             }),
             dynamicTest("2번 질문 추천", () -> {
-                toggleToRecommended(2L);
+                recommend(2L);
 
                 Long question2Count = recommendationCount(2L).getRecommendedCount();
                 assertThat(question2Count).isEqualTo(1L);
@@ -85,33 +78,25 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 Long question2Count = recommendationCount(2L).getRecommendedCount();
                 assertThat(question2Count).isEqualTo(0L);
             })
-
         );
-        // 이미 추천하거나 비추한 질문에 대한 postFail이 존재하지 않아서 인수테스트에서 확인 x
     }
 
     void recommend(Long questionId) {
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
-        post(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
+        put(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
     }
 
     void nonRecommend(Long questionId) {
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, NON_RECOMMENDATION);
-        post(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
+        put(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
     }
 
-    RecommendationResponse recommendationCount(Long questionId) {
-        return get(QUESTION_RECOMMENDATION_URI + questionId, RecommendationResponse.class);
+    RecommendationResponse searchRecommendation(Long questionId, Long userId) {
+        return get(QUESTION_RECOMMENDATION_URI + questionId + "&userId=" + userId, RecommendationResponse.class);
     }
 
-    void toggleToRecommended(Long questionId) {
-        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
-        patch(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
-    }
-
-    void toggleToNonRecommended(Long questionId) {
-        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, NON_RECOMMENDATION);
-        patch(QUESTION_RECOMMENDATION_URI + questionId, inputJson);
+    RecommendationCountResponse recommendationCount(Long questionId) {
+        return get(QUESTION_RECOMMENDATION_URI + questionId, RecommendationCountResponse.class);
     }
 
     void deleteRecommendation(Long questionId) {

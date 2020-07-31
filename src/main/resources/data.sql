@@ -1,0 +1,22 @@
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog', 5000, 'https://cdn.vuetifyjs.com/images/cards/house.jpg', 'BACKEND', 'title', 'JOB', 'hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog1', 5000, 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog2', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog3', 5000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog4', 5000, 'https://cdn.vuetifyjs.com/images/cards/house.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog5', 5000, 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog6', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog7', 5000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji1', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+
+
+INSERT INTO language(notice_id, languages) values (1, 'CPP');
+INSERT INTO language(notice_id, languages) values (1, 'JAVA');
+INSERT INTO language(notice_id, languages) values (2, 'CPP');
+INSERT INTO language(notice_id, languages) values (3, 'CPP');
+INSERT INTO language(notice_id, languages) values (4, 'CPP');
+INSERT INTO language(notice_id, languages) values (5, 'CPP');
+INSERT INTO language(notice_id, languages) values (6, 'CPP');
+INSERT INTO language(notice_id, languages) values (7, 'CPP');
+INSERT INTO language(notice_id, languages) values (8, 'CPP');
+INSERT INTO question (id, user_id, title, content, visit_count) VALUES (1, 100, '가비지 컬렉션이란 무엇인가','GC를 어느정도 까지 알아야할까요?', 100);
+INSERT INTO question (id, user_id, title, content, visit_count) VALUES (2, 54, 'PUT과 PATCH의 차이','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 30);

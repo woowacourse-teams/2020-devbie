@@ -3,7 +3,7 @@ package underdogs.devbie.recommendation.controller;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static underdogs.devbie.recommendation.acceptance.RecommendationAcceptanceTest.*;
+import static underdogs.devbie.recommendation.RecommendationAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +20,8 @@ import underdogs.devbie.user.domain.User;
 @WebMvcTest(QuestionRecommendationController.class)
 class QuestionRecommendationControllerTest extends MvcTest {
 
+    private static final String URL = "/api/recommendation-question?objectId=1";
+
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
 
@@ -32,11 +34,11 @@ class QuestionRecommendationControllerTest extends MvcTest {
     @DisplayName("추천 수 조회")
     @Test
     void count() throws Exception {
-        getAction("/api/recommendation-question/1")
+        getAction(URL)
             .andExpect(status().isOk());
     }
 
-    @DisplayName("추천 생성")
+    @DisplayName("추천")
     @Test
     void createRecommendation() throws Exception {
         User user = User.builder()
@@ -51,26 +53,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
 
         String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
 
-        postAction("/api/recommendation-question/1", inputJson, "")
-            .andExpect(status().isCreated());
-    }
-
-    @DisplayName("추천 토글")
-    @Test
-    void toggleRecommendation() throws Exception {
-        User user = User.builder()
-            .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
-
-        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
-        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
-        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-
-        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
-
-        patchAction("/api/recommendation-question/1", inputJson, "")
+        putAction(URL, inputJson, "")
             .andExpect(status().isNoContent());
     }
 
@@ -87,7 +70,7 @@ class QuestionRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        deleteAction("/api/recommendation-question/1", "")
+        deleteAction(URL, "")
             .andExpect(status().isNoContent());
     }
 }

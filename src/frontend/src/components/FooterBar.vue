@@ -1,16 +1,16 @@
 <template>
   <div>
-    <v-footer dark padless absolute color="#87BDD6" id="footer">
-      <v-card flat tile color="#87BDD6" class="lighten-1 white--text">
-        <v-card-text>
-          <v-btn
-            v-for="icon in icons"
-            :key="icon"
-            class="mx-4 white--text"
-            icon
-          >
-            <v-icon size="24px">{{ icon }}</v-icon>
-          </v-btn>
+    <v-footer dark padless color="#87BDD6" id="footer">
+        <v-card flat tile color="#87BDD6" class="lighten-1 white--text">
+            <v-card-text>
+                <v-btn
+                        v-for="icon in icons"
+                        :key="icon"
+                        class="mx-4 white--text"
+                        icon
+                >
+                    <v-icon size="24px">{{ icon }}</v-icon>
+                </v-btn>
         </v-card-text>
 
         <v-card-text class="white--text pt-0">

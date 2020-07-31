@@ -10,8 +10,8 @@ import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;

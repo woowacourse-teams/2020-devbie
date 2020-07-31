@@ -20,6 +20,7 @@ import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
@@ -80,6 +81,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     private void createNotice() throws JsonProcessingException {
         NoticeCreateRequest noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
@@ -95,6 +98,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     private void updateNotice() throws JsonProcessingException {
         NoticeUpdateRequest noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("bossdog")
+            .title("우테코 모집")
+            .noticeType(NoticeType.EDUCATION)
             .salary(60_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName(), Language.CPP.getName()))
             .jobPosition(JobPosition.FRONTEND)
@@ -119,6 +124,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(noticeResponse.getId()).isEqualTo(1L),
             () -> assertThat(noticeResponse.getName()).isEqualTo("underdogs"),
+            () -> assertThat(noticeResponse.getTitle()).isEqualTo("언더독스 채용"),
+            () -> assertThat(noticeResponse.getNoticeType()).isEqualTo(NoticeType.JOB),
             () -> assertThat(noticeResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
             () -> assertThat(noticeResponse.getLanguages()).contains(Language.JAVA.getName(),
@@ -132,6 +139,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(result.getId()).isEqualTo(1L),
             () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
+            () -> assertThat(result.getTitle()).isEqualTo("우테코 모집"),
+            () -> assertThat(result.getNoticeType()).isEqualTo(NoticeType.EDUCATION),
             () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
             () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
