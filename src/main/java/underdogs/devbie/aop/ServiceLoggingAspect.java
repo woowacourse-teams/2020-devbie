@@ -24,29 +24,23 @@ public class ServiceLoggingAspect {
 
     @Around("loggerPointCut()")
     public Object methodLogger(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        Object result = proceedingJoinPoint.proceed();
+
+        String serviceName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+        String methodName = proceedingJoinPoint.getSignature().getName();
+
+        Map<String, Object> params = new HashMap<>();
+
         try {
-            Object result = proceedingJoinPoint.proceed();
-
-            String serviceName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
-            String methodName = proceedingJoinPoint.getSignature().getName();
-
-            Map<String, Object> params = new HashMap<>();
-
-            try {
-                params.put("service", serviceName);
-                params.put("method", methodName);
-                params.put("params", Arrays.toString(proceedingJoinPoint.getArgs()));
-                params.put("log_time", new Date());
-            } catch (Exception e) {
-                log.error("LoggerAspect error", e);
-            }
-            log.info("params : {}", params);
-
-            return result;
-
-        } catch (Throwable throwable) {
-            log.error("AOP proceeding error", throwable);
-            throw throwable;
+            params.put("service", serviceName);
+            params.put("method", methodName);
+            params.put("params", Arrays.toString(proceedingJoinPoint.getArgs()));
+            params.put("log_time", new Date());
+        } catch (Exception e) {
+            log.error("LoggingAspect error", e);
         }
+
+        log.info("params : {}", params);
+        return result;
     }
 }
