@@ -33,6 +33,9 @@ export default {
     state.answers = state.answers.filter(answer => answer.id !== id);
   },
   SET_ANSWER_RECOMMENDATION(state, payload) {
+    state.answerRecommendation = state.answerRecommendation.filter(
+      ar => ar.answerId !== payload.answerId
+    );
     state.answerRecommendation.push(payload);
   },
   SET_MY_ANSWER_RECOMMENDATION(state, payload) {

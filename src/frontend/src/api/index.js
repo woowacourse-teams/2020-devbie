@@ -97,6 +97,32 @@ function deleteQuestionRecommendation(questionId) {
   );
 }
 
+function onAnswerRecommendation(answerId, request) {
+  const token = localStorage.getItem("devbieToken");
+  console.log(answerId);
+  return axios.put(
+    `${config.baseUrl}/api/recommendation-answer?objectId=${answerId}`,
+    request,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }
+  );
+}
+
+function deleteAnswerRecommendation(answerId) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.delete(
+    `${config.baseUrl}/api/recommendation-answer?objectId=${answerId}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }
+  );
+}
+
 function fetchAnswers(questionId) {
   return axios.get(`${config.baseUrl}/api/answers?questionId=${questionId}`);
 }
@@ -154,6 +180,8 @@ export {
   deleteAnswer,
   fetchAnswerRecommendation,
   fetchMyAnswerRecommendation,
+  onAnswerRecommendation,
+  deleteAnswerRecommendation,
   createQuestion,
   updateQuestion,
   deleteQuestion,

@@ -100,10 +100,7 @@ export default {
         await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
         this.userRecommended = "NOT_EXIST";
       }
-      await this.$store.dispatch(
-        "FETCH_ANSWER_RECOMMENDATION",
-        this.questionId
-      );
+      await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
     },
     async fetchMyAnswerRecommendation(answerId, userId) {
       await this.$store.dispatch("FETCH_MY_ANSWER_RECOMMENDATION", {

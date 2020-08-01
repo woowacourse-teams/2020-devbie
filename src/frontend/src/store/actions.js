@@ -11,7 +11,9 @@ import {
   fetchMyQuestionRecommendation,
   fetchMyAnswerRecommendation,
   onQuestionRecommendation,
+  onAnswerRecommendation,
   deleteQuestionRecommendation,
+  deleteAnswerRecommendation,
   updateAnswer,
   updateQuestion,
   fetchNotices
@@ -123,6 +125,22 @@ export default {
       await deleteAnswer(answerId).then(() => {
         commit("DELETE_ANSWER", answerId);
       });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async ON_ANSWER_RECOMMENDATION({ commit }, payload) {
+    try {
+      await onAnswerRecommendation(payload.answerId, payload.request);
+      commit();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async DELETE_ANSWER_RECOMMENDATION({ commit }, answerId) {
+    try {
+      await deleteAnswerRecommendation(answerId);
+      commit();
     } catch (error) {
       console.log(error);
     }
