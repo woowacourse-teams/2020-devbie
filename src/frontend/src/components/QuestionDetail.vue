@@ -23,7 +23,7 @@
                   fetchedMyQuestionRecommendation.recommendationType &&
                   userRecommended === 'RECOMMENDED'
               }"
-              class="far fa-thumbs-up"
+              class="far fa-thumbs-up recommendation"
               @click="
                 onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
               "
@@ -145,6 +145,9 @@ export default {
 .question-info .infos {
   font-size: 16px;
   margin-right: 15px;
+}
+.recommendation:hover {
+  cursor: pointer;
 }
 .recommendation-clicked {
   color: #7ec699;

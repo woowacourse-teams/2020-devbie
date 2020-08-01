@@ -15,7 +15,7 @@
               :class="{
                 'recommendation-clicked': userRecommended === 'RECOMMENDED'
               }"
-              class="far fa-thumbs-up"
+              class="far fa-thumbs-up recommendation"
               @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
             ></i>
             {{
@@ -151,6 +151,9 @@ export default {
 }
 .recommendations .infos {
   margin: 0 10px 10px 0;
+}
+.recommendation:hover {
+  cursor: pointer;
 }
 .recommendation-clicked {
   color: #7ec699;
