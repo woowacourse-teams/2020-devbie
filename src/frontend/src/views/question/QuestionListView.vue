@@ -16,8 +16,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import QuestionFilters from "../components/QuestionFilters";
-import QuestionList from "../components/QuestionList";
+import QuestionFilters from "../../components/question/QuestionFilters";
+import QuestionList from "../../components/question/QuestionList";
 
 export default {
   components: {
