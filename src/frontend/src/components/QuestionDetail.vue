@@ -2,6 +2,10 @@
   <div class="question-detail">
     <div class="inner">
       <div class="question-header">
+        {{
+          fetchedMyQuestionRecommendation &&
+            fetchedMyQuestionRecommendation.recommendationType
+        }}
         <div class="question-title">
           <h1>
             Q{{ fetchedQuestion.questionId }}. {{ fetchedQuestion.title }}
@@ -19,7 +23,9 @@
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked': userRecommended === 'RECOMMENDED'
+                'recommendation-clicked':
+                  fetchedMyQuestionRecommendation.recommendationType &&
+                  userRecommended === 'RECOMMENDED'
               }"
               class="far fa-thumbs-up"
               @click="
@@ -93,19 +99,33 @@ export default {
         "FETCH_QUESTION_RECOMMENDATION",
         this.questionId
       );
+    },
+    async fetchMyQuestionRecommendation(questionId, userId) {
+      await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
+        questionId,
+        userId
+      });
+      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
+    }
+  },
+  watch: {
+    fetchedLoginUser: async function() {
+      await this.fetchMyQuestionRecommendation(
+        this.questionId,
+        this.fetchedLoginUser.id
+      );
     }
   },
   async created() {
-    const questionId = this.questionId;
-    const userId = this.fetchedLoginUser.id;
-
+    await this.fetchMyQuestionRecommendation(
+      this.questionId,
+      this.fetchedLoginUser.id
+    );
     await this.$store.dispatch("FETCH_QUESTION", this.questionId);
-    await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
-      questionId,
-      userId
-    });
-    this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-    await this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
+    await this.$store.dispatch(
+      "FETCH_QUESTION_RECOMMENDATION",
+      this.questionId
+    );
     await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
 };

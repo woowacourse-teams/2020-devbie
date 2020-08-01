@@ -18,7 +18,7 @@ export default {
       isLoggedIn: false
     };
   },
-  async mounted() {
+  async created() {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {
