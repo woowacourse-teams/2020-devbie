@@ -65,10 +65,14 @@ export default {
   computed: {
     ...mapGetters([
       "fetchedLoginUser",
-      "fetchedAnswerRecommendation"
+      "fetchedAnswerRecommendation",
+      "fetchedMyAnswerRecommendation"
     ]),
     answerRecommendation() {
       return this.fetchedAnswerRecommendation(this.answer.id);
+    },
+    myAnswerRecommendation() {
+      return this.fetchedMyAnswerRecommendation(this.answer.id);
     }
   },
   methods: {
@@ -100,11 +104,29 @@ export default {
         "FETCH_ANSWER_RECOMMENDATION",
         this.questionId
       );
+    },
+    async fetchMyAnswerRecommendation(answerId, userId) {
+      await this.$store.dispatch("FETCH_MY_ANSWER_RECOMMENDATION", {
+        answerId,
+        userId
+      });
+      this.userRecommended = this.myAnswerRecommendation.data.recommendationType;
+    }
+  },
+  watch: {
+    fetchedLoginUser: async function() {
+      await this.fetchMyAnswerRecommendation(
+        this.answer.id,
+        this.fetchedLoginUser.id
+      );
     }
   },
   async created() {
-    const answerId = this.answer.id;
-    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
+    await this.fetchMyAnswerRecommendation(
+      this.answer.id,
+      this.fetchedLoginUser.id
+    );
+    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
   }
 };
 </script>

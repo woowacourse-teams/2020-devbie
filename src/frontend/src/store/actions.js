@@ -9,6 +9,7 @@ import {
   fetchQuestionRecommendation,
   fetchAnswerRecommendation,
   fetchMyQuestionRecommendation,
+  fetchMyAnswerRecommendation,
   onQuestionRecommendation,
   deleteQuestionRecommendation,
   updateAnswer,
@@ -130,6 +131,18 @@ export default {
     try {
       const { data } = await fetchAnswerRecommendation(answerId);
       commit("SET_ANSWER_RECOMMENDATION", { answerId, data });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_MY_ANSWER_RECOMMENDATION({ commit }, payload) {
+    try {
+      const { data } = await fetchMyAnswerRecommendation(
+        payload.answerId,
+        payload.userId
+      );
+      const answerId = payload.answerId;
+      commit("SET_MY_ANSWER_RECOMMENDATION", { answerId, data });
     } catch (error) {
       console.log(error);
     }

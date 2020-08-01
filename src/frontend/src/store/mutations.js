@@ -35,6 +35,9 @@ export default {
   SET_ANSWER_RECOMMENDATION(state, payload) {
     state.answerRecommendation.push(payload);
   },
+  SET_MY_ANSWER_RECOMMENDATION(state, payload) {
+    state.myAnswerRecommendation.push(payload);
+  },
   SET_NOTICES(state, data) {
     state.notices = data;
   },

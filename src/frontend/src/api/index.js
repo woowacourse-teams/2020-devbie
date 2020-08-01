@@ -129,6 +129,18 @@ function fetchAnswerRecommendation(answerId) {
   );
 }
 
+function fetchMyAnswerRecommendation(answerId, userId) {
+  const token = localStorage.getItem("devbieToken");
+  return axios.get(
+    `${config.baseUrl}/api/recommendation-answer?objectId=${answerId}&userId=${userId}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    }
+  );
+}
+
 export {
   fetchLoginUser,
   fetchQuestionList,
@@ -141,6 +153,7 @@ export {
   updateAnswer,
   deleteAnswer,
   fetchAnswerRecommendation,
+  fetchMyAnswerRecommendation,
   createQuestion,
   updateQuestion,
   deleteQuestion,

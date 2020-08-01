@@ -2,10 +2,6 @@
   <div class="question-detail">
     <div class="inner">
       <div class="question-header">
-        {{
-          fetchedMyQuestionRecommendation &&
-            fetchedMyQuestionRecommendation.recommendationType
-        }}
         <div class="question-title">
           <h1>
             Q{{ fetchedQuestion.questionId }}. {{ fetchedQuestion.title }}
@@ -117,14 +113,14 @@ export default {
     }
   },
   async created() {
-    await this.fetchMyQuestionRecommendation(
-      this.questionId,
-      this.fetchedLoginUser.id
-    );
     await this.$store.dispatch("FETCH_QUESTION", this.questionId);
     await this.$store.dispatch(
       "FETCH_QUESTION_RECOMMENDATION",
       this.questionId
+    );
+    await this.fetchMyQuestionRecommendation(
+      this.questionId,
+      this.fetchedLoginUser.id
     );
     await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
