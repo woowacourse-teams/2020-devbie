@@ -32,6 +32,9 @@ export default {
   DELETE_ANSWER(state, id) {
     state.answers = state.answers.filter(answer => answer.id !== id);
   },
+  SET_ANSWER_RECOMMENDATION(state, payload) {
+    state.answerRecommendation.push(payload);
+  },
   SET_NOTICES(state, data) {
     state.notices = data;
   },

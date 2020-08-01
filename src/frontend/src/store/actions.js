@@ -7,6 +7,7 @@ import {
   fetchQuestionDetail,
   fetchQuestionList,
   fetchQuestionRecommendation,
+  fetchAnswerRecommendation,
   fetchMyQuestionRecommendation,
   onQuestionRecommendation,
   deleteQuestionRecommendation,
@@ -121,6 +122,14 @@ export default {
       await deleteAnswer(answerId).then(() => {
         commit("DELETE_ANSWER", answerId);
       });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async FETCH_ANSWER_RECOMMENDATION({ commit }, answerId) {
+    try {
+      const { data } = await fetchAnswerRecommendation(answerId);
+      commit("SET_ANSWER_RECOMMENDATION", { answerId, data });
     } catch (error) {
       console.log(error);
     }

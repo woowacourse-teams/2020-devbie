@@ -123,6 +123,12 @@ function deleteAnswer(answerId) {
   });
 }
 
+function fetchAnswerRecommendation(answerId) {
+  return axios.get(
+    `${config.baseUrl}/api/recommendation-answer?objectId=${answerId}`
+  );
+}
+
 export {
   fetchLoginUser,
   fetchQuestionList,
@@ -134,6 +140,7 @@ export {
   fetchAnswers,
   updateAnswer,
   deleteAnswer,
+  fetchAnswerRecommendation,
   createQuestion,
   updateQuestion,
   deleteQuestion,

@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
     questionRecommendation: [],
     myQuestionRecommendation: [],
     answers: [],
+    answerRecommendation: [],
     questionId: [],
     notices: []
   },
@@ -34,6 +35,11 @@ export const store = new Vuex.Store({
     },
     fetchedAnswers(state) {
       return state.answers;
+    },
+    fetchedAnswerRecommendation: state => answerId => {
+      return state.answerRecommendation.filter(
+        ar => ar.answerId === answerId
+      )[0];
     },
     fetchedNewCreatedQuestionId(state) {
       return state.questionId;
