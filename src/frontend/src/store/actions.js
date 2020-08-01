@@ -1,21 +1,9 @@
-import {
-  createQuestion,
-  deleteAnswer,
-  deleteQuestion,
-  fetchAnswers,
-  fetchLoginUser,
-  fetchQuestionDetail,
-  fetchQuestionList,
-  fetchQuestionRecommendation,
-  updateAnswer,
-  updateQuestion,
-  fetchNotices
-} from "../api";
+import { getAction, postAction, patchAction, deleteAction } from "../api";
 
 export default {
   async FETCH_LOGIN_USER({ commit }) {
     try {
-      const { data } = await fetchLoginUser();
+      const { data } = await getAction("/api/users");
       commit("SET_LOGIN_USER", data);
     } catch (error) {
       console.log(error);
@@ -23,23 +11,25 @@ export default {
   },
   async FETCH_QUESTIONS({ commit }) {
     try {
-      const { data } = await fetchQuestionList();
+      const { data } = await getAction("/api/questions");
       commit("SET_QUESTIONS", data);
     } catch (error) {
       console.log(error);
     }
   },
-  async FETCH_QUESTION({ commit }, id) {
+  async FETCH_QUESTION({ commit }, questionId) {
     try {
-      const { data } = await fetchQuestionDetail(id);
+      const { data } = await getAction(`/api/questions/${questionId}`);
       commit("SET_QUESTION", data);
     } catch (error) {
       console.log(error);
     }
   },
-  async FETCH_QUESTION_RECOMMENDATION({ commit }, id) {
+  async FETCH_QUESTION_RECOMMENDATION({ commit }, questionId) {
     try {
-      const { data } = await fetchQuestionRecommendation(id);
+      const { data } = await getAction(
+        `/api/recommendation-question?objectId=${questionId}`
+      );
       commit("SET_QUESTION_RECOMMENDATION", data);
     } catch (error) {
       console.log(error);
@@ -47,7 +37,7 @@ export default {
   },
   async CREATE_QUESTION({ commit }, request) {
     try {
-      const response = await createQuestion(request);
+      const response = await postAction("/api/questions", request);
       const id = response["headers"].location.split("/")[3];
       commit("SET_NEW_QUESTION_ID", id);
     } catch (error) {
@@ -56,7 +46,7 @@ export default {
   },
   async UPDATE_QUESTION({ commit }, payload) {
     try {
-      await updateQuestion(payload.request, payload.id);
+      await patchAction(`/api/questions/${payload.id}`, payload.request);
       commit();
     } catch (error) {
       console.log(error);
@@ -64,7 +54,7 @@ export default {
   },
   async DELETE_QUESTION({ commit }, questionId) {
     try {
-      await deleteQuestion(questionId);
+      await deleteAction(`/api/questions/${questionId}`);
       commit();
     } catch (error) {
       console.log(error);
@@ -72,23 +62,15 @@ export default {
   },
   async FETCH_ANSWERS({ commit }, questionId) {
     try {
-      const { data } = await fetchAnswers(questionId);
+      const { data } = await getAction(`/api/answers?questionId=${questionId}`);
       commit("SET_ANSWERS", data.answerResponses);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  async UPDATE_ANSWER({ commit }, answerId, content) {
-    try {
-      await updateAnswer(answerId, content);
-      commit("SET_ANSWER", answerId, content);
     } catch (error) {
       console.log(error);
     }
   },
   async DELETE_ANSWER({ commit }, answerId) {
     try {
-      await deleteAnswer(answerId).then(() => {
+      await deleteAction(`/api/answers/${answerId}`).then(() => {
         commit("DELETE_ANSWER", answerId);
       });
     } catch (error) {
@@ -97,7 +79,7 @@ export default {
   },
   async FETCH_NOTICES({ commit }) {
     try {
-      const { data } = await fetchNotices();
+      const { data } = await getAction(`/api/notices`);
       commit("SET_NOTICES", data);
     } catch (error) {
       console.log(error);
