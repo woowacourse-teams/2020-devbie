@@ -64,7 +64,7 @@ a {
   display: flex;
   justify-content: center;
   margin: 20px 0 auto;
-  max-width: 90%;
+  max-width: 95%;
 }
 .left-menu {
   flex-grow: 1;
