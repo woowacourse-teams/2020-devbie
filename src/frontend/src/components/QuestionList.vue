@@ -43,7 +43,7 @@ export default {
   padding: 10px;
   display: flex;
   align-items: center;
-  width: 90%;
+  width: 95%;
 }
 .visits {
   font-size: 14px;

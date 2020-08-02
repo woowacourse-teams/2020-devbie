@@ -99,7 +99,6 @@ function deleteQuestionRecommendation(questionId) {
 
 function onAnswerRecommendation(answerId, request) {
   const token = localStorage.getItem("devbieToken");
-  console.log(answerId);
   return axios.put(
     `${config.baseUrl}/api/recommendation-answer?objectId=${answerId}`,
     request,

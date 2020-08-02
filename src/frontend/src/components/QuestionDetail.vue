@@ -33,7 +33,9 @@
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked': userRecommended === 'NON_RECOMMENDED'
+                'recommendation-clicked':
+                  fetchedMyQuestionRecommendation.recommendationType &&
+                  userRecommended === 'NON_RECOMMENDED'
               }"
               class="far fa-thumbs-down recommendation"
               @click="
@@ -76,20 +78,28 @@ export default {
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        const request = {
-          recommendationType: newType
-        };
-        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
-          questionId,
-          request
-        });
-        this.userRecommended = newType;
+        try {
+          const request = {
+            recommendationType: newType
+          };
+          await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
+            questionId,
+            request
+          });
+          this.userRecommended = newType;
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        await this.$store.dispatch(
-          "DELETE_QUESTION_RECOMMENDATION",
-          questionId
-        );
-        this.userRecommended = "NOT_EXIST";
+        try {
+          await this.$store.dispatch(
+            "DELETE_QUESTION_RECOMMENDATION",
+            questionId
+          );
+          this.userRecommended = "NOT_EXIST";
+        } catch (error) {
+          console.log(error);
+        }
       }
       await this.$store.dispatch(
         "FETCH_QUESTION_RECOMMENDATION",
@@ -118,10 +128,12 @@ export default {
       "FETCH_QUESTION_RECOMMENDATION",
       this.questionId
     );
-    await this.fetchMyQuestionRecommendation(
-      this.questionId,
-      this.fetchedLoginUser.id
-    );
+    if (this.fetchedLoginUser.id) {
+      await this.fetchMyQuestionRecommendation(
+        this.questionId,
+        this.fetchedLoginUser.id
+      );
+    }
     await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
 };
@@ -132,7 +144,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 20px;
 }
 .question-header {
   padding: 18px;
@@ -157,11 +168,13 @@ export default {
 }
 .question-content {
   padding: 30px 50px;
+  margin-bottom: 50px;
 }
 .inner {
-  width: 90%;
+  width: 95%;
   box-sizing: border-box;
   padding: 10px 0 40px 0;
   border-bottom: solid 1px #e8e8e8;
+  height: 400px;
 }
 </style>

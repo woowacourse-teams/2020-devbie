@@ -1,7 +1,9 @@
 <template>
   <div class="answer-box">
     <div class="inner">
-      <p id="count-of-answer">{{ "답변 수 : " + fetchedAnswers.length }}</p>
+      <div id="count-of-answer">
+        {{ "답변 수 : " + fetchedAnswers.length }}
+      </div>
       <div class="answer-list">
         <answer-item
           v-for="answer in fetchedAnswers"
@@ -36,11 +38,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 20px;
   max-width: 100%;
 }
 #count-of-answer {
-  padding: 18px;
+  padding: 11px;
+  border-radius: 15px;
+  background-color: #daebea;
+  display: inline-block;
 }
 .answer-list {
   list-style: none;

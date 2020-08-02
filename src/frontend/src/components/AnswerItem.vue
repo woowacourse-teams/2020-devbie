@@ -1,6 +1,6 @@
 <template>
   <div class="answer-item-box">
-    <div>작성자: {{ answer.userId }}</div>
+    <div class="author-name">작성자: {{ answer.userId }}</div>
     <div class="answer-temp">
       <div class="answer-content">
         <p class="answer-content-value" v-if="!this.updateEditFlag">
@@ -8,12 +8,14 @@
         </p>
         <v-textarea outlined v-else v-model="answer.content"></v-textarea>
       </div>
-      <div class="answer-infos">
+      <div :class="{ 'vertical-center': !author }" class="answer-infos">
         <div class="recommendations">
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked': userRecommended === 'RECOMMENDED'
+                'recommendation-clicked':
+                  fetchedMyAnswerRecommendation.recommendationType &&
+                  userRecommended === 'RECOMMENDED'
               }"
               class="far fa-thumbs-up recommendation"
               @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
@@ -25,7 +27,9 @@
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked': userRecommended === 'NON_RECOMMENDED'
+                'recommendation-clicked':
+                  fetchedMyAnswerRecommendation.recommendationType &&
+                  userRecommended === 'NON_RECOMMENDED'
               }"
               class="far fa-thumbs-down recommendation"
               @click="onAnswerRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
@@ -36,7 +40,7 @@
             }}
           </p>
         </div>
-        <div>
+        <div v-if="author">
           <v-btn class="update-btn" v-if="this.updateEditFlag" @click="update">
             수정 확인
           </v-btn>
@@ -47,7 +51,6 @@
         </div>
       </div>
     </div>
-    <hr class="answer-line" />
   </div>
 </template>
 
@@ -58,6 +61,7 @@ export default {
   props: ["answer"],
   data: function() {
     return {
+      author: false,
       userRecommended: "",
       updateEditFlag: false
     };
@@ -76,6 +80,9 @@ export default {
     }
   },
   methods: {
+    isAuthor() {
+      return (this.author = this.answer.userId === this.fetchedLoginUser.id);
+    },
     deleteBtnHandler() {
       this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
@@ -119,16 +126,22 @@ export default {
     }
   },
   async created() {
-    await this.fetchMyAnswerRecommendation(
-      this.answer.id,
-      this.fetchedLoginUser.id
-    );
+    if (this.fetchedLoginUser.id) {
+      await this.fetchMyAnswerRecommendation(
+        this.answer.id,
+        this.fetchedLoginUser.id
+      );
+    }
     await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
   }
 };
 </script>
 
 <style scoped>
+.author-name {
+  margin-top: 15px;
+  color: #7ec699;
+}
 .answer-item-box {
   display: flex;
   flex-direction: column;
@@ -140,6 +153,7 @@ export default {
 .answer-temp {
   display: flex;
   justify-content: space-between;
+  border-bottom: solid #e8e8e8 1px;
 }
 .recommendations {
   display: flex;
@@ -163,5 +177,10 @@ export default {
 }
 .answer-content-value {
   max-width: 1100px;
+}
+.vertical-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

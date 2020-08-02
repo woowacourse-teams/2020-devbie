@@ -63,7 +63,8 @@ a {
 .detail {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px 0 auto;
+  max-width: 90%;
 }
 .left-menu {
   flex-grow: 1;
@@ -71,9 +72,11 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 200px;
+  min-width: 220px;
 }
-
+#question-detail {
+  margin-bottom: 60px;
+}
 .menu-btn {
   margin-top: 30px;
 }
