@@ -4,11 +4,11 @@
       <question-filters id="question-filters"></question-filters>
       <question-list id="question-list"></question-list>
       <v-btn
-              v-if="isLoggedIn"
-              id="question-create"
-              @click="$router.push('/create-question')"
-              color="#DAEBEA"
-      >질문 올리기
+        v-if="isLoggedIn"
+        id="question-create"
+        @click="$router.push('/create-question')"
+        color="#DAEBEA"
+        >질문 올리기
       </v-btn>
     </div>
   </div>
@@ -40,32 +40,32 @@ export default {
 </script>
 
 <style scoped>
-  .interview {
-    display: flex;
-    justify-content: center;
-    margin: 0;
-  }
+.interview {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
 
-  .inner {
-    width: 90%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
+.inner {
+  width: 90%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 
-  #question-filters {
-    flex-grow: 1;
-  }
+#question-filters {
+  flex-grow: 1;
+}
 
-  #question-list {
-    flex-grow: 10;
-  }
+#question-list {
+  flex-grow: 10;
+}
 
-  #question-create {
-    flex-grow: 1;
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    text-decoration: none;
-  }
+#question-create {
+  flex-grow: 1;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
 </style>

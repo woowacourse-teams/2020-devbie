@@ -10,40 +10,40 @@
 </template>
 
 <script>
-  import NoticeType from "../components/NoticeType";
-  import NoticeFilters from "../components/NoticeFilters";
-  import NoticeCards from "../components/NoticeList";
+import NoticeType from "../components/NoticeType";
+import NoticeFilters from "../components/NoticeFilters";
+import NoticeCards from "../components/NoticeList";
 
-  export default {
-    components: {
-      NoticeType,
-      NoticeFilters,
-      NoticeCards
-    },
-    data() {
-      return {};
-    }
-  };
+export default {
+  components: {
+    NoticeType,
+    NoticeFilters,
+    NoticeCards
+  },
+  data() {
+    return {};
+  }
+};
 </script>
 
 <style scoped>
-  .filters {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    margin-bottom: 50px;
-  }
+.filters {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  margin-bottom: 50px;
+}
 
-  .filters > * {
-    margin-right: 120px;
-  }
+.filters > * {
+  margin-right: 120px;
+}
 
-  .search-bar {
-    margin: 0;
-    padding: 0;
-  }
+.search-bar {
+  margin: 0;
+  padding: 0;
+}
 
-  .search-bar .input {
-    padding: 0;
-  }
+.search-bar .input {
+  padding: 0;
+}
 </style>

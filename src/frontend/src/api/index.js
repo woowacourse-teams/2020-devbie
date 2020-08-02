@@ -66,15 +66,15 @@ function fetchAnswers(questionId) {
 
 function updateAnswer(answerId, content) {
   axios.patch(
-      `${config.baseUrl}/api/answers/${answerId}`,
-      {
-        content: content
-      },
-      {
-        headers: {
-          Authorization: "bearer " + localStorage.getItem("devbieToken")
-        }
+    `${config.baseUrl}/api/answers/${answerId}`,
+    {
+      content: content
+    },
+    {
+      headers: {
+        Authorization: "bearer " + localStorage.getItem("devbieToken")
       }
+    }
   );
 }
 

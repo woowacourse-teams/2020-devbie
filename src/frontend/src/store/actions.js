@@ -9,7 +9,8 @@ import {
   fetchQuestionRecommendation,
   updateAnswer,
   updateQuestion,
-  fetchNotices
+  fetchNotices,
+  fetchAnswers
 } from "../api";
 
 export default {
@@ -62,7 +63,7 @@ export default {
       console.log(error);
     }
   },
-  async DELETE_QUESTION({commit}, questionId) {
+  async DELETE_QUESTION({ commit }, questionId) {
     try {
       await deleteQuestion(questionId);
       commit();
@@ -70,15 +71,15 @@ export default {
       console.log(error);
     }
   },
-  async FETCH_ANSWERS({commit}, questionId) {
+  async FETCH_ANSWERS({ commit }, questionId) {
     try {
-      const {data} = await fetchAnswers(questionId);
+      const { data } = await fetchAnswers(questionId);
       commit("SET_ANSWERS", data.answerResponses);
     } catch (error) {
       console.log(error);
     }
   },
-  async UPDATE_ANSWER({commit}, answerId, content) {
+  async UPDATE_ANSWER({ commit }, answerId, content) {
     try {
       await updateAnswer(answerId, content);
       commit("SET_ANSWER", answerId, content);
@@ -86,7 +87,7 @@ export default {
       console.log(error);
     }
   },
-  async DELETE_ANSWER({commit}, answerId) {
+  async DELETE_ANSWER({ commit }, answerId) {
     try {
       await deleteAnswer(answerId).then(() => {
         commit("DELETE_ANSWER", answerId);
@@ -95,17 +96,17 @@ export default {
       console.log(error);
     }
   },
-  async FETCH_NOTICES({commit}) {
+  async FETCH_NOTICES({ commit }) {
     try {
-      const {data} = await fetchNotices();
+      const { data } = await fetchNotices();
       commit("SET_NOTICES", data);
     } catch (error) {
       console.log(error);
     }
   },
-  async FETCH_NOTICE({commit}, id) {
+  async FETCH_NOTICE({ commit }, id) {
     try {
-      const {data} = await fetchNoticeDetail(id);
+      const { data } = await fetchNoticeDetail(id);
       console.log(data);
       commit("SET_NOTICE", data);
     } catch (error) {

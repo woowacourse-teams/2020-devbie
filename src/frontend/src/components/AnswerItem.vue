@@ -16,46 +16,46 @@
         <v-btn @click="deleteBtnHandler">삭제</v-btn>
       </div>
     </div>
-    <hr class="answer-line"/>
+    <hr class="answer-line" />
   </div>
 </template>
 
 <script>
-  export default {
-    props: ["answer"],
-    data: function () {
-      return {
-        updateEditFlag: false
-      };
+export default {
+  props: ["answer"],
+  data: function() {
+    return {
+      updateEditFlag: false
+    };
+  },
+  methods: {
+    deleteBtnHandler: function() {
+      this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
-    methods: {
-      deleteBtnHandler: function () {
-        this.$store.dispatch("DELETE_ANSWER", this.answer.id);
-      },
-      updateBtnHandler: function () {
-        this.updateEditFlag = !this.updateEditFlag;
-      }
+    updateBtnHandler: function() {
+      this.updateEditFlag = !this.updateEditFlag;
     }
-  };
+  }
+};
 </script>
 
 <style scoped>
-  .answer-item-box {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-  }
+.answer-item-box {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
 
-  .answer-content {
-    padding: 30px 50px;
-  }
+.answer-content {
+  padding: 30px 50px;
+}
 
-  .answer-temp {
-    display: flex;
-    justify-content: space-between;
-  }
+.answer-temp {
+  display: flex;
+  justify-content: space-between;
+}
 
-  .answer-content-value {
-    max-width: 1100px;
-  }
+.answer-content-value {
+  max-width: 1100px;
+}
 </style>
