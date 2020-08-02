@@ -95,12 +95,9 @@ export default {
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        const request = {
-          recommendationType: newType
-        };
         await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
           answerId,
-          request
+          recommendationType: newType
         });
         this.userRecommended = newType;
       } else {

@@ -72,11 +72,13 @@ function fetchMyQuestionRecommendation(questionId, userId) {
   );
 }
 
-function onQuestionRecommendation(questionId, request) {
+function onQuestionRecommendation(questionId, recommendationType) {
   const token = localStorage.getItem("devbieToken");
   return axios.put(
     `${config.baseUrl}/api/recommendation-question?objectId=${questionId}`,
-    request,
+    {
+      recommendationType: recommendationType
+    },
     {
       headers: {
         Authorization: `bearer ${token}`
@@ -97,11 +99,13 @@ function deleteQuestionRecommendation(questionId) {
   );
 }
 
-function onAnswerRecommendation(answerId, request) {
+function onAnswerRecommendation(answerId, recommendationType) {
   const token = localStorage.getItem("devbieToken");
   return axios.put(
     `${config.baseUrl}/api/recommendation-answer?objectId=${answerId}`,
-    request,
+    {
+      recommendationType: recommendationType
+    },
     {
       headers: {
         Authorization: `bearer ${token}`

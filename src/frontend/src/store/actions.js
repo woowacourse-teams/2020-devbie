@@ -65,7 +65,10 @@ export default {
   },
   async ON_QUESTION_RECOMMENDATION({ commit }, payload) {
     try {
-      await onQuestionRecommendation(payload.questionId, payload.request);
+      await onQuestionRecommendation(
+        payload.questionId,
+        payload.recommendationType
+      );
       commit();
     } catch (error) {
       console.log(error);
@@ -131,7 +134,10 @@ export default {
   },
   async ON_ANSWER_RECOMMENDATION({ commit }, payload) {
     try {
-      await onAnswerRecommendation(payload.answerId, payload.request);
+      await onAnswerRecommendation(
+        payload.answerId,
+        payload.recommendationType
+      );
       commit();
     } catch (error) {
       console.log(error);
