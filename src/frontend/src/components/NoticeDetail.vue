@@ -22,21 +22,23 @@
               item-height="64"
             >
               <template v-slot="{ item }">
-                <v-list-item :key="item">
+                <v-list-item :key="item.id">
                   <v-list-item-action>
                     <v-btn fab small depressed color="primary">
-                      {{ item }}
+                      {{ item.id }}
                     </v-btn>
                   </v-list-item-action>
 
                   <v-list-item-content>
                     <v-list-item-title>
-                      채용 공고
+                      {{ item.name }} 채용 공고 {{ item.title }}
                     </v-list-item-title>
                   </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-icon small>mdi-open-in-new</v-icon>
+                    <v-icon small @click="$router.push(`/notices/${item.id}`)"
+                      >mdi-open-in-new</v-icon
+                    >
                   </v-list-item-action>
                 </v-list-item>
 
@@ -104,6 +106,7 @@
         </div>
       </div>
     </div>
+    {{ fetchedNotices.noticeResponses }}
   </div>
 </template>
 
@@ -115,9 +118,10 @@ export default {
     benched: 0
   }),
   computed: {
+    ...mapGetters(["fetchedNotices"]),
     ...mapGetters(["fetchedNotice"]),
     items() {
-      return Array.from({ length: this.length }, (k, v) => v + 1);
+      return this.fetchedNotices.noticeResponses;
     },
     length() {
       return 10;
@@ -125,6 +129,7 @@ export default {
   },
   created() {
     const noticeId = this.$route.params.id;
+    this.$store.dispatch("FETCH_NOTICES");
     this.$store.dispatch("FETCH_NOTICE", noticeId);
   }
 };
