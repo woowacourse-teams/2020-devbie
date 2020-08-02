@@ -14,7 +14,7 @@
             <i
               :class="{
                 'recommendation-clicked':
-                  fetchedMyAnswerRecommendation.recommendationType &&
+                  fetchedMyAnswerRecommendation &&
                   userRecommended === 'RECOMMENDED'
               }"
               class="far fa-thumbs-up recommendation"
@@ -28,7 +28,7 @@
             <i
               :class="{
                 'recommendation-clicked':
-                  fetchedMyAnswerRecommendation.recommendationType &&
+                  fetchedMyAnswerRecommendation &&
                   userRecommended === 'NON_RECOMMENDED'
               }"
               class="far fa-thumbs-down recommendation"
