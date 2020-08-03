@@ -2,8 +2,8 @@
   <div>
     <v-app-bar color="#87BDD6" name="navigation">
       <v-app-bar-nav-icon @click="$router.push('/')" id="logo"
-        >icon</v-app-bar-nav-icon
-      >
+        >icon
+      </v-app-bar-nav-icon>
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn @click="$router.push('/notice')" text x-large

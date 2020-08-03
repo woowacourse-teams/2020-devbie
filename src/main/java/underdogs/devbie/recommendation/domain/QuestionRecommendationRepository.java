@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface QuestionRecommendationRepository extends
     JpaRepository<QuestionRecommendation, Long>,
@@ -13,11 +14,12 @@ public interface QuestionRecommendationRepository extends
     @Override
     @Query("select q from QuestionRecommendation q "
         + "where q.questionId = :questionId")
-    List<QuestionRecommendation> findByObjectId(Long questionId);
+    List<QuestionRecommendation> findByObjectId(@Param("questionId") Long questionId);
 
     @Override
     @Query("select q from QuestionRecommendation q "
         + "where q.questionId = :questionId  "
         + "and q.userId = :userId")
-    Optional<QuestionRecommendation> findByObjectAndUserId(Long questionId, Long userId);
+    Optional<QuestionRecommendation> findByObjectAndUserId(@Param("questionId") Long questionId,
+        @Param("userId") Long userId);
 }

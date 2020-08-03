@@ -3,7 +3,7 @@ package underdogs.devbie.recommendation.controller;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static underdogs.devbie.recommendation.RecommendationAcceptanceTest.*;
+import static underdogs.devbie.recommendation.acceptance.RecommendationAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.DisplayName;

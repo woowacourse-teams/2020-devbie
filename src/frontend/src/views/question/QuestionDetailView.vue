@@ -1,16 +1,16 @@
 <template>
   <div class="detail">
     <div class="left-menu">
-      <router-link :to="`/questions`"
-        ><v-btn color="#DAEBEA" class="menu-btn">돌아가기</v-btn></router-link
-      >
+      <router-link :to="`/questions`">
+        <v-btn color="#DAEBEA" class="menu-btn">돌아가기</v-btn>
+      </router-link>
       <div class="author-btn" v-if="author">
-        <router-link :to="`/edit-question/${this.$route.params.id}`"
-          ><v-btn color="#DAEBEA" class="menu-btn">수정하기</v-btn></router-link
-        >
+        <router-link :to="`/edit-question/${this.$route.params.id}`">
+          <v-btn color="#DAEBEA" class="menu-btn">수정하기</v-btn>
+        </router-link>
         <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn"
-          >삭제하기</v-btn
-        >
+          >삭제하기
+        </v-btn>
       </div>
     </div>
     <div class="question-box">
@@ -61,11 +61,13 @@ export default {
 a {
   text-decoration: none;
 }
+
 .detail {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
+
 .left-menu {
   flex-grow: 1;
   border-right: solid 1px #e8e8e8;
@@ -78,11 +80,13 @@ a {
 .menu-btn {
   margin-top: 30px;
 }
+
 .author-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .question-box {
   display: flex;
   flex-direction: column;
