@@ -7,7 +7,7 @@ import NoticeMainPage from "../views/notice/NoticeListView";
 import LoginPage from "../views/LoginPage";
 import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
-import NoticeDetailView from "../views/NoticeDetailView";
+import NoticeDetailView from "../views/notice/NoticeDetailView";
 
 Vue.use(VueRouter);
 
