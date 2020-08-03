@@ -92,12 +92,10 @@ export default {
     },
     async ON_ANSWER_RECOMMENDATION({ commit }, payload) {
       try {
-        const answerId = payload.answerId;
         const recommendationType = payload.recommendationType;
         await putAction(
           `/api/recommendation-answer?objectId=${payload.answerId}`,
           {
-            answerId: answerId,
             recommendationType: recommendationType
           }
         );
