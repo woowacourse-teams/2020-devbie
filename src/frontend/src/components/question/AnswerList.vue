@@ -40,18 +40,21 @@ export default {
   align-items: center;
   max-width: 100%;
 }
+
 #count-of-answer {
   padding: 11px;
   border-radius: 15px;
   background-color: #daebea;
   display: inline-block;
 }
+
 .answer-list {
   list-style: none;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
 }
+
 .inner {
   width: 90%;
   box-sizing: border-box;

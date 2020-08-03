@@ -137,15 +137,19 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 20px;
 }
+
 .question-header {
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
 }
+
 .question-info {
   display: flex;
   justify-content: flex-end;
 }
+
 .question-info .infos {
   font-size: 16px;
   margin-right: 15px;
@@ -159,10 +163,12 @@ export default {
 .question-info .infos:last-child {
   margin-right: 5px;
 }
+
 .question-content {
   padding: 30px 50px;
   margin-bottom: 50px;
 }
+
 .inner {
   width: 95%;
   box-sizing: border-box;

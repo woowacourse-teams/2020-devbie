@@ -23,17 +23,15 @@
         ></v-textarea>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <router-link :to="`/questions`" class="form-link"
-            ><v-btn class="form-btn" color="blue darken-1"
-              >돌아가기</v-btn
-            ></router-link
-          >
+          <router-link :to="`/questions`" class="form-link">
+            <v-btn class="form-btn" color="blue darken-1">돌아가기 </v-btn>
+          </router-link>
           <v-btn
             class="form-btn"
             color="blue darken-1"
             @click="onUpdateQuestion"
-            >수정하기</v-btn
-          >
+            >수정하기
+          </v-btn>
         </v-card-actions>
       </v-card>
     </div>
@@ -71,18 +69,23 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .inner {
   width: 600px;
 }
+
 .inner .inner-card {
   padding: 25px;
 }
+
 .input-box {
   margin-bottom: 25px;
 }
+
 .form-link {
   text-decoration: none;
 }
+
 .form-btn {
   margin-right: 10px;
 }

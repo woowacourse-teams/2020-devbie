@@ -48,16 +48,20 @@ export default {
 #app {
   font-family: "Do Hyeon", sans-serif;
 }
+
 .content {
   min-height: calc(100vh - 220px);
 }
+
 a {
   text-decoration: none;
 }
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.5s;
 }
+
 .page-enter,
 .page-leave-to {
   opacity: 0;

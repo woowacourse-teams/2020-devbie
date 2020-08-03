@@ -1,6 +1,8 @@
 package underdogs.devbie.user.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,9 +18,9 @@ import underdogs.devbie.config.BaseTimeEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Builder
 @ToString
 public class User extends BaseTimeEntity {
 
@@ -29,6 +31,9 @@ public class User extends BaseTimeEntity {
     private String oauthId;
 
     private String email;
+
+    @Enumerated(value = EnumType.STRING)
+    private RoleType roleType = RoleType.USER;
 
     public User updateOauthInfo(UserInfoResponse userInfoResponse) {
         validateUserInfo(userInfoResponse);

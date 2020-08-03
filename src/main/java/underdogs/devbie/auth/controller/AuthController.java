@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.dto.JwtTokenResponse;
 import underdogs.devbie.auth.service.AuthService;
 
@@ -18,11 +19,13 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @NoValidate
     @GetMapping("/login-url")
     public ResponseEntity<String> fetchLoginUrl() {
         return ResponseEntity.ok(authService.fetchLoginUrl());
     }
 
+    @NoValidate
     @PostMapping("/login")
     public ResponseEntity<JwtTokenResponse> login(@RequestParam(value = "code") String code) {
         JwtTokenResponse jwtTokenResponse = authService.createToken(code);

@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface RecommendationRepository<T extends Recommendation> {
 
-    List<? extends Recommendation> findByObjectId(Long objectId);
+    List<T> findByObjectId(Long objectId);
 
-    Optional<? extends Recommendation> findByObjectAndUserId(Long objectId, Long userId);
+    Optional<T> findByObjectAndUserId(Long objectId, Long userId);
 
     T save(T t);
 

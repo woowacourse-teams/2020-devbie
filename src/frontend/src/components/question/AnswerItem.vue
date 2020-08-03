@@ -151,9 +151,11 @@ export default {
   flex-direction: column;
   margin-top: 10px;
 }
+
 .answer-content {
   padding: 30px 20px 30px 50px;
 }
+
 .answer-temp {
   display: flex;
   justify-content: space-between;

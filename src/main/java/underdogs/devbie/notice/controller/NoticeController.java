@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
+import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
+import underdogs.devbie.user.domain.RoleType;
 
 @RestController
 @RequestMapping("/api/notices")
@@ -28,6 +31,7 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
+    @Role(role = {RoleType.ADMIN})
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody NoticeCreateRequest request) {
         Long noticeId = noticeService.save(request);
@@ -36,6 +40,7 @@ public class NoticeController {
             .build();
     }
 
+    @Role(role = {RoleType.ADMIN})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
         @PathVariable Long id,
@@ -47,6 +52,7 @@ public class NoticeController {
             .build();
     }
 
+    @Role(role = {RoleType.ADMIN})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         noticeService.delete(id);
@@ -55,12 +61,14 @@ public class NoticeController {
             .build();
     }
 
+    @NoValidate
     @GetMapping
     public ResponseEntity<NoticeResponses> readAll() {
         NoticeResponses responses = noticeService.readAll();
         return ResponseEntity.ok(responses);
     }
 
+    @NoValidate
     @GetMapping("/{id}")
     public ResponseEntity<NoticeDetailResponse> read(@PathVariable Long id) {
         NoticeDetailResponse response = noticeService.read(id);

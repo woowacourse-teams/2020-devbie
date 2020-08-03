@@ -8,8 +8,8 @@
         id="question-create"
         @click="$router.push('/create-question')"
         color="#DAEBEA"
-        >질문 올리기</v-btn
-      >
+        >질문 올리기
+      </v-btn>
     </div>
   </div>
 </template>
@@ -45,18 +45,22 @@ export default {
   justify-content: center;
   margin: 0;
 }
+
 .inner {
   width: 95%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
+
 #question-filters {
   flex-grow: 1;
 }
+
 #question-list {
   flex-grow: 10;
 }
+
 #question-create {
   flex-grow: 1;
   margin-top: 40px;

@@ -36,6 +36,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
 .filters {
   padding: 0;
   margin: 0 50px 0 0;

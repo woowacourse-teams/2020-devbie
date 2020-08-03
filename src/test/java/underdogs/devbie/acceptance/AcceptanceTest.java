@@ -2,6 +2,7 @@ package underdogs.devbie.acceptance;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,20 +16,20 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
+    protected Long userId;
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
     @LocalServerPort
     protected int port;
 
     protected String bearerToken;
-
-    protected Long userId;
 
     @Value("${security.jwt.token.secret-key:sample}")
     private String secret;
@@ -47,8 +48,14 @@ public abstract class AcceptanceTest {
         userId = createUser();
         UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
             .id(userId)
+            .roleType(RoleType.ADMIN)
             .build());
         bearerToken = new JwtTokenProvider(secret, seconds).createToken(userTokenDto);
+    }
+
+    @AfterEach
+    void tearDown() {
+        deleteUser();
     }
 
     private Long createUser() throws JsonProcessingException {
@@ -56,6 +63,10 @@ public abstract class AcceptanceTest {
             .email("atdd@atdd.com")
             .build();
         return post("/api/users", objectMapper.writeValueAsString(userCreateRequest), Long.class);
+    }
+
+    private void deleteUser() {
+        delete("/api/users/" + userId);
     }
 
     protected <T> void post(String path, String inputJson) {

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.utils.AuthorizationExtractor;
 import underdogs.devbie.auth.controller.interceptor.utils.InterceptorValidator;
@@ -25,8 +26,15 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         if (interceptorValidator.isNotValid(handler)) {
             return true;
         }
+
         String token = authExtractor.extract(request, "bearer");
-        String userId = jwtTokenProvider.extractValidSubject(token);
+        Claims claims = jwtTokenProvider.extractValidSubject(token);
+        String userId = claims.get("userId").toString();
+        String role = claims.get("role").toString();
+
+        if (interceptorValidator.isValidRole(handler, role)) {
+            return true;
+        }
 
         request.setAttribute("userId", userId);
         return true;
