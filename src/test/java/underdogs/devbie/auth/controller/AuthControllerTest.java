@@ -1,10 +1,12 @@
 package underdogs.devbie.auth.controller;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,6 +33,11 @@ public class AuthControllerTest extends MvcTest {
 
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
+
+    @BeforeEach
+    void setUp() {
+        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
+    }
 
     @DisplayName("fetch 로그인 url")
     @Test
