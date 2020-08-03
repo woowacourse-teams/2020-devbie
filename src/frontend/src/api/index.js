@@ -8,7 +8,6 @@ const config = {
 const devbieToken = `bearer ${localStorage.getItem("devbieToken")}`;
 
 function getAction(url) {
-  console.log(url);
   return axios.get(`${config.baseUrl}${url}`, {
     headers: {
       Authorization: devbieToken
