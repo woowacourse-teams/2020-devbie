@@ -15,5 +15,12 @@ cache:
 
 script: "./gradlew clean build"
 
+env:
+  global:
+    - USER=kimseonggyu1
+    - secure: ec2wQor8w9an/d30ZDsj5Pv9ExYQNLX2hMI7NHxSDa2uufJIQtjw+EAL5krgmX4xcbiZlE+bBIaiVn8T1yFsRXWDtvya7D5CAb54vvLGMzBSnj4u5jGoFPWheTq2pHT0tmYmSFcGMvll97iGtNY5XaH3xzDHarJvKf5r/A7YmYbeO+XAMIN+WDavgCerBUenEploAqftFPX51dPgZViVcx0AtTd6yYY/A58PO1cjWpcwuFpDzh8k4vmxhW4iLXD/5BaPE3JxmgmteE2pvQ6CAYJCySFFE9nRiK7NDOrjuo6TN3AJtUIRgjKIwvku1A4UU8pXuftCMMAEEFj988cOW8oa3ojZQW4yU/MjhrXfH76VM2BCsbeYI2Q9/+Gk6g4e+OEi1CL/AIk6F39CMR79fBtIKoTUVxCuM9Tuf9hCT/EAsbx15FhHcgZ9dpIJjl6wP3uPnvzsWQhuC75OEIAY0WzoO1kQAiIZMI3j9nbpTFYB3xbCFijEv6N3gCBRjp+pJc6GqfsQlGSWxnnqUPG5hPQEuB7O6qeH7nSOr1B05IkOPj1UudXKijJHYKKyD0DOIpJ/L5CjKo/3PENLZQJdPX7V0AmFs8E9nkbrN/q21m0AlpBm/OaHsKVXFS+Gi3IzHxW8PF8QCv6tVEIqwGBzPwSEt/lMGx7sG+JtzLP9sm4=
+
 after_success:
   - docker build -t kimseonggyu1/devbie:latest .
+  - docker login -u USER -p PASSWORD
+  - docker push kimseonggyu1/devbie:latest
