@@ -22,5 +22,5 @@ env:
 
 after_success:
   - docker build -t kimseonggyu1/devbie:latest .
-  - docker login -u USER -p PASSWORD
+  - docker login -u $USER -p $PASSWORD
   - docker push kimseonggyu1/devbie:latest
