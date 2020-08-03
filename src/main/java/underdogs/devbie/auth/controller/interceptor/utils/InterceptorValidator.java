@@ -21,6 +21,10 @@ public class InterceptorValidator {
         Role methodAnnotation = ((HandlerMethod)handler).getMethodAnnotation(Role.class);
         RoleType roleType = RoleType.valueOf(role);
 
+        if (Objects.isNull(methodAnnotation)) {
+            return false;
+        }
+
         if (!Arrays.asList(methodAnnotation.role())
             .contains(roleType)) {
             throw new InvalidAuthorizationException();
