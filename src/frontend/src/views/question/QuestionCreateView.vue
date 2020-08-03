@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import CreateForm from "../components/CreateForm";
+import CreateForm from "../../components/question/CreateForm";
 
 export default {
   components: {
@@ -21,6 +21,7 @@ export default {
   justify-content: center;
   margin-top: 20px;
 }
+
 #create-form {
   margin-top: 15px;
 }

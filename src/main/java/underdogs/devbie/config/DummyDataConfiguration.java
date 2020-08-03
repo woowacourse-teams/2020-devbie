@@ -49,11 +49,11 @@ public class DummyDataConfiguration {
                 .content(AnswerContent.from("content5"))
                 .build();
 
-            answerRepository.save(ans1);
-            answerRepository.save(ans2);
-            answerRepository.save(ans3);
-            answerRepository.save(ans4);
-            answerRepository.save(ans5);
+            // answerRepository.save(ans1);
+            // answerRepository.save(ans2);
+            // answerRepository.save(ans3);
+            // answerRepository.save(ans4);
+            // answerRepository.save(ans5);
         }
     }
 }

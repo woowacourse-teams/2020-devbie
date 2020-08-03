@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import NoticeDetail from "../components/NoticeDetail";
+import NoticeDetail from "../components/notice/NoticeDetail";
 
 export default {
   components: {

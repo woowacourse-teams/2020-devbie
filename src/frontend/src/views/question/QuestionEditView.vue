@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import EditForm from "../components/EditForm";
+import EditForm from "../../components/question/EditForm";
 
 export default {
   components: {
@@ -21,6 +21,7 @@ export default {
   justify-content: center;
   margin-top: 20px;
 }
+
 #edit-form {
   margin-top: 15px;
 }

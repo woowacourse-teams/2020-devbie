@@ -1,12 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import QuestionListView from "../views/QuestionListView";
-import QuestionDetailView from "../views/QuestionDetailView";
+import QuestionListView from "../views/question/QuestionListView";
+import QuestionDetailView from "../views/question/QuestionDetailView";
 import MainPage from "../views/MainPage";
-import NoticeMainPage from "../views/NoticeListView";
+import NoticeMainPage from "../views/notice/NoticeListView";
 import LoginPage from "../views/LoginPage";
-import QuestionCreateView from "../views/QuestionCreateView";
-import QuestionEditView from "../views/QuestionEditView";
+import QuestionCreateView from "../views/question/QuestionCreateView";
+import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/NoticeDetailView";
 
 Vue.use(VueRouter);

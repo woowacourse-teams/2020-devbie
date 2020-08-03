@@ -25,8 +25,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import QuestionDetail from "../components/QuestionDetail";
-import AnswerList from "../components/AnswerList";
+import QuestionDetail from "../../components/question/QuestionDetail";
+import AnswerList from "../../components/question/AnswerList";
 
 export default {
   components: {
@@ -61,11 +61,13 @@ export default {
 a {
   text-decoration: none;
 }
+
 .detail {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
+
 .left-menu {
   flex-grow: 1;
   border-right: solid 1px #e8e8e8;

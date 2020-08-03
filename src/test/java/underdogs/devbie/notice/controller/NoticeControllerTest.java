@@ -60,6 +60,8 @@ public class NoticeControllerTest extends MvcTest {
 
     @BeforeEach
     void setUp() {
+        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 

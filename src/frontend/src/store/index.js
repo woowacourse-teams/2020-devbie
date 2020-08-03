@@ -1,47 +1,21 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import mutations from "./mutations.js";
-import actions from "./actions";
+import loginUser from "./modules/loginUser";
+import questions from "./modules/questions";
+import answers from "./modules/answers";
+import notices from "./modules/notices";
+import recommendations from "./modules/recommendations";
+import notice from "./modules/notice";
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-  state: {
-    loginUser: [],
-    questions: [],
-    question: [],
-    questionRecommendation: [],
-    answers: [],
-    questionId: [],
-    notices: [],
-    notice: []
-  },
-  getters: {
-    fetchedLoginUser(state) {
-      return state.loginUser;
-    },
-    fetchedQuestions(state) {
-      return state.questions;
-    },
-    fetchedQuestion(state) {
-      return state.question;
-    },
-    fetchedQuestionRecommendation(state) {
-      return state.questionRecommendation;
-    },
-    fetchedAnswers(state) {
-      return state.answers;
-    },
-    fetchedNewCreatedQuestionId(state) {
-      return state.questionId;
-    },
-    fetchedNotices(state) {
-      return state.notices;
-    },
-    fetchedNotice(state) {
-      return state.notice;
-    }
-  },
-  mutations,
-  actions
+  modules: {
+    loginUser,
+    questions,
+    answers,
+    notices,
+    notice,
+    recommendations
+  }
 });
