@@ -13,3 +13,6 @@ cache:
     - '$HOME/.gradle'
 
 script: "./gradlew clean build"
+
+after_success:
+  - docker build -t kimseonggyu1/devbie:latest
