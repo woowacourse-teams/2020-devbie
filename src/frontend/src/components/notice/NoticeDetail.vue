@@ -9,7 +9,13 @@
 
               <v-spacer></v-spacer>
 
-              <v-btn color="white" class="text--primary" fab small>
+              <v-btn
+                @click="$router.push(`/notice`)"
+                color="white"
+                class="text--primary"
+                fab
+                small
+              >
                 <v-icon>mdi-format-list-bulleted</v-icon>
               </v-btn>
             </v-card-title>
@@ -29,17 +35,13 @@
                     </v-btn>
                   </v-list-item-action>
 
-                  <v-list-item-content>
+                  <v-list-item-content
+                    @click="$router.push(`/notices/${item.id}`)"
+                  >
                     <v-list-item-title>
                       {{ item.name }} 채용 공고 {{ item.title }}
                     </v-list-item-title>
                   </v-list-item-content>
-
-                  <v-list-item-action>
-                    <v-icon small @click="$router.push(`/notices/${item.id}`)"
-                      >mdi-open-in-new</v-icon
-                    >
-                  </v-list-item-action>
                 </v-list-item>
 
                 <v-divider></v-divider>
@@ -106,7 +108,6 @@
         </div>
       </div>
     </div>
-    {{ fetchedNotices.noticeResponses }}
   </div>
 </template>
 
@@ -158,8 +159,9 @@ export default {
 }
 
 .notice-list {
-  width: 600px;
+  width: 400px;
   flex-basis: auto;
+  margin-right: 200px;
 }
 
 .notice-header {
