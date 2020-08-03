@@ -31,11 +31,13 @@ import org.apache.http.entity.ContentType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @WebFilter(urlPatterns = "/*")
+@Component
+@Slf4j
 public class ReadableRequestWrapperFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {
@@ -67,7 +69,6 @@ public class ReadableRequestWrapperFilter implements Filter {
             try {
                 InputStream is = request.getInputStream();
                 this.rawData = IOUtils.toByteArray(is);
-
                 String collect = this.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
                 if (StringUtils.isEmpty(collect)) {
                     return;
