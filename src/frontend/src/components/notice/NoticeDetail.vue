@@ -114,9 +114,16 @@
 import { mapGetters } from "vuex";
 
 export default {
-  data: () => ({
-    benched: 0
-  }),
+  data() {
+    return {
+      benched: 0
+    };
+  },
+  created() {
+    const noticeId = this.$route.params.id;
+    this.$store.dispatch("FETCH_NOTICES");
+    this.$store.dispatch("FETCH_NOTICE", noticeId);
+  },
   computed: {
     ...mapGetters(["fetchedNotices"]),
     ...mapGetters(["fetchedNotice"]),
@@ -126,11 +133,6 @@ export default {
     length() {
       return 10;
     }
-  },
-  created() {
-    const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICES");
-    this.$store.dispatch("FETCH_NOTICE", noticeId);
   }
 };
 </script>

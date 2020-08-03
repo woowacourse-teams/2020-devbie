@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import underdogs.devbie.auth.controller.interceptor.annotation.Role;
+import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +22,7 @@ public class UserInfoResponse {
         return User.builder()
             .oauthId(id)
             .email(email)
+            .roleType(RoleType.USER)
             .build();
     }
 }

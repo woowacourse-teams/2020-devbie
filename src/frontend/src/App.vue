@@ -2,7 +2,7 @@
   <v-app id="app">
     <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
     <transition name="page">
-      <router-view class="content"></router-view>
+      <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
     <footer-bar></footer-bar>
   </v-app>

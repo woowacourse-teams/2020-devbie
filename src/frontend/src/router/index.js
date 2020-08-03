@@ -51,7 +51,7 @@ export const router = new VueRouter({
     },
     {
       path: "/notices/:id",
-      name: "notice",
+      name: "notice-detail",
       component: NoticeDetailView
     }
   ]
