@@ -26,6 +26,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeRepository;
+import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
@@ -51,6 +52,8 @@ public class NoticeServiceTest {
             .collect(Collectors.toSet());
         Notice expected = Notice.builder()
             .id(1L)
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .company(new Company("underdogs", 50_000_000))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
@@ -61,6 +64,8 @@ public class NoticeServiceTest {
 
         NoticeCreateRequest noticeRequest = NoticeCreateRequest.builder()
             .name("underdogs")
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
@@ -81,6 +86,8 @@ public class NoticeServiceTest {
         Long id = 2L;
         NoticeUpdateRequest request = NoticeUpdateRequest.builder()
             .name("underdogs")
+            .title("우테코 모집")
+            .noticeType(NoticeType.EDUCATION)
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
@@ -114,6 +121,8 @@ public class NoticeServiceTest {
             .collect(Collectors.toSet());
         Notice expected = Notice.builder()
             .id(1L)
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .company(new Company("underdogs", 50_000_000))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
@@ -143,6 +152,8 @@ public class NoticeServiceTest {
             .collect(Collectors.toSet());
         Notice expected = Notice.builder()
             .id(1L)
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .company(new Company("underdogs", 50_000_000))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))

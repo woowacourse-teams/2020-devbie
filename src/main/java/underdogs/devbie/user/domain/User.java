@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.auth.dto.UserInfoResponse;
 import underdogs.devbie.config.BaseTimeEntity;
 
@@ -20,6 +21,7 @@ import underdogs.devbie.config.BaseTimeEntity;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
+@ToString
 public class User extends BaseTimeEntity {
 
     @Id

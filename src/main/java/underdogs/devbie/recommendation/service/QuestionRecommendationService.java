@@ -1,55 +1,32 @@
 package underdogs.devbie.recommendation.service;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-import underdogs.devbie.exception.AlreadyExistException;
-import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
-import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 @Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class QuestionRecommendationService {
+public class QuestionRecommendationService extends RecommendationService {
 
-    private final QuestionRecommendationRepository questionRecommendations;
-
-    public RecommendationResponse count(Long questionId) {
-        List<QuestionRecommendation> recommendations = questionRecommendations.findByQuestionId(questionId);
-
-        return RecommendationResponse.fromQuestionRecommendation(recommendations);
+    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository) {
+        this.recommendationRepository = questionRecommendationRepository;
     }
 
-    @Transactional
-    public void createRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
-        questionRecommendations.findByQuestionIdAndUserId(questionId, userId)
-            .ifPresent(x -> new AlreadyExistException());
+    @Override
+    public void createOrUpdateRecommendation(Long objectId, Long userId, RecommendationType recommendationType) {
+        Optional<QuestionRecommendation> optionalQuestionRecommendation =
+            recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        questionRecommendations.save(QuestionRecommendation.of(questionId, userId, recommendationType));
-    }
+        QuestionRecommendation questionRecommendation =
+            optionalQuestionRecommendation.orElse(QuestionRecommendation.of(objectId, userId, recommendationType));
 
-    @Transactional
-    public void toggleRecommendation(Long questionId, Long userId, RecommendationType recommendationType) {
-        QuestionRecommendation questionRecommendation = questionRecommendations
-            .findByQuestionIdAndUserId(questionId, userId)
-            .filter(recommendation -> recommendation.hasRecommendationTypeOf(recommendationType.toggleType()))
-            .orElseThrow(NotExistException::new);
+        if (!questionRecommendation.hasRecommendationTypeOf(recommendationType)) {
+            questionRecommendation.toggleRecommended();
+        }
 
-        questionRecommendation.toggleRecommended();
-    }
-
-    @Transactional
-    public void deleteRecommendation(Long questionId, Long userId) {
-        QuestionRecommendation questionRecommendation = questionRecommendations
-            .findByQuestionIdAndUserId(questionId, userId)
-            .orElseThrow(NotExistException::new);
-
-        questionRecommendations.delete(questionRecommendation);
+        recommendationRepository.save(questionRecommendation);
     }
 }

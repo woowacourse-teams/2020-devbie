@@ -15,18 +15,26 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.notice.expception.CreateFailException;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
+@ToString
 public class Notice extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private NoticeType noticeType;
 
     @Embedded
     @Column(nullable = false)
@@ -48,10 +56,13 @@ public class Notice extends BaseTimeEntity {
     private String image;
 
     @Builder
-    private Notice(Long id, Company company, Duration duration, JobPosition jobPosition,
+    private Notice(Long id, String title, NoticeType noticeType, Company company, Duration duration,
+        JobPosition jobPosition,
         NoticeDescription noticeDescription, String image) {
-        validateParameters(company, jobPosition, noticeDescription);
+        validateParameters(title, noticeType, company, jobPosition, noticeDescription);
         this.id = id;
+        this.title = title;
+        this.noticeType = noticeType;
         this.company = company;
         this.duration = duration;
         this.jobPosition = jobPosition;
@@ -59,9 +70,11 @@ public class Notice extends BaseTimeEntity {
         this.image = image;
     }
 
-    private void validateParameters(Company company, JobPosition jobPosition,
+    private void validateParameters(String title, NoticeType noticeType, Company company, JobPosition jobPosition,
         NoticeDescription noticeDescription) {
-        if (Objects.isNull(company)
+        if (Objects.isNull(title)
+            || Objects.isNull(noticeType)
+            || Objects.isNull(company)
             || Objects.isNull(jobPosition)
             || Objects.isNull(noticeDescription)) {
             throw new CreateFailException();
@@ -69,6 +82,8 @@ public class Notice extends BaseTimeEntity {
     }
 
     public void update(Notice notice) {
+        this.title = notice.title;
+        this.noticeType = notice.noticeType;
         this.company = notice.company;
         this.duration = notice.duration;
         this.jobPosition = notice.jobPosition;

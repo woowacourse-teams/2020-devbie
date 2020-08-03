@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-footer dark padless absolute color="#87BDD6" id="footer">
+    <v-footer dark padless color="#87BDD6" id="footer">
       <v-card flat tile color="#87BDD6" class="lighten-1 white--text">
         <v-card-text>
           <v-btn

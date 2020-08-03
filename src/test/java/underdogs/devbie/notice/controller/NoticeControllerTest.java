@@ -31,6 +31,7 @@ import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
+import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -66,6 +67,8 @@ public class NoticeControllerTest extends MvcTest {
 
         noticeCreateRequest = NoticeCreateRequest.builder()
             .name("underdogs")
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
@@ -77,6 +80,8 @@ public class NoticeControllerTest extends MvcTest {
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("underdogs")
+            .title("우테코 모집")
+            .noticeType(NoticeType.EDUCATION)
             .salary(50_000_000)
             .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
             .jobPosition(JobPosition.BACKEND)
@@ -183,6 +188,8 @@ public class NoticeControllerTest extends MvcTest {
     void readAll() throws Exception {
         List<Notice> notices = Arrays.asList(Notice.builder()
             .id(1L)
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
             .company(new Company("underdogs", 2000))
             .image("/static/image/underdogs")
             .jobPosition(JobPosition.BACKEND)

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
@@ -12,6 +13,7 @@ import underdogs.devbie.user.domain.User;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
+@ToString
 public class UserTokenDto {
 
     private Long id;
