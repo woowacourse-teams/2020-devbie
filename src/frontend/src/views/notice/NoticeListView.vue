@@ -10,9 +10,10 @@
 </template>
 
 <script>
-import NoticeType from "../components/NoticeType";
-import NoticeFilters from "../components/NoticeFilters";
-import NoticeCards from "../components/NoticeList";
+import NoticeType from "../../components/notice/NoticeType";
+import NoticeFilters from "../../components/notice/NoticeFilters";
+import NoticeCards from "../../components/notice/NoticeList";
+
 export default {
   components: {
     NoticeType,
