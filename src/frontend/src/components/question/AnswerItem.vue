@@ -6,7 +6,12 @@
         <p class="answer-content-value" v-if="!this.updateEditFlag">
           {{ answer.content }}
         </p>
-        <v-textarea outlined v-else v-model="updateContent"></v-textarea>
+        <v-textarea
+          class="update-form"
+          outlined
+          v-else
+          v-model="updateContent"
+        ></v-textarea>
       </div>
       <div :class="{ 'vertical-center': !author }" class="answer-infos">
         <div class="recommendations">
@@ -187,6 +192,9 @@ export default {
 }
 .recommendation-clicked {
   color: #7ec699;
+}
+.answer-content {
+  min-width: 80%;
 }
 .update-btn {
   margin-right: 7px;
