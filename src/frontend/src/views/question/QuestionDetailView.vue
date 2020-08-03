@@ -25,8 +25,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import QuestionDetail from "../components/QuestionDetail";
-import AnswerList from "../components/AnswerList";
+import QuestionDetail from "../../components/question/QuestionDetail";
+import AnswerList from "../../components/question/AnswerList";
 
 export default {
   components: {

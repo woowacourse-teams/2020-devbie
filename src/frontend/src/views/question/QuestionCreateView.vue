@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import CreateForm from "../components/CreateForm";
+import CreateForm from "../../components/question/CreateForm";
 
 export default {
   components: {

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import EditForm from "../components/EditForm";
+import EditForm from "../../components/question/EditForm";
 
 export default {
   components: {

@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import NoticeType from "../components/NoticeType";
-import NoticeFilters from "../components/NoticeFilters";
-import NoticeCards from "../components/NoticeList";
+import NoticeType from "../../components/notice/NoticeType";
+import NoticeFilters from "../../components/notice/NoticeFilters";
+import NoticeCards from "../../components/notice/NoticeList";
 
 export default {
   components: {
@@ -33,16 +33,13 @@ export default {
   justify-content: center;
   margin-bottom: 50px;
 }
-
 .filters > * {
   margin-right: 120px;
 }
-
 .search-bar {
   margin: 0;
   padding: 0;
 }
-
 .search-bar .input {
   padding: 0;
 }
