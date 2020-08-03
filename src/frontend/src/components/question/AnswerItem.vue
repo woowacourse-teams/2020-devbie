@@ -84,24 +84,20 @@ export default {
     isAuthor() {
       return (this.author = this.answer.userId === this.fetchedLoginUser.id);
     },
-    deleteBtnHandler() {
-      this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+    async deleteBtnHandler() {
+      await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
     updateBtnHandler() {
       this.updateEditFlag = !this.updateEditFlag;
     },
     async update() {
-      try {
-        const answerId = this.answer.id;
-        const updateContent = this.updateContent;
-        await this.$store.dispatch("UPDATE_ANSWER", {
-          answerId,
-          updateContent
-        });
-        this.updateEditFlag = !this.updateEditFlag;
-      } catch (error) {
-        console.log(error);
-      }
+      const answerId = this.answer.id;
+      const updateContent = this.updateContent;
+      await this.$store.dispatch("UPDATE_ANSWER", {
+        answerId,
+        updateContent
+      });
+      this.updateEditFlag = !this.updateEditFlag;
     },
     async onAnswerRecommendation(priorType, newType) {
       const answerId = this.answer.id;
