@@ -1,4 +1,4 @@
-import { deleteAction, getAction, updateAnswer } from "../../api";
+import { deleteAction, getAction, patchAction } from "../../api";
 
 export default {
   state: {
@@ -8,10 +8,10 @@ export default {
     SET_ANSWERS(state, data) {
       state.answers = data;
     },
-    UPDATE_ANSWER(state, id, content) {
+    UPDATE_ANSWER(state, payload) {
       state.answers.some(answer => {
-        if (answer.id === id) {
-          answer.content = content;
+        if (answer.id === payload.answerId) {
+          answer.content = payload.updateContent;
           return true;
         }
         return false;
@@ -32,10 +32,13 @@ export default {
         console.log(error);
       }
     },
-    async UPDATE_ANSWER({ commit }, answerId, content) {
+    async UPDATE_ANSWER({ commit }, payload) {
       try {
-        await updateAnswer(answerId, content);
-        commit("SET_ANSWER", answerId, content);
+        const updateContent = payload.updateContent;
+        await patchAction(`/api/answers/${payload.answerId}`, {
+          content: updateContent
+        });
+        commit("UPDATE_ANSWER", payload);
       } catch (error) {
         console.log(error);
       }
