@@ -36,6 +36,7 @@ export default {
   flex-direction: column;
   align-items: center;
 }
+
 .question {
   border: solid 2px #87bdd6;
   border-radius: 10px;
@@ -45,11 +46,13 @@ export default {
   align-items: center;
   width: 90%;
 }
+
 .visits {
   font-size: 14px;
   margin-right: 13px;
   margin-bottom: 0;
 }
+
 .title {
   color: #7ec699;
   font-weight: normal;

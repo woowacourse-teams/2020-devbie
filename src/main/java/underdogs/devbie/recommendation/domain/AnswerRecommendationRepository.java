@@ -16,7 +16,7 @@ public interface AnswerRecommendationRepository extends
     List<AnswerRecommendation> findByObjectId(Long answerId);
 
     @Override
-    @Query("select a from AnswerRecommendation a " 
+    @Query("select a from AnswerRecommendation a "
         + "where a.answerId = :answerId  "
         + "and a.userId = :userId")
     Optional<AnswerRecommendation> findByObjectAndUserId(Long answerId, Long userId);

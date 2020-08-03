@@ -21,6 +21,7 @@ export default {
   justify-content: center;
   margin-top: 20px;
 }
+
 #edit-form {
   margin-top: 15px;
 }

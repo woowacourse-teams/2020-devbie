@@ -13,6 +13,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .select-btn {
   margin-right: 15px;
   padding: 5px;

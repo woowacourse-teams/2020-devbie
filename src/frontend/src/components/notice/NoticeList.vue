@@ -54,16 +54,20 @@ export default {
 .selector-item {
   margin: 0 30px 50px 0;
 }
+
 .card-title {
   justify-content: center;
 }
+
 .notice-info {
   display: flex;
   justify-content: space-between;
 }
+
 .notice-info :first-child {
   margin-left: 10px;
 }
+
 .notice-info :last-child {
   margin-right: 10px;
 }

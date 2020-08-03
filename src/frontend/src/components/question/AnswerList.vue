@@ -39,15 +39,18 @@ export default {
   margin-left: 20px;
   max-width: 100%;
 }
+
 #count-of-answer {
   padding: 18px;
 }
+
 .answer-list {
   list-style: none;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
 }
+
 .inner {
   width: 90%;
   box-sizing: border-box;
