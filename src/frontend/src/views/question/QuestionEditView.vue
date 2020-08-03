@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <h2 class="title">질문 작성</h2>
-    <create-form id="create-form"></create-form>
+  <div class="edit-form">
+    <h2 class="title">질문 수정 페이지</h2>
+    <edit-form id="edit-form"></edit-form>
   </div>
 </template>
 
 <script>
-import CreateForm from "../components/CreateForm";
+import EditForm from "../../components/question/EditForm";
 
 export default {
   components: {
-    CreateForm
+    EditForm
   }
 };
 </script>
@@ -21,7 +21,7 @@ export default {
   justify-content: center;
   margin-top: 20px;
 }
-#create-form {
+#edit-form {
   margin-top: 15px;
 }
 </style>
