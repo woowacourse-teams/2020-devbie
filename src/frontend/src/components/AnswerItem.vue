@@ -116,10 +116,16 @@ export default {
   },
   watch: {
     fetchedLoginUser: async function() {
+      if (!this.fetchedLoginUser.id) {
+        this.userRecommended = "NOT_EXIST";
+        this.isAuthor();
+        return;
+      }
       await this.fetchMyAnswerRecommendation(
         this.answer.id,
         this.fetchedLoginUser.id
       );
+      this.isAuthor();
     }
   },
   async created() {
@@ -129,6 +135,7 @@ export default {
         this.fetchedLoginUser.id
       );
     }
+    await this.isAuthor();
     await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
   }
 };
