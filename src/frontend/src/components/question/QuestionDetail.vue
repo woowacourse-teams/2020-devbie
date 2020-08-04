@@ -19,9 +19,7 @@
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked':
-                  fetchedMyQuestionRecommendation.recommendationType &&
-                  userRecommended === 'RECOMMENDED'
+                'recommendation-clicked': isUserRecommendation('RECOMMENDED')
               }"
               class="far fa-thumbs-up recommendation"
               @click="
@@ -33,9 +31,9 @@
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked':
-                  fetchedMyQuestionRecommendation.recommendationType &&
-                  userRecommended === 'NON_RECOMMENDED'
+                'recommendation-clicked': isUserRecommendation(
+                  'NON_RECOMMENDED'
+                )
               }"
               class="far fa-thumbs-down recommendation"
               @click="
@@ -101,6 +99,12 @@ export default {
         userId
       });
       this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
+    },
+    isUserRecommendation(recommendationType) {
+      return (
+        this.fetchedMyQuestionRecommendation.recommendationType &&
+        this.userRecommended === recommendationType
+      );
     }
   },
   watch: {
