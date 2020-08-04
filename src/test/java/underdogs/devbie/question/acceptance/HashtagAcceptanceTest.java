@@ -13,6 +13,7 @@ import org.junit.jupiter.api.TestFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
+import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
 
 public class HashtagAcceptanceTest extends AcceptanceTest {
@@ -27,7 +28,13 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
             WHEN 해시태그 목록을 조회를 요청한다.
             THEN 생성된 해시태그 목록을 불러온다.
 
-            WHEN 해시태그 내용을 수정을 요청한다.
+            WHEN 해시태그를 Id로 단건 조회한다.
+            THEN Id값으로 해시태그를 불러온다.
+
+            WHEN 해시태그를 이름으로 조회한다.
+            THEN 이름에 해당하는 해시태그를 불러온다.
+
+            WHEN 해시태그 내용 수정을 요청한다.
             THEN 해시태그 내용이 수정된다.
 
             WHEN 해시태그를 삭제 요청을 보낸다.
@@ -43,10 +50,21 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
                 createHashtag("network");
             }),
             dynamicTest("해시태그 목록 조회", () -> {
-                HashtagResponses hashtagResponses = get("api/hashtags", HashtagResponses.class);
+                HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
+
                 assertAll(
                     () -> assertThat(hashtagResponses.getHashtags().get(0).getTagName()).isEqualTo("java"),
                     () -> assertThat(hashtagResponses.getHashtags().get(1).getTagName()).isEqualTo("network")
+                );
+            }),
+            dynamicTest("해시태그 단건 조회", () -> {
+                HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
+                Long hashtagId = hashtagResponses.getHashtags().get(0).getId();
+                HashtagResponse hashtagResponse = get("/api/hashtags/" + hashtagId, HashtagResponse.class);
+
+                assertAll(
+                    () -> assertThat(hashtagResponse.getId()).isEqualTo(hashtagId),
+                    () -> assertThat(hashtagResponse.getTagName()).isEqualTo("java")
                 );
             })
         );

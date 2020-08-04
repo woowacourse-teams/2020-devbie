@@ -72,8 +72,6 @@ class HashtagControllerTest extends MvcTest {
             .hashtags(Lists.newArrayList(HashtagResponse.from(hashtag)))
             .build();
 
-        System.out.println(responses.getHashtags() + ">>>>>>");
-
         given(hashtagService.readAll()).willReturn(responses);
 
         MvcResult mvcResult = getAction("/api/hashtags")
@@ -85,6 +83,29 @@ class HashtagControllerTest extends MvcTest {
         assertAll(
             () -> assertThat(hashtagResponses.getHashtags().get(0).getId()).isEqualTo(100L),
             () -> assertThat(hashtagResponses.getHashtags().get(0).getTagName()).isEqualTo(TEST_HASHTAG_NAME)
+        );
+    }
+
+    @DisplayName("해시태그 단건 조회")
+    @Test
+    void read() throws Exception {
+        Hashtag hashtag = Hashtag.builder()
+            .id(100L)
+            .tagName(TagName.from(TEST_HASHTAG_NAME))
+            .build();
+        HashtagResponse response = HashtagResponse.from(hashtag);
+
+        given(hashtagService.read(eq(100L))).willReturn(response);
+
+        MvcResult mvcResult = getAction("/api/hashtags/" + response.getId())
+            .andExpect(status().isOk())
+            .andReturn();
+        String value = mvcResult.getResponse().getContentAsString();
+        HashtagResponse hashtagResponse = objectMapper.readValue(value, HashtagResponse.class);
+
+        assertAll(
+            () -> assertThat(hashtagResponse.getId()).isEqualTo(100L),
+            () -> assertThat(hashtagResponse.getTagName()).isEqualTo(TEST_HASHTAG_NAME)
         );
     }
 }

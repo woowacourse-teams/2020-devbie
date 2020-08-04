@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.question.domain.TagNameTest.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
+import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,4 +73,21 @@ class HashtagServiceTest {
         );
     }
 
+    @DisplayName("해시태그 단건 조회")
+    @Test
+    void read() {
+        Hashtag hashtag = Hashtag.builder()
+            .id(100L)
+            .tagName(TagName.from(TEST_HASHTAG_NAME))
+            .build();
+
+        given(hashtagRepository.findById(eq(100L))).willReturn(Optional.of(hashtag));
+
+        HashtagResponse response = hashtagService.read(hashtag.getId());
+
+        assertAll(
+            () -> assertThat(response.getId()).isEqualTo(hashtag.getId()),
+            () -> assertThat(response.getTagName()).isEqualTo(hashtag.getTagName().getName())
+        );
+    }
 }

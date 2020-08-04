@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
+import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
 import underdogs.devbie.question.service.HashtagService;
 import underdogs.devbie.user.domain.RoleType;
@@ -37,5 +39,12 @@ public class HashtagController {
         HashtagResponses hashtagResponses = hashtagService.readAll();
         return ResponseEntity
             .ok(hashtagResponses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HashtagResponse> read(@PathVariable("id") Long id) {
+        HashtagResponse hashtagResponse = hashtagService.read(id);
+        return ResponseEntity
+            .ok(hashtagResponse);
     }
 }
