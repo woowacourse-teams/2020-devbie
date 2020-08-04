@@ -21,7 +21,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
             .selectFrom(notice)
             .where(eqNoticeType(noticeType),
                 eqJobPosition(jobPosition),
-                inLanguage(language))
+                containLanguage(language))
             .fetch();
     }
 
@@ -43,12 +43,13 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
             .eq(jobPosition);
     }
 
-    private BooleanExpression inLanguage(Language language) {
+    private BooleanExpression containLanguage(Language language) {
         if (StringUtils.isEmpty(language)) {
             return null;
         }
         return notice
             .noticeDescription
-            .languages.contains(language);
+            .languages
+            .contains(language);
     }
 }
