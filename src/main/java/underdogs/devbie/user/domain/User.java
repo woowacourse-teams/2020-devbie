@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity {
     private String email;
 
     @Enumerated(value = EnumType.STRING)
-    private RoleType roleType = RoleType.USER;
+    private RoleType roleType;
 
     public User updateOauthInfo(UserInfoResponse userInfoResponse) {
         validateUserInfo(userInfoResponse);

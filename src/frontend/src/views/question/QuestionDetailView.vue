@@ -50,7 +50,6 @@ export default {
       }
     },
     isAuthor(userId) {
-      console.log(userId, this.fetchedLoginUser.id);
       return (this.author = userId === this.fetchedLoginUser.id);
     }
   }
@@ -65,7 +64,8 @@ a {
 .detail {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px 0 auto;
+  max-width: 95%;
 }
 
 .left-menu {
@@ -74,9 +74,11 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 200px;
+  min-width: 220px;
 }
-
+#question-detail {
+  margin-bottom: 60px;
+}
 .menu-btn {
   margin-top: 30px;
 }

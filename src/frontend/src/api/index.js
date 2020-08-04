@@ -24,7 +24,7 @@ function postAction(url, request) {
 }
 
 function putAction(url, request) {
-  return axios.post(`${config.baseUrl}${url}`, request, {
+  return axios.put(`${config.baseUrl}${url}`, request, {
     headers: {
       Authorization: devbieToken
     }

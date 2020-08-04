@@ -47,7 +47,7 @@ export default {
 }
 
 .inner {
-  width: 90%;
+  width: 95%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
