@@ -13,6 +13,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.util.collections.Sets;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,6 +25,7 @@ import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionTitle;
+import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -178,5 +180,27 @@ class QuestionControllerTest extends MvcTest {
             () -> assertThat(questionResponses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
             () -> assertThat(questionResponses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
         );
+    }
+
+    @DisplayName("질문에 달린 태그 생성 및 교체")
+    @Test
+    void hashtagsOnQuestion() throws Exception {
+        Question question = Question.builder()
+            .id(1L)
+            .userId(1L)
+            .title(QuestionTitle.from(TEST_QUESTION_TITLE))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .build();
+        HashtagsRequest hashtagsRequest = HashtagsRequest.builder()
+            .hashtags(Sets.newSet("java", "network"))
+            .build();
+        String inputJson = objectMapper.writeValueAsString(hashtagsRequest);
+
+        willDoNothing().given(questionService).saveOrUpdateHashtags(anyLong(), any());
+
+        putAction(String.format("/api/questions/%d/hashtags", question.getId()), inputJson, TEST_TOKEN)
+            .andExpect(status().isNoContent());
+
+        verify(questionService).saveOrUpdateHashtags(eq(1L), any(HashtagsRequest.class));
     }
 }

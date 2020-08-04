@@ -23,7 +23,10 @@ public class HashtagService {
 
     @Transactional
     public Long save(HashtagCreateRequest request) {
-        Hashtag savedHashtag = hashtagRepository.save(request.toEntity());
+        Hashtag hashtag = hashtagRepository.findByTagName(request.getTagName())
+            .orElse(request.toEntity());
+
+        Hashtag savedHashtag = hashtagRepository.save(hashtag);
         return savedHashtag.getId();
     }
 

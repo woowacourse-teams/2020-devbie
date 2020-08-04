@@ -1,13 +1,20 @@
 package underdogs.devbie.question.service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.question.domain.Hashtag;
+import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
+import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionRepository;
+import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -21,6 +28,7 @@ import underdogs.devbie.question.exception.QuestionNotExistedException;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final HashtagRepository hashtagRepository;
 
     @Transactional
     public Long save(Long userId, QuestionCreateRequest request) {
@@ -76,5 +84,26 @@ public class QuestionService {
     public QuestionResponses searchByTitle(String keyword) {
         List<Question> questions = questionRepository.findByTitleLike(keyword);
         return QuestionResponses.from(questions);
+    }
+
+    @Transactional
+    public void saveOrUpdateHashtags(Long questionId, HashtagsRequest request) {
+        Question question = questionRepository.findById(questionId).orElseThrow(QuestionNotExistedException::new);
+
+        Set<QuestionHashtag> hashtags = request.getHashtags().stream()
+            .map(tagName -> {
+                Hashtag hashtag = hashtagRepository.findByTagName(tagName)
+                    .orElse(Hashtag.builder()
+                        .tagName(TagName.from(tagName))
+                        .build());
+                hashtagRepository.save(hashtag);
+
+                return QuestionHashtag.builder()
+                    .question(question)
+                    .hashtag(hashtag)
+                    .build();
+            }).collect(Collectors.toSet());
+
+        question.saveOrUpdateHashtags(hashtags);
     }
 }

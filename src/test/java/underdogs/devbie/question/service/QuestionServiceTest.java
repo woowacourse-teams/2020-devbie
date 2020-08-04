@@ -15,12 +15,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
+import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -36,13 +39,16 @@ class QuestionServiceTest {
     @Mock
     private QuestionRepository questionRepository;
 
+    @Mock
+    private HashtagRepository hashtagRepository;
+
     private User user;
 
     private Question question;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionRepository);
+        questionService = new QuestionService(questionRepository, hashtagRepository);
 
         user = User.builder()
             .id(1L)
@@ -180,6 +186,23 @@ class QuestionServiceTest {
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
             () -> assertThat(responses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
+        );
+    }
+
+    @DisplayName("질문에 해시태그 추가")
+    @Test
+    void saveOrUpdateHashtags() {
+        HashtagsRequest request = HashtagsRequest.builder()
+            .hashtags(Sets.newSet("java", "network"))
+            .build();
+
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.saveOrUpdateHashtags(question.getId(), request);
+
+        assertAll(
+            () -> assertThat(question.getHashtags()).hasSize(2),
+            () -> assertThat(question.getHashtags().containsAll(Lists.newArrayList("java", "network")))
         );
     }
 }

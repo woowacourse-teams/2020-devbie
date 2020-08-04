@@ -9,9 +9,11 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.mockito.internal.util.collections.Sets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
+import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -107,6 +109,15 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
                     () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")
                 );
+            }),
+            dynamicTest("질문에 해시태그 추가", () -> {
+                HashtagsRequest hashTagsRequest = HashtagsRequest.builder()
+                    .hashtags(Sets.newSet("java", "network"))
+                    .build();
+                QuestionResponse firstQuestion = fetchFirstQuestion();
+
+                String inputJson = objectMapper.writeValueAsString(hashTagsRequest);
+                put("/api/questions/" + firstQuestion.getQuestionId() + "/hashtags", inputJson);
             }),
             dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
