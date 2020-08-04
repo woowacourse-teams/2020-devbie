@@ -1,4 +1,4 @@
-import { deleteAction, getAction } from "../../api";
+import { deleteAction, getAction, updateAnswer } from "../../api";
 
 export default {
   state: {
@@ -28,6 +28,14 @@ export default {
           `/api/answers?questionId=${questionId}`
         );
         commit("SET_ANSWERS", data.answerResponses);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async UPDATE_ANSWER({ commit }, answerId, content) {
+      try {
+        await updateAnswer(answerId, content);
+        commit("SET_ANSWER", answerId, content);
       } catch (error) {
         console.log(error);
       }
