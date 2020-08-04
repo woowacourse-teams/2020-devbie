@@ -15,6 +15,7 @@ import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
+import underdogs.devbie.question.dto.HashtagUpdateRequest;
 
 public class HashtagAcceptanceTest extends AcceptanceTest {
 
@@ -76,6 +77,33 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(hashtagResponse.getId()).isEqualTo(firstHashtag.getId()),
                     () -> assertThat(hashtagResponse.getTagName()).isEqualTo(firstHashtag.getTagName())
                 );
+            }),
+            dynamicTest("해시태그 수정", () -> {
+                HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
+                HashtagResponse firstHashtag = hashtagResponses.getHashtags().get(0);
+
+                HashtagUpdateRequest hashtagUpdateRequest = HashtagUpdateRequest.builder()
+                    .tagName("Changed Name")
+                    .build();
+                String inputJson = objectMapper.writeValueAsString(hashtagUpdateRequest);
+
+                patch("/api/hashtags/" + firstHashtag.getId(), inputJson);
+
+                HashtagResponse updatedHashtag = get("/api/hashtags/" + firstHashtag.getId(), HashtagResponse.class);
+
+                assertAll(
+                    () -> assertThat(updatedHashtag.getId()).isEqualTo(firstHashtag.getId()),
+                    () -> assertThat(updatedHashtag.getTagName()).isEqualTo("Changed Name")
+                );
+            }),
+            dynamicTest("해시태그 삭제", () -> {
+                HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
+                HashtagResponse firstHashtag = hashtagResponses.getHashtags().get(0);
+                delete("/api/hashtags/" + firstHashtag.getId());
+
+                HashtagResponses deletedHashtagResponses = get("/api/hashtags", HashtagResponses.class);
+
+                assertThat(deletedHashtagResponses.getHashtags()).hasSize(1);
             })
         );
     }

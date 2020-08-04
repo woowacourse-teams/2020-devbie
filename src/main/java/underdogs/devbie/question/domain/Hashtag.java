@@ -41,4 +41,8 @@ public class Hashtag extends BaseTimeEntity {
             throw new CreateFailException();
         }
     }
+
+    public void update(Hashtag hashtag) {
+        this.tagName = hashtag.getTagName();
+    }
 }

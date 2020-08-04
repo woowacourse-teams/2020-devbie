@@ -23,6 +23,7 @@ import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
+import underdogs.devbie.question.dto.HashtagUpdateRequest;
 
 @ExtendWith(MockitoExtension.class)
 class HashtagServiceTest {
@@ -32,9 +33,16 @@ class HashtagServiceTest {
     @Mock
     private HashtagRepository hashtagRepository;
 
+    private Hashtag hashtag;
+
     @BeforeEach
     void setUp() {
         hashtagService = new HashtagService(hashtagRepository);
+
+        hashtag = Hashtag.builder()
+            .id(100L)
+            .tagName(TagName.from(TEST_HASHTAG_NAME))
+            .build();
     }
 
     @DisplayName("해시태그 생성")
@@ -42,10 +50,6 @@ class HashtagServiceTest {
     void save() {
         HashtagCreateRequest request = HashtagCreateRequest.builder()
             .tagName(TEST_HASHTAG_NAME)
-            .build();
-        Hashtag hashtag = Hashtag.builder()
-            .id(100L)
-            .tagName(TagName.from(TEST_HASHTAG_NAME))
             .build();
         given(hashtagRepository.save(any(Hashtag.class))).willReturn(hashtag);
 
@@ -57,10 +61,6 @@ class HashtagServiceTest {
     @DisplayName("해시태그 목록 조회")
     @Test
     void readAll() {
-        Hashtag hashtag = Hashtag.builder()
-            .id(100L)
-            .tagName(TagName.from(TEST_HASHTAG_NAME))
-            .build();
         List<Hashtag> hashtags = Lists.newArrayList(hashtag);
 
         given(hashtagRepository.findAll()).willReturn(hashtags);
@@ -76,11 +76,6 @@ class HashtagServiceTest {
     @DisplayName("해시태그 단건 조회")
     @Test
     void read() {
-        Hashtag hashtag = Hashtag.builder()
-            .id(100L)
-            .tagName(TagName.from(TEST_HASHTAG_NAME))
-            .build();
-
         given(hashtagRepository.findById(eq(100L))).willReturn(Optional.of(hashtag));
 
         HashtagResponse response = hashtagService.read(hashtag.getId());
@@ -94,11 +89,6 @@ class HashtagServiceTest {
     @DisplayName("이름으로 해시태그 조회")
     @Test
     void readByTagName() {
-        Hashtag hashtag = Hashtag.builder()
-            .id(100L)
-            .tagName(TagName.from(TEST_HASHTAG_NAME))
-            .build();
-
         given(hashtagRepository.findByTagName(anyString())).willReturn(Optional.of(hashtag));
 
         HashtagResponse response = hashtagService.readByTagName(hashtag.getTagName().getName());
@@ -107,5 +97,30 @@ class HashtagServiceTest {
             () -> assertThat(response.getId()).isEqualTo(hashtag.getId()),
             () -> assertThat(response.getTagName()).isEqualTo(hashtag.getTagName().getName())
         );
+    }
+
+    @DisplayName("해시태그 수정")
+    @Test
+    void update() {
+        HashtagUpdateRequest request = HashtagUpdateRequest.builder()
+            .tagName("Changed Name")
+            .build();
+        given(hashtagRepository.findById(anyLong())).willReturn(Optional.of(hashtag));
+
+        hashtagService.update(hashtag.getId(), request);
+
+        HashtagResponse response = hashtagService.read(hashtag.getId());
+
+        assertThat(response.getTagName()).isEqualTo(request.getTagName());
+    }
+
+    @DisplayName("해시태그 삭제")
+    @Test
+    void delete() {
+        willDoNothing().given(hashtagRepository).deleteById(anyLong());
+
+        hashtagService.delete(hashtag.getId());
+
+        verify(hashtagRepository).deleteById(eq(100L));
     }
 }

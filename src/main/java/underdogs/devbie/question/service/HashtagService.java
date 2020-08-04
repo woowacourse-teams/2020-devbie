@@ -11,6 +11,7 @@ import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
+import underdogs.devbie.question.dto.HashtagUpdateRequest;
 import underdogs.devbie.question.exception.HashtagNotExistedException;
 
 @Service
@@ -20,6 +21,7 @@ public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
 
+    @Transactional
     public Long save(HashtagCreateRequest request) {
         Hashtag savedHashtag = hashtagRepository.save(request.toEntity());
         return savedHashtag.getId();
@@ -44,5 +46,16 @@ public class HashtagService {
         Hashtag hashtag = hashtagRepository.findByTagName(tagName)
             .orElseThrow(HashtagNotExistedException::new);
         return HashtagResponse.from(hashtag);
+    }
+
+    @Transactional
+    public void update(Long id, HashtagUpdateRequest request) {
+        Hashtag hashtag = readOne(id);
+        hashtag.update(request.toEntity());
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        hashtagRepository.deleteById(id);
     }
 }

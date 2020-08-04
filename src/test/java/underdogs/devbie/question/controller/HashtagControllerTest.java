@@ -25,6 +25,7 @@ import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
+import underdogs.devbie.question.dto.HashtagUpdateRequest;
 import underdogs.devbie.question.service.HashtagService;
 
 @WebMvcTest(HashtagController.class)
@@ -130,5 +131,29 @@ class HashtagControllerTest extends MvcTest {
             () -> assertThat(hashtagResponse.getId()).isEqualTo(100L),
             () -> assertThat(hashtagResponse.getTagName()).isEqualTo(TEST_HASHTAG_NAME)
         );
+    }
+
+    @DisplayName("해시 태그 수정")
+    @Test
+    void update() throws Exception {
+        HashtagUpdateRequest request = HashtagUpdateRequest.builder()
+            .tagName("Changed Name")
+            .build();
+        String inputJson = objectMapper.writeValueAsString(request);
+
+        willDoNothing().given(hashtagService).update(anyLong(), any(HashtagUpdateRequest.class));
+
+        patchAction("/api/hashtags/1", inputJson, TEST_TOKEN);
+
+        verify(hashtagService).update(eq(1L), any(HashtagUpdateRequest.class));
+    }
+
+    @DisplayName("해시 태그 삭제")
+    @Test
+    void delete() throws Exception {
+        deleteAction("/api/hashtags/1", TEST_TOKEN)
+            .andExpect(status().isNoContent());
+
+        verify(hashtagService).delete(eq(1L));
     }
 }
