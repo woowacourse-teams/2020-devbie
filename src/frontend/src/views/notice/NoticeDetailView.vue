@@ -1,6 +1,5 @@
 <template>
   <div class="detail">
-    <div class="left-menu"></div>
     <notice-detail id="notice-detail"></notice-detail>
   </div>
 </template>
