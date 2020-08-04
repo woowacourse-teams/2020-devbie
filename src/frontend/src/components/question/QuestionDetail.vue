@@ -17,11 +17,29 @@
             {{ fetchedQuestion.visits }}
           </p>
           <p class="infos">
-            <i class="far fa-thumbs-up"></i>
+            <i
+              :class="{
+                'recommendation-clicked': isUserRecommendation('RECOMMENDED')
+              }"
+              class="far fa-thumbs-up recommendation"
+              @click="
+                onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
+              "
+            ></i>
             {{ fetchedQuestionRecommendation.recommendedCount }}
           </p>
           <p class="infos">
-            <i class="far fa-thumbs-down"></i>
+            <i
+              :class="{
+                'recommendation-clicked': isUserRecommendation(
+                  'NON_RECOMMENDED'
+                )
+              }"
+              class="far fa-thumbs-down recommendation"
+              @click="
+                onQuestionRecommendation('RECOMMENDED', 'NON_RECOMMENDED')
+              "
+            ></i>
             {{ fetchedQuestionRecommendation.nonRecommendedCount }}
           </p>
         </div>
@@ -37,13 +55,82 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      questionId: this.$route.params.id,
+      userRecommended: ""
+    };
+  },
   computed: {
-    ...mapGetters(["fetchedQuestion", "fetchedQuestionRecommendation"])
+    ...mapGetters([
+      "fetchedLoginUser",
+      "fetchedQuestion",
+      "fetchedQuestionRecommendation",
+      "fetchedMyQuestionRecommendation"
+    ])
+  },
+  methods: {
+    async onQuestionRecommendation(priorType, newType) {
+      const questionId = this.questionId;
+      if (
+        this.userRecommended === "NOT_EXIST" ||
+        this.userRecommended === priorType
+      ) {
+        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
+          questionId,
+          recommendationType: newType
+        });
+        this.userRecommended = newType;
+      } else {
+        await this.$store.dispatch(
+          "DELETE_QUESTION_RECOMMENDATION",
+          questionId
+        );
+        this.userRecommended = "NOT_EXIST";
+      }
+      await this.$store.dispatch(
+        "FETCH_QUESTION_RECOMMENDATION",
+        this.questionId
+      );
+    },
+    async fetchMyQuestionRecommendation(questionId, userId) {
+      await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
+        questionId,
+        userId
+      });
+      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
+    },
+    isUserRecommendation(recommendationType) {
+      return (
+        this.fetchedMyQuestionRecommendation.recommendationType &&
+        this.userRecommended === recommendationType
+      );
+    }
+  },
+  watch: {
+    fetchedLoginUser: async function() {
+      if (!this.fetchedLoginUser.id) {
+        this.userRecommended = "NOT_EXIST";
+        return;
+      }
+      await this.fetchMyQuestionRecommendation(
+        this.questionId,
+        this.fetchedLoginUser.id
+      );
+    }
   },
   async created() {
-    const questionId = this.$route.params.id;
-    await this.$store.dispatch("FETCH_QUESTION", questionId);
-    await this.$store.dispatch("FETCH_QUESTION_RECOMMENDATION", questionId);
+    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
+    await this.$store.dispatch(
+      "FETCH_QUESTION_RECOMMENDATION",
+      this.questionId
+    );
+    if (this.fetchedLoginUser.id) {
+      await this.fetchMyQuestionRecommendation(
+        this.questionId,
+        this.fetchedLoginUser.id
+      );
+    }
     await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
 };
@@ -71,19 +158,26 @@ export default {
   font-size: 16px;
   margin-right: 15px;
 }
-
+.recommendation:hover {
+  cursor: pointer;
+}
+.recommendation-clicked {
+  color: #7ec699;
+}
 .question-info .infos:last-child {
   margin-right: 5px;
 }
 
 .question-content {
   padding: 30px 50px;
+  margin-bottom: 50px;
 }
 
 .inner {
-  width: 90%;
+  width: 95%;
   box-sizing: border-box;
   padding: 10px 0 40px 0;
   border-bottom: solid 1px #e8e8e8;
+  height: 400px;
 }
 </style>

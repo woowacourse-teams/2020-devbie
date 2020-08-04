@@ -29,33 +29,27 @@ class ControllerLoggingAspect {
 
     @Around("loggerPointCut()")
     public Object methodLogger(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        Object result = proceedingJoinPoint.proceed();
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+
+        String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+        String methodName = proceedingJoinPoint.getSignature().getName();
+
+        Map<String, Object> params = new HashMap<>();
+
         try {
-            Object result = proceedingJoinPoint.proceed();
-            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-
-            String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
-            String methodName = proceedingJoinPoint.getSignature().getName();
-
-            Map<String, Object> params = new HashMap<>();
-
-            try {
-                params.put("controller", controllerName);
-                params.put("method", methodName);
-                params.put("params", getParams(request));
-                params.put("log_time", new Date());
-                params.put("request_uri", request.getRequestURI());
-                params.put("http_method", request.getMethod());
-            } catch (Exception e) {
-                log.error("ControllerLoggerAspect error", e);
-            }
-            log.info("params : {}", params);
-
-            return result;
-
-        } catch (Throwable throwable) {
-            log.error("AOP proceeding error", throwable);
-            throw throwable;
+            params.put("controller", controllerName);
+            params.put("method", methodName);
+            params.put("params", getParams(request));
+            params.put("log_time", new Date());
+            params.put("request_uri", request.getRequestURI());
+            params.put("http_method", request.getMethod());
+        } catch (Exception e) {
+            log.error("LoggingAspect error", e);
         }
+
+        log.info("params : {}", params);
+        return result;
     }
 
     private static JSONObject getParams(HttpServletRequest request) {
