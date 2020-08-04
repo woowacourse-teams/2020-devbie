@@ -115,11 +115,15 @@ jacocoTestReport {
     reports {
         html.enabled true
     }
-
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
 jacocoTestCoverageVerification {
+    def Qdomains = []
+    for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
+        Qdomains.add(qPattern + "*")
+    }
+
     violationRules {
         rule {
             element = 'CLASS'
@@ -131,6 +135,7 @@ jacocoTestCoverageVerification {
             }
 
             includes = ['*.domain.*']
+            excludes = [] + Qdomains
         }
     }
 }
