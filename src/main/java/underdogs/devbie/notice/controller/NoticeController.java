@@ -66,7 +66,7 @@ public class NoticeController {
     }
 
     @NoValidate
-    @GetMapping(params = {"noticeType"})
+    @GetMapping
     public ResponseEntity<NoticeResponses> readAll(
         @RequestParam NoticeType noticeType,
         @RequestParam(required = false) JobPosition jobPosition,
