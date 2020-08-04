@@ -25,8 +25,8 @@ export const router = new VueRouter({
       component: LoginPage
     },
     {
-      path: "/notice",
-      name: "notice",
+      path: "/notices",
+      name: "notices",
       component: NoticeMainPage
     },
     {
