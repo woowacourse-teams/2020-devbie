@@ -1,0 +1,23 @@
+version: "3"
+services:
+  test_database:
+    container_name: test_database
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: test_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+
+  test_application:
+    container_name: test_app
+    image: kimseonggyu1/devbie:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - test_database

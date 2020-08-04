@@ -168,3 +168,5 @@ build
 
 # infra
 nohup.out
+
+db
