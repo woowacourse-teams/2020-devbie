@@ -5,7 +5,6 @@ import questions from "./modules/questions";
 import answers from "./modules/answers";
 import notices from "./modules/notices";
 import recommendations from "./modules/recommendations";
-import notice from "./modules/notice";
 
 Vue.use(Vuex);
 
@@ -15,7 +14,6 @@ export const store = new Vuex.Store({
     questions,
     answers,
     notices,
-    notice,
     recommendations
   }
 });
