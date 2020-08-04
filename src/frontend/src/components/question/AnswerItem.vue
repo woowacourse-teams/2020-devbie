@@ -1,5 +1,5 @@
 <template>
-  <div class="answer-create-item-box">
+  <div class="answer-item-box">
     <div class="author-name">작성자: {{ answer.userId }}</div>
     <div class="answer-temp">
       <div class="answer-content">
@@ -161,7 +161,7 @@ export default {
   margin-top: 15px;
   color: #7ec699;
 }
-.answer-create-item-box {
+.answer-item-box {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
