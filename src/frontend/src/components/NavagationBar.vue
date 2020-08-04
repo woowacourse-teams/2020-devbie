@@ -13,7 +13,9 @@
         ><p class="navigation-menu">면접</p></v-btn
       >
       <template v-if="isLoggedIn">
-        <v-avatar color="primary">image</v-avatar>
+        <v-avatar color="primary">
+          <v-img :src="fetchedLoginUser.image" alt="avatar-image" />
+        </v-avatar>
         <v-btn @click="logout">Logout</v-btn>
       </template>
       <v-btn @click="showLoginPage" color="#E8E8E8" id="login-btn" large v-else
@@ -25,10 +27,14 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   props: ["isLoggedIn"],
 
+  computed: {
+    ...mapGetters(["fetchedLoginUser"])
+  },
   methods: {
     async showLoginPage() {
       try {
