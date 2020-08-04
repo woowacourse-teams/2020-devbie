@@ -75,8 +75,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
             }),
-            dynamicTest("공고 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices", NoticeResponses.class);
+            dynamicTest("채용공고 게시글 전체를 조회한다.", () -> {
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB", NoticeResponses.class);
 
                 NoticeResponse noticeResponse = noticeResponses.getNoticeResponses().get(0);
 
