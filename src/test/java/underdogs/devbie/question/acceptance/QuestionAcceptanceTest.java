@@ -46,6 +46,9 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             WHEN 질문의 제목에 포함된 단어로 검색한다.
             THEN 해당 단어가 포함된 질문 목록이 조회된다.
 
+            WHEN 질문에 해시태그를 추가한다.
+            THEN 해시태그로 질문을 검색할 수 있다.
+
             WHEN 질문을 삭제 요청한다..
             THEN 질문이 삭제된다.
      */

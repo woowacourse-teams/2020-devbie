@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class TagNameTest {
+public class TagNameTest {
 
     public static final String TEST_HASHTAG_NAME = "Test TagName";
 
