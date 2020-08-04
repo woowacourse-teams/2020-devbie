@@ -1,8 +1,10 @@
 package underdogs.devbie.answer.exception;
 
-public class AnswerNotExistedException extends RuntimeException {
+import underdogs.devbie.exception.NotExistException;
+
+public class AnswerNotExistedException extends NotExistException {
 
     public AnswerNotExistedException() {
-        super("존재하지 않는 답변입니다.");
+        super("답변");
     }
 }

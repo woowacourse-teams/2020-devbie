@@ -1,8 +1,12 @@
 package underdogs.devbie.answer.exception;
 
-public class NotMatchedAnswerAuthorException extends RuntimeException {
+import underdogs.devbie.auth.exception.InvalidAuthenticationException;
+
+public class NotMatchedAnswerAuthorException extends InvalidAuthenticationException {
+
+    private static final String FEATURE_NAME = "답변 작성 수정";
 
     public NotMatchedAnswerAuthorException() {
-        super("답변 작성자만 수정할 수 있습니다.");
+        super(FEATURE_NAME);
     }
 }
