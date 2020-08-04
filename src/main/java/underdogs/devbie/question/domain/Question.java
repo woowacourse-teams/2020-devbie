@@ -40,6 +40,7 @@ public class Question extends BaseTimeEntity {
     @Builder
     public Question(Long id, Long userId, QuestionTitle title, QuestionContent content) {
         validateParameters(userId, title, content);
+        this.id = id;
         this.userId = userId;
         this.title = title;
         this.content = content;

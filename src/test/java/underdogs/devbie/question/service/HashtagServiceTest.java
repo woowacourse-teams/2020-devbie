@@ -1,10 +1,14 @@
 package underdogs.devbie.question.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.question.domain.TagNameTest.*;
 
+import java.util.List;
+
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +20,7 @@ import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
+import underdogs.devbie.question.dto.HashtagResponses;
 
 @ExtendWith(MockitoExtension.class)
 class HashtagServiceTest {
@@ -45,6 +50,25 @@ class HashtagServiceTest {
         Long hashtagId = hashtagService.save(request);
 
         assertThat(hashtagId).isEqualTo(hashtag.getId());
+    }
+
+    @DisplayName("해시태그 목록 조회")
+    @Test
+    void readAll() {
+        Hashtag hashtag = Hashtag.builder()
+            .id(100L)
+            .tagName(TagName.from(TEST_HASHTAG_NAME))
+            .build();
+        List<Hashtag> hashtags = Lists.newArrayList(hashtag);
+
+        given(hashtagRepository.findAll()).willReturn(hashtags);
+
+        HashtagResponses hashtagResponses = hashtagService.readAll();
+
+        assertAll(
+            () -> assertThat(hashtagResponses.getHashtags().get(0).getId()).isEqualTo(100L),
+            () -> assertThat(hashtagResponses.getHashtags().get(0).getTagName()).isEqualTo(TEST_HASHTAG_NAME)
+        );
     }
 
 }

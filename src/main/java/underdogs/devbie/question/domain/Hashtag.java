@@ -32,6 +32,7 @@ public class Hashtag extends BaseTimeEntity {
     @Builder
     public Hashtag(Long id, TagName tagName) {
         validateParameters(tagName);
+        this.id = id;
         this.tagName = tagName;
     }
 

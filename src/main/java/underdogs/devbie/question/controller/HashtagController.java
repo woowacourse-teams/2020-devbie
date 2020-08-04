@@ -3,6 +3,7 @@ package underdogs.devbie.question.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
+import underdogs.devbie.question.dto.HashtagResponses;
 import underdogs.devbie.question.service.HashtagService;
 import underdogs.devbie.user.domain.RoleType;
 
@@ -28,5 +30,12 @@ public class HashtagController {
         return ResponseEntity
             .created(URI.create("/api/hashtags/" + hashtagId))
             .build();
+    }
+
+    @GetMapping
+    public ResponseEntity<HashtagResponses> readAll() {
+        HashtagResponses hashtagResponses = hashtagService.readAll();
+        return ResponseEntity
+            .ok(hashtagResponses);
     }
 }

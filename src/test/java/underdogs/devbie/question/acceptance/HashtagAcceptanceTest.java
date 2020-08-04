@@ -1,5 +1,7 @@
 package underdogs.devbie.question.acceptance;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.util.stream.Stream;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.TestFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
+import underdogs.devbie.question.dto.HashtagResponses;
 
 public class HashtagAcceptanceTest extends AcceptanceTest {
 
@@ -38,6 +41,13 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
             dynamicTest("해시태그 생성", () -> {
                 createHashtag("java");
                 createHashtag("network");
+            }),
+            dynamicTest("해시태그 목록 조회", () -> {
+                HashtagResponses hashtagResponses = get("api/hashtags", HashtagResponses.class);
+                assertAll(
+                    () -> assertThat(hashtagResponses.getHashtags().get(0).getTagName()).isEqualTo("java"),
+                    () -> assertThat(hashtagResponses.getHashtags().get(1).getTagName()).isEqualTo("network")
+                );
             })
         );
     }

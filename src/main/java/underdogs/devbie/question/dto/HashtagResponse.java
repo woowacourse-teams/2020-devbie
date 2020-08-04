@@ -15,10 +15,12 @@ import underdogs.devbie.question.domain.Hashtag;
 @ToString
 public class HashtagResponse {
 
+    private Long id;
     private String tagName;
 
     public static HashtagResponse from(Hashtag hashtag) {
         return HashtagResponse.builder()
+            .id(hashtag.getId())
             .tagName(hashtag.getTagName().getName())
             .build();
     }
