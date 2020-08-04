@@ -1,53 +1,6 @@
 <template>
   <div class="notice-detail">
     <div class="inner">
-      <div class="notice-list">
-        <div>
-          <v-card elevation="16" max-width="400" class="mx-auto">
-            <v-card-title class="white--text blue darken-4">
-              전체 공고
-
-              <v-spacer></v-spacer>
-
-              <v-btn color="white" class="text--primary" fab small>
-                <v-icon>mdi-format-list-bulleted</v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-divider></v-divider>
-
-            <v-virtual-scroll
-              :bench="benched"
-              :items="items"
-              height="600"
-              item-height="64"
-            >
-              <template v-slot="{ item }">
-                <v-list-item :key="item.id">
-                  <v-list-item-action>
-                    <v-btn fab small depressed color="primary">
-                      {{ item.id }}
-                    </v-btn>
-                  </v-list-item-action>
-
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ item.name }} 채용 공고 {{ item.title }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-
-                  <v-list-item-action>
-                    <v-icon small @click="$router.push(`/notices/${item.id}`)"
-                      >mdi-open-in-new</v-icon
-                    >
-                  </v-list-item-action>
-                </v-list-item>
-
-                <v-divider></v-divider>
-              </template>
-            </v-virtual-scroll>
-          </v-card>
-        </div>
-      </div>
       <div class="notice-detail-main">
         <div class="notice-header">
           <div class="notice-title">
@@ -106,7 +59,6 @@
         </div>
       </div>
     </div>
-    {{ fetchedNotices.noticeResponses }}
   </div>
 </template>
 
@@ -114,23 +66,13 @@
 import { mapGetters } from "vuex";
 
 export default {
-  data: () => ({
-    benched: 0
-  }),
-  computed: {
-    ...mapGetters(["fetchedNotices"]),
-    ...mapGetters(["fetchedNotice"]),
-    items() {
-      return this.fetchedNotices.noticeResponses;
-    },
-    length() {
-      return 10;
-    }
-  },
   created() {
     const noticeId = this.$route.params.id;
     this.$store.dispatch("FETCH_NOTICES");
     this.$store.dispatch("FETCH_NOTICE", noticeId);
+  },
+  computed: {
+    ...mapGetters(["fetchedNotice"])
   }
 };
 </script>
@@ -153,11 +95,6 @@ export default {
 .notice-detail-main {
   display: flex;
   flex-direction: column;
-}
-
-.notice-list {
-  width: 600px;
-  flex-basis: auto;
 }
 
 .notice-header {
