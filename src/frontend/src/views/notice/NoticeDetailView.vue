@@ -1,15 +1,16 @@
 <template>
   <div class="detail">
-    <notice-detail id="notice-detail"></notice-detail>
+    <notice-scroll id="notice-scroll"></notice-scroll>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import NoticeDetail from "../../components/notice/NoticeDetail";
+import NoticeScroll from "../../components/notice/NoticeScroll";
 
 export default {
   components: {
-    NoticeDetail
+    NoticeScroll
   }
 };
 </script>
@@ -19,12 +20,5 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-}
-.left-menu {
-  flex-grow: 1;
-  border-right: solid 1px #e8e8e8;
-}
-#notice-detail {
-  flex-grow: 8;
 }
 </style>

@@ -8,6 +8,7 @@ import LoginPage from "../views/LoginPage";
 import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/notice/NoticeDetailView";
+import NoticeDetail from "../components/notice/NoticeDetail";
 
 Vue.use(VueRouter);
 
@@ -50,9 +51,16 @@ export const router = new VueRouter({
       component: QuestionEditView
     },
     {
-      path: "/notices/:id",
+      path: "/notices",
       name: "notice-detail",
-      component: NoticeDetailView
+      component: NoticeDetailView,
+      children: [
+        {
+          path: ":id",
+          name: "notice-content",
+          component: NoticeDetail
+        }
+      ]
     }
   ]
 });
