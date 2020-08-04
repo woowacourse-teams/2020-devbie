@@ -12,7 +12,7 @@ import lombok.Getter;
 import reactor.core.publisher.Mono;
 import underdogs.devbie.auth.dto.AccessTokenRequest;
 import underdogs.devbie.auth.dto.AccessTokenResponse;
-import underdogs.devbie.auth.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoDto;
 
 @Getter
 @Component
@@ -57,12 +57,12 @@ public class GithubClient {
         return String.format(GITHUB_LOGIN_URL_PREFIX, clientId);
     }
 
-    public UserInfoResponse fetchUserInfo(String accessToken) {
-        UserInfoResponse userInfoResponse = connectWithAuthorization(accessToken, userInfoUrl)
-            .bodyToFlux(UserInfoResponse.class)
+    public UserInfoDto fetchUserInfo(String accessToken) {
+        UserInfoDto userInfoDto = connectWithAuthorization(accessToken, userInfoUrl)
+            .bodyToFlux(UserInfoDto.class)
             .blockFirst();
 
-        return Objects.requireNonNull(userInfoResponse);
+        return Objects.requireNonNull(userInfoDto);
     }
 
     private WebClient.ResponseSpec connectWithAuthorization(String accessToken, String url) {
