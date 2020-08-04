@@ -90,4 +90,22 @@ class HashtagServiceTest {
             () -> assertThat(response.getTagName()).isEqualTo(hashtag.getTagName().getName())
         );
     }
+
+    @DisplayName("이름으로 해시태그 조회")
+    @Test
+    void readByTagName() {
+        Hashtag hashtag = Hashtag.builder()
+            .id(100L)
+            .tagName(TagName.from(TEST_HASHTAG_NAME))
+            .build();
+
+        given(hashtagRepository.findByTagName(anyString())).willReturn(Optional.of(hashtag));
+
+        HashtagResponse response = hashtagService.readByTagName(hashtag.getTagName().getName());
+
+        assertAll(
+            () -> assertThat(response.getId()).isEqualTo(hashtag.getId()),
+            () -> assertThat(response.getTagName()).isEqualTo(hashtag.getTagName().getName())
+        );
+    }
 }

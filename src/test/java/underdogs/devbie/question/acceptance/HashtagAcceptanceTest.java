@@ -66,6 +66,16 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(hashtagResponse.getId()).isEqualTo(hashtagId),
                     () -> assertThat(hashtagResponse.getTagName()).isEqualTo("java")
                 );
+            }),
+            dynamicTest("이름으로 해시태그 조회", () -> {
+                HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
+                HashtagResponse firstHashtag = hashtagResponses.getHashtags().get(0);
+                HashtagResponse hashtagResponse = get("/api/hashtags?tagName=" + firstHashtag.getTagName(), HashtagResponse.class);
+
+                assertAll(
+                    () -> assertThat(hashtagResponse.getId()).isEqualTo(firstHashtag.getId()),
+                    () -> assertThat(hashtagResponse.getTagName()).isEqualTo(firstHashtag.getTagName())
+                );
             })
         );
     }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,13 @@ public class HashtagController {
     @GetMapping("/{id}")
     public ResponseEntity<HashtagResponse> read(@PathVariable("id") Long id) {
         HashtagResponse hashtagResponse = hashtagService.read(id);
+        return ResponseEntity
+            .ok(hashtagResponse);
+    }
+
+    @GetMapping(params = "tagName")
+    public ResponseEntity<HashtagResponse> read(@RequestParam("tagName") String tagName) {
+        HashtagResponse hashtagResponse = hashtagService.readByTagName(tagName);
         return ResponseEntity
             .ok(hashtagResponse);
     }

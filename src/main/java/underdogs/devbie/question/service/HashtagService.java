@@ -39,4 +39,10 @@ public class HashtagService {
         return hashtagRepository.findById(hashtagId)
             .orElseThrow(HashtagNotExistedException::new);
     }
+
+    public HashtagResponse readByTagName(String tagName) {
+        Hashtag hashtag = hashtagRepository.findByTagName(tagName)
+            .orElseThrow(HashtagNotExistedException::new);
+        return HashtagResponse.from(hashtag);
+    }
 }

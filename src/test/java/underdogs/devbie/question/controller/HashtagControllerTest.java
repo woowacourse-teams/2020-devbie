@@ -108,4 +108,27 @@ class HashtagControllerTest extends MvcTest {
             () -> assertThat(hashtagResponse.getTagName()).isEqualTo(TEST_HASHTAG_NAME)
         );
     }
+
+    @DisplayName("태그 이름으로 해시태그 조회")
+    @Test
+    void readByTagName() throws Exception {
+        Hashtag hashtag = Hashtag.builder()
+            .id(100L)
+            .tagName(TagName.from(TEST_HASHTAG_NAME))
+            .build();
+        HashtagResponse response = HashtagResponse.from(hashtag);
+
+        given(hashtagService.readByTagName(anyString())).willReturn(response);
+
+        MvcResult mvcResult = getAction("/api/hashtags?tagName=/" + response.getTagName())
+            .andExpect(status().isOk())
+            .andReturn();
+        String value = mvcResult.getResponse().getContentAsString();
+        HashtagResponse hashtagResponse = objectMapper.readValue(value, HashtagResponse.class);
+
+        assertAll(
+            () -> assertThat(hashtagResponse.getId()).isEqualTo(100L),
+            () -> assertThat(hashtagResponse.getTagName()).isEqualTo(TEST_HASHTAG_NAME)
+        );
+    }
 }
