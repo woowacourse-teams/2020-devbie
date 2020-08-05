@@ -39,10 +39,11 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
             <v-divider></v-divider>
           </template>
         </v-virtual-scroll>
+        얍
+        {{ notices }}
       </v-card>
     </div>
   </div>
@@ -63,7 +64,7 @@ export default {
   computed: {
     ...mapGetters(["fetchedNotices"]),
     items() {
-      return this.fetchedNotices.noticeResponses;
+      return this.fetchedNotices;
     }
   }
 };

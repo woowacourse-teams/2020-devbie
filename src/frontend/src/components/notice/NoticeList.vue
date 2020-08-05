@@ -2,7 +2,7 @@
   <div>
     <v-row dense>
       <v-col
-        v-for="notice in fetchedNotices.noticeResponses"
+        v-for="notice in fetchedNotices"
         :key="notice.id"
         :cols="2"
         class="selector-item"
