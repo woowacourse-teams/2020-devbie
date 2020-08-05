@@ -21,23 +21,28 @@
           required
           v-model="content"
         ></v-textarea>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <router-link :to="`/questions`" class="form-link">
-            <v-btn class="form-btn" color="blue darken-1">돌아가기 </v-btn>
-          </router-link>
-          <v-btn
-            class="form-btn"
-            color="blue darken-1"
-            @click="onCreateQuestion"
-            >질문 올리기
-          </v-btn>
-        </v-card-actions>
+        <div class="control-box">
+          <hashtag-box></hashtag-box>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <router-link :to="`/questions`" class="form-link">
+              <v-btn class="form-btn" color="blue darken-1">돌아가기 </v-btn>
+            </router-link>
+            <v-btn
+              class="form-btn"
+              color="blue darken-1"
+              @click="onCreateQuestion"
+              >질문 올리기
+            </v-btn>
+          </v-card-actions>
+        </div>
       </v-card>
     </div>
   </div>
 </template>
 <script>
+import HashtagBox from "./HashtagBox";
+
 export default {
   data() {
     return {
@@ -54,6 +59,9 @@ export default {
       await this.$store.dispatch("CREATE_QUESTION", request);
       window.location.href = `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`;
     }
+  },
+  components: {
+    HashtagBox
   }
 };
 </script>
@@ -74,6 +82,11 @@ export default {
 
 .input-box {
   margin-bottom: 25px;
+}
+
+.control-box {
+  display: flex;
+  justify-content: space-between;
 }
 
 .form-link {
