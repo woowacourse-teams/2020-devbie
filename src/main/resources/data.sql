@@ -7,6 +7,9 @@ INSERT INTO notice(name, salary, image, job_position, title, notice_type, conten
 INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog6', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'BACKEND', 'title', 'JOB','hi!');
 INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog7', 5000, 'test', 'BACKEND', 'title', 'JOB','hi!');
 INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji1', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog6', 5000, 'https://cdn.vuetifyjs.com/images/cards/road.jpg', 'FRONTEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('bossdog7', 5000, 'test', 'FRONTEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji1', 6000, 'test', 'FRONTEND', 'title', 'JOB','hi!');
 
 
 INSERT INTO language(notice_id, languages) values (1, 'CPP');
