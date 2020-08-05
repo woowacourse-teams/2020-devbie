@@ -13,13 +13,10 @@ export default {
     }
   },
   actions: {
-    async FETCH_LOGIN_USER({ commit }) {
-      try {
-        const { data } = await getAction("/api/users");
+    FETCH_LOGIN_USER({ commit }) {
+      return getAction("/api/users").then(({ data }) => {
         commit("SET_LOGIN_USER", data);
-      } catch (error) {
-        console.log(error);
-      }
+      });
     }
   },
   getters: {
