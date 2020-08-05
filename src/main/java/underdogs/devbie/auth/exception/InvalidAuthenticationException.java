@@ -1,8 +1,10 @@
 package underdogs.devbie.auth.exception;
 
-public class InvalidAuthenticationException extends RuntimeException {
+import underdogs.devbie.exception.AuthException;
 
-    public InvalidAuthenticationException(String featureName) {
-        super(String.format("%s 기능을 요청할 권한이 없습니다.", featureName));
+public class InvalidAuthenticationException extends AuthException {
+
+    public InvalidAuthenticationException(String reason) {
+        super(reason);
     }
 }

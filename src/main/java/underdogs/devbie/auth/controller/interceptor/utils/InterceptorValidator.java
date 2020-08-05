@@ -7,7 +7,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
-import underdogs.devbie.auth.exception.InvalidAuthorizationException;
+import underdogs.devbie.auth.exception.NotExistUserRoleException;
 import underdogs.devbie.user.domain.RoleType;
 
 public class InterceptorValidator {
@@ -25,11 +25,15 @@ public class InterceptorValidator {
             return false;
         }
 
-        if (!Arrays.asList(methodAnnotation.role())
-            .contains(roleType)) {
-            throw new InvalidAuthorizationException();
-        }
+        validateUserRole(methodAnnotation, roleType);
 
         return true;
+    }
+
+    private void validateUserRole(Role methodAnnotation, RoleType roleType) {
+        if (!Arrays.asList(methodAnnotation.role())
+            .contains(roleType)) {
+            throw new NotExistUserRoleException();
+        }
     }
 }

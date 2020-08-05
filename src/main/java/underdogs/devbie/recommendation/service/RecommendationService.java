@@ -33,7 +33,7 @@ public abstract class RecommendationService<T extends Recommendation> {
     public void deleteRecommendation(Long objectId, Long userId) {
         Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
+        Recommendation recommendation = optRecommendation.orElseThrow(() -> new NotExistException("Recommendation이 존재하지 않습니다."));
 
         recommendationRepository.delete(recommendation);
     }

@@ -21,6 +21,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // todo : 이걸 왜 매번 생성하지 ? 동시성 문제가 발생할까 ?
         InterceptorValidator interceptorValidator = new InterceptorValidator();
 
         if (interceptorValidator.isNotValid(handler)) {
