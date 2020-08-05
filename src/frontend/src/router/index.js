@@ -9,6 +9,7 @@ import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/notice/NoticeDetailView";
 import NoticeDetail from "../components/notice/NoticeDetail";
+import NoticeCreateView from "../views/notice/NoticeCreateView";
 
 Vue.use(VueRouter);
 
@@ -59,6 +60,11 @@ export const router = new VueRouter({
           path: ":id",
           name: "notice-content",
           component: NoticeDetail
+        },
+        {
+          path: "",
+          name: "notice-create",
+          component: NoticeCreateView
         }
       ]
     }
