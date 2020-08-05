@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
@@ -26,6 +28,8 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
+@Sql(value = "/notice_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/notice_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class NoticeAcceptanceTest extends AcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
 
@@ -46,7 +50,13 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
          When 공고 1개를 추가 요청한다.
          Then 공고가 업로드 되었다.
 
-         When 공고 전체를 조회 요청한다.
+         When 공고 전체를 공고타입별 조회 요청한다.
+         Then 공고 전체가 조회된다.
+
+         When 공고 전체를 공고타입과 포지션 조회 요청한다.
+         hen 공고 전체가 조회된다.
+
+         When 공고 전체를 공고타입, 포지션, 언어별 조회 요청한다.
          Then 공고 전체가 조회된다.
 
          When 공고를 수정한다.
@@ -78,18 +88,45 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             dynamicTest("채용공고 게시글 전체를 조회한다.", () -> {
                 NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB", NoticeResponses.class);
 
-                NoticeResponse noticeResponse = noticeResponses.getNoticeResponses().get(0);
+                assertThat(noticeResponses.getNoticeResponses())
+                    .extracting(NoticeResponse::getNoticeType)
+                    .contains(NoticeType.JOB);
+            }),
+            dynamicTest("채용공고와 포지션 별 게시글 전체를 조회한다.", () -> {
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND",
+                    NoticeResponses.class);
 
+                List<NoticeResponse> response = noticeResponses.getNoticeResponses();
                 assertAll(
-                    () -> assertThat(noticeResponse.getId()).isEqualTo(1L),
-                    () -> assertThat(noticeResponse.getName()).isEqualTo("underdogs"),
-                    () -> assertThat(noticeResponse.getTitle()).isEqualTo("언더독스 채용"),
-                    () -> assertThat(noticeResponse.getNoticeType()).isEqualTo(NoticeType.JOB),
-                    () -> assertThat(noticeResponse.getImage()).isEqualTo("/static/image/underdogs"),
-                    () -> assertThat(noticeResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
-                    () -> assertThat(noticeResponse.getLanguages()).contains(Language.JAVA.getName(),
-                        Language.JAVASCRIPT.getName())
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getNoticeType)
+                        .contains(NoticeType.JOB),
+
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getJobPosition)
+                        .contains(JobPosition.BACKEND)
                 );
+
+            }),
+            dynamicTest("채용공고와 포지션과 언어별 게시글 전체를 조회한다.", () -> {
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP",
+                    NoticeResponses.class);
+
+                List<NoticeResponse> response = noticeResponses.getNoticeResponses();
+                assertAll(
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getNoticeType)
+                        .contains(NoticeType.JOB),
+
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getJobPosition)
+                        .contains(JobPosition.BACKEND),
+
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getLanguages)
+                        .anyMatch(language -> language.contains(Language.CPP.getName()))
+                );
+
             }),
             dynamicTest("공고 게시글을 수정한다.", () -> {
                 NoticeUpdateRequest noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -128,5 +165,4 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             })
         );
     }
-
 }
