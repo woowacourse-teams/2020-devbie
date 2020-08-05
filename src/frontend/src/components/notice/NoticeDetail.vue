@@ -27,6 +27,15 @@
               <v-btn id="chatting-btn" depressed large color="primary"
                 >채팅방</v-btn
               >
+              <v-btn
+                id="destroy-btn"
+                depressed
+                large
+                color="warning"
+                v-if="isAdmin()"
+                @click="onDeleteNotice"
+                >삭제</v-btn
+              >
             </div>
           </div>
         </div>
@@ -64,14 +73,25 @@
 
 <script>
 import { mapGetters } from "vuex";
+import router from "../../router";
 
 export default {
+  methods: {
+    isAdmin() {
+      return this.fetchedLoginUser.roleType === "ADMIN";
+    },
+    async onDeleteNotice() {
+      await this.$store.dispatch("DELETE_NOTICE", this.$route.params.id);
+      await router.go(0); // 새로고침
+    }
+  },
   created() {
     const noticeId = this.$route.params.id;
     this.$store.dispatch("FETCH_NOTICES");
     this.$store.dispatch("FETCH_NOTICE", noticeId);
   },
   computed: {
+    ...mapGetters(["fetchedLoginUser"]),
     ...mapGetters(["fetchedNotice"])
   }
 };
@@ -145,6 +165,12 @@ export default {
 }
 
 #chatting-btn {
+  width: 100px;
+  padding: 10px;
+  margin: 3px 3px;
+}
+
+#destroy-btn {
   width: 100px;
   padding: 10px;
   margin: 3px 3px;

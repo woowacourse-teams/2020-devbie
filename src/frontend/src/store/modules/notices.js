@@ -1,4 +1,4 @@
-import { getAction } from "../../api";
+import { deleteAction, getAction } from "../../api";
 
 export default {
   state: {
@@ -11,13 +11,16 @@ export default {
     },
     SET_NOTICE(state, data) {
       state.notice = data;
+    },
+    DELETE_NOTICE(state, noticeId) {
+      state.notices = state.notices.filter(notice => notice.id !== noticeId);
     }
   },
   actions: {
     async FETCH_NOTICES({ commit }) {
       try {
         const { data } = await getAction(`/api/notices`);
-        commit("SET_NOTICES", data);
+        commit("SET_NOTICES", data["noticeResponses"]);
       } catch (error) {
         console.log(error);
       }
@@ -26,6 +29,14 @@ export default {
       try {
         const { data } = await getAction(`/api/notices/${noticeId}`);
         commit("SET_NOTICE", data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async DELETE_NOTICE({ commit }, noticeId) {
+      try {
+        await deleteAction(`/api/notices/${noticeId}`);
+        commit("DELETE_NOTICE", Number(noticeId));
       } catch (error) {
         console.log(error);
       }
