@@ -24,10 +24,8 @@ public class ControllerAdvice {
     // 500 - 서버가 예상하지 못한 에러가 발생했다.
 
     @ExceptionHandler(UnAuthorizedException.class)
-    public ResponseEntity<ErrorResponse> unauthorizedExceptionHandler(Exception exception) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-            .message(exception.getMessage())
-            .build();
+    public ResponseEntity<ErrorResponse> unauthorizedExceptionHandler(UnAuthorizedException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body(errorResponse);
     }
