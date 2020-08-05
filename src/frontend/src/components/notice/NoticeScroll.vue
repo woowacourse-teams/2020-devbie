@@ -42,7 +42,6 @@
             <v-divider></v-divider>
           </template>
         </v-virtual-scroll>
-        얍
         {{ notices }}
       </v-card>
     </div>
