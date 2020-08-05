@@ -53,7 +53,7 @@ public class NoticeService {
     }
 
     public NoticeResponses filteredRead(NoticeType noticeType, JobPosition jobPosition, Language language) {
-        List<Notice> notices = noticeRepository.findBy(noticeType, jobPosition, language);
+        List<Notice> notices = noticeRepository.findAllBy(noticeType, jobPosition, language);
         return NoticeResponses.listFrom(notices);
     }
 }
