@@ -13,6 +13,7 @@ import org.mockito.internal.util.collections.Sets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
+import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -118,10 +119,26 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
 
                 String inputJson = objectMapper.writeValueAsString(hashTagsRequest);
                 put("/api/questions/" + firstQuestion.getQuestionId() + "/hashtags", inputJson);
+
+                QuestionResponse question = fetchFirstQuestion();
+            }),
+            dynamicTest("질문에 해시태그 삭제", () -> {
+                QuestionResponse firstQuestion = fetchFirstQuestion();
+                HashtagResponse hashtag = firstQuestion.getHashtags().get(0);
+
+                delete(String.format("/api/questions/%d/hashtags/%d", firstQuestion.getQuestionId(), hashtag.getId()));
+
+                QuestionResponse deletedHashtagQuestion = fetchFirstQuestion();
+
+                assertAll(
+                    () -> assertThat(deletedHashtagQuestion.getHashtags()).hasSize(1),
+                    () -> assertThat(deletedHashtagQuestion.getHashtags().get(0).getTagName()).isEqualTo(firstQuestion.getHashtags().get(1).getTagName())
+                );
             }),
             dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
                 delete("/api/questions/" + firstQuestion.getQuestionId());
+
                 QuestionResponses questions = get("/api/questions", QuestionResponses.class);
                 assertThat(questions.getQuestions()).hasSize(1);
             })

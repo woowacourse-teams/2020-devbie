@@ -203,4 +203,13 @@ class QuestionControllerTest extends MvcTest {
 
         verify(questionService).saveOrUpdateHashtags(eq(1L), any(HashtagsRequest.class));
     }
+
+    @DisplayName("질문에 달린 해시태그 삭제")
+    @Test
+    void deleteHashtagOnQuestion() throws Exception {
+        deleteAction("/api/questions/1/hashtags/2", TEST_TOKEN)
+            .andExpect(status().isNoContent());
+
+        verify(questionService).deleteHashtag(eq(1L), eq(2L));
+    }
 }

@@ -96,9 +96,20 @@ public class QuestionController {
     @PutMapping("/{id}/hashtags")
     public ResponseEntity<Void> addHashtag(
         @PathVariable("id") Long id,
-        @RequestBody HashtagsRequest request
+        @Valid @RequestBody HashtagsRequest request
     ) {
         questionService.saveOrUpdateHashtags(id, request);
+        return ResponseEntity
+            .noContent()
+            .build();
+    }
+
+    @DeleteMapping("/{id}/hashtags/{hashtagId}")
+    public ResponseEntity<Void> deleteHashtag(
+        @PathVariable("id") Long questionId,
+        @PathVariable("hashtagId") Long hashtagId
+    ) {
+        questionService.deleteHashtag(questionId, hashtagId);
         return ResponseEntity
             .noContent()
             .build();

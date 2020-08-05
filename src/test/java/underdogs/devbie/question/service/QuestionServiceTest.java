@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
+import underdogs.devbie.question.domain.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.dto.HashtagsRequest;
@@ -42,13 +43,16 @@ class QuestionServiceTest {
     @Mock
     private HashtagRepository hashtagRepository;
 
+    @Mock
+    private QuestionHashtagRepository questionHashtagRepository;
+
     private User user;
 
     private Question question;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionRepository, hashtagRepository);
+        questionService = new QuestionService(questionRepository, hashtagRepository, questionHashtagRepository);
 
         user = User.builder()
             .id(1L)
@@ -204,5 +208,13 @@ class QuestionServiceTest {
             () -> assertThat(question.getHashtags()).hasSize(2),
             () -> assertThat(question.getHashtags().containsAll(Lists.newArrayList("java", "network")))
         );
+    }
+
+    @DisplayName("질문에 달리 해시태그 삭제")
+    @Test
+    void deleteHashtag() {
+        questionService.deleteHashtag(1L, 2L);
+
+        verify(questionHashtagRepository).deleteByQuestionIdAndHashtagId(eq(1L), eq(2L));
     }
 }

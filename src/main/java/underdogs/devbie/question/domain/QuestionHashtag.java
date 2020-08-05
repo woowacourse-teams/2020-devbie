@@ -2,6 +2,7 @@ package underdogs.devbie.question.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,7 @@ import underdogs.devbie.exception.CreateFailException;
 public class QuestionHashtag {
 
     @Id
+    @Column(name = "question_hashtag_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

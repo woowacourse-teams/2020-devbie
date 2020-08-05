@@ -1,7 +1,10 @@
 package underdogs.devbie.question.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +22,8 @@ import underdogs.devbie.question.domain.TagName;
 @ToString
 public class HashtagsRequest {
 
-    private Set<String> hashtags;
+    @NotEmpty
+    private Set<String> hashtags = new HashSet<>();
 
     public Set<Hashtag> toEntity() {
         return hashtags.stream()

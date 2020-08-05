@@ -1,11 +1,13 @@
 package underdogs.devbie.question.domain;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ import underdogs.devbie.exception.CreateFailException;
 public class Question extends BaseTimeEntity {
 
     @Id
+    @Column(name = "question_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -42,7 +45,7 @@ public class Question extends BaseTimeEntity {
     @Embedded
     private Visits visits;
 
-    @OneToMany(fetch = LAZY, mappedBy = "question")
+    @OneToMany(fetch = LAZY, cascade = REMOVE, orphanRemoval = true, mappedBy = "question")
     private Set<QuestionHashtag> hashtags = new HashSet<>();
 
     @Builder
@@ -70,7 +73,8 @@ public class Question extends BaseTimeEntity {
         this.visits.increase();
     }
 
-    public void saveOrUpdateHashtags(Set<QuestionHashtag> hashtags) {
-        this.hashtags = hashtags;
+    public void setHashtags(Set<QuestionHashtag> hashtags) {
+        this.hashtags.clear();
+        this.hashtags.addAll(hashtags);
     }
 }
