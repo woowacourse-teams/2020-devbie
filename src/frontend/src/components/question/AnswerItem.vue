@@ -6,7 +6,12 @@
         <p class="answer-content-value" v-if="!this.updateEditFlag">
           {{ answer.content }}
         </p>
-        <v-textarea outlined v-else v-model="answer.content"></v-textarea>
+        <v-textarea
+          class="update-form"
+          outlined
+          v-else
+          v-model="updateContent"
+        ></v-textarea>
       </div>
       <div :class="{ 'vertical-center': !author }" class="answer-infos">
         <div class="recommendations">
@@ -41,7 +46,7 @@
           </p>
         </div>
         <div v-if="author">
-          <v-btn class="update-btn" v-if="this.updateEditFlag" @click="update">
+          <v-btn class="update-btn" v-if="updateEditFlag" @click="update">
             수정 확인
           </v-btn>
           <v-btn class="update-btn" v-else @click="updateBtnHandler"
@@ -63,7 +68,8 @@ export default {
     return {
       author: false,
       userRecommended: "",
-      updateEditFlag: false
+      updateEditFlag: false,
+      updateContent: this.answer.content
     };
   },
   computed: {
@@ -83,10 +89,19 @@ export default {
     isAuthor() {
       return (this.author = this.answer.userId === this.fetchedLoginUser.id);
     },
-    deleteBtnHandler() {
-      this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+    async deleteBtnHandler() {
+      await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
     updateBtnHandler() {
+      this.updateEditFlag = !this.updateEditFlag;
+    },
+    async update() {
+      const answerId = this.answer.id;
+      const updateContent = this.updateContent;
+      await this.$store.dispatch("UPDATE_ANSWER", {
+        answerId,
+        updateContent
+      });
       this.updateEditFlag = !this.updateEditFlag;
     },
     async onAnswerRecommendation(priorType, newType) {
@@ -177,6 +192,9 @@ export default {
 }
 .recommendation-clicked {
   color: #7ec699;
+}
+.answer-content {
+  min-width: 80%;
 }
 .update-btn {
   margin-right: 7px;
