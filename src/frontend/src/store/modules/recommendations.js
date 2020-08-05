@@ -57,6 +57,7 @@ export default {
         commit();
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     async DELETE_QUESTION_RECOMMENDATION({ commit }, questionId) {
@@ -67,6 +68,7 @@ export default {
         commit();
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     async FETCH_ANSWER_RECOMMENDATION({ commit }, answerId) {
@@ -74,7 +76,13 @@ export default {
         const { data } = await getAction(
           `/api/recommendation-answer?objectId=${answerId}`
         );
-        commit("SET_ANSWER_RECOMMENDATION", { answerId, data });
+        const recommendedCount = data.recommendedCount;
+        const nonRecommendedCount = data.nonRecommendedCount;
+        commit("SET_ANSWER_RECOMMENDATION", {
+          answerId,
+          recommendedCount,
+          nonRecommendedCount
+        });
       } catch (error) {
         console.log(error);
       }
@@ -85,25 +93,28 @@ export default {
           `/api/recommendation-answer?objectId=${payload.answerId}&userId=${payload.userId}`
         );
         const answerId = payload.answerId;
-        commit("SET_MY_ANSWER_RECOMMENDATION", { answerId, data });
+        const recommendationType = data.recommendationType;
+        commit("SET_MY_ANSWER_RECOMMENDATION", {
+          answerId,
+          recommendationType
+        });
       } catch (error) {
         console.log(error);
       }
     },
     async ON_ANSWER_RECOMMENDATION({ commit }, payload) {
       try {
-        const answerId = payload.answerId;
         const recommendationType = payload.recommendationType;
         await putAction(
           `/api/recommendation-answer?objectId=${payload.answerId}`,
           {
-            answerId: answerId,
             recommendationType: recommendationType
           }
         );
         commit();
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     async DELETE_ANSWER_RECOMMENDATION({ commit }, answerId) {
@@ -112,6 +123,7 @@ export default {
         commit();
       } catch (error) {
         console.log(error);
+        throw error;
       }
     }
   },

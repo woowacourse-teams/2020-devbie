@@ -25,9 +25,7 @@
               class="far fa-thumbs-up recommendation"
               @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
             ></i>
-            {{
-              answerRecommendation && answerRecommendation.data.recommendedCount
-            }}
+            {{ answerRecommendation && answerRecommendation.recommendedCount }}
           </p>
           <p class="infos">
             <i
@@ -40,8 +38,7 @@
               @click="onAnswerRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
             ></i>
             {{
-              answerRecommendation &&
-                answerRecommendation.data.nonRecommendedCount
+              answerRecommendation && answerRecommendation.nonRecommendedCount
             }}
           </p>
         </div>
@@ -110,14 +107,22 @@ export default {
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
-          answerId,
-          recommendationType: newType
-        });
-        this.userRecommended = newType;
+        try {
+          await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
+            answerId,
+            recommendationType: newType
+          });
+          this.userRecommended = newType;
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
-        this.userRecommended = "NOT_EXIST";
+        try {
+          await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
+          this.userRecommended = "NOT_EXIST";
+        } catch (error) {
+          console.log(error);
+        }
       }
       await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
     },
@@ -126,7 +131,7 @@ export default {
         answerId,
         userId
       });
-      this.userRecommended = this.myAnswerRecommendation.data.recommendationType;
+      this.userRecommended = this.myAnswerRecommendation.recommendationType;
     }
   },
   watch: {
@@ -144,6 +149,7 @@ export default {
     }
   },
   async created() {
+    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
     if (this.fetchedLoginUser.id) {
       await this.fetchMyAnswerRecommendation(
         this.answer.id,
@@ -151,7 +157,6 @@ export default {
       );
     }
     await this.isAuthor();
-    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
   }
 };
 </script>

@@ -76,17 +76,25 @@ export default {
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
-          questionId,
-          recommendationType: newType
-        });
-        this.userRecommended = newType;
+        try {
+          await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
+            questionId,
+            recommendationType: newType
+          });
+          this.userRecommended = newType;
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        await this.$store.dispatch(
-          "DELETE_QUESTION_RECOMMENDATION",
-          questionId
-        );
-        this.userRecommended = "NOT_EXIST";
+        try {
+          await this.$store.dispatch(
+            "DELETE_QUESTION_RECOMMENDATION",
+            questionId
+          );
+          this.userRecommended = "NOT_EXIST";
+        } catch (error) {
+          console.log(error);
+        }
       }
       await this.$store.dispatch(
         "FETCH_QUESTION_RECOMMENDATION",
