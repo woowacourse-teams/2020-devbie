@@ -5,9 +5,6 @@
       <notice-filters></notice-filters>
       <v-text-field class="search-bar"></v-text-field>
     </div>
-    <v-btn class="btn" @click="$router.push(`/notices/create`)"
-      >관리자 글쓰기</v-btn
-    >
     <notice-cards></notice-cards>
   </div>
 </template>
@@ -45,11 +42,5 @@ export default {
 }
 .search-bar .input {
   padding: 0;
-}
-.btn {
-  margin-bottom: 20px;
-}
-.btn:hover {
-  opacity: 0.7;
 }
 </style>

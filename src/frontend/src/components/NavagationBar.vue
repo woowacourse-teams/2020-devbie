@@ -6,6 +6,9 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn @click="$router.push('/admin')" v-if="isAdmin()" text x-large
+        ><p class="navigation-menu">관리자</p></v-btn
+      >
       <v-btn @click="$router.push('/notices')" text x-large
         ><p class="navigation-menu">공고</p></v-btn
       >
@@ -25,11 +28,17 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   props: ["isLoggedIn"],
-
   methods: {
+    isAdmin() {
+      if (this.isLoggedIn) {
+        return this.fetchedLoginUser.roleType === "ADMIN";
+      }
+      return false;
+    },
     async showLoginPage() {
       try {
         const redirectUrlData = await axios.get("/api/auth/login-url");
@@ -41,6 +50,9 @@ export default {
     logout() {
       this.$emit("logout");
     }
+  },
+  computed: {
+    ...mapGetters(["fetchedLoginUser"])
   }
 };
 </script>
