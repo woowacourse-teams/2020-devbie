@@ -1,5 +1,7 @@
 <template>
-  <div>뭐야?</div>
+  <div>
+    <a @click="$router.push(`/notices/create`)">글쓰기</a>
+  </div>
 </template>
 
 <script>
