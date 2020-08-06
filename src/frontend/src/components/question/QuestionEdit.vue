@@ -21,24 +21,29 @@
           row-height="1"
           required
         ></v-textarea>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <router-link :to="`/questions`" class="form-link">
-            <v-btn class="form-btn" color="blue darken-1">돌아가기 </v-btn>
-          </router-link>
-          <v-btn
-            class="form-btn"
-            color="blue darken-1"
-            @click="onUpdateQuestion"
-            >수정하기
-          </v-btn>
-        </v-card-actions>
+        <div class="control-box">
+          <hashtag-box></hashtag-box>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <router-link :to="`/questions`" class="form-link">
+              <v-btn class="form-btn" color="blue darken-1">돌아가기 </v-btn>
+            </router-link>
+            <v-btn
+              class="form-btn"
+              color="blue darken-1"
+              @click="onUpdateQuestion"
+              >수정하기
+            </v-btn>
+          </v-card-actions>
+        </div>
       </v-card>
     </div>
   </div>
 </template>
 
 <script>
+import HashtagBox from "./HashtagBox";
+
 export default {
   data() {
     return {
@@ -60,6 +65,9 @@ export default {
   },
   created() {
     this.$store.dispatch("FETCH_QUESTION", this.questionId);
+  },
+  components: {
+    HashtagBox
   }
 };
 </script>
@@ -76,6 +84,11 @@ export default {
 
 .inner .inner-card {
   padding: 25px;
+}
+
+.control-box {
+  display: flex;
+  justify-content: space-between;
 }
 
 .input-box {
