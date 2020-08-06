@@ -1,16 +1,16 @@
 <template>
   <div class="edit-form">
     <h2 class="title">질문 수정 페이지</h2>
-    <edit-form id="edit-form"></edit-form>
+    <question-edit id="edit-form"></question-edit>
   </div>
 </template>
 
 <script>
-import EditForm from "../../components/question/EditForm";
+import QuestionEdit from "../../components/question/QuestionEdit";
 
 export default {
   components: {
-    EditForm
+    QuestionEdit
   }
 };
 </script>
