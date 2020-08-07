@@ -35,6 +35,15 @@
         </v-card-actions>
       </v-card>
     </div>
+    <v-snackbar v-model="snackbar" :multi-line="true" top>
+      {{ snackbarText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+          닫기
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -44,18 +53,33 @@ export default {
     return {
       questionId: this.$route.params.id,
       title: this.$store.getters.fetchedQuestion.title,
-      content: this.$store.getters.fetchedQuestion.content
+      content: this.$store.getters.fetchedQuestion.content,
+      snackbar: false,
+      snackbarText: ""
     };
   },
   methods: {
     async onUpdateQuestion() {
+      if (this.title === "" || this.content === "") {
+        this.showSnackBar();
+        return;
+      }
       const request = {
         title: this.title,
         content: this.content
       };
-      const id = this.questionId;
-      await this.$store.dispatch("UPDATE_QUESTION", { request, id });
-      window.location.href = `/questions/${this.questionId}`;
+      try {
+        const id = this.questionId;
+        await this.$store.dispatch("UPDATE_QUESTION", { request, id });
+        window.location.href = `/questions/${this.questionId}`;
+      } catch (error) {
+        this.showSnackBar();
+        console.log(error);
+      }
+    },
+    showSnackBar() {
+      this.snackbar = true;
+      this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
     }
   },
   created() {

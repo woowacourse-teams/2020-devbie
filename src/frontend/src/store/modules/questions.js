@@ -41,12 +41,12 @@ export default {
       return response;
     },
     async UPDATE_QUESTION({ commit }, payload) {
-      try {
-        await patchAction(`/api/questions/${payload.id}`, payload.request);
-        commit();
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await patchAction(
+        `/api/questions/${payload.id}`,
+        payload.request
+      );
+      commit();
+      return response;
     },
     async DELETE_QUESTION({ commit }, questionId) {
       try {
