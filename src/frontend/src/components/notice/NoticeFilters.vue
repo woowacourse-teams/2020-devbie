@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       languages: ["C", "C++", "JAVA"],
-      position: ["프론트엔드", "백엔드", "인프라"]
+      position: ["프론트엔드", "백엔드"]
     };
   }
 };
