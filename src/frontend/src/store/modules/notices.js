@@ -1,4 +1,4 @@
-import { deleteAction, getAction, postAction } from "../../api";
+import { deleteAction, getAction, patchAction, postAction } from "../../api";
 
 export default {
   state: {
@@ -18,6 +18,18 @@ export default {
     },
     DELETE_NOTICE(state, noticeId) {
       state.notices = state.notices.filter(notice => notice.id !== noticeId);
+    },
+    UPDATE_NOTICE(state, noticeId, data) {
+      state.notice = data;
+      state.notices = state.notices.map(notice => {
+        if (notice.id === noticeId) {
+          return {
+            ...data,
+            id: noticeId
+          };
+        }
+        return notice;
+      });
     }
   },
   actions: {
@@ -55,6 +67,14 @@ export default {
       try {
         await deleteAction(`/api/notices/${noticeId}`);
         commit("DELETE_NOTICE", Number(noticeId));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async EDIT_NOTICE({ commit }, { id, params }) {
+      try {
+        await patchAction(`/api/notices/${id}`, params);
+        commit("UPDATE_NOTICE", id, params);
       } catch (error) {
         console.log(error);
       }
