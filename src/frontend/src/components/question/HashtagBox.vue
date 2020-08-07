@@ -52,6 +52,10 @@ export default {
   },
   methods: {
     addHashtag() {
+      if (this.tagName.trim() === "") {
+        console.log("태그 공백일 수 없습니다.");
+        return;
+      }
       this.items.push(this.tagName);
     },
     deleteHashtag(index) {
