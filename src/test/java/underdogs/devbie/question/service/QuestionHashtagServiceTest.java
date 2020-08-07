@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.question.domain.QuestionTest.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class QuestionHashtagServiceTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
         hashtag = Hashtag.builder()
             .id(1L)

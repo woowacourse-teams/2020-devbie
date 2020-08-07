@@ -3,7 +3,7 @@ package underdogs.devbie.question.domain;
 import static org.assertj.core.api.Assertions.*;
 import static underdogs.devbie.question.domain.QuestionTest.*;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.assertj.core.util.Lists;
@@ -20,7 +20,7 @@ class QuestionHashtagsTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         QuestionHashtags questionHashtags = new QuestionHashtags(Sets.newSet(

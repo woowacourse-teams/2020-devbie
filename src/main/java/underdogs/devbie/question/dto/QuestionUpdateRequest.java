@@ -1,6 +1,6 @@
 package underdogs.devbie.question.dto;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
@@ -35,7 +35,7 @@ public class QuestionUpdateRequest {
             .userId(userId)
             .title(QuestionTitle.from(title))
             .content(QuestionContent.from(content))
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
     }
 }

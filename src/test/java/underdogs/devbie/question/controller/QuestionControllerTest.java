@@ -10,7 +10,7 @@ import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.question.service.QuestionServiceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -171,7 +171,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from("스택과 큐의 차이"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         Question question2 = Question.builder()
@@ -179,7 +179,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from("오버스택플로우"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));

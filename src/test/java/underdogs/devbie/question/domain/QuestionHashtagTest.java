@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static underdogs.devbie.question.domain.QuestionTest.*;
 import static underdogs.devbie.question.domain.TagNameTest.*;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class QuestionHashtagTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         assertThatThrownBy(() -> QuestionHashtag.builder()

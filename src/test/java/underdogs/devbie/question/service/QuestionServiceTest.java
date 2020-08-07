@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -70,7 +70,7 @@ public class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from(TEST_QUESTION_TITLE))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         questionHashtags = Sets.newSet(
@@ -195,14 +195,14 @@ public class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from("스택과 큐의 차이"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         Question question2 = Question.builder()
             .userId(2L)
             .title(QuestionTitle.from("오버스택플로우"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new HashSet<>())
+            .hashtags(new LinkedHashSet<>())
             .build();
 
         List<Question> questions = Lists.newArrayList(question1, question2);
