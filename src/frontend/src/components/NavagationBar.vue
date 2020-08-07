@@ -40,10 +40,10 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import {mapGetters} from "vuex";
+import axios from "axios";
+import { mapGetters } from "vuex";
 
-  export default {
+export default {
   props: ["isLoggedIn"],
 
   computed: {

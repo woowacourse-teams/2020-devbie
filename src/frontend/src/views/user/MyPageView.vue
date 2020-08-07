@@ -3,9 +3,9 @@
 </template>
 
 <script>
-    import MyPage from "../../components/user/MyPage";
+import MyPage from "../../components/user/MyPage";
 
-    export default {
+export default {
   components: {
     MyPage
   },
