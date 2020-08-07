@@ -17,12 +17,14 @@ public class UserResponse {
     private Long id;
     private String email;
     private String image;
+    private String name;
     private RoleType roleType;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
             .id(user.getId())
             .email(user.getEmail())
+            .name(user.getName())
             .image(user.getImage())
             .roleType(user.getRoleType())
             .build();
