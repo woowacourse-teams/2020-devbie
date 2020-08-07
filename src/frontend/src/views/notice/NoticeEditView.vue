@@ -73,12 +73,30 @@
       >
         작성하기
       </v-btn>
+      {{ fetchedNotice }}
     </v-form>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
+  async created() {
+    await this.$store.dispatch("FETCH_NOTICE", this.$route.params.id);
+
+    this.request = {
+      ...this.fetchedNotice,
+      description: this.fetchedNotice.noticeDescription.content,
+      languages: this.fetchedNotice.noticeDescription.languages,
+      name: this.fetchedNotice.company.name,
+      salary: this.fetchedNotice.company.salary
+    };
+    console.log(this.request);
+  },
+  computed: {
+    ...mapGetters(["fetchedNotice"])
+  },
   data: function() {
     return {
       valid: true,

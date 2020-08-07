@@ -9,8 +9,9 @@ import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/notice/NoticeDetailView";
 import NoticeDetail from "../components/notice/NoticeDetail";
-import AdminMainView from "@/views/admin/AdminMainView";
-import NoticeCreateView from "@/views/notice/NoticeCreateView";
+import AdminMainView from "../views/admin/AdminMainView";
+import NoticeCreateView from "../views/notice/NoticeCreateView";
+import NoticeEditView from "../views/notice/NoticeEditView";
 
 Vue.use(VueRouter);
 
@@ -69,6 +70,11 @@ export const router = new VueRouter({
       path: "/notices/create",
       name: "notice-create",
       component: NoticeCreateView
+    },
+    {
+      path: "/notices/edit/:id",
+      name: "notice-edit",
+      component: NoticeEditView
     },
     {
       path: "/admin",
