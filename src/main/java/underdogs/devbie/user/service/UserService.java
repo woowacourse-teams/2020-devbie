@@ -8,6 +8,8 @@ import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
+import underdogs.devbie.user.dto.UserUpdateRequest;
+import underdogs.devbie.user.exception.NotMatchedUserException;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,6 +26,18 @@ public class UserService {
 
         userRepository.save(user);
         return user;
+    }
+
+    @Transactional
+    public void updateUserInfo(User user, UserUpdateRequest request) {
+        validateUser(user.getId(), request.getId());
+        user.updateUserInfo(request.toEntity());
+    }
+
+    private void validateUser(Long userId, Long id) {
+        if (!userId.equals(id)) {
+            throw new NotMatchedUserException();
+        }
     }
 
     public User findById(long userId) {

@@ -45,6 +45,12 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public void updateUserInfo(User user) {
+        this.name = user.name;
+        this.email = user.email;
+        this.image = user.image;
+    }
+
     private void validateUserInfo(UserInfoDto userInfoDto) {
         if (!userInfoDto.getId().equals(this.oauthId)) {
             throw new IllegalArgumentException("일치하지않은 유저입니다. "
