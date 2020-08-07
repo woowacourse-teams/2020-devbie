@@ -64,6 +64,9 @@ export default {
       this.hashtags = hashtags;
     }
   },
+  created() {
+    this.$store.commit("CLEAR_HASHTAGS");
+  },
   components: {
     HashtagBox
   }

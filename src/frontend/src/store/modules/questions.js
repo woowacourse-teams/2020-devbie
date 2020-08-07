@@ -15,6 +15,9 @@ export default {
     },
     SET_NEW_QUESTION_ID(state, data) {
       state.questionId = data;
+    },
+    CLEAR_HASHTAGS(state) {
+      state.question.hashtags = [];
     }
   },
   actions: {
