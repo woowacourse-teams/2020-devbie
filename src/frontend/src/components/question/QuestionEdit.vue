@@ -43,15 +43,19 @@
 
 <script>
 import HashtagBox from "./HashtagBox";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       questionId: this.$route.params.id,
-      title: this.$store.getters.fetchedQuestion.title,
-      content: this.$store.getters.fetchedQuestion.content,
+      title: "",
+      content: "",
       hashtags: []
     };
+  },
+  computed: {
+    ...mapGetters(["fetchedLoginUser", "fetchedQuestion"])
   },
   methods: {
     async onUpdateQuestion() {
@@ -67,8 +71,18 @@ export default {
       this.hashtags = hashtags;
     }
   },
-  created() {
-    this.$store.dispatch("FETCH_QUESTION", this.questionId);
+  watch: {
+    fetchedLoginUser: function() {
+      this.title = this.fetchedQuestion.title;
+      this.content = this.fetchedQuestion.content;
+      this.hashtags = this.fetchedQuestion.hashtags;
+    }
+  },
+  async created() {
+    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
+    this.title = this.fetchedQuestion.title;
+    this.content = this.fetchedQuestion.content;
+    this.hashtags = this.fetchedQuestion.hashtags;
   },
   components: {
     HashtagBox

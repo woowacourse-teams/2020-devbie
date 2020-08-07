@@ -42,6 +42,9 @@ export default {
     }
   },
   watch: {
+    fetchedQuestion: function() {
+      this.items = this.tagNames;
+    },
     items: function() {
       this.$emit("hashtags", this.items);
       this.tagName = "";
@@ -54,9 +57,6 @@ export default {
     deleteHashtag(index) {
       this.items.splice(index, 1);
     }
-  },
-  created() {
-    this.items = this.tagNames;
   }
 };
 </script>
