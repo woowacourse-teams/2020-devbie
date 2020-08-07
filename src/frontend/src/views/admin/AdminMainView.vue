@@ -5,7 +5,19 @@
 </template>
 
 <script>
-export default {};
+export default {
+  async created() {
+    await this.isAdmin();
+  },
+  methods: {
+    async isAdmin() {
+      const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
+      if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
+        await this.$router.push("/");
+      }
+    }
+  }
+};
 </script>
 
 <style scoped></style>

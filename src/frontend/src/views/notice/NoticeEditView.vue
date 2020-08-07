@@ -83,6 +83,8 @@ import { dateParser, languageTranslator } from "@/util";
 
 export default {
   async created() {
+    await this.isAdmin();
+
     this.id = this.$route.params.id;
     await this.$store.dispatch("FETCH_NOTICE", this.id);
 
@@ -142,6 +144,12 @@ export default {
   },
 
   methods: {
+    async isAdmin() {
+      const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
+      if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
+        await this.$router.push("/");
+      }
+    },
     async validate() {
       if (!this.$refs.form.validate()) {
         return;
