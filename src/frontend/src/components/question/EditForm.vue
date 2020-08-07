@@ -61,7 +61,8 @@ export default {
   methods: {
     async onUpdateQuestion() {
       if (this.title === "" || this.content === "") {
-        this.showSnackBar();
+        this.snackbar = true;
+        this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
         return;
       }
       const request = {
@@ -73,13 +74,18 @@ export default {
         await this.$store.dispatch("UPDATE_QUESTION", { request, id });
         window.location.href = `/questions/${this.questionId}`;
       } catch (error) {
-        this.showSnackBar();
         console.log(error);
+        if (error.response.status === 405) {
+          this.snackbar = true;
+          this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
+        } else if (error.response.status === 401) {
+          this.snackbar = true;
+          this.snackbarText = "작성자만 수정할 수 있습니다.";
+        } else {
+          this.snackbar = true;
+          this.snackbarText = "요청에 실패했습니다.";
+        }
       }
-    },
-    showSnackBar() {
-      this.snackbar = true;
-      this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
     }
   },
   created() {
