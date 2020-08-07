@@ -43,7 +43,7 @@ class UserServiceTest {
     @DisplayName("Oauth로부터 User 모델 신규 저장 및 업데이트")
     @Test
     void saveOrUpdateOauthUser() {
-        UserInfoDto userInfoDto = new UserInfoDto(TEST_OAUTH_ID, TEST_USER_EMAIL);
+        UserInfoDto userInfoDto = new UserInfoDto(TEST_OAUTH_ID, TEST_USER_EMAIL, TEST_GITHUB_ID, TEST_AVATAR_URL);
         given(userRepository.findByOauthId(any())).willReturn(Optional.of(user));
 
         User savedUser = userService.saveOrUpdateUser(userInfoDto);
