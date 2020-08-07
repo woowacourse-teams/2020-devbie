@@ -58,17 +58,17 @@ export const router = new VueRouter({
       component: NoticeDetailView,
       children: [
         {
-          path: "create",
-          name: "notice-create",
-          component: NoticeCreateView
-        },
-        {
-          path: ":id",
+          path: ":id(\\d+)",
           params: true,
           name: "notice-content",
           component: NoticeDetail
         }
       ]
+    },
+    {
+      path: "/notices/create",
+      name: "notice-create",
+      component: NoticeCreateView
     },
     {
       path: "/admin",
