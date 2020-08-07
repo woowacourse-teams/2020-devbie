@@ -19,6 +19,7 @@
         id="question-detail"
       ></question-detail>
       <answer-list></answer-list>
+      <answer-create></answer-create>
     </div>
     <v-snackbar v-model="snackbar" :multi-line="true" top>
       {{ snackbarText }}
@@ -36,11 +37,13 @@
 import { mapGetters } from "vuex";
 import QuestionDetail from "../../components/question/QuestionDetail";
 import AnswerList from "../../components/question/AnswerList";
+import AnswerCreate from "../../components/question/AnswerCreate";
 
 export default {
   components: {
     QuestionDetail,
-    AnswerList
+    AnswerList,
+    AnswerCreate
   },
   data() {
     return {
