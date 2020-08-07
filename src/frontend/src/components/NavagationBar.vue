@@ -6,7 +6,7 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="$router.push('/notice')" text x-large
+      <v-btn @click="$router.push('/notices')" text x-large
         ><p class="navigation-menu">공고</p></v-btn
       >
       <v-btn @click="$router.push('/questions')" text x-large

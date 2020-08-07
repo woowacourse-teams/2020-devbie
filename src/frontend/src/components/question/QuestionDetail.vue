@@ -67,6 +67,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      loginUser: {},
       questionId: this.$route.params.id,
       userRecommended: ""
     };
@@ -81,22 +82,34 @@ export default {
   },
   methods: {
     async onQuestionRecommendation(priorType, newType) {
+      if (!this.loginUser.id) {
+        console.log("you should login");
+        return;
+      }
       const questionId = this.questionId;
       if (
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
-          questionId,
-          recommendationType: newType
-        });
-        this.userRecommended = newType;
+        try {
+          await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
+            questionId,
+            recommendationType: newType
+          });
+          this.userRecommended = newType;
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        await this.$store.dispatch(
-          "DELETE_QUESTION_RECOMMENDATION",
-          questionId
-        );
-        this.userRecommended = "NOT_EXIST";
+        try {
+          await this.$store.dispatch(
+            "DELETE_QUESTION_RECOMMENDATION",
+            questionId
+          );
+          this.userRecommended = "NOT_EXIST";
+        } catch (error) {
+          console.log(error);
+        }
       }
       await this.$store.dispatch(
         "FETCH_QUESTION_RECOMMENDATION",
@@ -112,13 +125,14 @@ export default {
     },
     isUserRecommendation(recommendationType) {
       return (
-        this.fetchedMyQuestionRecommendation.recommendationType &&
+        this.fetchedMyQuestionRecommendation &&
         this.userRecommended === recommendationType
       );
     }
   },
   watch: {
     fetchedLoginUser: async function() {
+      this.loginUser = this.fetchedLoginUser;
       if (!this.fetchedLoginUser.id) {
         this.userRecommended = "NOT_EXIST";
         return;
@@ -130,6 +144,7 @@ export default {
     }
   },
   async created() {
+    this.loginUser = this.fetchedLoginUser;
     await this.$store.dispatch("FETCH_QUESTION", this.questionId);
     await this.$store.dispatch(
       "FETCH_QUESTION_RECOMMENDATION",

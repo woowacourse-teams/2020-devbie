@@ -7,7 +7,7 @@
         :cols="2"
         class="selector-item"
       >
-        <v-card>
+        <v-card @click="$router.push(`/notices/${notice.id}`)">
           <v-img
             :src="notice.image"
             class="white--text align-end"
