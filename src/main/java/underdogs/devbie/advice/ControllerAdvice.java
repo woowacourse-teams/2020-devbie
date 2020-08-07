@@ -2,10 +2,12 @@ package underdogs.devbie.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import underdogs.devbie.advice.dto.ErrorResponse;
+import underdogs.devbie.exception.BadRequestException;
 import underdogs.devbie.exception.UnAuthorizedException;
 
 @RestControllerAdvice
@@ -29,6 +31,14 @@ public class ControllerAdvice {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body(errorResponse);
     }
+
+    @ExceptionHandler({BadRequestException.class, MethodArgumentNotValidException.class})
+    public ResponseEntity<ErrorResponse> badRequestExceptionHandler(BadRequestException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(errorResponse);
+    }
+
     // @ExceptionHandler({NotExistException.class
     //     , CreateFailException.class
     //     , AlreadyExistException.class})

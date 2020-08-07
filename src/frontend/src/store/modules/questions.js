@@ -35,13 +35,10 @@ export default {
       }
     },
     async CREATE_QUESTION({ commit }, request) {
-      try {
-        const response = await postAction("/api/questions", request);
-        const id = response["headers"].location.split("/")[3];
-        commit("SET_NEW_QUESTION_ID", id);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await postAction("/api/questions", request);
+      const id = response["headers"].location.split("/")[3];
+      commit("SET_NEW_QUESTION_ID", id);
+      return response;
     },
     async UPDATE_QUESTION({ commit }, payload) {
       try {

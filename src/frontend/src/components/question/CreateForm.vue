@@ -34,6 +34,15 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-snackbar v-model="snackbar" :multi-line="true" top>
+        {{ snackbarText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+            닫기
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </div>
 </template>
@@ -42,17 +51,30 @@ export default {
   data() {
     return {
       title: "",
-      content: ""
+      content: "",
+      snackbar: false,
+      snackbarText: ""
     };
   },
   methods: {
     async onCreateQuestion() {
+      if (this.title === "" || this.content === "") {
+        this.snackbar = true;
+        this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
+        return;
+      }
       const request = {
         title: this.title,
         content: this.content
       };
-      await this.$store.dispatch("CREATE_QUESTION", request);
-      window.location.href = `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`;
+      try {
+        await this.$store.dispatch("CREATE_QUESTION", request);
+        window.location.href = `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`;
+      } catch (error) {
+        this.snackbar = true;
+        this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
+        console.log(error);
+      }
     }
   }
 };
