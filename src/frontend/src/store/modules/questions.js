@@ -49,12 +49,9 @@ export default {
       return response;
     },
     async DELETE_QUESTION({ commit }, questionId) {
-      try {
-        await deleteAction(`/api/questions/${questionId}`);
-        commit();
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await deleteAction(`/api/questions/${questionId}`);
+      commit();
+      return response;
     }
   },
   getters: {

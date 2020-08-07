@@ -20,6 +20,15 @@
       ></question-detail>
       <answer-list></answer-list>
     </div>
+    <v-snackbar v-model="snackbar" :multi-line="true" top>
+      {{ snackbarText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+          닫기
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -35,7 +44,9 @@ export default {
   },
   data() {
     return {
-      author: false
+      author: false,
+      snackbar: false,
+      snackbarText: ""
     };
   },
   computed: {
@@ -44,9 +55,19 @@ export default {
   methods: {
     async onDeleteQuestion() {
       if (confirm("정말 삭제하시겠습니까?")) {
-        const questionId = this.$route.params.id;
-        await this.$store.dispatch("DELETE_QUESTION", questionId);
-        window.location.href = `/questions`;
+        try {
+          const questionId = this.$route.params.id;
+          await this.$store.dispatch("DELETE_QUESTION", questionId);
+          window.location.href = `/questions`;
+        } catch (error) {
+          console.log(error);
+          if (error.response.status === 401) {
+            this.snackbarText = "작성자만 할 수 있습니다.";
+          } else {
+            this.snackbarText = "삭제 실패했습니다.";
+          }
+          this.snackbar = true;
+        }
       }
     },
     isAuthor(userId) {
