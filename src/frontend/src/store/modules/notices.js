@@ -36,8 +36,11 @@ export default {
     // eslint-disable-next-line no-unused-vars
     async CREATE_NOTICE({ commit }, noticeRequest) {
       try {
-        console.log(noticeRequest);
-        await postAction(`/api/notices`, noticeRequest);
+        const temp = {
+          ...noticeRequest,
+          image: noticeRequest.image.name
+        };
+        await postAction(`/api/notices`, temp);
       } catch (error) {
         console.log(error);
       }

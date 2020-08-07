@@ -48,7 +48,7 @@ public class NoticeServiceTest {
     @DisplayName("게시글 저장")
     @Test
     void save() {
-        Set<String> languages = Stream.of(Language.JAVA.getName(), Language.JAVASCRIPT.getName())
+        Set<Language> languages = Stream.of(Language.JAVA, Language.JAVASCRIPT)
             .collect(Collectors.toSet());
         Notice expected = Notice.builder()
             .id(1L)
@@ -58,7 +58,8 @@ public class NoticeServiceTest {
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(LocalDateTime.of(2020, 10, 10, 14, 0),
+                LocalDateTime.of(2020, 10, 10, 15, 0)))
             .build();
         given(noticeRepository.save(any(Notice.class))).willReturn(expected);
 
@@ -67,12 +68,12 @@ public class NoticeServiceTest {
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
             .salary(50_000_000)
-            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+            .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-10 14:00")
+            .endDate("2020-10-10 15:00")
             .build();
 
         Long noticeId = noticeService.save(noticeRequest);
@@ -89,7 +90,7 @@ public class NoticeServiceTest {
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
             .salary(50_000_000)
-            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+            .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
@@ -117,7 +118,7 @@ public class NoticeServiceTest {
     @DisplayName("게시글 전체 조회")
     @Test
     void readAll() {
-        Set<String> languages = Stream.of(Language.JAVA.getName(), Language.JAVASCRIPT.getName())
+        Set<Language> languages = Stream.of(Language.JAVA, Language.JAVASCRIPT)
             .collect(Collectors.toSet());
         Notice expected = Notice.builder()
             .id(1L)
@@ -148,7 +149,7 @@ public class NoticeServiceTest {
     @DisplayName("게시글 하나 조회")
     @Test
     void read() {
-        Set<String> languages = Stream.of(Language.JAVA.getName(), Language.JAVASCRIPT.getName())
+        Set<Language> languages = Stream.of(Language.JAVA, Language.JAVASCRIPT)
             .collect(Collectors.toSet());
         Notice expected = Notice.builder()
             .id(1L)

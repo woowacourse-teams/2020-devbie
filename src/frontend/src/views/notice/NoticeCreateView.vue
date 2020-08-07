@@ -17,12 +17,14 @@
         label="직군"
         required
       ></v-select>
-      <v-text-field
+      <v-select
         v-model="request.languages"
-        :rules="textRules"
+        :items="languageItems"
+        attach
+        chips
         label="프로그래밍 언어"
-        required
-      ></v-text-field>
+        multiple
+      ></v-select>
       <v-text-field
         v-model="request.title"
         :rules="textRules"
@@ -93,9 +95,13 @@ export default {
       { text: "교육", value: "EDUCATION" }
     ],
     jobPositionItems: [
-      { text: "인프라 엔지니어", value: "INFRA" },
       { text: "백엔드 개발자", value: "BACKEND" },
       { text: "프론트엔드 개발자", value: "FRONTEND" }
+    ],
+    languageItems: [
+      { text: "C", value: "C" },
+      { text: "C++", value: "CPP" },
+      { text: "JAVA", value: "JAVA" }
     ],
     request: {
       jobPosition: "",
@@ -116,6 +122,7 @@ export default {
       if (!this.$refs.form.validate()) {
         return;
       }
+      console.log(this.request);
       this.$store.dispatch("CREATE_NOTICE", this.request);
     }
   }
