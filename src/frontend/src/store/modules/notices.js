@@ -1,4 +1,4 @@
-import { deleteAction, getAction } from "../../api";
+import { deleteAction, getAction, postAction } from "../../api";
 
 export default {
   state: {
@@ -29,6 +29,15 @@ export default {
       try {
         const { data } = await getAction(`/api/notices/${noticeId}`);
         commit("SET_NOTICE", data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // eslint-disable-next-line no-unused-vars
+    async CREATE_NOTICE({ commit }, noticeRequest) {
+      try {
+        console.log(noticeRequest);
+        await postAction(`/api/notices`, noticeRequest);
       } catch (error) {
         console.log(error);
       }
