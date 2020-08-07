@@ -3,7 +3,8 @@ import { deleteAction, getAction, postAction } from "../../api";
 export default {
   state: {
     notices: [],
-    notice: []
+    notice: [],
+    noticeId: ""
   },
   mutations: {
     SET_NOTICES(state, data) {
@@ -11,6 +12,9 @@ export default {
     },
     SET_NOTICE(state, data) {
       state.notice = data;
+    },
+    SET_NOTICE_ID(state, data) {
+      state.noticeId = data;
     },
     DELETE_NOTICE(state, noticeId) {
       state.notices = state.notices.filter(notice => notice.id !== noticeId);
@@ -40,7 +44,9 @@ export default {
           ...noticeRequest,
           image: noticeRequest.image.name
         };
-        await postAction(`/api/notices`, temp);
+        const response = await postAction(`/api/notices`, temp);
+        const id = response["headers"].location.split("/")[3];
+        commit("SET_NOTICE_ID", id);
       } catch (error) {
         console.log(error);
       }
@@ -60,6 +66,9 @@ export default {
     },
     fetchedNotice(state) {
       return state.notice;
+    },
+    fetchedNewCreatedNoticeId(state) {
+      return state.noticeId;
     }
   }
 };

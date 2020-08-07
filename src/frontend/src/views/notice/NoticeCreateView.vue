@@ -118,12 +118,17 @@ export default {
   }),
 
   methods: {
-    validate() {
+    async validate() {
       if (!this.$refs.form.validate()) {
         return;
       }
-      console.log(this.request);
-      this.$store.dispatch("CREATE_NOTICE", this.request);
+      try {
+        await this.$store.dispatch("CREATE_NOTICE", this.request);
+        const id = await this.$store.getters.fetchedNewCreatedNoticeId;
+        await this.$router.push(`/notices/${id}`);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
