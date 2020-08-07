@@ -13,8 +13,6 @@ import org.mockito.internal.util.collections.Sets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.question.dto.HashtagResponse;
-import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -66,6 +64,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("전체 질문 조회", () -> {
                 QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+
                 QuestionResponse firstQuestion = questions.getQuestions().get(0);
                 assertAll(
                     () -> assertThat(questions.getQuestions()).hasSize(2),
@@ -77,6 +76,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             dynamicTest("특정 질문 검색", () -> {
                 QuestionResponses searchedQuestions = get("/api/questions?keyword=" + SEARCH_KEYWORD,
                     QuestionResponses.class);
+
                 assertAll(
                     () -> assertThat(searchedQuestions.getQuestions()).hasSize(1),
                     () -> assertThat(searchedQuestions.getQuestions().get(0).getTitle()).isEqualTo(
@@ -85,8 +85,10 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
+
                 QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
                     QuestionResponse.class);
+
                 assertAll(
                     () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
                     () -> assertThat(questionResponse.getVisits()).isEqualTo(1L),
@@ -99,40 +101,20 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 QuestionUpdateRequest updateRequest = QuestionUpdateRequest.builder()
                     .title("Changed Title")
                     .content("Changed Content")
+                    .hashtags(Sets.newSet("kotlin"))
                     .build();
                 String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
+
                 patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
+
                 QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
                     QuestionResponse.class);
                 assertAll(
                     () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
                     () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
                     () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
-                    () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")
-                );
-            }),
-            dynamicTest("질문에 해시태그 추가", () -> {
-                HashtagsRequest hashTagsRequest = HashtagsRequest.builder()
-                    .hashtags(Sets.newSet("java", "network"))
-                    .build();
-                QuestionResponse firstQuestion = fetchFirstQuestion();
-
-                String inputJson = objectMapper.writeValueAsString(hashTagsRequest);
-                put("/api/questions/" + firstQuestion.getQuestionId() + "/hashtags", inputJson);
-
-                QuestionResponse question = fetchFirstQuestion();
-            }),
-            dynamicTest("질문에 해시태그 삭제", () -> {
-                QuestionResponse firstQuestion = fetchFirstQuestion();
-                HashtagResponse hashtag = firstQuestion.getHashtags().get(0);
-
-                delete(String.format("/api/questions/%d/hashtags/%d", firstQuestion.getQuestionId(), hashtag.getId()));
-
-                QuestionResponse deletedHashtagQuestion = fetchFirstQuestion();
-
-                assertAll(
-                    () -> assertThat(deletedHashtagQuestion.getHashtags()).hasSize(1),
-                    () -> assertThat(deletedHashtagQuestion.getHashtags().get(0).getTagName()).isEqualTo(firstQuestion.getHashtags().get(1).getTagName())
+                    () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content"),
+                    () -> assertThat(updatedQuestion.getHashtags().get(0).getTagName()).isEqualTo("kotlin")
                 );
             }),
             dynamicTest("질문 삭제", () -> {
@@ -140,6 +122,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 delete("/api/questions/" + firstQuestion.getQuestionId());
 
                 QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+
                 assertThat(questions.getQuestions()).hasSize(1);
             })
         );
@@ -150,6 +133,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         QuestionCreateRequest createRequest = QuestionCreateRequest.builder()
             .title(title)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(Sets.newSet("java", "network"))
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
         post("/api/questions", inputJsonForCreate);

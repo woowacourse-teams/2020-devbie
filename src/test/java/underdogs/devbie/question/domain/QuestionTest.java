@@ -3,12 +3,14 @@ package underdogs.devbie.question.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import underdogs.devbie.exception.CreateFailException;
 
-class QuestionTest {
+public class QuestionTest {
 
     public static final QuestionTitle TEST_QUESTION_TITLE = QuestionTitle.from("test title");
     public static final QuestionContent TEST_QUESTION_CONTENT = QuestionContent.from("test content");
@@ -19,6 +21,7 @@ class QuestionTest {
         assertThatThrownBy(() -> Question.builder()
             .userId(1L)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(new HashSet<>())
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -29,6 +32,7 @@ class QuestionTest {
         assertThatThrownBy(() -> Question.builder()
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
+            .hashtags(new HashSet<>())
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -39,6 +43,7 @@ class QuestionTest {
         assertThatThrownBy(() -> Question.builder()
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(new HashSet<>())
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -50,11 +55,13 @@ class QuestionTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(new HashSet<>())
             .build();
         Question changeQuestion = Question.builder()
             .userId(1L)
             .title(QuestionTitle.from("Changed Title"))
             .content(QuestionContent.from("Changed Content"))
+            .hashtags(new HashSet<>())
             .build();
         question.updateQuestionInfo(changeQuestion);
 
@@ -71,6 +78,7 @@ class QuestionTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(new HashSet<>())
             .build();
 
         assertThat(question.getVisits().getVisitCount()).isEqualTo(0L);
@@ -83,6 +91,7 @@ class QuestionTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(new HashSet<>())
             .build();
 
         question.increaseVisits();

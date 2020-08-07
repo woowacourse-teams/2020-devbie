@@ -1,6 +1,10 @@
 package underdogs.devbie.question.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,11 +29,15 @@ public class QuestionCreateRequest {
     @NotBlank
     private String content;
 
+    @NotEmpty
+    private Set<String> hashtags;
+
     public Question toEntity(Long userId) {
         return Question.builder()
             .userId(userId)
             .title(QuestionTitle.from(title))
             .content(QuestionContent.from(content))
+            .hashtags(new HashSet<>())
             .build();
     }
 }

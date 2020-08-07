@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.question.dto.HashtagsRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -88,28 +86,6 @@ public class QuestionController {
         @PathVariable("id") Long id
     ) {
         questionService.delete(user.getId(), id);
-        return ResponseEntity
-            .noContent()
-            .build();
-    }
-
-    @PutMapping("/{id}/hashtags")
-    public ResponseEntity<Void> addHashtag(
-        @PathVariable("id") Long id,
-        @Valid @RequestBody HashtagsRequest request
-    ) {
-        questionService.saveOrUpdateHashtags(id, request);
-        return ResponseEntity
-            .noContent()
-            .build();
-    }
-
-    @DeleteMapping("/{id}/hashtags/{hashtagId}")
-    public ResponseEntity<Void> deleteHashtag(
-        @PathVariable("id") Long questionId,
-        @PathVariable("hashtagId") Long hashtagId
-    ) {
-        questionService.deleteHashtag(questionId, hashtagId);
         return ResponseEntity
             .noContent()
             .build();

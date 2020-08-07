@@ -103,7 +103,7 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
 
                 HashtagResponses deletedHashtagResponses = get("/api/hashtags", HashtagResponses.class);
 
-                assertThat(deletedHashtagResponses.getHashtags()).hasSize(1);
+                assertThat(deletedHashtagResponses.getHashtags()).hasSize(2);
             })
         );
     }

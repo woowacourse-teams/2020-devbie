@@ -22,7 +22,7 @@
           required
         ></v-textarea>
         <div class="control-box">
-          <hashtag-box></hashtag-box>
+          <hashtag-box @hashtags="receiveHashtags"></hashtag-box>
           <v-card-actions>
             <v-spacer></v-spacer>
             <router-link :to="`/questions`" class="form-link">
@@ -49,18 +49,22 @@ export default {
     return {
       questionId: this.$route.params.id,
       title: this.$store.getters.fetchedQuestion.title,
-      content: this.$store.getters.fetchedQuestion.content
+      content: this.$store.getters.fetchedQuestion.content,
+      hashtags: []
     };
   },
   methods: {
     async onUpdateQuestion() {
-      const request = {
+      await this.$store.dispatch("UPDATE_QUESTION", {
         title: this.title,
-        content: this.content
-      };
-      const id = this.questionId;
-      await this.$store.dispatch("UPDATE_QUESTION", { request, id });
+        content: this.content,
+        hashtags: this.hashtags,
+        questionId: this.questionId
+      });
       window.location.href = `/questions/${this.questionId}`;
+    },
+    receiveHashtags(hashtags) {
+      this.hashtags = hashtags;
     }
   },
   created() {

@@ -15,14 +15,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
 @Table(name = "question_hashtag")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
 public class QuestionHashtag {
 
     @Id

@@ -49,12 +49,13 @@ public class Question extends BaseTimeEntity {
     private Set<QuestionHashtag> hashtags = new HashSet<>();
 
     @Builder
-    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content) {
+    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content, Set<QuestionHashtag> hashtags) {
         validateParameters(userId, title, content);
         this.id = id;
         this.userId = userId;
         this.title = title;
         this.content = content;
+        this.hashtags = hashtags;
         this.visits = Visits.init();
     }
 
@@ -73,8 +74,8 @@ public class Question extends BaseTimeEntity {
         this.visits.increase();
     }
 
-    public void setHashtags(Set<QuestionHashtag> hashtags) {
+    public void setHashtags(QuestionHashtags hashtags) {
         this.hashtags.clear();
-        this.hashtags.addAll(hashtags);
+        this.hashtags.addAll(hashtags.getQuestionHashtags());
     }
 }

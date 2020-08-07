@@ -22,7 +22,7 @@
           v-model="content"
         ></v-textarea>
         <div class="control-box">
-          <hashtag-box></hashtag-box>
+          <hashtag-box @hashtags="receiveHashtags"></hashtag-box>
           <v-card-actions>
             <v-spacer></v-spacer>
             <router-link :to="`/questions`" class="form-link">
@@ -47,17 +47,21 @@ export default {
   data() {
     return {
       title: "",
-      content: ""
+      content: "",
+      hashtags: []
     };
   },
   methods: {
     async onCreateQuestion() {
-      const request = {
+      await this.$store.dispatch("CREATE_QUESTION", {
         title: this.title,
-        content: this.content
-      };
-      await this.$store.dispatch("CREATE_QUESTION", request);
+        content: this.content,
+        hashtags: this.hashtags
+      });
       window.location.href = `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`;
+    },
+    receiveHashtags(hashtags) {
+      this.hashtags = hashtags;
     }
   },
   components: {

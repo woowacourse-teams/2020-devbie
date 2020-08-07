@@ -6,8 +6,10 @@ import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +20,15 @@ import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import underdogs.devbie.question.domain.HashtagRepository;
+import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
-import underdogs.devbie.question.domain.QuestionHashtagRepository;
+import underdogs.devbie.question.domain.QuestionHashtag;
+import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
-import underdogs.devbie.question.dto.HashtagsRequest;
+import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -33,26 +37,27 @@ import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
-class QuestionServiceTest {
+public class QuestionServiceTest {
+
+    public static final Set<String> TEST_HASHTAGS = Sets.newSet("java", "network");
 
     private QuestionService questionService;
 
     @Mock
+    private QuestionHashtagService questionHashtagService;
+
+    @Mock
     private QuestionRepository questionRepository;
-
-    @Mock
-    private HashtagRepository hashtagRepository;
-
-    @Mock
-    private QuestionHashtagRepository questionHashtagRepository;
 
     private User user;
 
     private Question question;
 
+    private Set<QuestionHashtag> questionHashtags;
+
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionRepository, hashtagRepository, questionHashtagRepository);
+        questionService = new QuestionService(questionHashtagService, questionRepository);
 
         user = User.builder()
             .id(1L)
@@ -65,7 +70,15 @@ class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from(TEST_QUESTION_TITLE))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(new HashSet<>())
             .build();
+
+        questionHashtags = Sets.newSet(
+            QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(1L).tagName(TagName.from("java")).build()).build(),
+            QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(2L).tagName(TagName.from("network")).build()).build()
+        );
+
+        question.setHashtags(new QuestionHashtags(questionHashtags));
     }
 
     @DisplayName("질문 생성")
@@ -74,6 +87,7 @@ class QuestionServiceTest {
         QuestionCreateRequest request = QuestionCreateRequest.builder()
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(TEST_HASHTAGS)
             .build();
         given(questionRepository.save(any(Question.class))).willReturn(question);
 
@@ -96,7 +110,10 @@ class QuestionServiceTest {
             () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
-            () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent())
+            () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent()),
+            () -> assertThat(response.getHashtags()).contains(
+                HashtagResponse.builder().id(1L).tagName("java").build(),
+                HashtagResponse.builder().id(2L).tagName("network").build())
         );
     }
 
@@ -112,7 +129,10 @@ class QuestionServiceTest {
             () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
-            () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent())
+            () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent()),
+            () -> assertThat(response.getHashtags()).contains(
+                HashtagResponse.builder().id(1L).tagName("java").build(),
+                HashtagResponse.builder().id(2L).tagName("network").build())
         );
     }
 
@@ -135,6 +155,7 @@ class QuestionServiceTest {
         QuestionUpdateRequest request = QuestionUpdateRequest.builder()
             .title("Changed Title")
             .content("Changed Content")
+            .hashtags(Sets.newSet("kotlin"))
             .build();
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
@@ -145,6 +166,7 @@ class QuestionServiceTest {
             () -> assertThat(response.getTitle()).isEqualTo(request.getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(request.getContent())
         );
+        verify(questionHashtagService).updateHashtags(any(), any());
     }
 
     @DisplayName("질문 삭제 실패 - 질문 작성자가 아닐 경우 예외 발생")
@@ -173,12 +195,14 @@ class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from("스택과 큐의 차이"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(new HashSet<>())
             .build();
 
         Question question2 = Question.builder()
             .userId(2L)
             .title(QuestionTitle.from("오버스택플로우"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(new HashSet<>())
             .build();
 
         List<Question> questions = Lists.newArrayList(question1, question2);
@@ -191,30 +215,5 @@ class QuestionServiceTest {
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
             () -> assertThat(responses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
         );
-    }
-
-    @DisplayName("질문에 해시태그 추가")
-    @Test
-    void saveOrUpdateHashtags() {
-        HashtagsRequest request = HashtagsRequest.builder()
-            .hashtags(Sets.newSet("java", "network"))
-            .build();
-
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
-
-        questionService.saveOrUpdateHashtags(question.getId(), request);
-
-        assertAll(
-            () -> assertThat(question.getHashtags()).hasSize(2),
-            () -> assertThat(question.getHashtags().containsAll(Lists.newArrayList("java", "network")))
-        );
-    }
-
-    @DisplayName("질문에 달리 해시태그 삭제")
-    @Test
-    void deleteHashtag() {
-        questionService.deleteHashtag(1L, 2L);
-
-        verify(questionHashtagRepository).deleteByQuestionIdAndHashtagId(eq(1L), eq(2L));
     }
 }
