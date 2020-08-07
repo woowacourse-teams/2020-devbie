@@ -28,7 +28,16 @@
                 >채팅방</v-btn
               >
               <v-btn
-                id="destroy-btn"
+                class="admin-btn"
+                depressed
+                large
+                color="warning"
+                v-if="isAdmin()"
+                @click="onEditNotice"
+                >수정</v-btn
+              >
+              <v-btn
+                class="admin-btn"
                 depressed
                 large
                 color="warning"
@@ -83,6 +92,9 @@ export default {
     async onDeleteNotice() {
       await this.$store.dispatch("DELETE_NOTICE", this.$route.params.id);
       await router.go(0); // 새로고침
+    },
+    onEditNotice() {
+      router.push(`/notices/edit/${this.$route.params.id}`);
     }
   },
   created() {
@@ -170,7 +182,7 @@ export default {
   margin: 3px 3px;
 }
 
-#destroy-btn {
+.admin-btn {
   width: 100px;
   padding: 10px;
   margin: 3px 3px;
