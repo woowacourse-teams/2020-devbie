@@ -30,8 +30,10 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         String userId = (String)webRequest.getAttribute("userId", SCOPE_REQUEST);
 
         try {
+            System.out.println("성공");
             return userService.findById(Long.parseLong(userId));
         } catch (Exception e) {
+            System.out.println("실패");
             throw new LoginUserNotFoundException();
         }
     }
