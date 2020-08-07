@@ -1,4 +1,4 @@
-import { getAction } from "../../api";
+import { getAction, patchAction } from "../../api";
 
 export default {
   state: {
@@ -17,6 +17,14 @@ export default {
       try {
         const { data } = await getAction("/api/users");
         commit("SET_LOGIN_USER", data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async UPDATE_USER_INFO({ commit }, payload) {
+      try {
+        await patchAction(`/api/users/`, payload);
+        commit();
       } catch (error) {
         console.log(error);
       }
