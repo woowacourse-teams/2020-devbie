@@ -98,12 +98,12 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("해시태그 삭제", () -> {
                 HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
-                HashtagResponse firstHashtag = hashtagResponses.getHashtags().get(0);
-                delete("/api/hashtags/" + firstHashtag.getId());
-
+                for (int i = 0; i < hashtagResponses.getHashtags().size(); i++) {
+                    delete("/api/hashtags/" + hashtagResponses.getHashtags().get(i).getId());
+                }
                 HashtagResponses deletedHashtagResponses = get("/api/hashtags", HashtagResponses.class);
 
-                assertThat(deletedHashtagResponses.getHashtags()).hasSize(2);
+                assertThat(deletedHashtagResponses.getHashtags()).hasSize(0);
             })
         );
     }
