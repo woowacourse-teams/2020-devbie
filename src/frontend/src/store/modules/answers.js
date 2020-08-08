@@ -61,19 +61,16 @@ export default {
       }
     },
     async CREATE_ANSWER({ commit }, payload) {
-      try {
-        const questionId = payload.questionId;
-        const content = payload.content;
-        const createdResponse = await postAction(`/api/answers`, {
-          questionId,
-          content
-        });
-        const createdAnswerLocation = createdResponse.headers.location;
-        const createdItemResponse = await getAction(createdAnswerLocation);
-        commit("CREATE_ANSWER", createdItemResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
+      const questionId = payload.questionId;
+      const content = payload.content;
+      const createdResponse = await postAction(`/api/answers`, {
+        questionId,
+        content
+      });
+      const createdAnswerLocation = createdResponse.headers.location;
+      const createdItemResponse = await getAction(createdAnswerLocation);
+      commit("CREATE_ANSWER", createdItemResponse.data);
+      return createdResponse;
     }
   },
   getters: {
