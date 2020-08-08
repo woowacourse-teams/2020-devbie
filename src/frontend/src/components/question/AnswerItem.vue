@@ -51,6 +51,15 @@
         </div>
       </div>
     </div>
+    <v-snackbar v-model="snackbar" :multi-line="true" top>
+      {{ snackbarText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+          닫기
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -65,7 +74,9 @@ export default {
       author: false,
       userRecommended: "",
       updateEditFlag: false,
-      updateContent: this.answer.content
+      updateContent: this.answer.content,
+      snackbar: false,
+      snackbarText: ""
     };
   },
   computed: {
@@ -103,6 +114,8 @@ export default {
     async onAnswerRecommendation(priorType, newType) {
       if (!this.loginUser.id) {
         console.log("you should login");
+        this.snackbarText = "로그인 후 추천/비추천 할 수 있습니다. ";
+        this.snackbar = true;
         return;
       }
       const answerId = this.answer.id;
@@ -118,6 +131,10 @@ export default {
           this.userRecommended = newType;
         } catch (error) {
           console.log(error);
+          if (error.response.status === 401) {
+            this.snackbarText = "로그인 후 추천/비추천 할 수 있습니다. ";
+            this.snackbar = true;
+          }
         }
       } else {
         try {
@@ -125,6 +142,10 @@ export default {
           this.userRecommended = "NOT_EXIST";
         } catch (error) {
           console.log(error);
+          if (error.response.status === 401) {
+            this.snackbarText = "로그인 후 추천/비추천 할 수 있습니다. ";
+            this.snackbar = true;
+          }
         }
       }
       await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
