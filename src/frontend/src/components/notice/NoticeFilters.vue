@@ -47,8 +47,7 @@ export default {
     };
   },
   methods: {
-    changeJobPosition(e) {
-      console.log(e);
+    changeJobPosition() {
       this.$store.commit("SET_JOB_POSITION", this.selectedPosition);
     },
     changeLanguage() {

@@ -16,16 +16,16 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Notice> findBy(NoticeType noticeType, JobPosition jobPosition, Language language) {
+    public List<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition, Language language) {
         return jpaQueryFactory
             .selectFrom(notice)
-            .where(eqNoticeType(noticeType),
-                eqJobPosition(jobPosition),
+            .where(equalNoticeType(noticeType),
+                equalJobPosition(jobPosition),
                 containLanguage(language))
             .fetch();
     }
 
-    private BooleanExpression eqNoticeType(NoticeType noticeType) {
+    private BooleanExpression equalNoticeType(NoticeType noticeType) {
         if (StringUtils.isEmpty(noticeType)) {
             return null;
         }
@@ -34,7 +34,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
             .eq(noticeType);
     }
 
-    private BooleanExpression eqJobPosition(JobPosition jobPosition) {
+    private BooleanExpression equalJobPosition(JobPosition jobPosition) {
         if (StringUtils.isEmpty(jobPosition)) {
             return null;
         }

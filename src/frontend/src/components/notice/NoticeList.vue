@@ -43,13 +43,13 @@ import { mapGetters } from "vuex";
 export default {
   methods: {
     getNotices() {
-      const url = {
+      const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
         language: this.fetchedLanguage
       };
-      const queryUrl = new URLSearchParams(url).toString();
-      this.$store.dispatch("FETCH_NOTICES", queryUrl);
+      const queryParam = new URLSearchParams(param).toString();
+      this.$store.dispatch("FETCH_NOTICES", queryParam);
     }
   },
   computed: {

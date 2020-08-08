@@ -6,47 +6,47 @@
         <p class="answer-content-value" v-if="!this.updateEditFlag">
           {{ answer.content }}
         </p>
-        <v-textarea outlined v-else v-model="answer.content"></v-textarea>
+        <v-textarea
+          class="update-form"
+          outlined
+          v-else
+          v-model="updateContent"
+        ></v-textarea>
       </div>
       <div :class="{ 'vertical-center': !author }" class="answer-infos">
         <div class="recommendations">
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked':
-                  fetchedMyAnswerRecommendation &&
-                  userRecommended === 'RECOMMENDED'
+                'recommendation-clicked': isUserRecommendation('RECOMMENDED')
               }"
               class="far fa-thumbs-up recommendation"
               @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
             ></i>
-            {{
-              answerRecommendation && answerRecommendation.data.recommendedCount
-            }}
+            {{ answerRecommendation && answerRecommendation.recommendedCount }}
           </p>
           <p class="infos">
             <i
               :class="{
-                'recommendation-clicked':
-                  fetchedMyAnswerRecommendation &&
-                  userRecommended === 'NON_RECOMMENDED'
+                'recommendation-clicked': isUserRecommendation(
+                  'NON_RECOMMENDED'
+                )
               }"
               class="far fa-thumbs-down recommendation"
               @click="onAnswerRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
             ></i>
             {{
-              answerRecommendation &&
-                answerRecommendation.data.nonRecommendedCount
+              answerRecommendation && answerRecommendation.nonRecommendedCount
             }}
           </p>
         </div>
         <div v-if="author">
-          <v-btn class="update-btn" v-if="this.updateEditFlag" @click="update">
+          <v-btn class="update-btn" v-if="updateEditFlag" @click="update">
             수정 확인
           </v-btn>
           <v-btn class="update-btn" v-else @click="updateBtnHandler"
-            >수정</v-btn
-          >
+            >수정
+          </v-btn>
           <v-btn @click="deleteBtnHandler">삭제</v-btn>
         </div>
       </div>
@@ -61,9 +61,11 @@ export default {
   props: ["answer"],
   data: function() {
     return {
+      loginUser: {},
       author: false,
       userRecommended: "",
-      updateEditFlag: false
+      updateEditFlag: false,
+      updateContent: this.answer.content
     };
   },
   computed: {
@@ -81,28 +83,49 @@ export default {
   },
   methods: {
     isAuthor() {
-      return (this.author = this.answer.userId === this.fetchedLoginUser.id);
+      return (this.author = this.answer.userId === this.loginUser.id);
     },
-    deleteBtnHandler() {
-      this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+    async deleteBtnHandler() {
+      await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
     updateBtnHandler() {
       this.updateEditFlag = !this.updateEditFlag;
     },
+    async update() {
+      const answerId = this.answer.id;
+      const updateContent = this.updateContent;
+      await this.$store.dispatch("UPDATE_ANSWER", {
+        answerId,
+        updateContent
+      });
+      this.updateEditFlag = !this.updateEditFlag;
+    },
     async onAnswerRecommendation(priorType, newType) {
+      if (!this.loginUser.id) {
+        console.log("you should login");
+        return;
+      }
       const answerId = this.answer.id;
       if (
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
-          answerId,
-          recommendationType: newType
-        });
-        this.userRecommended = newType;
+        try {
+          await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
+            answerId,
+            recommendationType: newType
+          });
+          this.userRecommended = newType;
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
-        this.userRecommended = "NOT_EXIST";
+        try {
+          await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
+          this.userRecommended = "NOT_EXIST";
+        } catch (error) {
+          console.log(error);
+        }
       }
       await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
     },
@@ -111,32 +134,34 @@ export default {
         answerId,
         userId
       });
-      this.userRecommended = this.myAnswerRecommendation.data.recommendationType;
+      this.userRecommended = this.myAnswerRecommendation.recommendationType;
+    },
+    isUserRecommendation(recommendationType) {
+      return (
+        this.myAnswerRecommendation &&
+        this.userRecommended === recommendationType
+      );
     }
   },
   watch: {
     fetchedLoginUser: async function() {
-      if (!this.fetchedLoginUser.id) {
+      this.loginUser = this.fetchedLoginUser;
+      if (!this.loginUser.id) {
         this.userRecommended = "NOT_EXIST";
         this.isAuthor();
         return;
       }
-      await this.fetchMyAnswerRecommendation(
-        this.answer.id,
-        this.fetchedLoginUser.id
-      );
+      await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
       this.isAuthor();
     }
   },
   async created() {
-    if (this.fetchedLoginUser.id) {
-      await this.fetchMyAnswerRecommendation(
-        this.answer.id,
-        this.fetchedLoginUser.id
-      );
+    this.loginUser = this.fetchedLoginUser;
+    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
+    if (this.loginUser.id) {
+      await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
     }
     await this.isAuthor();
-    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
   }
 };
 </script>
@@ -146,6 +171,7 @@ export default {
   margin-top: 15px;
   color: #7ec699;
 }
+
 .answer-item-box {
   display: flex;
   flex-direction: column;
@@ -161,32 +187,38 @@ export default {
   justify-content: space-between;
   border-bottom: solid #e8e8e8 1px;
 }
+
 .recommendations {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .answer-infos {
   min-width: 135px;
 }
+
 .recommendations .infos {
   margin: 0 10px 10px 0;
 }
+
 .recommendation:hover {
   cursor: pointer;
 }
+
 .recommendation-clicked {
   color: #7ec699;
 }
+
+.answer-content {
+  min-width: 80%;
+}
+
 .update-btn {
   margin-right: 7px;
 }
+
 .answer-content-value {
   max-width: 1100px;
-}
-.vertical-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>

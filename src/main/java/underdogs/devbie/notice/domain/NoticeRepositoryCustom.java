@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface NoticeRepositoryCustom {
 
-    List<Notice> findBy(NoticeType noticeType, JobPosition jobPosition, Language language);
+    List<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition, Language language);
 }
