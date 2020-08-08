@@ -5,13 +5,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
@@ -26,7 +28,7 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
-@Sql(value = "/notice_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/notice_create.sql")
 @Sql(value = "/notice_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class NoticeAcceptanceTest extends AcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
@@ -137,8 +139,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate(updatedDuration.getStartDate().toString())
-                    .endDate(updatedDuration.getEndDate().toString())
+                    .startDate("2020-10-21 13:00")
+                    .endDate("2020-10-21 14:00")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
