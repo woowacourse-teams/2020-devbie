@@ -5,6 +5,7 @@ import questions from "./modules/questions";
 import answers from "./modules/answers";
 import notices from "./modules/notices";
 import recommendations from "./modules/recommendations";
+import snackBar from "./modules/snackBar";
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ export const store = new Vuex.Store({
     questions,
     answers,
     notices,
-    recommendations
+    recommendations,
+    snackBar
   }
 });

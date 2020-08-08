@@ -21,15 +21,6 @@
       <answer-list></answer-list>
       <answer-create></answer-create>
     </div>
-    <v-snackbar v-model="snackbar" :multi-line="true" top>
-      {{ snackbarText }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-          닫기
-        </v-btn>
-      </template>
-    </v-snackbar>
   </div>
 </template>
 
@@ -47,9 +38,7 @@ export default {
   },
   data() {
     return {
-      author: false,
-      snackbar: false,
-      snackbarText: ""
+      author: false
     };
   },
   computed: {
@@ -65,9 +54,12 @@ export default {
         } catch (error) {
           console.log(error);
           if (error.response.status === 401) {
-            this.snackbarText = "작성자만 할 수 있습니다.";
+            this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "작성자만 할 수 있습니다."
+            );
           } else {
-            this.snackbarText = "삭제 실패했습니다.";
+            this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "삭제 실패했습니다.");
           }
           this.snackbar = true;
         }

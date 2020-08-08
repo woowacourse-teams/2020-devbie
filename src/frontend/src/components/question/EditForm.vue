@@ -35,15 +35,6 @@
         </v-card-actions>
       </v-card>
     </div>
-    <v-snackbar v-model="snackbar" :multi-line="true" top>
-      {{ snackbarText }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-          닫기
-        </v-btn>
-      </template>
-    </v-snackbar>
   </div>
 </template>
 
@@ -53,16 +44,16 @@ export default {
     return {
       questionId: this.$route.params.id,
       title: this.$store.getters.fetchedQuestion.title,
-      content: this.$store.getters.fetchedQuestion.content,
-      snackbar: false,
-      snackbarText: ""
+      content: this.$store.getters.fetchedQuestion.content
     };
   },
   methods: {
     async onUpdateQuestion() {
       if (this.title === "" || this.content === "") {
-        this.snackbar = true;
-        this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
+        this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "질문 제목과 질문 내용을 채워주세요."
+        );
         return;
       }
       const request = {
@@ -76,14 +67,17 @@ export default {
       } catch (error) {
         console.log(error);
         if (error.response.status === 405) {
-          this.snackbar = true;
-          this.snackbarText = "질문 제목과 질문 내용을 채워주세요.";
-        } else if (error.response.status === 401) {
-          this.snackbar = true;
-          this.snackbarText = "작성자만 수정할 수 있습니다.";
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "질문 제목과 질문 내용을 채워주세요."
+          );
+        } else if (error.response.status === 403) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "작성자만 수정할 수 있습니다."
+          );
         } else {
-          this.snackbar = true;
-          this.snackbarText = "요청에 실패했습니다.";
+          this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "요청에 실패했습니다.");
         }
       }
     }

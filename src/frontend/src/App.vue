@@ -4,15 +4,7 @@
     <transition name="page">
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
-    <v-snackbar v-model="snackbar" :multi-line="true" top>
-      {{ snackbarText }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-          닫기
-        </v-btn>
-      </template>
-    </v-snackbar>
+    <snack-bar></snack-bar>
     <footer-bar></footer-bar>
   </v-app>
 </template>
@@ -20,13 +12,12 @@
 <script>
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
+import SnackBar from "./components/SnackBar";
 
 export default {
   data() {
     return {
-      isLoggedIn: false,
-      snackbar: false,
-      snackbarText: ""
+      isLoggedIn: false
     };
   },
   async created() {
@@ -36,8 +27,8 @@ export default {
         await this.$store.dispatch("FETCH_LOGIN_USER");
         this.isLoggedIn = true;
       } catch (error) {
-        this.snackbar = true;
-        this.snackbarText = error.response.data.message;
+        console.log(error.response.data.message);
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인 실패하였습니다.");
         localStorage.removeItem("devbieToken");
         this.isLoggedIn = false;
       }
@@ -52,7 +43,8 @@ export default {
   },
   components: {
     NavigationBar,
-    FooterBar
+    FooterBar,
+    SnackBar
   }
 };
 </script>
