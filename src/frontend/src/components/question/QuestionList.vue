@@ -7,9 +7,19 @@
         class="question"
       >
         <p class="visits">조회수 : {{ question.visits }}</p>
-        <router-link :to="`/questions/${question.questionId}`" class="title">
+        <p
+          @click="$router.push(`/questions/${question.questionId}`)"
+          class="title"
+        >
           Q. {{ question.title }}
-        </router-link>
+        </p>
+        <div
+          class="hashtags"
+          v-for="hashtag in question.hashtags"
+          :key="hashtag.id"
+        >
+          #{{ hashtag.tagName }}
+        </div>
       </li>
     </ul>
   </div>
@@ -63,5 +73,16 @@ export default {
   font-weight: normal;
   font-size: 24px;
   text-decoration: none;
+  margin-bottom: 0;
+  margin-right: 7px;
+}
+
+.hashtags {
+  margin: 0 3px;
+  font-size: 13px;
+}
+
+.hashtags:first-child {
+  margin-left: 7px;
 }
 </style>
