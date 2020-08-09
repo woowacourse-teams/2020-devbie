@@ -65,6 +65,14 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
+      try {
+        const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
+        commit("SET_QUESTIONS", data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   getters: {

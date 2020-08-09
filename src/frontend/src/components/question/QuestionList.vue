@@ -23,6 +23,11 @@ export default {
     ...mapGetters(["fetchedQuestions"])
   },
   created() {
+    const hashtag = this.$route.query.hashtag;
+    if (hashtag) {
+      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", hashtag);
+      return;
+    }
     this.$store.dispatch("FETCH_QUESTIONS");
   }
 };

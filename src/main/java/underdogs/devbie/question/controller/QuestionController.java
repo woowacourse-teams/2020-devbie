@@ -90,4 +90,14 @@ public class QuestionController {
             .noContent()
             .build();
     }
+
+    @NoValidate
+    @GetMapping(params = "hashtag")
+    public ResponseEntity<QuestionResponses> searchByHashtag(
+        @RequestParam("hashtag") String hashtag
+    ) {
+        QuestionResponses responses = questionService.searchByHashtag(hashtag);
+        return ResponseEntity
+            .ok(responses);
+    }
 }

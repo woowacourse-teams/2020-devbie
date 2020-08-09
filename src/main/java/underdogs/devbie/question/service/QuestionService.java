@@ -80,4 +80,10 @@ public class QuestionService {
         List<Question> questions = questionRepository.findByTitleLike(keyword);
         return QuestionResponses.from(questions);
     }
+
+    public QuestionResponses searchByHashtag(String hashtag) {
+        List<Long> questionIds = questionHashtagService.findIdsByHashtagName(hashtag);
+        List<Question> questions = questionRepository.findAllById(questionIds);
+        return QuestionResponses.from(questions);
+    }
 }

@@ -13,6 +13,7 @@
               v-for="hashtag in fetchedQuestion.hashtags"
               v-bind:key="hashtag.id"
               class="hashtag"
+              @click="$router.push(`/questions?hashtag=${hashtag.tagName}`)"
               >#{{ hashtag.tagName }}
             </span>
           </div>

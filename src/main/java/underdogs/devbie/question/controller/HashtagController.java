@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
@@ -38,6 +39,7 @@ public class HashtagController {
             .build();
     }
 
+    @NoValidate
     @GetMapping
     public ResponseEntity<HashtagResponses> readAll() {
         HashtagResponses hashtagResponses = hashtagService.readAll();

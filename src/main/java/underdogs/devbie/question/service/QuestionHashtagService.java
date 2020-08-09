@@ -15,6 +15,7 @@ import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.exception.HashtagNotExistedException;
 
 @Service
 @Transactional(readOnly = true)
@@ -42,15 +43,15 @@ public class QuestionHashtagService {
 
     private QuestionHashtags mapToQuestionHashtags(Question question, Set<String> hashtags) {
         return new QuestionHashtags(hashtags
-                .stream()
-                .map(tagName -> {
-                    Hashtag hashtag = findOrCreateHashtag(tagName);
-                    hashtagRepository.save(hashtag);
-                    QuestionHashtag questionHashtag = findOrCreateQuestionHashtag(question, hashtag);
-                    questionHashtagRepository.save(questionHashtag);
-                    return questionHashtag;
-                })
-                .collect(Collectors.toSet()));
+            .stream()
+            .map(tagName -> {
+                Hashtag hashtag = findOrCreateHashtag(tagName);
+                hashtagRepository.save(hashtag);
+                QuestionHashtag questionHashtag = findOrCreateQuestionHashtag(question, hashtag);
+                questionHashtagRepository.save(questionHashtag);
+                return questionHashtag;
+            })
+            .collect(Collectors.toSet()));
     }
 
     private Hashtag findOrCreateHashtag(String tagName) {
@@ -66,5 +67,10 @@ public class QuestionHashtagService {
                 .question(question)
                 .hashtag(hashtag)
                 .build());
+    }
+
+    public List<Long> findIdsByHashtagName(String hashtag) {
+        Hashtag findHashtag = hashtagRepository.findByTagName(hashtag).orElseThrow(HashtagNotExistedException::new);
+        return questionHashtagRepository.findQuestionIdsByHashtagId(findHashtag.getId());
     }
 }
