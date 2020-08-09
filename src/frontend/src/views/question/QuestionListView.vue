@@ -46,7 +46,7 @@ export default {
 
 #question-control {
   flex-grow: 1;
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   text-decoration: none;

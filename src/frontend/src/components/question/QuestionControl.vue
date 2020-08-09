@@ -1,11 +1,6 @@
 <template>
   <div class="question-control">
-    <v-btn
-      class="control-btn hashtag-list"
-      @click="$router.push('/hashtags')"
-      color="#DAEBEA"
-      >태그 목록</v-btn
-    >
+    <hashtag-list></hashtag-list>
     <v-btn
       v-if="isLoggedIn"
       class="control-btn question-create"
@@ -18,10 +13,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+import HashtagList from "../../components/hashtag/HashtagList";
 
 export default {
   computed: {
     ...mapGetters(["isLoggedIn"])
+  },
+  components: {
+    HashtagList
   }
 };
 </script>
@@ -32,10 +31,11 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 200px;
 }
 
 .control-btn {
   width: 95px;
-  margin-bottom: 25px;
+  margin-top: 20px;
 }
 </style>

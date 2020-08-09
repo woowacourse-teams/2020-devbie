@@ -9,6 +9,7 @@ import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/notice/NoticeDetailView";
 import NoticeDetail from "../components/notice/NoticeDetail";
+import HashtagsView from "../views/hashtags/HashtagsView";
 
 Vue.use(VueRouter);
 
@@ -61,6 +62,11 @@ export const router = new VueRouter({
           component: NoticeDetail
         }
       ]
+    },
+    {
+      path: "/hashtags",
+      name: "hashtags",
+      component: HashtagsView
     }
   ]
 });
