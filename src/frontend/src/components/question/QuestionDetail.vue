@@ -86,14 +86,13 @@ export default {
         console.log("you should login");
         return;
       }
-      const questionId = this.questionId;
       if (
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
         try {
           await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
-            questionId,
+            questionId: this.questionId,
             recommendationType: newType
           });
           this.userRecommended = newType;
@@ -104,7 +103,7 @@ export default {
         try {
           await this.$store.dispatch(
             "DELETE_QUESTION_RECOMMENDATION",
-            questionId
+            this.questionId
           );
           this.userRecommended = "NOT_EXIST";
         } catch (error) {

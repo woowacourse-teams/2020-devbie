@@ -3,38 +3,21 @@
     <div class="inner">
       <question-filters id="question-filters"></question-filters>
       <question-list id="question-list"></question-list>
-      <v-btn
-        v-if="isLoggedIn"
-        id="question-create"
-        @click="$router.push('/create-question')"
-        color="#DAEBEA"
-        >질문 올리기
-      </v-btn>
+      <question-control id="question-control"></question-control>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import QuestionFilters from "../../components/question/QuestionFilters";
 import QuestionList from "../../components/question/QuestionList";
+import QuestionControl from "../../components/question/QuestionControl";
 
 export default {
   components: {
     QuestionFilters,
-    QuestionList
-  },
-  data() {
-    return {
-      isLoggedIn: false
-    };
-  },
-  computed: {
-    ...mapGetters(["fetchedQuestions", "fetchedLoginUser"])
-  },
-  created() {
-    this.$store.dispatch("FETCH_QUESTIONS");
-    this.isLoggedIn = !!this.fetchedLoginUser.id;
+    QuestionList,
+    QuestionControl
   }
 };
 </script>
@@ -61,7 +44,7 @@ export default {
   flex-grow: 10;
 }
 
-#question-create {
+#question-control {
   flex-grow: 1;
   margin-top: 40px;
   display: flex;

@@ -9,24 +9,22 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
 
 export default {
-  data() {
-    return {
-      isLoggedIn: false
-    };
+  computed: {
+    ...mapGetters(["isLoggedIn"])
   },
   async created() {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {
         await this.$store.dispatch("FETCH_LOGIN_USER");
-        this.isLoggedIn = true;
       } catch (error) {
         localStorage.removeItem("devbieToken");
-        this.isLoggedIn = false;
+        this.$store.commit("DELETE_LOGIN_USER");
       }
     }
   },
@@ -34,7 +32,6 @@ export default {
     logout() {
       localStorage.removeItem("devbieToken");
       this.$store.commit("DELETE_LOGIN_USER");
-      this.isLoggedIn = false;
     }
   },
   components: {
