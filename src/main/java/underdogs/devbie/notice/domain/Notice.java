@@ -33,7 +33,7 @@ public class Notice extends BaseTimeEntity {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "notice_type", nullable = false)
+    @Column(nullable = false)
     private NoticeType noticeType;
 
     @Embedded
@@ -45,7 +45,7 @@ public class Notice extends BaseTimeEntity {
     private Duration duration;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "job_position", nullable = false)
+    @Column(nullable = false)
     private JobPosition jobPosition;
 
     @Embedded
