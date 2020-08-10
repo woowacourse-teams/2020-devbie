@@ -21,9 +21,9 @@ export default {
     }
   },
   actions: {
-    async FETCH_QUESTIONS({ commit }) {
+    async FETCH_QUESTIONS({ commit }, orderBy) {
       try {
-        const { data } = await getAction("/api/questions");
+        const { data } = await getAction(`/api/questions?orderBy=${orderBy}`);
         commit("SET_QUESTIONS", data);
       } catch (error) {
         console.log(error);

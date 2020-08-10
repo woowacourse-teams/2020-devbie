@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -44,8 +45,10 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping
-    public ResponseEntity<QuestionResponses> readAll() {
-        QuestionResponses responses = questionService.readAll();
+    public ResponseEntity<QuestionResponses> readAllOrderBy(
+        @RequestParam(value = "orderBy", required = false) OrderBy condition
+    ) {
+        QuestionResponses responses = questionService.readAllOrderBy(condition);
         return ResponseEntity
             .ok(responses);
     }

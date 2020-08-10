@@ -21,6 +21,7 @@ import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.question.domain.Hashtag;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtag;
@@ -102,7 +103,7 @@ public class QuestionServiceTest {
         List<Question> questions = Lists.newArrayList(question);
         given(questionRepository.findAll()).willReturn(questions);
 
-        QuestionResponses responses = questionService.readAll();
+        QuestionResponses responses = questionService.readAllOrderBy(OrderBy.CREATED_DATE);
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
@@ -116,6 +117,8 @@ public class QuestionServiceTest {
                 HashtagResponse.builder().id(2L).tagName("network").build())
         );
     }
+
+    // TODO: 질문 목록 조회, 최신 순 and 조회 순
 
     @DisplayName("질문 상세 조회")
     @Test

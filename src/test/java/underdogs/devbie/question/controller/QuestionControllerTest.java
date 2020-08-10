@@ -92,7 +92,7 @@ class QuestionControllerTest extends MvcTest {
             .build();
         QuestionResponses responses = new QuestionResponses(Lists.newArrayList(response));
 
-        given(questionService.readAll()).willReturn(responses);
+        given(questionService.readAllOrderBy()).willReturn(responses);
 
         MvcResult mvcResult = getAction("/api/questions/")
             .andExpect(status().isOk())

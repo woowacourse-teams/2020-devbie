@@ -1,13 +1,9 @@
 <template>
   <div class="filters">
     <router-link class="condition" :to="`/questions`">전체 질문</router-link>
-    <router-link class="condition" :to="`questions22`">인기 질문</router-link>
-    <router-link class="condition" :to="`/questions?orderBy=actual`"
-      >면접에 나온 질문
-    </router-link>
-    <router-link class="condition" :to="`/questions?orderBy=expected`"
-      >면접 예상 질문
-    </router-link>
+    <router-link class="condition" :to="`/questions?orderBy=VISITS`"
+      >인기 질문</router-link
+    >
   </div>
 </template>
 

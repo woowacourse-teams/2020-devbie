@@ -35,7 +35,10 @@ export const router = new VueRouter({
       path: "/questions",
       name: "questions",
       component: QuestionListView,
-      props: route => ({ hashtag: route.query.hashtag })
+      props: route => ({
+        hashtag: route.query.hashtag,
+        orderBy: route.query.orderBy
+      })
     },
     {
       path: "/questions/:id",

@@ -34,11 +34,12 @@ export default {
   },
   created() {
     const hashtag = this.$route.query.hashtag;
+    const orderBy = this.$route.query.orderBy || "CREATED_DATE";
     if (hashtag) {
       this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", hashtag);
       return;
     }
-    this.$store.dispatch("FETCH_QUESTIONS");
+    this.$store.dispatch("FETCH_QUESTIONS", orderBy);
   }
 };
 </script>

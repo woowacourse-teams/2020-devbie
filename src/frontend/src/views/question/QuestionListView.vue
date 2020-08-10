@@ -38,6 +38,7 @@ export default {
 
 #question-filters {
   flex-grow: 1;
+  min-width: 160px;
 }
 
 #question-list {
