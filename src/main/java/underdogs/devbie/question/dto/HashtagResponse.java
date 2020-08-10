@@ -34,10 +34,14 @@ public class HashtagResponse {
 
     public static List<HashtagResponse> listFrom(Set<QuestionHashtag> hashtags) {
         return hashtags.stream()
-            .map(h -> HashtagResponse.from(Hashtag.builder()
-                .id(h.getHashtag().getId())
-                .tagName(h.getHashtag().getTagName())
-                .build()))
+            .map(h -> HashtagResponse.from(createHashtag(h)))
             .collect(Collectors.toList());
+    }
+
+    private static Hashtag createHashtag(QuestionHashtag h) {
+        return Hashtag.builder()
+            .id(h.getHashtag().getId())
+            .tagName(h.getHashtag().getTagName())
+            .build();
     }
 }
