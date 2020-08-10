@@ -13,8 +13,9 @@
     </div>
     <div class="input-box">
       <v-text-field
-        label="새로운 태그 생성"
+        label="#해시태그"
         class="input hashtag-input-text"
+        placeholder="Enter로 태그 추가"
         v-model="tagName"
         @keydown.enter="addHashtag"
       ></v-text-field>
