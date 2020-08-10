@@ -17,6 +17,17 @@ export default {
       state.questionId = data;
     }
   },
+  getters: {
+    fetchedQuestions(state) {
+      return state.questions;
+    },
+    fetchedQuestion(state) {
+      return state.question;
+    },
+    fetchedNewCreatedQuestionId(state) {
+      return state.questionId;
+    }
+  },
   actions: {
     async FETCH_QUESTIONS({ commit }) {
       try {
@@ -40,29 +51,11 @@ export default {
       commit("SET_NEW_QUESTION_ID", id);
       return response;
     },
-    async UPDATE_QUESTION({ commit }, payload) {
-      const response = await patchAction(
-        `/api/questions/${payload.id}`,
-        payload.request
-      );
-      commit();
-      return response;
+    async UPDATE_QUESTION(state, data) {
+      return await patchAction(`/api/questions/${data.id}`, data.request);
     },
-    async DELETE_QUESTION({ commit }, questionId) {
-      const response = await deleteAction(`/api/questions/${questionId}`);
-      commit();
-      return response;
-    }
-  },
-  getters: {
-    fetchedQuestions(state) {
-      return state.questions;
-    },
-    fetchedQuestion(state) {
-      return state.question;
-    },
-    fetchedNewCreatedQuestionId(state) {
-      return state.questionId;
+    async DELETE_QUESTION(state, questionId) {
+      return await deleteAction(`/api/questions/${questionId}`);
     }
   }
 };

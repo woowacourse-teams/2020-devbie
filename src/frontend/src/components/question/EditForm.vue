@@ -63,9 +63,10 @@ export default {
       try {
         const id = this.questionId;
         await this.$store.dispatch("UPDATE_QUESTION", { request, id });
+
+        await this.$store.dispatch("UPDATE_QUESTION", { request, id });
         window.location.href = `/questions/${this.questionId}`;
       } catch (error) {
-        console.log(error);
         if (error.response.status === 405) {
           this.$store.dispatch(
             "UPDATE_SNACKBAR_TEXT",
