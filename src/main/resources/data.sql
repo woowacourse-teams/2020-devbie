@@ -22,8 +22,8 @@ INSERT INTO language(notice_id, languages) values (6, 'CPP');
 INSERT INTO language(notice_id, languages) values (7, 'CPP');
 INSERT INTO language(notice_id, languages) values (8, 'CPP');
 
-INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (1, 100, '가비지 컬렉션이란 무엇인가','GC를 어느정도 까지 알아야할까요?', 100);
-INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (2, 54, 'PUT과 PATCH의 차이','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 30);
+INSERT INTO question (question_id, user_id, title, content, visit_count, recommended_count, non_recommended_count) VALUES (1, 100, '가비지 컬렉션이란 무엇인가','GC를 어느정도 까지 알아야할까요?', 100, 10, 5);
+INSERT INTO question (question_id, user_id, title, content, visit_count, recommended_count, non_recommended_count) VALUES (2, 54, 'PUT과 PATCH의 차이','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 30, 15, 27);
 
 INSERT INTO answer (id, user_id, question_id, content) VALUES (1, 101, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');
 INSERT INTO answer (id, user_id, question_id, content) VALUES (2, 102, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');

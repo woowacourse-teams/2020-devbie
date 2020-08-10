@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import underdogs.devbie.question.domain.Question;
+import underdogs.devbie.question.domain.QuestionRepository;
+import underdogs.devbie.question.exception.QuestionNotExistedException;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -11,8 +14,11 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 @Service
 public class QuestionRecommendationService extends RecommendationService {
 
-    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository) {
+    private QuestionRepository questionRepository;
+
+    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository, QuestionRepository questionRepository) {
         this.recommendationRepository = questionRecommendationRepository;
+        this.questionRepository = questionRepository;
     }
 
     @Override
@@ -28,5 +34,9 @@ public class QuestionRecommendationService extends RecommendationService {
         }
 
         recommendationRepository.save(questionRecommendation);
+
+        Question question = questionRepository.findById(objectId)
+            .orElseThrow(QuestionNotExistedException::new);
+        question.increaseRecommendationCounts(recommendationType);
     }
 }

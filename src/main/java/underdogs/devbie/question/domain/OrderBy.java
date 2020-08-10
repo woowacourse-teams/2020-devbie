@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public enum OrderBy {
     CREATED_DATE("createdDate", Direction.ASC),
-    VISITS("visits", Direction.DESC);
+    VISITS("visits.visitCount", Direction.DESC),
+    RECOMMENDATIONS("recommendationCount.recommendedCount", Direction.DESC);
 
     private final String propertyName;
     private final Direction direction;

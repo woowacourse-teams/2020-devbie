@@ -2,6 +2,7 @@ package underdogs.devbie.recommendation.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
+import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 
 import java.util.stream.Stream;
 
@@ -25,6 +26,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     Stream<DynamicTest> manageRecommendation() {
         return Stream.of(
             dynamicTest("1번 질문 추천", () -> {
+                createQuestion(TEST_QUESTION_TITLE);
                 recommend(1L);
 
                 Long question1Count = recommendationCount(1L).getRecommendedCount();
@@ -35,6 +37,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 assertThat(question1Type).isEqualTo("RECOMMENDED");
             }),
             dynamicTest("2번 질문 비추천", () -> {
+                createQuestion(TEST_QUESTION_TITLE);
                 nonRecommend(2L);
 
                 Long question2Count = recommendationCount(2L).getNonRecommendedCount();

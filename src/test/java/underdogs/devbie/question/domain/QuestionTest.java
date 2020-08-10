@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import underdogs.devbie.exception.CreateFailException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 
 public class QuestionTest {
 
@@ -97,5 +98,23 @@ public class QuestionTest {
         question.increaseVisits();
 
         assertThat(question.getVisits().getVisitCount()).isEqualTo(1L);
+    }
+
+    @DisplayName("추천수 증가")
+    @Test
+    void increaseRecommendationCount() {
+        Question question = Question.builder()
+            .userId(1L)
+            .title(TEST_QUESTION_TITLE)
+            .content(TEST_QUESTION_CONTENT)
+            .hashtags(new LinkedHashSet<>())
+            .build();
+
+        question.increaseRecommendationCounts(RecommendationType.RECOMMENDED);
+
+        assertAll(
+            () -> assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(1L),
+            () -> assertThat(question.getRecommendationCount().getNonRecommendedCount()).isEqualTo(0L)
+        );
     }
 }

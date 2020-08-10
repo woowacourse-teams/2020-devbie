@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionTitle;
@@ -92,9 +93,9 @@ class QuestionControllerTest extends MvcTest {
             .build();
         QuestionResponses responses = new QuestionResponses(Lists.newArrayList(response));
 
-        given(questionService.readAllOrderBy()).willReturn(responses);
+        given(questionService.readAllOrderBy(OrderBy.CREATED_DATE)).willReturn(responses);
 
-        MvcResult mvcResult = getAction("/api/questions/")
+        MvcResult mvcResult = getAction("/api/questions?orderBy=CREATED_DATE")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();

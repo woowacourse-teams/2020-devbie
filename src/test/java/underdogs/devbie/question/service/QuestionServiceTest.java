@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.OrderBy;
@@ -101,7 +102,7 @@ public class QuestionServiceTest {
     @Test
     void readAll() {
         List<Question> questions = Lists.newArrayList(question);
-        given(questionRepository.findAll()).willReturn(questions);
+        given(questionRepository.findAllOrderBy(any(Sort.class))).willReturn(questions);
 
         QuestionResponses responses = questionService.readAllOrderBy(OrderBy.CREATED_DATE);
 
