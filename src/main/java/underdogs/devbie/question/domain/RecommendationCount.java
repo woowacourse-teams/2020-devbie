@@ -32,4 +32,12 @@ public class RecommendationCount {
         }
         this.nonRecommendedCount++;
     }
+
+    public void decreaseCount(RecommendationType type) {
+        if (type == RecommendationType.RECOMMENDED) {
+            this.recommendedCount--;
+            return;
+        }
+        this.nonRecommendedCount--;
+    }
 }

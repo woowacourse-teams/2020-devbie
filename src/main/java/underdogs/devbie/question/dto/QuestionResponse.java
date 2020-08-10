@@ -33,7 +33,7 @@ public class QuestionResponse {
             .userId(question.getUserId())
             .visits(question.getVisits().getVisitCount())
             .recommendedCount(question.getRecommendationCount().getRecommendedCount())
-            .recommendedCount(question.getRecommendationCount().getNonRecommendedCount())
+            .nonRecommendedCount(question.getRecommendationCount().getNonRecommendedCount())
             .title(question.getTitle().getTitle())
             .content(question.getContent().getContent())
             .hashtags(HashtagResponse.listFrom(question.getHashtags()))

@@ -2,15 +2,11 @@ import { getAction, putAction, deleteAction } from "../../api";
 
 export default {
   state: {
-    questionRecommendation: {},
     myQuestionRecommendation: {},
     answerRecommendation: [],
     myAnswerRecommendation: []
   },
   mutations: {
-    SET_QUESTION_RECOMMENDATION(state, data) {
-      state.questionRecommendation = data;
-    },
     SET_MY_QUESTION_RECOMMENDATION(state, data) {
       state.myQuestionRecommendation = data;
     },
@@ -25,16 +21,6 @@ export default {
     }
   },
   actions: {
-    async FETCH_QUESTION_RECOMMENDATION({ commit }, questionId) {
-      try {
-        const { data } = await getAction(
-          `/api/recommendation-question?objectId=${questionId}`
-        );
-        commit("SET_QUESTION_RECOMMENDATION", data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async FETCH_MY_QUESTION_RECOMMENDATION({ commit }, payload) {
       try {
         const { data } = await getAction(
@@ -130,9 +116,6 @@ export default {
     }
   },
   getters: {
-    fetchedQuestionRecommendation(state) {
-      return state.questionRecommendation;
-    },
     fetchedMyQuestionRecommendation(state) {
       return state.myQuestionRecommendation;
     },

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -30,15 +29,8 @@ public abstract class RecommendationService<T extends Recommendation> {
     }
 
     @Transactional
-    public void deleteRecommendation(Long objectId, Long userId) {
-        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
+    public abstract void deleteRecommendation(Long objectId, Long userId);
 
-        Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
-
-        recommendationRepository.delete(recommendation);
-    }
-
-    // save시 구체적인 클래스를 명시해주기 위해 abstract
     @Transactional
     public abstract void createOrUpdateRecommendation(Long objectId, Long id, RecommendationType recommendationType);
 }

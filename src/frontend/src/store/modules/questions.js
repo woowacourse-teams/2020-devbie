@@ -18,6 +18,29 @@ export default {
     },
     CLEAR_HASHTAGS(state) {
       state.question.hashtags = [];
+    },
+    SET_RECOMMENDATION_COUNT(state, data) {
+      if (data.priorType === data.newType) {
+        if (data.newType === "RECOMMENDED") {
+          state.question.recommendedCount -= 1;
+          return;
+        }
+        state.question.nonRecommendedCount -= 1;
+      }
+
+      if (data.newType === "RECOMMENDED") {
+        if (data.priorType === "NON_RECOMMENDED") {
+          state.question.nonRecommendedCount -= 1;
+        }
+        state.question.recommendedCount += 1;
+      }
+
+      if (data.newType === "NON_RECOMMENDED") {
+        if (data.priorType === "RECOMMENDED") {
+          state.question.recommendedCount -= 1;
+        }
+        state.question.nonRecommendedCount += 1;
+      }
     }
   },
   actions: {

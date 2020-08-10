@@ -83,6 +83,10 @@ public class Question extends BaseTimeEntity {
         this.recommendationCount.increaseCount(type);
     }
 
+    public void decreaseRecommendationCounts(RecommendationType type) {
+        this.recommendationCount.decreaseCount(type);
+    }
+
     public void setHashtags(QuestionHashtags hashtags) {
         this.hashtags.clear();
         this.hashtags.addAll(hashtags.getQuestionHashtags());
