@@ -6,7 +6,12 @@
         v-bind:key="question.id"
         class="question"
       >
-        <p class="visits">조회수 : {{ question.visits }}</p>
+        <div class="count-infos">
+          <p class="count visits">조회수 : {{ question.visits }}</p>
+          <p class="count recommendedCount">
+            추천수 : {{ question.recommendedCount }}
+          </p>
+        </div>
         <p
           @click="$router.push(`/questions/${question.questionId}`)"
           class="title"
@@ -63,9 +68,14 @@ export default {
   width: 95%;
 }
 
-.visits {
+.count-infos {
+  display: flex;
+  flex-direction: column;
+}
+
+.count {
   font-size: 14px;
-  margin-right: 13px;
+  margin-right: 17px;
   margin-bottom: 0;
 }
 
@@ -76,6 +86,12 @@ export default {
   text-decoration: none;
   margin-bottom: 0;
   margin-right: 7px;
+}
+
+.title:hover {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .hashtags {

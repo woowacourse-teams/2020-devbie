@@ -21,6 +21,8 @@ public class QuestionResponse {
     private Long questionId;
     private Long userId;
     private Long visits;
+    private Long recommendedCount;
+    private Long nonRecommendedCount;
     private String title;
     private String content;
     private List<HashtagResponse> hashtags = new ArrayList<>();
@@ -30,6 +32,8 @@ public class QuestionResponse {
             .questionId(question.getId())
             .userId(question.getUserId())
             .visits(question.getVisits().getVisitCount())
+            .recommendedCount(question.getRecommendationCount().getRecommendedCount())
+            .recommendedCount(question.getRecommendationCount().getNonRecommendedCount())
             .title(question.getTitle().getTitle())
             .content(question.getContent().getContent())
             .hashtags(HashtagResponse.listFrom(question.getHashtags()))
