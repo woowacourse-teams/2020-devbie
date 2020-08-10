@@ -66,7 +66,7 @@ public class AnswerController {
     public ResponseEntity<Void> update(
         @LoginUser User user,
         @PathVariable(value = "id") Long id,
-        @RequestBody AnswerUpdateRequest request
+        @Valid @RequestBody AnswerUpdateRequest request
     ) {
         answerService.update(user, id, request);
 

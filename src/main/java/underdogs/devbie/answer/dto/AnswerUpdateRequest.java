@@ -1,5 +1,7 @@
 package underdogs.devbie.answer.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AnswerUpdateRequest {
 
+    @NotEmpty
     private String content;
 
     public static AnswerUpdateRequest from(String content) {

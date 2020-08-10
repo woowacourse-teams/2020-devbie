@@ -41,24 +41,17 @@ export default {
       }
     },
     async UPDATE_ANSWER({ commit }, payload) {
-      try {
-        const updateContent = payload.updateContent;
-        await patchAction(`/api/answers/${payload.answerId}`, {
-          content: updateContent
-        });
-        commit("UPDATE_ANSWER", payload);
-      } catch (error) {
-        console.log(error);
-      }
+      const updateContent = payload.updateContent;
+      const response = await patchAction(`/api/answers/${payload.answerId}`, {
+        content: updateContent
+      });
+      commit("UPDATE_ANSWER", payload);
+      return response;
     },
     async DELETE_ANSWER({ commit }, answerId) {
-      try {
-        await deleteAction(`/api/answers/${answerId}`).then(() => {
-          commit("DELETE_ANSWER", answerId);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await deleteAction(`/api/answers/${answerId}`);
+      commit("DELETE_ANSWER", answerId);
+      return response;
     },
     async CREATE_ANSWER({ commit }, payload) {
       const questionId = payload.questionId;

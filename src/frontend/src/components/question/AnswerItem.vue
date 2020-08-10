@@ -86,7 +86,27 @@ export default {
       return (this.author = this.answer.userId === this.loginUser.id);
     },
     async deleteBtnHandler() {
-      await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+      try {
+        await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+      } catch (error) {
+        console.error(error);
+        if (error.response.status === 401) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "로그인 정보가 확인되지 않습니다."
+          );
+        } else if (error.response.status === 403) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "삭제할 수 있는 권한이 없습니다."
+          );
+        } else {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "삭제 요청에 실패했습니다."
+          );
+        }
+      }
     },
     updateBtnHandler() {
       this.updateEditFlag = !this.updateEditFlag;
@@ -94,11 +114,38 @@ export default {
     async update() {
       const answerId = this.answer.id;
       const updateContent = this.updateContent;
-      await this.$store.dispatch("UPDATE_ANSWER", {
-        answerId,
-        updateContent
-      });
-      this.updateEditFlag = !this.updateEditFlag;
+      if (updateContent === "") {
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+        return;
+      }
+      try {
+        await this.$store.dispatch("UPDATE_ANSWER", {
+          answerId,
+          updateContent
+        });
+        this.updateEditFlag = !this.updateEditFlag;
+      } catch (error) {
+        console.error(error);
+        console.error(error.response.data.message);
+        if (error.response.status === 405) {
+          this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+        } else if (error.response.status === 401) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "로그인 정보가 확인되지 않습니다."
+          );
+        } else if (error.response.status === 403) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "수정할 수 있는 권한이 없습니다."
+          );
+        } else {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "수정 요청에 실패했습니다."
+          );
+        }
+      }
     },
     async onAnswerRecommendation(priorType, newType) {
       if (!this.loginUser.id) {
@@ -139,7 +186,6 @@ export default {
               "UPDATE_SNACKBAR_TEXT",
               "로그인 후 추천/비추천 할 수 있습니다. "
             );
-            this.snackbar = true;
           }
         }
       }
