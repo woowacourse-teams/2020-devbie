@@ -114,7 +114,7 @@ public class NoticeServiceTest {
         verify(noticeRepository).deleteById(eq(1L));
     }
 
-    @DisplayName("게시글 전체 조회")
+    @DisplayName("필터된 게시글 조회")
     @Test
     void readAll() {
         Set<String> languages = Stream.of(Language.JAVA.getName(), Language.JAVASCRIPT.getName())
@@ -129,9 +129,13 @@ public class NoticeServiceTest {
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
-        given(noticeRepository.findAll()).willReturn(Arrays.asList(expected));
 
-        List<NoticeResponse> noticeResponses = noticeService.readAll().getNoticeResponses();
+        given(noticeRepository.findAllBy(any(NoticeType.class), any(JobPosition.class), any(Language.class)))
+            .willReturn(Arrays.asList(expected));
+
+        List<NoticeResponse> noticeResponses = noticeService
+            .filteredRead(NoticeType.JOB, JobPosition.BACKEND, Language.JAVA)
+            .getNoticeResponses();
 
         assertAll(
             () -> assertThat(noticeResponses).isNotEmpty(),
