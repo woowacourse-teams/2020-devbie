@@ -53,10 +53,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["fetchedNoticeType"]),
-    ...mapGetters(["fetchedJobPosition"]),
-    ...mapGetters(["fetchedLanguage"]),
-    ...mapGetters(["fetchedNotices"])
+    ...mapGetters([
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage"
+    ])
   },
   created() {
     this.getNotices();
