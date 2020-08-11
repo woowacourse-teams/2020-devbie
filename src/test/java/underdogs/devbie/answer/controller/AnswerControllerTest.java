@@ -110,36 +110,6 @@ public class AnswerControllerTest extends MvcTest {
             .andDo(print());
     }
 
-    @DisplayName("Answer 전체 조회")
-    @Test
-    void readAll() throws Exception {
-        Answer expectAnswer = Answer.builder()
-            .id(1L)
-            .userId(2L)
-            .questionId(3L)
-            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
-            .build();
-        AnswerResponses expectAnswers = AnswerResponses.from(
-            Answers.from(Collections.singletonList(expectAnswer))
-        );
-        given(answerService.readAll()).willReturn(expectAnswers);
-
-        MvcResult mvcResult = getAction("/api/answers").andReturn();
-
-        AnswerResponses answerResponses = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(),
-            AnswerResponses.class);
-
-        assertThat(answerResponses).isNotNull();
-        assertThat(answerResponses.getAnswerResponses()).isNotNull();
-        List<AnswerResponse> actual = answerResponses.getAnswerResponses();
-        assertAll(
-            () -> assertEquals(actual.get(0).getId(), 1L),
-            () -> assertEquals(actual.get(0).getUserId(), 2L),
-            () -> assertEquals(actual.get(0).getQuestionId(), 3L),
-            () -> assertEquals(actual.get(0).getContent(), TEST_ANSWER_CONTENT)
-        );
-    }
-
     @DisplayName("Answer id로 하나의 Answer 조회")
     @Test
     void read() throws Exception {
