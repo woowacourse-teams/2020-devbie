@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 public class S3Service {
     private AmazonS3 s3Client;
 
-    @Value("${cloud.aws.region.static}")
+    @Value("${cloud.aws.region.static:sample}")
     private String region;
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket:sample}")
     private String bucket;
 
     @PostConstruct
