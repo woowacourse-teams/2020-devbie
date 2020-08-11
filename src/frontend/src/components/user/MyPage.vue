@@ -122,7 +122,8 @@ export default {
       };
 
       await this.$store.dispatch("UPDATE_USER_INFO", updated_info);
-      this.$store.dispatch("UPDATE_USER_IMAGE", formData);
+      await this.$store.dispatch("UPDATE_USER_IMAGE", formData);
+      this.$store.dispatch("FETCH_LOGIN_USER");
     }
   }
 };
