@@ -41,11 +41,38 @@
 import { mapGetters } from "vuex";
 
 export default {
+  methods: {
+    getNotices() {
+      const param = {
+        noticeType: this.fetchedNoticeType,
+        jobPosition: this.fetchedJobPosition,
+        language: this.fetchedLanguage
+      };
+      const queryParam = new URLSearchParams(param).toString();
+      this.$store.dispatch("FETCH_NOTICES", queryParam);
+    }
+  },
   computed: {
-    ...mapGetters(["fetchedNotices"])
+    ...mapGetters([
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage"
+    ])
   },
   created() {
-    this.$store.dispatch("FETCH_NOTICES");
+    this.getNotices();
+  },
+  watch: {
+    fetchedNoticeType() {
+      this.getNotices();
+    },
+    fetchedJobPosition() {
+      this.getNotices();
+    },
+    fetchedLanguage() {
+      this.getNotices();
+    }
   }
 };
 </script>
@@ -70,5 +97,8 @@ export default {
 
 .notice-info :last-child {
   margin-right: 10px;
+}
+.v-card:hover {
+  opacity: 0.6;
 }
 </style>

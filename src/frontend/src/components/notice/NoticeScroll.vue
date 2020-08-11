@@ -75,4 +75,7 @@ export default {
   flex-basis: auto;
   margin-right: 200px;
 }
+.v-list-item:hover {
+  opacity: 0.7;
+}
 </style>

@@ -4,6 +4,9 @@ export default {
   state: {
     notices: [],
     notice: [],
+    noticeType: "JOB",
+    jobPosition: "",
+    language: "",
     noticeId: ""
   },
   mutations: {
@@ -18,12 +21,21 @@ export default {
     },
     DELETE_NOTICE(state, noticeId) {
       state.notices = state.notices.filter(notice => notice.id !== noticeId);
+    },
+    SET_NOTICE_TYPE(state, data) {
+      state.noticeType = data;
+    },
+    SET_JOB_POSITION(state, data) {
+      state.jobPosition = data;
+    },
+    SET_LANGUAGE(state, data) {
+      state.language = data;
     }
   },
   actions: {
-    async FETCH_NOTICES({ commit }) {
+    async FETCH_NOTICES({ commit }, queryUrl) {
       try {
-        const { data } = await getAction(`/api/notices`);
+        const { data } = await getAction(`/api/notices?` + queryUrl);
         commit("SET_NOTICES", data["noticeResponses"]);
       } catch (error) {
         console.log(error);
@@ -66,6 +78,15 @@ export default {
     },
     fetchedNotice(state) {
       return state.notice;
+    },
+    fetchedNoticeType(state) {
+      return state.noticeType;
+    },
+    fetchedLanguage(state) {
+      return state.language;
+    },
+    fetchedJobPosition(state) {
+      return state.jobPosition;
     },
     fetchedNewCreatedNoticeId(state) {
       return state.noticeId;

@@ -200,9 +200,10 @@ public class NoticeControllerTest extends MvcTest {
                 , "hi"))
             .build());
 
-        given(noticeService.readAll()).willReturn(NoticeResponses.listFrom(notices));
+        given(noticeService.filteredRead(any(NoticeType.class), any(), any()))
+            .willReturn(NoticeResponses.listFrom(notices));
 
-        MvcResult mvcResult = getAction("/api/notices")
+        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB")
             .andExpect(status().isOk())
             .andReturn();
 
