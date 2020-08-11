@@ -65,7 +65,7 @@ export default {
         hashtags: this.hashtags,
         questionId: this.questionId
       });
-      window.location.href = `/questions/${this.questionId}`;
+      await this.$router.push(`/questions/${this.questionId}`);
     },
     receiveHashtags(hashtags) {
       this.hashtags = hashtags;

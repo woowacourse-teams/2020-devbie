@@ -58,7 +58,9 @@ export default {
         content: this.content,
         hashtags: this.hashtags
       });
-      window.location.href = `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`;
+      await this.$router.push(
+        `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`
+      );
     },
     receiveHashtags(hashtags) {
       this.hashtags = hashtags;
