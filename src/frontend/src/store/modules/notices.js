@@ -27,20 +27,12 @@ export default {
   },
   actions: {
     async FETCH_NOTICES({ commit }, queryUrl) {
-      try {
-        const { data } = await getAction(`/api/notices?` + queryUrl);
-        commit("SET_NOTICES", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await getAction(`/api/notices?` + queryUrl);
+      commit("SET_NOTICES", response.data);
     },
     async FETCH_NOTICE({ commit }, noticeId) {
-      try {
-        const { data } = await getAction(`/api/notices/${noticeId}`);
-        commit("SET_NOTICE", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await getAction(`/api/notices/${noticeId}`);
+      commit("SET_NOTICE", response.data);
     }
   },
   getters: {

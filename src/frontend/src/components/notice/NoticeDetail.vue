@@ -68,7 +68,14 @@ import { mapGetters } from "vuex";
 export default {
   created() {
     const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICE", noticeId);
+    try {
+      this.$store.dispatch("FETCH_NOTICE", noticeId);
+    } catch (error) {
+      this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고를 불러오지 못했습니다."
+      );
+    }
   },
   computed: {
     ...mapGetters(["fetchedNotice"])

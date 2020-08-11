@@ -49,7 +49,14 @@ export default {
         language: this.fetchedLanguage
       };
       const queryParam = new URLSearchParams(param).toString();
-      this.$store.dispatch("FETCH_NOTICES", queryParam);
+      try {
+        this.$store.dispatch("FETCH_NOTICES", queryParam);
+      } catch (error) {
+        this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "공고를 불러오지 못했습니다."
+        );
+      }
     }
   },
   computed: {
