@@ -64,6 +64,14 @@ void count() {
         QuestionRecommendation recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);
         given(questionRecommendationRepository.findByObjectAndUserId(anyLong(), anyLong())).willReturn(
             Optional.of(recommendation));
+        Question question = Question.builder()
+            .id(1L)
+            .userId(1L)
+            .title(TEST_QUESTION_TITLE)
+            .content(TEST_QUESTION_CONTENT)
+            .hashtags(new LinkedHashSet<>())
+            .build();
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
         questionRecommendationService.deleteRecommendation(1L, 1L);
 

@@ -87,7 +87,7 @@ export default {
         return;
       }
 
-      await this.$store.commit("SET_RECOMMENDATION_COUNT", {
+      await this.$store.commit("SET_QUESTION_RECOMMENDATION_COUNT", {
         priorType: this.userRecommended,
         newType: newType
       });

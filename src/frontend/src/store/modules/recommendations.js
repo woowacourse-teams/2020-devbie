@@ -3,20 +3,20 @@ import { getAction, putAction, deleteAction } from "../../api";
 export default {
   state: {
     myQuestionRecommendation: {},
-    answerRecommendation: [],
     myAnswerRecommendation: []
   },
   mutations: {
     SET_MY_QUESTION_RECOMMENDATION(state, data) {
       state.myQuestionRecommendation = data;
     },
-    SET_ANSWER_RECOMMENDATION(state, payload) {
-      state.answerRecommendation = state.answerRecommendation.filter(
-        ar => ar.answerId !== payload.answerId
-      );
-      state.answerRecommendation.push(payload);
-    },
     SET_MY_ANSWER_RECOMMENDATION(state, payload) {
+      const index = state.myAnswerRecommendation.findIndex(
+        a => a.answerId === payload.answerId
+      );
+      if (index > 0) {
+        state.myAnswerRecommendation[index] = payload;
+        return;
+      }
       state.myAnswerRecommendation.push(payload);
     }
   },
@@ -58,32 +58,14 @@ export default {
         throw error;
       }
     },
-    async FETCH_ANSWER_RECOMMENDATION({ commit }, answerId) {
-      try {
-        const { data } = await getAction(
-          `/api/recommendation-answer?objectId=${answerId}`
-        );
-        const recommendedCount = data.recommendedCount;
-        const nonRecommendedCount = data.nonRecommendedCount;
-        commit("SET_ANSWER_RECOMMENDATION", {
-          answerId,
-          recommendedCount,
-          nonRecommendedCount
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async FETCH_MY_ANSWER_RECOMMENDATION({ commit }, payload) {
       try {
         const { data } = await getAction(
           `/api/recommendation-answer?objectId=${payload.answerId}&userId=${payload.userId}`
         );
-        const answerId = payload.answerId;
-        const recommendationType = data.recommendationType;
         commit("SET_MY_ANSWER_RECOMMENDATION", {
-          answerId,
-          recommendationType
+          answerId: payload.answerId,
+          recommendationType: data.recommendationType
         });
       } catch (error) {
         console.log(error);
@@ -98,8 +80,10 @@ export default {
             recommendationType: recommendationType
           }
         );
-        const answerId = payload.answerId;
-        commit("SET_ANSWER_RECOMMENDATION", { answerId, recommendationType });
+        commit("SET_MY_ANSWER_RECOMMENDATION", {
+          answerId: payload.answerId,
+          recommendationType: recommendationType
+        });
       } catch (error) {
         console.log(error);
         throw error;
@@ -108,7 +92,10 @@ export default {
     async DELETE_ANSWER_RECOMMENDATION({ commit }, answerId) {
       try {
         await deleteAction(`/api/recommendation-answer?objectId=${answerId}`);
-        commit("SET_ANSWER_RECOMMENDATION", { answerId });
+        commit("SET_MY_ANSWER_RECOMMENDATION", {
+          answerId: answerId,
+          recommendationType: "NOT_EXIST"
+        });
       } catch (error) {
         console.log(error);
         throw error;
@@ -118,11 +105,6 @@ export default {
   getters: {
     fetchedMyQuestionRecommendation(state) {
       return state.myQuestionRecommendation;
-    },
-    fetchedAnswerRecommendation: state => answerId => {
-      return state.answerRecommendation.filter(
-        ar => ar.answerId === answerId
-      )[0];
     },
     fetchedMyAnswerRecommendation: state => answerId => {
       return state.myAnswerRecommendation.filter(

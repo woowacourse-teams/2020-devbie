@@ -19,13 +19,14 @@ export default {
     CLEAR_HASHTAGS(state) {
       state.question.hashtags = [];
     },
-    SET_RECOMMENDATION_COUNT(state, data) {
+    SET_QUESTION_RECOMMENDATION_COUNT(state, data) {
       if (data.priorType === data.newType) {
         if (data.newType === "RECOMMENDED") {
           state.question.recommendedCount -= 1;
           return;
         }
         state.question.nonRecommendedCount -= 1;
+        return;
       }
 
       if (data.newType === "RECOMMENDED") {

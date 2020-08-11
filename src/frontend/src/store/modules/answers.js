@@ -27,6 +27,31 @@ export default {
         questionId: payload.questionId,
         content: payload.content
       });
+    },
+    SET_ANSWER_RECOMMENDATION_COUNT(state, data) {
+      const index = state.answers.findIndex(a => a.id === data.answerId);
+      if (data.priorType === data.newType) {
+        if (data.newType === "RECOMMENDED") {
+          state.answers[index].recommendedCount -= 1;
+          return;
+        }
+        state.answers[index].nonRecommendedCount -= 1;
+        return;
+      }
+
+      if (data.newType === "RECOMMENDED") {
+        if (data.priorType === "NON_RECOMMENDED") {
+          state.answers[index].nonRecommendedCount -= 1;
+        }
+        state.answers[index].recommendedCount += 1;
+      }
+
+      if (data.newType === "NON_RECOMMENDED") {
+        if (data.priorType === "RECOMMENDED") {
+          state.answers[index].recommendedCount -= 1;
+        }
+        state.answers[index].nonRecommendedCount += 1;
+      }
     }
   },
   actions: {

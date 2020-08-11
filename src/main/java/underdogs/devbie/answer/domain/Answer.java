@@ -2,6 +2,7 @@ package underdogs.devbie.answer.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
+import underdogs.devbie.question.domain.RecommendationCount;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +26,7 @@ import underdogs.devbie.exception.CreateFailException;
 public class Answer extends BaseTimeEntity {
 
     @Id
+    @Column(name = "answer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -33,6 +37,9 @@ public class Answer extends BaseTimeEntity {
     @Embedded
     private AnswerContent content;
 
+    @Embedded
+    private RecommendationCount recommendationCount;
+
     @Builder
     public Answer(Long id, Long userId, Long questionId, AnswerContent content) {
         validateParameters(userId, questionId, content);
@@ -40,10 +47,11 @@ public class Answer extends BaseTimeEntity {
         this.userId = userId;
         this.questionId = questionId;
         this.content = content;
+        this.recommendationCount = RecommendationCount.init();
     }
 
-    private void validateParameters(Long userId, Long questionid, AnswerContent content) {
-        if (Objects.isNull(userId) || Objects.isNull(questionid) || Objects.isNull(content)) {
+    private void validateParameters(Long userId, Long questionId, AnswerContent content) {
+        if (Objects.isNull(userId) || Objects.isNull(questionId) || Objects.isNull(content)) {
             throw new CreateFailException();
         }
     }
@@ -54,5 +62,13 @@ public class Answer extends BaseTimeEntity {
 
     public boolean isNotMatched(Long userId) {
         return !this.userId.equals(userId);
+    }
+
+    public void increaseRecommendationCounts(RecommendationType type) {
+        this.recommendationCount.increaseCount(type);
+    }
+
+    public void decreaseRecommendationCounts(RecommendationType type) {
+        this.recommendationCount.decreaseCount(type);
     }
 }

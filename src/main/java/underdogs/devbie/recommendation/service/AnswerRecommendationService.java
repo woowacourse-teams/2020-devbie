@@ -38,11 +38,11 @@ public class AnswerRecommendationService extends RecommendationService {
 
         if (!answerRecommendation.hasRecommendationTypeOf(recommendationType)) {
             answerRecommendation.toggleRecommended();
-            // answer.decreaseRecommendationCounts(recommendationType.toggleType());
+            answer.decreaseRecommendationCounts(recommendationType.toggleType());
         }
 
         recommendationRepository.save(answerRecommendation);
-        // answer.increaseRecommendationCounts(recommendationType);
+        answer.increaseRecommendationCounts(recommendationType);
     }
 
     @Transactional
@@ -53,8 +53,8 @@ public class AnswerRecommendationService extends RecommendationService {
 
         recommendationRepository.delete(recommendation);
 
-        Answer question = answerRepository.findById(objectId)
+        Answer answer = answerRepository.findById(objectId)
             .orElseThrow(QuestionNotExistedException::new);
-        // answer.decreaseRecommendationCounts(recommendation.getRecommendationType());
+        answer.decreaseRecommendationCounts(recommendation.getRecommendationType());
     }
 }

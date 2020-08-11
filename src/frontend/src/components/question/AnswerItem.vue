@@ -23,7 +23,7 @@
               class="far fa-thumbs-up recommendation"
               @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
             ></i>
-            {{ answerRecommendation && answerRecommendation.recommendedCount }}
+            {{ answer.recommendedCount }}
           </p>
           <p class="infos">
             <i
@@ -35,9 +35,7 @@
               class="far fa-thumbs-down recommendation"
               @click="onAnswerRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
             ></i>
-            {{
-              answerRecommendation && answerRecommendation.nonRecommendedCount
-            }}
+            {{ answer.nonRecommendedCount }}
           </p>
         </div>
         <div v-if="author">
@@ -69,14 +67,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "fetchedLoginUser",
-      "fetchedAnswerRecommendation",
-      "fetchedMyAnswerRecommendation"
-    ]),
-    answerRecommendation() {
-      return this.fetchedAnswerRecommendation(this.answer.id);
-    },
+    ...mapGetters(["fetchedLoginUser", "fetchedMyAnswerRecommendation"]),
     myAnswerRecommendation() {
       return this.fetchedMyAnswerRecommendation(this.answer.id);
     }
@@ -92,11 +83,9 @@ export default {
       this.updateEditFlag = !this.updateEditFlag;
     },
     async update() {
-      const answerId = this.answer.id;
-      const updateContent = this.updateContent;
       await this.$store.dispatch("UPDATE_ANSWER", {
-        answerId,
-        updateContent
+        answerId: this.answer.id,
+        updateContent: this.updateContent
       });
       this.updateEditFlag = !this.updateEditFlag;
     },
@@ -105,29 +94,29 @@ export default {
         console.log("you should login");
         return;
       }
-      const answerId = this.answer.id;
+
+      await this.$store.commit("SET_ANSWER_RECOMMENDATION_COUNT", {
+        answerId: this.answer.id,
+        priorType: this.userRecommended,
+        newType: newType
+      });
+
       if (
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       ) {
-        try {
-          await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
-            answerId,
-            recommendationType: newType
-          });
-          this.userRecommended = newType;
-        } catch (error) {
-          console.log(error);
-        }
+        await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
+          answerId: this.answer.id,
+          recommendationType: newType
+        });
+        this.userRecommended = newType;
       } else {
-        try {
-          await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
-          this.userRecommended = "NOT_EXIST";
-        } catch (error) {
-          console.log(error);
-        }
+        await this.$store.dispatch(
+          "DELETE_ANSWER_RECOMMENDATION",
+          this.answer.id
+        );
+        this.userRecommended = "NOT_EXIST";
       }
-      await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
     },
     async fetchMyAnswerRecommendation(answerId, userId) {
       await this.$store.dispatch("FETCH_MY_ANSWER_RECOMMENDATION", {
@@ -157,7 +146,6 @@ export default {
   },
   async created() {
     this.loginUser = this.fetchedLoginUser;
-    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
     if (this.loginUser.id) {
       await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
     }
