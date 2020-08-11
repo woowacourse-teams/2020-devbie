@@ -33,7 +33,7 @@ class QuestionHashtagTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         assertThatThrownBy(() -> QuestionHashtag.builder()

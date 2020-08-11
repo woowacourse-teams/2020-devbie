@@ -27,6 +27,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
+import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
@@ -82,15 +83,14 @@ class QuestionControllerTest extends MvcTest {
     @DisplayName("질문 목록 조회")
     @Test
     void readAll() throws Exception {
-        QuestionResponse response = QuestionResponse.builder()
-            .questionId(1L)
-            .title(TEST_QUESTION_TITLE)
-            .content(TEST_QUESTION_CONTENT)
-            .hashtags(Lists.newArrayList(
-                HashtagResponse.builder().tagName("java").build(),
-                HashtagResponse.builder().tagName("network").build()))
+        Question question = Question.builder()
+            .id(1L)
+            .userId(1L)
+            .title(QuestionTitle.from(TEST_QUESTION_TITLE))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
-        QuestionResponses responses = new QuestionResponses(Lists.newArrayList(response));
+        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
 
         given(questionService.readAll()).willReturn(responses);
 
@@ -102,9 +102,7 @@ class QuestionControllerTest extends MvcTest {
 
         assertAll(
             () -> assertThat(questionResponses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
-            () -> assertThat(questionResponses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT),
-            () -> assertThat(questionResponses.getQuestions().get(0).getHashtags().get(0).getTagName()).isEqualTo("java"),
-            () -> assertThat(questionResponses.getQuestions().get(0).getHashtags().get(1).getTagName()).isEqualTo("network")
+            () -> assertThat(questionResponses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );
     }
 
@@ -171,7 +169,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from("스택과 큐의 차이"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         Question question2 = Question.builder()
@@ -179,7 +177,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from("오버스택플로우"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));

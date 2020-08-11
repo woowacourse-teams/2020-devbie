@@ -70,7 +70,7 @@ public class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from(TEST_QUESTION_TITLE))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         questionHashtags = Sets.newSet(
@@ -78,7 +78,7 @@ public class QuestionServiceTest {
             QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(2L).tagName(TagName.from("network")).build()).build()
         );
 
-        question.setHashtags(new QuestionHashtags(questionHashtags));
+        question.setHashtags(QuestionHashtags.from(questionHashtags));
     }
 
     @DisplayName("질문 생성")
@@ -195,14 +195,14 @@ public class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from("스택과 큐의 차이"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         Question question2 = Question.builder()
             .userId(2L)
             .title(QuestionTitle.from("오버스택플로우"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         List<Question> questions = Lists.newArrayList(question1, question2);

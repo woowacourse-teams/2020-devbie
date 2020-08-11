@@ -1,10 +1,6 @@
 package underdogs.devbie.question.domain;
 
-import static javax.persistence.FetchType.*;
-
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -12,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,11 +39,11 @@ public class Question extends BaseTimeEntity {
     @Embedded
     private Visits visits;
 
-    @OneToMany(fetch = LAZY, orphanRemoval = true, mappedBy = "question")
-    private Set<QuestionHashtag> hashtags = new LinkedHashSet<>();
+    @Embedded
+    private QuestionHashtags hashtags;
 
     @Builder
-    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content, Set<QuestionHashtag> hashtags) {
+    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content, QuestionHashtags hashtags) {
         validateParameters(userId, title, content);
         this.id = id;
         this.userId = userId;
@@ -74,7 +69,6 @@ public class Question extends BaseTimeEntity {
     }
 
     public void setHashtags(QuestionHashtags hashtags) {
-        this.hashtags.clear();
-        this.hashtags.addAll(hashtags.getQuestionHashtags());
+        this.hashtags.setHashtags(hashtags.getQuestionHashtags());
     }
 }

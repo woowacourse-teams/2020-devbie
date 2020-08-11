@@ -22,6 +22,7 @@ import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtagRepository;
+import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.TagName;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +49,7 @@ class QuestionHashtagServiceTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
         hashtag = Hashtag.builder()
             .id(1L)
@@ -68,8 +69,8 @@ class QuestionHashtagServiceTest {
         questionHashtagService.saveHashtags(question, Sets.newSet("java"));
 
         assertAll(
-            () -> assertThat(question.getHashtags()).hasSize(1),
-            () -> assertThat(new ArrayList<>(question.getHashtags()).get(0).getHashtag().getTagName())
+            () -> assertThat(question.getHashtags().getQuestionHashtags()).hasSize(1),
+            () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
                 .isEqualTo(hashtag.getTagName())
         );
     }
@@ -94,8 +95,8 @@ class QuestionHashtagServiceTest {
         questionHashtagService.updateHashtags(question, Sets.newSet("kotlin"));
 
         assertAll(
-            () -> assertThat(question.getHashtags()).hasSize(1),
-            () -> assertThat(new ArrayList<>(question.getHashtags()).get(0).getHashtag().getTagName())
+            () -> assertThat(question.getHashtags().getQuestionHashtags()).hasSize(1),
+            () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
                 .isEqualTo(updateHashtag.getTagName())
         );
     }

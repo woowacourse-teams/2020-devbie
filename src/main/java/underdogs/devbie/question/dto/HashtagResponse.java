@@ -1,7 +1,6 @@
 package underdogs.devbie.question.dto;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
@@ -13,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.QuestionHashtag;
+import underdogs.devbie.question.domain.QuestionHashtags;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,8 +32,9 @@ public class HashtagResponse {
             .build();
     }
 
-    public static List<HashtagResponse> listFrom(Set<QuestionHashtag> hashtags) {
-        return hashtags.stream()
+    public static List<HashtagResponse> listFrom(QuestionHashtags hashtags) {
+        return hashtags.getQuestionHashtags()
+            .stream()
             .map(h -> HashtagResponse.from(createHashtag(h)))
             .collect(Collectors.toList());
     }

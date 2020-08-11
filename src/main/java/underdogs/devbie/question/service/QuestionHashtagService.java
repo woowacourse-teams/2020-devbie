@@ -41,7 +41,7 @@ public class QuestionHashtagService {
     }
 
     private QuestionHashtags mapToQuestionHashtags(Question question, Set<String> hashtags) {
-        return new QuestionHashtags(hashtags
+        return QuestionHashtags.from(hashtags
                 .stream()
                 .map(tagName -> {
                     Hashtag hashtag = findOrCreateHashtag(tagName);

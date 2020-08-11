@@ -20,10 +20,10 @@ class QuestionHashtagsTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
-        QuestionHashtags questionHashtags = new QuestionHashtags(Sets.newSet(
+        QuestionHashtags questionHashtags = QuestionHashtags.from(Sets.newSet(
             QuestionHashtag.builder()
                 .question(question)
                 .hashtag(Hashtag.builder().id(2L).tagName(TagName.from("java")).build())
