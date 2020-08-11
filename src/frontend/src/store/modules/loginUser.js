@@ -23,7 +23,19 @@ export default {
     },
     async UPDATE_USER_INFO({ commit }, payload) {
       try {
-        await patchAction(`/api/users/`, payload);
+        await patchAction(`/api/users`, payload);
+        commit();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async UPDATE_USER_IMAGE({ commit }, payload) {
+      try {
+        await patchAction(
+          `/api/users/image`,
+          payload,
+          `content-type: multipart/form-data`
+        );
         commit();
       } catch (error) {
         console.log(error);
