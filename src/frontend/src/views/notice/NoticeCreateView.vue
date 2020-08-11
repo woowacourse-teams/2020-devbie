@@ -35,12 +35,14 @@
         <v-text-field
           v-model="request.startDate"
           :rules="textRules"
+          placeholder="2010-10-20 13:00"
           label="시작일"
           required
         ></v-text-field>
         <v-text-field
           v-model="request.endDate"
           :rules="textRules"
+          placeholder="2010-10-20 14:00"
           label="종료일"
           required
         ></v-text-field>

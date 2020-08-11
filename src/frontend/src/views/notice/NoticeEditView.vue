@@ -34,12 +34,14 @@
       <div class="duration">
         <v-text-field
           v-model="request.startDate"
+          placeholder="2010-10-20 13:00"
           :rules="textRules"
           label="시작일"
           required
         ></v-text-field>
         <v-text-field
           v-model="request.endDate"
+          placeholder="2010-10-20 14:00"
           :rules="textRules"
           label="종료일"
           required
@@ -73,10 +75,6 @@
       >
         작성하기
       </v-btn>
-<<<<<<< HEAD
-      {{ fetchedNotice }}
-=======
->>>>>>> 504b607a839cd90d5fbe9b67b1dd6aa986fed727
     </v-form>
   </div>
 </template>
