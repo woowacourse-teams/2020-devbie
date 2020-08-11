@@ -6,10 +6,21 @@
           <span class="headline">회원 정보</span>
         </v-card-title>
         <v-card-subtitle class="subtitle">
-          <v-avatar class="avatar" color="primary" size="200">
+          <v-avatar
+            class="avatar"
+            color="primary"
+            size="200"
+            @click="editImage"
+          >
             <v-img :src="image" alt="avatar-image" />
           </v-avatar>
-          <input type="file" ref="avatarimg" @change="preview" />
+          <input
+            type="file"
+            ref="avatar"
+            @change="preview"
+            accept="image/*"
+            style="display:none"
+          />
         </v-card-subtitle>
         <v-card-text>
           <v-text-field
@@ -30,19 +41,12 @@
           ></v-text-field>
           <small>*는 필수로 입력해야 합니다</small>
         </v-card-text>
-        <form>
-          <div class="form-group">
-            <label for="img">파일 업로드</label>
-            <input type="file" id="img" ref="avatar" />
-          </div>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="resetUpdate">취소</v-btn>
-            <v-btn color="blue darken-1" text @click="updateUserInfo"
-              >저장</v-btn
-            >
-          </v-card-actions>
-        </form>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="resetUpdate">취소</v-btn>
+          <v-btn color="blue darken-1" text @click="updateUserInfo">저장</v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
@@ -78,8 +82,12 @@ export default {
     }
   },
   methods: {
+    editImage() {
+      this.$refs.avatar.click();
+    },
+
     preview() {
-      this.img_files = this.$refs.avatarimg.files[0];
+      this.img_files = this.$refs.avatar.files[0];
       if (this.img_files) {
         const reader = new FileReader();
 
@@ -97,9 +105,11 @@ export default {
       this.name = this.fetchedLoginUser.name;
       this.image = this.fetchedLoginUser.image;
     },
+
     resetUpdate() {
       this.initializeUserInfo();
     },
+
     async updateUserInfo() {
       this.img_files = this.$refs.avatar.files[0];
       const formData = new FormData();
