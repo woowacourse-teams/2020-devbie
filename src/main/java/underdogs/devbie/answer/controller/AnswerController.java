@@ -41,15 +41,6 @@ public class AnswerController {
             .build();
     }
 
-    // todo : 이거 필요없지 않나 ?
-    @NoValidate
-    @GetMapping
-    public ResponseEntity<AnswerResponses> readAll() {
-        AnswerResponses answerResponses = answerService.readAll();
-
-        return ResponseEntity.ok(answerResponses);
-    }
-
     @NoValidate
     @GetMapping("/{id}")
     public ResponseEntity<AnswerResponse> read(@PathVariable(value = "id") Long id) {
