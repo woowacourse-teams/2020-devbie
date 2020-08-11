@@ -18,30 +18,6 @@ export default {
     },
     CLEAR_HASHTAGS(state) {
       state.question.hashtags = [];
-    },
-    SET_QUESTION_RECOMMENDATION_COUNT(state, data) {
-      if (data.priorType === data.newType) {
-        if (data.newType === "RECOMMENDED") {
-          state.question.recommendedCount -= 1;
-          return;
-        }
-        state.question.nonRecommendedCount -= 1;
-        return;
-      }
-
-      if (data.newType === "RECOMMENDED") {
-        if (data.priorType === "NON_RECOMMENDED") {
-          state.question.nonRecommendedCount -= 1;
-        }
-        state.question.recommendedCount += 1;
-      }
-
-      if (data.newType === "NON_RECOMMENDED") {
-        if (data.priorType === "RECOMMENDED") {
-          state.question.recommendedCount -= 1;
-        }
-        state.question.nonRecommendedCount += 1;
-      }
     }
   },
   actions: {
@@ -55,7 +31,9 @@ export default {
     },
     async FETCH_QUESTION({ commit }, questionId) {
       try {
-        const { data } = await getAction(`/api/questions/${questionId}`);
+        const { data } = await getAction(
+          `/api/questions/${questionId}?visit=true`
+        );
         commit("SET_QUESTION", data);
       } catch (error) {
         console.log(error);
@@ -94,6 +72,16 @@ export default {
       try {
         const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
         commit("SET_QUESTIONS", data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async UPDATE_QUESTION_RECOMMENDATION_COUNT({ commit }, questionId) {
+      try {
+        const { data } = await getAction(
+          `/api/questions/${questionId}?visit=false`
+        );
+        commit("SET_QUESTION", data);
       } catch (error) {
         console.log(error);
       }

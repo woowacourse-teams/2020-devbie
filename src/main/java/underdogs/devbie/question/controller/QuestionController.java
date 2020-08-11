@@ -65,8 +65,10 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionResponse> read(@PathVariable("id") Long id) {
-        QuestionResponse response = questionService.read(id);
+    public ResponseEntity<QuestionResponse> read(
+        @PathVariable("id") Long id,
+        @RequestParam(value = "visit") boolean isVisit) {
+        QuestionResponse response = questionService.read(id, isVisit);
         return ResponseEntity
             .ok(response);
     }

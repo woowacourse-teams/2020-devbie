@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
-import underdogs.devbie.question.domain.RecommendationCount;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -39,9 +39,11 @@ public class QuestionService {
     }
 
     @Transactional
-    public QuestionResponse read(Long id) {
+    public QuestionResponse read(Long id, boolean isVisit) {
         Question question = readOne(id);
-        question.increaseVisits();
+        if (isVisit) {
+            question.increaseVisits();
+        }
         return QuestionResponse.from(question);
     }
 
@@ -88,5 +90,10 @@ public class QuestionService {
         List<Long> questionIds = questionHashtagService.findIdsByHashtagName(hashtag);
         List<Question> questions = questionRepository.findAllById(questionIds);
         return QuestionResponses.from(questions);
+    }
+
+    public QuestionResponse readWithoutVisit(Long id) {
+        Question question = readOne(id);
+        return QuestionResponse.from(question);
     }
 }

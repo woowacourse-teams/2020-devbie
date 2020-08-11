@@ -33,14 +33,15 @@ export default {
     },
     async ON_QUESTION_RECOMMENDATION({ commit }, payload) {
       try {
-        const recommendationType = payload.recommendationType;
         await putAction(
           `/api/recommendation-question?objectId=${payload.questionId}`,
           {
-            recommendationType: recommendationType
+            recommendationType: payload.recommendationType
           }
         );
-        commit("SET_MY_QUESTION_RECOMMENDATION", { recommendationType });
+        commit("SET_MY_QUESTION_RECOMMENDATION", {
+          recommendationType: payload.recommendationType
+        });
       } catch (error) {
         console.log(error);
         throw error;
@@ -51,8 +52,9 @@ export default {
         await deleteAction(
           `/api/recommendation-question?objectId=${questionId}`
         );
-        const recommendationType = "NOT_EXIST";
-        commit("SET_MY_QUESTION_RECOMMENDATION", { recommendationType });
+        commit("SET_MY_QUESTION_RECOMMENDATION", {
+          recommendationType: "NOT_EXIST"
+        });
       } catch (error) {
         console.log(error);
         throw error;
