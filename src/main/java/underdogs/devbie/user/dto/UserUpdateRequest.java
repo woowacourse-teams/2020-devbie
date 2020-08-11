@@ -21,20 +21,19 @@ public class UserUpdateRequest {
 
     @NotNull
     private Long id;
+
     @NotBlank
     private String name;
+
     @NotBlank
     @Email
     private String email;
-    @NotBlank
-    private String image;
 
     public User toEntity() {
         return User.builder()
             .id(id)
             .name(name)
             .email(email)
-            .image(image)
             .build();
     }
 }

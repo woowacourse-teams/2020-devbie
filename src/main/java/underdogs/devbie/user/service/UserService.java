@@ -34,6 +34,11 @@ public class UserService {
         user.updateUserInfo(request.toEntity());
     }
 
+    @Transactional
+    public void updateUserImage(User user, String imagePath) {
+        user.updateUserImage(imagePath);
+    }
+
     private void validateUser(Long userId, Long id) {
         if (!userId.equals(id)) {
             throw new NotMatchedUserException();

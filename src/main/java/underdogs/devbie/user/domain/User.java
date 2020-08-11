@@ -48,7 +48,10 @@ public class User extends BaseTimeEntity {
     public void updateUserInfo(User user) {
         this.name = user.name;
         this.email = user.email;
-        this.image = user.image;
+    }
+
+    public void updateUserImage(String image){
+        this.image = image;
     }
 
     private void validateUserInfo(UserInfoDto userInfoDto) {
