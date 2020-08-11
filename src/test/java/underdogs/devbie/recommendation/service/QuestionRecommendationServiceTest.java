@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.question.domain.Question;
+import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.service.QuestionService;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
@@ -43,7 +44,7 @@ class QuestionRecommendationServiceTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
         willDoNothing().given(questionService).updateRecommendationCount(anyLong(), any(RecommendationType.class), anyBoolean());
 
@@ -63,7 +64,7 @@ class QuestionRecommendationServiceTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
         willDoNothing().given(questionService).decreaseRecommendationCount(anyLong(), any(RecommendationType.class));
 

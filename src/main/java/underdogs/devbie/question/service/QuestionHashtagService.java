@@ -9,13 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
-import underdogs.devbie.question.domain.TagName;
-import underdogs.devbie.question.exception.HashtagNotExistedException;
 
 @Service
 @Transactional(readOnly = true)
@@ -58,5 +55,10 @@ public class QuestionHashtagService {
                 .hashtag(hashtag)
                 .build());
         return questionHashtagRepository.save(questionHashtag);
+    }
+
+    public List<Long> findIdsByHashtagName(String hashtag) {
+        Hashtag findHashtag = hashtagService.findOrCreateHashtag(hashtag);
+        return questionHashtagRepository.findQuestionIdsByHashtagId(findHashtag.getId());
     }
 }

@@ -228,7 +228,7 @@ public class QuestionServiceTest {
             .userId(1L)
             .title(QuestionTitle.from(TEST_QUESTION_TITLE))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
-            .hashtags(questionHashtags)
+            .hashtags(QuestionHashtags.from(questionHashtags))
             .build();
         given(questionHashtagService.findIdsByHashtagName(anyString())).willReturn(Lists.newArrayList(100L));
         given(questionRepository.findAllById(anyCollection())).willReturn(Lists.newArrayList(question1));
