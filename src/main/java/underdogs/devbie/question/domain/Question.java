@@ -1,6 +1,5 @@
 package underdogs.devbie.question.domain;
 
-import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 import java.util.LinkedHashSet;
@@ -45,7 +44,7 @@ public class Question extends BaseTimeEntity {
     @Embedded
     private Visits visits;
 
-    @OneToMany(fetch = LAZY, cascade = REMOVE, orphanRemoval = true, mappedBy = "question")
+    @OneToMany(fetch = LAZY, orphanRemoval = true, mappedBy = "question")
     private Set<QuestionHashtag> hashtags = new LinkedHashSet<>();
 
     @Builder
