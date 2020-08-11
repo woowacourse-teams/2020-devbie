@@ -117,12 +117,19 @@ export default {
 
       const updated_info = {
         id: this.id,
-        name: this.name,
-        email: this.email
+        payload: {
+          name: this.name,
+          email: this.email
+        }
+      };
+
+      const updated_img = {
+        id: this.id,
+        payload: formData
       };
 
       await this.$store.dispatch("UPDATE_USER_INFO", updated_info);
-      await this.$store.dispatch("UPDATE_USER_IMAGE", formData);
+      await this.$store.dispatch("UPDATE_USER_IMAGE", updated_img);
       this.$store.dispatch("FETCH_LOGIN_USER");
     }
   }

@@ -19,9 +19,6 @@ import underdogs.devbie.user.domain.User;
 @ToString
 public class UserUpdateRequest {
 
-    @NotNull
-    private Long id;
-
     @NotBlank
     private String name;
 
@@ -31,7 +28,6 @@ public class UserUpdateRequest {
 
     public User toEntity() {
         return User.builder()
-            .id(id)
             .name(name)
             .email(email)
             .build();

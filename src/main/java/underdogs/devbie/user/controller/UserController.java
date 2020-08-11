@@ -50,23 +50,25 @@ public class UserController {
             .body(userId);
     }
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateUser(
         @LoginUser User user,
+        @PathVariable("id") Long userId,
         @Valid @RequestBody UserUpdateRequest request
     ) {
-        userService.updateUserInfo(user, request);
+        userService.updateUserInfo(user, userId ,request);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/image")
+    @PatchMapping("/{id}/image")
     public ResponseEntity<Void> updateImage(
         @LoginUser User user,
+        @PathVariable("id") Long userId,
         @RequestParam("image") MultipartFile imageFile
     ) throws IOException {
         if (!Objects.isNull(imageFile)) {
             String imagePath = s3Service.upload(imageFile);
-            userService.updateUserImage(user, imagePath);
+            userService.updateUserImage(user, userId, imagePath);
         }
         return ResponseEntity.noContent().build();
     }

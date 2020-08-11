@@ -29,13 +29,14 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserInfo(User user, UserUpdateRequest request) {
-        validateUser(user.getId(), request.getId());
+    public void updateUserInfo(User user, Long userId, UserUpdateRequest request) {
+        validateUser(user.getId(), userId);
         user.updateUserInfo(request.toEntity());
     }
 
     @Transactional
-    public void updateUserImage(User user, String imagePath) {
+    public void updateUserImage(User user, Long userId, String imagePath) {
+        validateUser(user.getId(), userId);
         user.updateUserImage(imagePath);
     }
 
