@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface QuestionHashtagRepository extends JpaRepository<QuestionHashtag, Long> {
 
+    void deleteByQuestionIdAndHashtagId(Long questionId, Long hashtagId);
+
     Optional<QuestionHashtag> findByQuestionIdAndHashtagId(Long questionId, Long hashtagId);
 
     List<QuestionHashtag> findAllByQuestionId(Long questionId);

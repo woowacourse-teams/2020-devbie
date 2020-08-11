@@ -23,18 +23,11 @@
         ></v-textarea>
         <div class="control-box">
           <hashtag-box @hashtags="receiveHashtags"></hashtag-box>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <router-link :to="`/questions`" class="form-link">
-              <v-btn class="form-btn" color="blue darken-1">돌아가기 </v-btn>
-            </router-link>
-            <v-btn
-              class="form-btn"
-              color="blue darken-1"
-              @click="onCreateQuestion"
-              >질문 올리기
-            </v-btn>
-          </v-card-actions>
+          <form-button>
+            <button class="button" @click="onCreateQuestion">
+              <span>질문하기</span>
+            </button>
+          </form-button>
         </div>
       </v-card>
     </div>
@@ -42,6 +35,7 @@
 </template>
 <script>
 import HashtagBox from "./HashtagBox";
+import FormButton from "./FormButton";
 
 export default {
   data() {
@@ -58,7 +52,9 @@ export default {
         content: this.content,
         hashtags: this.hashtags
       });
-      window.location.href = `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`;
+      await this.$router.push(
+        `/questions/${this.$store.getters.fetchedNewCreatedQuestionId}`
+      );
     },
     receiveHashtags(hashtags) {
       this.hashtags = hashtags;
@@ -68,7 +64,8 @@ export default {
     this.$store.commit("CLEAR_HASHTAGS");
   },
   components: {
-    HashtagBox
+    HashtagBox,
+    FormButton
   }
 };
 </script>
@@ -96,11 +93,66 @@ export default {
   justify-content: space-between;
 }
 
-.form-link {
-  text-decoration: none;
+.button {
+  background: #fff;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease-in-out 0.35s;
+  margin: 0 10px;
+  text-align: center;
+  border-radius: 4px;
 }
 
-.form-btn {
-  margin-right: 10px;
+span {
+  display: block;
+  padding: 7px 14px;
+  background: #fff;
+  z-index: 100;
+  position: relative;
+  transition: all 0.35s ease-in-out 0.35s;
+}
+
+.button:hover span {
+  background: #36b4c7;
+  color: #fff;
+  transition: all 0.35s ease-in-out 0.35s;
+}
+
+.button:after {
+  bottom: -100%;
+  right: -100%;
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #36b4c7;
+  transition: all 0.35s ease-in-out 0.5s;
+}
+
+.button:hover:after {
+  right: 0;
+  bottom: 0;
+  transition: all ease-in-out 0.35s;
+}
+
+.button:before {
+  top: -100%;
+  left: -100%;
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #36b4c7;
+  transition: all 0.35s ease-in-out 0.5s;
+}
+
+.button:hover:before {
+  left: 0;
+  top: 0;
+  transition: all ease-in-out 0.35s;
 }
 </style>

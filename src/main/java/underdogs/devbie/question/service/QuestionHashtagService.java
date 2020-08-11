@@ -22,7 +22,7 @@ import underdogs.devbie.question.exception.HashtagNotExistedException;
 @RequiredArgsConstructor
 public class QuestionHashtagService {
 
-    private final HashtagRepository hashtagRepository;
+    private final HashtagService hashtagService;
     private final QuestionHashtagRepository questionHashtagRepository;
 
     @Transactional
@@ -42,36 +42,21 @@ public class QuestionHashtagService {
     }
 
     private QuestionHashtags mapToQuestionHashtags(Question question, Set<String> hashtags) {
-        return new QuestionHashtags(hashtags
-            .stream()
-            .map(tagName -> {
-                Hashtag hashtag = findOrCreateHashtag(tagName);
-                hashtagRepository.save(hashtag);
-                QuestionHashtag questionHashtag = findOrCreateQuestionHashtag(question, hashtag);
-                questionHashtagRepository.save(questionHashtag);
-                return questionHashtag;
-            })
-            .collect(Collectors.toSet()));
-    }
-
-    private Hashtag findOrCreateHashtag(String tagName) {
-        return hashtagRepository.findByTagName(tagName)
-            .orElse(Hashtag.builder()
-                .tagName(TagName.from(tagName))
-                .build());
+        return QuestionHashtags.from(hashtags
+                .stream()
+                .map(tagName -> {
+                    Hashtag hashtag = hashtagService.findOrCreateHashtag(tagName);
+                    return findOrCreateQuestionHashtag(question, hashtag);
+                })
+                .collect(Collectors.toSet()));
     }
 
     private QuestionHashtag findOrCreateQuestionHashtag(Question question, Hashtag hashtag) {
-        return questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
+        QuestionHashtag questionHashtag = questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
             .orElse(QuestionHashtag.builder()
                 .question(question)
                 .hashtag(hashtag)
                 .build());
-    }
-
-    public List<Long> findIdsByHashtagName(String hashtag) {
-        Hashtag findHashtag = hashtagRepository.findByTagName(hashtag)
-            .orElseThrow(HashtagNotExistedException::new);
-        return questionHashtagRepository.findQuestionIdsByHashtagId(findHashtag.getId());
+        return questionHashtagRepository.save(questionHashtag);
     }
 }

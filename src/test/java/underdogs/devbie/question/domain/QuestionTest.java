@@ -22,7 +22,7 @@ public class QuestionTest {
         assertThatThrownBy(() -> Question.builder()
             .userId(1L)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -33,7 +33,7 @@ public class QuestionTest {
         assertThatThrownBy(() -> Question.builder()
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -44,7 +44,7 @@ public class QuestionTest {
         assertThatThrownBy(() -> Question.builder()
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build())
             .isInstanceOf(CreateFailException.class);
     }
@@ -56,13 +56,13 @@ public class QuestionTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
         Question changeQuestion = Question.builder()
             .userId(1L)
             .title(QuestionTitle.from("Changed Title"))
             .content(QuestionContent.from("Changed Content"))
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
         question.updateQuestionInfo(changeQuestion);
 
@@ -79,7 +79,7 @@ public class QuestionTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         assertThat(question.getVisits().getVisitCount()).isEqualTo(0L);
@@ -92,7 +92,7 @@ public class QuestionTest {
             .userId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
-            .hashtags(new LinkedHashSet<>())
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         question.increaseVisits();

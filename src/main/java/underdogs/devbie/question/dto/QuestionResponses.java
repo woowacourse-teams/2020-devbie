@@ -12,7 +12,7 @@ import lombok.ToString;
 import underdogs.devbie.question.domain.Question;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
 public class QuestionResponses {
