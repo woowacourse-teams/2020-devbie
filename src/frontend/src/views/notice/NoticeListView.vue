@@ -5,20 +5,20 @@
       <notice-filters></notice-filters>
       <v-text-field class="search-bar"></v-text-field>
     </div>
-    <notice-cards></notice-cards>
+    <notice-list></notice-list>
   </div>
 </template>
 
 <script>
 import NoticeType from "../../components/notice/NoticeType";
 import NoticeFilters from "../../components/notice/NoticeFilters";
-import NoticeCards from "../../components/notice/NoticeList";
+import NoticeList from "../../components/notice/NoticeList";
 
 export default {
   components: {
     NoticeType,
     NoticeFilters,
-    NoticeCards
+    NoticeList
   },
   data() {
     return {};

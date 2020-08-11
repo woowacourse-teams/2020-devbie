@@ -162,6 +162,9 @@ build
 .idea
 .idea/**
 
+#querydsl
+generated
+
 # log
 ./logs/**
 *.gz

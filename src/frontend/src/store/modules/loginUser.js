@@ -2,7 +2,7 @@ import { getAction } from "../../api";
 
 export default {
   state: {
-    loginUser: []
+    loginUser: {}
   },
   mutations: {
     SET_LOGIN_USER(state, data) {
