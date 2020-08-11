@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.HashtagRepository;
+import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
@@ -60,5 +61,14 @@ public class HashtagService {
     @Transactional
     public void delete(Long id) {
         hashtagRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Hashtag findOrCreateHashtag(String tagName) {
+        Hashtag hashtag = hashtagRepository.findByTagName(tagName)
+            .orElse(Hashtag.builder()
+                .tagName(TagName.from(tagName))
+                .build());
+        return hashtagRepository.save(hashtag);
     }
 }

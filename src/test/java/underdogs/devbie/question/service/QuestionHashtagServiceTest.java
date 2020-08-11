@@ -7,7 +7,6 @@ import static underdogs.devbie.question.domain.QuestionTest.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +17,6 @@ import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtagRepository;
@@ -31,7 +29,7 @@ class QuestionHashtagServiceTest {
     private QuestionHashtagService questionHashtagService;
 
     @Mock
-    private HashtagRepository hashtagRepository;
+    private HashtagService hashtagService;
 
     @Mock
     private QuestionHashtagRepository questionHashtagRepository;
@@ -42,7 +40,7 @@ class QuestionHashtagServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionHashtagService = new QuestionHashtagService(hashtagRepository, questionHashtagRepository);
+        questionHashtagService = new QuestionHashtagService(hashtagService, questionHashtagRepository);
 
         question = Question.builder()
             .id(1L)
@@ -60,14 +58,18 @@ class QuestionHashtagServiceTest {
     @DisplayName("질문 생성시 해시태그 함께 등록")
     @Test
     void saveHashtags() {
-        given(hashtagRepository.findByTagName(anyString())).willReturn(
-            Optional.of(hashtag));
-        given(questionHashtagRepository.findByQuestionIdAndHashtagId(anyLong(), anyLong())).willReturn(
-            Optional.of(QuestionHashtag.builder().id(1L).question(question).hashtag(hashtag).build())
+        given(hashtagService.findOrCreateHashtag(anyString())).willReturn(hashtag);
+        given(questionHashtagRepository.save(any(QuestionHashtag.class))).willReturn(
+            QuestionHashtag.builder()
+                .id(1L)
+                .question(question)
+                .hashtag(hashtag)
+                .build()
         );
 
         questionHashtagService.saveHashtags(question, Sets.newSet("java"));
 
+        verify(hashtagService).findOrCreateHashtag(eq("java"));
         assertAll(
             () -> assertThat(question.getHashtags().getQuestionHashtags()).hasSize(1),
             () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
@@ -82,18 +84,18 @@ class QuestionHashtagServiceTest {
             .id(3L)
             .tagName(TagName.from("kotlin"))
             .build();
-        given(hashtagRepository.findByTagName(anyString())).willReturn(
-            Optional.of(hashtag));
-        given(questionHashtagRepository.findByQuestionIdAndHashtagId(anyLong(), anyLong())).willReturn(
-            Optional.of(QuestionHashtag.builder()
+        given(hashtagService.findOrCreateHashtag(anyString())).willReturn(hashtag);
+        given(questionHashtagRepository.save(any(QuestionHashtag.class))).willReturn(
+            QuestionHashtag.builder()
                 .id(1L)
                 .question(question)
                 .hashtag(updateHashtag)
-                .build())
+                .build()
         );
 
         questionHashtagService.updateHashtags(question, Sets.newSet("kotlin"));
 
+        verify(hashtagService).findOrCreateHashtag(eq("kotlin"));
         assertAll(
             () -> assertThat(question.getHashtags().getQuestionHashtags()).hasSize(1),
             () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())

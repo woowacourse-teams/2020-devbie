@@ -9,19 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
-import underdogs.devbie.question.domain.TagName;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QuestionHashtagService {
 
-    private final HashtagRepository hashtagRepository;
+    private final HashtagService hashtagService;
     private final QuestionHashtagRepository questionHashtagRepository;
 
     @Transactional
@@ -44,27 +42,18 @@ public class QuestionHashtagService {
         return QuestionHashtags.from(hashtags
                 .stream()
                 .map(tagName -> {
-                    Hashtag hashtag = findOrCreateHashtag(tagName);
-                    hashtagRepository.save(hashtag);
-                    QuestionHashtag questionHashtag = findOrCreateQuestionHashtag(question, hashtag);
-                    questionHashtagRepository.save(questionHashtag);
-                    return questionHashtag;
+                    Hashtag hashtag = hashtagService.findOrCreateHashtag(tagName);
+                    return findOrCreateQuestionHashtag(question, hashtag);
                 })
                 .collect(Collectors.toSet()));
     }
 
-    private Hashtag findOrCreateHashtag(String tagName) {
-        return hashtagRepository.findByTagName(tagName)
-            .orElse(Hashtag.builder()
-                .tagName(TagName.from(tagName))
-                .build());
-    }
-
     private QuestionHashtag findOrCreateQuestionHashtag(Question question, Hashtag hashtag) {
-        return questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
+        QuestionHashtag questionHashtag = questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
             .orElse(QuestionHashtag.builder()
                 .question(question)
                 .hashtag(hashtag)
                 .build());
+        return questionHashtagRepository.save(questionHashtag);
     }
 }
