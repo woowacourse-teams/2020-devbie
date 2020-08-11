@@ -9,6 +9,7 @@
           <v-avatar class="avatar" color="primary" size="200">
             <v-img :src="image" alt="avatar-image" />
           </v-avatar>
+          <input type="file" ref="avatarimg" @change="preview" />
         </v-card-subtitle>
         <v-card-text>
           <v-text-field
@@ -29,11 +30,19 @@
           ></v-text-field>
           <small>*는 필수로 입력해야 합니다</small>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="resetUpdate">취소</v-btn>
-          <v-btn color="blue darken-1" text @click="updateUserInfo">저장</v-btn>
-        </v-card-actions>
+        <form>
+          <div class="form-group">
+            <label for="img">파일 업로드</label>
+            <input type="file" id="img" ref="avatar" />
+          </div>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="resetUpdate">취소</v-btn>
+            <v-btn color="blue darken-1" text @click="updateUserInfo"
+              >저장</v-btn
+            >
+          </v-card-actions>
+        </form>
       </v-card>
     </v-col>
   </v-row>
@@ -51,7 +60,8 @@ export default {
       email: "",
       name: "",
       image: "",
-      rules: { ...validator }
+      rules: { ...validator },
+      img_files: ""
     };
   },
 
@@ -63,11 +73,24 @@ export default {
     this.initializeUserInfo();
   },
   watch: {
-    fetchedLoginUser: function() {
+    fetchedLoginUser() {
       this.initializeUserInfo();
     }
   },
   methods: {
+    preview() {
+      this.img_files = this.$refs.avatarimg.files[0];
+      if (this.img_files) {
+        const reader = new FileReader();
+
+        reader.onload = e => {
+          this.image = e.target.result;
+        };
+
+        reader.readAsDataURL(this.img_files);
+      }
+    },
+
     initializeUserInfo() {
       this.id = this.fetchedLoginUser.id;
       this.email = this.fetchedLoginUser.email;
@@ -77,14 +100,19 @@ export default {
     resetUpdate() {
       this.initializeUserInfo();
     },
-    updateUserInfo() {
+    async updateUserInfo() {
+      this.img_files = this.$refs.avatar.files[0];
+      const formData = new FormData();
+      formData.append("image", this.img_files);
+
       const updated_info = {
         id: this.id,
         name: this.name,
-        email: this.email,
-        image: this.image
+        email: this.email
       };
-      this.$store.dispatch("UPDATE_USER_INFO", updated_info);
+
+      await this.$store.dispatch("UPDATE_USER_INFO", updated_info);
+      this.$store.dispatch("UPDATE_USER_IMAGE", formData);
     }
   }
 };
