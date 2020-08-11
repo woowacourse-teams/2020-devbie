@@ -26,6 +26,7 @@ import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.exception.AnswerNotExistedException;
 import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -277,5 +278,54 @@ class AnswerServiceTest {
 
         verify(answerRepository).findById(eq(1L));
         verify(answerRepository).deleteById(expectAnswer.getId());
+    }
+
+    @DisplayName("면접 답변 추천")
+    @Test
+    void updateRecommendationCount() {
+        Answer expected = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(QUESTION_ID)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expected));
+
+        answerService.updateRecommendationCount(expected.getId(), RecommendationType.RECOMMENDED, false);
+
+        assertThat(expected.getRecommendationCount().getRecommendedCount()).isEqualTo(1L);
+    }
+
+    @DisplayName("면접 답변 추천 토글")
+    @Test
+    void toggleRecommendationCount() {
+        Answer expected = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(QUESTION_ID)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expected));
+
+        answerService.updateRecommendationCount(expected.getId(), RecommendationType.NON_RECOMMENDED, true);
+
+        assertThat(expected.getRecommendationCount().getRecommendedCount()).isEqualTo(-1L);
+        assertThat(expected.getRecommendationCount().getNonRecommendedCount()).isEqualTo(1L);
+    }
+
+    @DisplayName("면접 답변 추천 취소")
+    @Test
+    void deleteRecommendationCount() {
+        Answer expected = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(QUESTION_ID)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expected));
+
+        answerService.decreaseRecommendationCount(expected.getId(), RecommendationType.RECOMMENDED);
+
+        assertThat(expected.getRecommendationCount().getRecommendedCount()).isEqualTo(-1L);
     }
 }

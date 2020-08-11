@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.answer.domain.Answer;
-import underdogs.devbie.answer.domain.repository.AnswerRepository;
+import underdogs.devbie.answer.service.AnswerService;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -28,19 +28,11 @@ class AnswerRecommendationServiceTest {
     AnswerRecommendationRepository answerRecommendations;
 
     @Mock
-    AnswerRepository answerRepository;
+    AnswerService answerService;
 
     @BeforeEach
     void setUp() {
-        this.answerRecommendationService = new AnswerRecommendationService(answerRecommendations, answerRepository);
-    }
-
-    @DisplayName("추천 수 조회")
-    @Test
-    void count() {
-        answerRecommendationService.count(1L);
-
-        verify(answerRecommendations).findByObjectId(anyLong());
+        this.answerRecommendationService = new AnswerRecommendationService(answerRecommendations, answerService);
     }
 
     @DisplayName("추천 생성")
@@ -52,11 +44,9 @@ class AnswerRecommendationServiceTest {
             .questionId(1L)
             .content(TEST_ANSWER_CONTENT)
             .build();
-        given(answerRepository.findById(anyLong())).willReturn(Optional.of(answer));
+        willDoNothing().given(answerService).updateRecommendationCount(anyLong(), any(RecommendationType.class), anyBoolean());
 
         answerRecommendationService.createOrUpdateRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
-
-        // verify(answerRecommendations).save(any());
     }
 
     @DisplayName("추천 삭제")
@@ -69,13 +59,12 @@ class AnswerRecommendationServiceTest {
             .questionId(1L)
             .content(TEST_ANSWER_CONTENT)
             .build();
-        given(answerRepository.findById(anyLong())).willReturn(Optional.of(answer));
+        willDoNothing().given(answerService).decreaseRecommendationCount(anyLong(), any(RecommendationType.class));
         given(answerRecommendations.findByObjectAndUserId(anyLong(), anyLong())).willReturn(
             Optional.of(recommendation));
 
         answerRecommendationService.deleteRecommendation(1L, 1L);
 
         verify(answerRecommendations).findByObjectAndUserId(anyLong(), anyLong());
-        // verify(answerRecommendations).delete(any());
     }
 }

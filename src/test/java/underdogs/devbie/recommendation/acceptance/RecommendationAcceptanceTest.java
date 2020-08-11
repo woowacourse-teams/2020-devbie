@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
+import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 public class RecommendationAcceptanceTest extends AcceptanceTest {
@@ -25,61 +25,37 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> manageRecommendation() {
         return Stream.of(
-            dynamicTest("1번 질문 추천", () -> {
+            dynamicTest("1번 질문 생성 및 초기상태 확인", () -> {
                 createQuestion(TEST_QUESTION_TITLE);
+
+                String questionType = searchRecommendation(1L, userId).getRecommendationType();
+                assertThat(questionType).isEqualTo("NOT_EXIST");
+            }),
+            dynamicTest("1번 질문 추천", () -> {
                 recommend(1L);
 
-                Long question1Count = recommendationCount(1L).getRecommendedCount();
-                assertThat(question1Count).isEqualTo(1L);
+                QuestionResponse questionResponse = fetchFirstQuestion();
+                assertThat(questionResponse.getRecommendedCount()).isEqualTo(1L);
             }),
             dynamicTest("1번 질문 추천 갯수 확인", () -> {
                 String question1Type = searchRecommendation(1L, userId).getRecommendationType();
                 assertThat(question1Type).isEqualTo("RECOMMENDED");
             }),
-            dynamicTest("2번 질문 비추천", () -> {
-                createQuestion(TEST_QUESTION_TITLE);
-                nonRecommend(2L);
-
-                Long question2Count = recommendationCount(2L).getNonRecommendedCount();
-                assertThat(question2Count).isEqualTo(1L);
-            }),
-            dynamicTest("2번 질문 추천 갯수 확인", () -> {
-                String question2Type = searchRecommendation(2L, userId).getRecommendationType();
-                assertThat(question2Type).isEqualTo("NON_RECOMMENDED");
-            }),
-            dynamicTest("3번 질문에 아무것도 눌려있지 않다", () -> {
-                String question3Type = searchRecommendation(3L, userId).getRecommendationType();
-                assertThat(question3Type).isEqualTo("NOT_EXIST");
-            }),
-            dynamicTest("1번 질문 다시 추천해도 추천수가 증가하지 않는다", () -> {
-                recommend(1L);
-
-                Long question1Count = recommendationCount(1L).getRecommendedCount();
-                assertThat(question1Count).isEqualTo(1L);
-            }),
-
             dynamicTest("1번 질문 비추천", () -> {
                 nonRecommend(1L);
 
-                Long question1Count = recommendationCount(1L).getNonRecommendedCount();
-                assertThat(question1Count).isEqualTo(1L);
+                QuestionResponse questionResponse = fetchFirstQuestion();
+                assertThat(questionResponse.getNonRecommendedCount()).isEqualTo(1L);
             }),
-            dynamicTest("2번 질문 추천", () -> {
-                recommend(2L);
-
-                Long question2Count = recommendationCount(2L).getRecommendedCount();
-                assertThat(question2Count).isEqualTo(1L);
+            dynamicTest("1번 질문 추천 갯수 확인", () -> {
+                String question1Type = searchRecommendation(1L, userId).getRecommendationType();
+                assertThat(question1Type).isEqualTo("NON_RECOMMENDED");
             }),
             dynamicTest("1번 질문 추천 기록 삭제", () -> {
                 deleteRecommendation(1L);
 
-                Long question1Count = recommendationCount(1L).getNonRecommendedCount();
-                assertThat(question1Count).isEqualTo(0L);
-            }), dynamicTest("2번 질문 추천 기록 삭제", () -> {
-                deleteRecommendation(2L);
-
-                Long question2Count = recommendationCount(2L).getRecommendedCount();
-                assertThat(question2Count).isEqualTo(0L);
+                QuestionResponse questionResponse = fetchFirstQuestion();
+                assertThat(questionResponse.getNonRecommendedCount()).isEqualTo(0L);
             })
         );
     }
@@ -96,10 +72,6 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
 
     RecommendationResponse searchRecommendation(Long questionId, Long userId) {
         return get(QUESTION_RECOMMENDATION_URI + questionId + "&userId=" + userId, RecommendationResponse.class);
-    }
-
-    RecommendationCountResponse recommendationCount(Long questionId) {
-        return get(QUESTION_RECOMMENDATION_URI + questionId, RecommendationCountResponse.class);
     }
 
     void deleteRecommendation(Long questionId) {

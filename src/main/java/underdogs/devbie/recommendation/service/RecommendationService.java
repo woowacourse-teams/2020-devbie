@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
-import underdogs.devbie.recommendation.domain.Recommendations;
-import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 @Transactional(readOnly = true)
@@ -20,12 +18,6 @@ public abstract class RecommendationService<T extends Recommendation> {
         Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
 
         return RecommendationResponse.from(optRecommendation);
-    }
-
-    public RecommendationCountResponse count(Long objectId) {
-        Recommendations recommendations = Recommendations.from(recommendationRepository.findByObjectId(objectId));
-
-        return RecommendationCountResponse.from(recommendations);
     }
 
     @Transactional

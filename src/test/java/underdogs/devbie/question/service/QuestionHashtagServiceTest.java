@@ -7,6 +7,7 @@ import static underdogs.devbie.question.domain.QuestionTest.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.google.common.collect.Lists;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.HashtagRepository;
 import underdogs.devbie.question.domain.Question;
@@ -100,5 +102,14 @@ class QuestionHashtagServiceTest {
         );
     }
 
-    // TODO: findIdsByHashtagName test
+    @DisplayName("삭제할 해시태그 아이디 검색")
+    @Test
+    void findIdsByHashtagName() {
+        given(hashtagRepository.findByTagName(anyString())).willReturn(Optional.of(hashtag));
+        given(questionHashtagRepository.findQuestionIdsByHashtagId(anyLong())).willReturn(Lists.newArrayList(1L));
+
+        List<Long> questionIds = questionHashtagService.findIdsByHashtagName("java");
+
+        assertThat(questionIds.get(0)).isEqualTo(1L);
+    }
 }

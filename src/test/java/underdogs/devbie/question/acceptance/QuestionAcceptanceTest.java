@@ -126,9 +126,4 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         );
 
     }
-
-    private QuestionResponse fetchFirstQuestion() {
-        QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
-        return questions.getQuestions().get(0);
-    }
 }

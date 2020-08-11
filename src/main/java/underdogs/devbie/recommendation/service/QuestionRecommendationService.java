@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import underdogs.devbie.exception.NotExistException;
-import underdogs.devbie.question.domain.Question;
-import underdogs.devbie.question.domain.QuestionRepository;
-import underdogs.devbie.question.exception.QuestionNotExistedException;
+import underdogs.devbie.question.service.QuestionService;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.Recommendation;
@@ -17,11 +15,11 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 @Service
 public class QuestionRecommendationService extends RecommendationService {
 
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
-    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository, QuestionRepository questionRepository) {
+    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository, QuestionService questionService) {
         this.recommendationRepository = questionRecommendationRepository;
-        this.questionRepository = questionRepository;
+        this.questionService = questionService;
     }
 
     @Override
@@ -32,16 +30,12 @@ public class QuestionRecommendationService extends RecommendationService {
         QuestionRecommendation questionRecommendation =
             optionalQuestionRecommendation.orElse(QuestionRecommendation.of(objectId, userId, recommendationType));
 
-        Question question = questionRepository.findById(objectId)
-            .orElseThrow(QuestionNotExistedException::new);
-
         if (!questionRecommendation.hasRecommendationTypeOf(recommendationType)) {
             questionRecommendation.toggleRecommended();
-            question.decreaseRecommendationCounts(recommendationType.toggleType());
         }
-
         recommendationRepository.save(questionRecommendation);
-        question.increaseRecommendationCounts(recommendationType);
+
+        questionService.updateRecommendationCount(objectId, recommendationType, !questionRecommendation.hasRecommendationTypeOf(recommendationType));
     }
 
     @Transactional
@@ -52,8 +46,6 @@ public class QuestionRecommendationService extends RecommendationService {
 
         recommendationRepository.delete(recommendation);
 
-        Question question = questionRepository.findById(objectId)
-            .orElseThrow(QuestionNotExistedException::new);
-        question.decreaseRecommendationCounts(recommendation.getRecommendationType());
+        questionService.decreaseRecommendationCount(objectId, recommendation.getRecommendationType());
     }
 }

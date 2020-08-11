@@ -36,6 +36,7 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,8 +119,6 @@ public class QuestionServiceTest {
                 HashtagResponse.builder().id(2L).tagName("network").build())
         );
     }
-
-    // TODO: 질문 목록 조회, 최신 순 and 조회 순
 
     @DisplayName("질문 상세 조회")
     @Test
@@ -221,5 +220,57 @@ public class QuestionServiceTest {
         );
     }
 
-    // TODO: searchByHashtag test
+    @DisplayName("해시태그로 질문 목록 필터링")
+    @Test
+    void searchByHashtag() {
+        Question question1 = Question.builder()
+            .id(100L)
+            .userId(1L)
+            .title(QuestionTitle.from(TEST_QUESTION_TITLE))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(questionHashtags)
+            .build();
+        given(questionHashtagService.findIdsByHashtagName(anyString())).willReturn(Lists.newArrayList(100L));
+        given(questionRepository.findAllById(anyCollection())).willReturn(Lists.newArrayList(question1));
+
+        QuestionResponses responses = questionService.searchByHashtag("java");
+
+        assertAll(
+            () -> assertThat(responses.getQuestions().get(0).getUserId()).isEqualTo(1L),
+            () -> assertThat(responses.getQuestions().get(0).getQuestionId()).isEqualTo(100L),
+            () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
+            () -> assertThat(responses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+        );
+    }
+
+    @DisplayName("면접 질문 추천")
+    @Test
+    void updateRecommendationCount() {
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.updateRecommendationCount(question.getId(), RecommendationType.RECOMMENDED, false);
+
+        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(1L);
+    }
+
+    @DisplayName("면접 질문 추천 토글")
+    @Test
+    void toggleRecommendationCount() {
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.updateRecommendationCount(question.getId(), RecommendationType.NON_RECOMMENDED, true);
+
+        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(-1L);
+        assertThat(question.getRecommendationCount().getNonRecommendedCount()).isEqualTo(1L);
+    }
+
+    @DisplayName("면접 질문 추천 취소")
+    @Test
+    void deleteRecommendationCount() {
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.decreaseRecommendationCount(question.getId(), RecommendationType.RECOMMENDED);
+
+        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(-1L);
+    }
 }

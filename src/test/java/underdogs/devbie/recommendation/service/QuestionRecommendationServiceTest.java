@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.question.domain.Question;
-import underdogs.devbie.question.domain.QuestionRepository;
+import underdogs.devbie.question.service.QuestionService;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -28,20 +28,12 @@ class QuestionRecommendationServiceTest {
     QuestionRecommendationRepository questionRecommendationRepository;
 
     @Mock
-    QuestionRepository questionRepository;
+    QuestionService questionService;
 
     @BeforeEach
     void setUp() {
-        this.questionRecommendationService = new QuestionRecommendationService(questionRecommendationRepository, questionRepository);
+        this.questionRecommendationService = new QuestionRecommendationService(questionRecommendationRepository, questionService);
     }
-
-@DisplayName("추천 수 조회")
-@Test
-void count() {
-    questionRecommendationService.count(1L);
-
-    verify(questionRecommendationRepository).findByObjectId(anyLong());
-}
 
     @DisplayName("추천 생성")
     @Test
@@ -53,9 +45,11 @@ void count() {
             .content(TEST_QUESTION_CONTENT)
             .hashtags(new LinkedHashSet<>())
             .build();
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        willDoNothing().given(questionService).updateRecommendationCount(anyLong(), any(RecommendationType.class), anyBoolean());
 
         questionRecommendationService.createOrUpdateRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
+
+        verify(questionService).updateRecommendationCount(eq(1L), eq(RecommendationType.RECOMMENDED), eq(false));
     }
 
     @DisplayName("추천 삭제")
@@ -71,7 +65,7 @@ void count() {
             .content(TEST_QUESTION_CONTENT)
             .hashtags(new LinkedHashSet<>())
             .build();
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        willDoNothing().given(questionService).decreaseRecommendationCount(anyLong(), any(RecommendationType.class));
 
         questionRecommendationService.deleteRecommendation(1L, 1L);
 

@@ -70,7 +70,8 @@ public class QuestionHashtagService {
     }
 
     public List<Long> findIdsByHashtagName(String hashtag) {
-        Hashtag findHashtag = hashtagRepository.findByTagName(hashtag).orElseThrow(HashtagNotExistedException::new);
+        Hashtag findHashtag = hashtagRepository.findByTagName(hashtag)
+            .orElseThrow(HashtagNotExistedException::new);
         return questionHashtagRepository.findQuestionIdsByHashtagId(findHashtag.getId());
     }
 }
