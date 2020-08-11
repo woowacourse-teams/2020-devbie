@@ -16,7 +16,7 @@
           >
             <v-card-title
               class="card-title"
-              v-text="notice.name + `- 공고 타이틀`"
+              v-text="`${notice.name} - ${notice.title}`"
             ></v-card-title>
           </v-img>
 

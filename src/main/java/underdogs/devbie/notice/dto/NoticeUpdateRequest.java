@@ -1,6 +1,7 @@
 package underdogs.devbie.notice.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.validation.constraints.Min;
@@ -56,8 +57,10 @@ public class NoticeUpdateRequest {
     private String image;
 
     public Notice toEntity(Long id) {
-        LocalDateTime startLocalDate = LocalDateTime.parse(startDate);
-        LocalDateTime endLocalDate = LocalDateTime.parse(endDate);
+        LocalDateTime startLocalDate = LocalDateTime.parse(startDate,
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime endLocalDate = LocalDateTime.parse(endDate,
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
         return Notice.builder()
             .id(id)

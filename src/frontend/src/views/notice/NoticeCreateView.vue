@@ -79,6 +79,9 @@
 
 <script>
 export default {
+  async created() {
+    await this.isAdmin();
+  },
   data: function() {
     return {
       valid: true,
@@ -119,6 +122,12 @@ export default {
   },
 
   methods: {
+    async isAdmin() {
+      const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
+      if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
+        await this.$router.push("/");
+      }
+    },
     async validate() {
       if (!this.$refs.form.validate()) {
         return;

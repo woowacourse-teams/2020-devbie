@@ -73,32 +73,54 @@
       >
         작성하기
       </v-btn>
+<<<<<<< HEAD
       {{ fetchedNotice }}
+=======
+>>>>>>> 504b607a839cd90d5fbe9b67b1dd6aa986fed727
     </v-form>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import { dateParser, languageTranslator } from "@/util";
 
 export default {
   async created() {
-    await this.$store.dispatch("FETCH_NOTICE", this.$route.params.id);
+    await this.isAdmin();
+
+    this.id = this.$route.params.id;
+    await this.$store.dispatch("FETCH_NOTICE", this.id);
 
     this.request = {
-      ...this.fetchedNotice,
-      description: this.fetchedNotice.noticeDescription.content,
-      languages: this.fetchedNotice.noticeDescription.languages,
+      title: this.fetchedNotice.title,
       name: this.fetchedNotice.company.name,
-      salary: this.fetchedNotice.company.salary
+      jobPosition: this.fetchedNotice.jobPosition,
+      noticeType: this.fetchedNotice.noticeType,
+      startDate: dateParser(
+        this.fetchedNotice.duration === null
+          ? ""
+          : this.fetchedNotice.duration.startDate
+      ),
+      endDate: dateParser(
+        this.fetchedNotice.duration === null
+          ? ""
+          : this.fetchedNotice.duration.endDate
+      ),
+      description: this.fetchedNotice.noticeDescription.content,
+      languages: this.fetchedNotice.noticeDescription.languages.map(language =>
+        languageTranslator(language)
+      ),
+      salary: this.fetchedNotice.company.salary,
+      image: this.fetchedNotice.image
     };
-    console.log(this.request);
   },
   computed: {
     ...mapGetters(["fetchedNotice"])
   },
   data: function() {
     return {
+      id: "",
       valid: true,
       numberRules: [
         v => !!v || "숫자를 입력하세요.",
@@ -121,30 +143,27 @@ export default {
         { text: "C++", value: "CPP" },
         { text: "JAVA", value: "JAVA" }
       ],
-      request: {
-        jobPosition: "",
-        image: "",
-        title: "",
-        name: "",
-        salary: 0,
-        languages: [],
-        description: "",
-        startDate: "",
-        endDate: "",
-        noticeType: ""
-      }
+      request: {}
     };
   },
 
   methods: {
+    async isAdmin() {
+      const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
+      if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
+        await this.$router.push("/");
+      }
+    },
     async validate() {
       if (!this.$refs.form.validate()) {
         return;
       }
       try {
-        await this.$store.dispatch("CREATE_NOTICE", this.request);
-        const id = await this.$store.getters.fetchedNewCreatedNoticeId;
-        await this.$router.push(`/notices/${id}`);
+        await this.$store.dispatch("EDIT_NOTICE", {
+          id: this.id,
+          params: this.request
+        });
+        await this.$router.push(`/notices/${this.id}`);
       } catch (error) {
         console.log(error);
       }

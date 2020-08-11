@@ -28,7 +28,7 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
-@Sql(value = "/notice_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/notice_create.sql")
 @Sql(value = "/notice_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class NoticeAcceptanceTest extends AcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
@@ -139,8 +139,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate(updatedDuration.getStartDate().toString())
-                    .endDate(updatedDuration.getEndDate().toString())
+                    .startDate("2020-10-21 13:00")
+                    .endDate("2020-10-21 14:00")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));

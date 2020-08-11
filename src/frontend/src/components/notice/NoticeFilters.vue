@@ -9,6 +9,7 @@
       item-value="value"
       :items="position"
       hide-details
+      label="직군"
       menu-props="auto"
       single-line
     ></v-select>
