@@ -34,8 +34,6 @@ public class QuestionRecommendationService extends RecommendationService {
             questionRecommendation.toggleRecommended();
         }
         recommendationRepository.save(questionRecommendation);
-
-        questionService.updateRecommendationCount(objectId, recommendationType, !questionRecommendation.hasRecommendationTypeOf(recommendationType));
     }
 
     @Transactional
@@ -45,7 +43,5 @@ public class QuestionRecommendationService extends RecommendationService {
         Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
 
         recommendationRepository.delete(recommendation);
-
-        questionService.decreaseRecommendationCount(objectId, recommendation.getRecommendationType());
     }
 }

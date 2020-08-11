@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.answer.domain.Answer;
-import underdogs.devbie.answer.service.AnswerService;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
@@ -27,12 +26,9 @@ class AnswerRecommendationServiceTest {
     @Mock
     AnswerRecommendationRepository answerRecommendations;
 
-    @Mock
-    AnswerService answerService;
-
     @BeforeEach
     void setUp() {
-        this.answerRecommendationService = new AnswerRecommendationService(answerRecommendations, answerService);
+        this.answerRecommendationService = new AnswerRecommendationService(answerRecommendations);
     }
 
     @DisplayName("추천 생성")
@@ -44,7 +40,6 @@ class AnswerRecommendationServiceTest {
             .questionId(1L)
             .content(TEST_ANSWER_CONTENT)
             .build();
-        willDoNothing().given(answerService).updateRecommendationCount(anyLong(), any(RecommendationType.class), anyBoolean());
 
         answerRecommendationService.createOrUpdateRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
     }
@@ -59,7 +54,6 @@ class AnswerRecommendationServiceTest {
             .questionId(1L)
             .content(TEST_ANSWER_CONTENT)
             .build();
-        willDoNothing().given(answerService).decreaseRecommendationCount(anyLong(), any(RecommendationType.class));
         given(answerRecommendations.findByObjectAndUserId(anyLong(), anyLong())).willReturn(
             Optional.of(recommendation));
 

@@ -36,7 +36,6 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
-import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -241,36 +240,5 @@ public class QuestionServiceTest {
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(responses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );
-    }
-
-    @DisplayName("면접 질문 추천")
-    @Test
-    void updateRecommendationCount() {
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
-
-        questionService.updateRecommendationCount(question.getId(), RecommendationType.RECOMMENDED, false);
-
-        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(1L);
-    }
-
-    @DisplayName("면접 질문 추천 토글")
-    @Test
-    void toggleRecommendationCount() {
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
-
-        questionService.updateRecommendationCount(question.getId(), RecommendationType.NON_RECOMMENDED, true);
-
-        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(-1L);
-        assertThat(question.getRecommendationCount().getNonRecommendedCount()).isEqualTo(1L);
-    }
-
-    @DisplayName("면접 질문 추천 취소")
-    @Test
-    void deleteRecommendationCount() {
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
-
-        questionService.decreaseRecommendationCount(question.getId(), RecommendationType.RECOMMENDED);
-
-        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(-1L);
     }
 }

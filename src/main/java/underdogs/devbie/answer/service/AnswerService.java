@@ -14,7 +14,6 @@ import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.exception.AnswerNotExistedException;
 import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
-import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 
 @Service
@@ -76,21 +75,5 @@ public class AnswerService {
     public AnswerResponses readByQuestionId(Long questionId) {
         Answers answers = Answers.from(answerRepository.findByQuestionId(questionId));
         return AnswerResponses.from(answers);
-    }
-
-    @Transactional
-    public void updateRecommendationCount(Long answerId, RecommendationType type, boolean isToggleCount) {
-        Answer answer = readOne(answerId);
-        answer.increaseRecommendationCounts(type);
-
-        if (isToggleCount) {
-            answer.decreaseRecommendationCounts(type.toggleType());
-        }
-    }
-
-    @Transactional
-    public void decreaseRecommendationCount(Long answerId, RecommendationType type) {
-        Answer answer = readOne(answerId);
-        answer.decreaseRecommendationCounts(type);
     }
 }

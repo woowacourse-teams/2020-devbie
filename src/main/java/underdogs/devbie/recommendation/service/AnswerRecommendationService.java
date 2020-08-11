@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import underdogs.devbie.answer.service.AnswerService;
 import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
@@ -15,11 +14,8 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 @Service
 public class AnswerRecommendationService extends RecommendationService {
 
-    private AnswerService answerService;
-
-    public AnswerRecommendationService(AnswerRecommendationRepository answerRecommendationRepository, AnswerService answerService) {
+    public AnswerRecommendationService(AnswerRecommendationRepository answerRecommendationRepository) {
         this.recommendationRepository = answerRecommendationRepository;
-        this.answerService = answerService;
     }
 
     @Override
@@ -35,8 +31,6 @@ public class AnswerRecommendationService extends RecommendationService {
         }
 
         recommendationRepository.save(answerRecommendation);
-
-        answerService.updateRecommendationCount(objectId, recommendationType, !answerRecommendation.hasRecommendationTypeOf(recommendationType));
     }
 
     @Transactional
@@ -46,7 +40,5 @@ public class AnswerRecommendationService extends RecommendationService {
         Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
 
         recommendationRepository.delete(recommendation);
-
-        answerService.decreaseRecommendationCount(objectId, recommendation.getRecommendationType());
     }
 }

@@ -46,11 +46,8 @@ class QuestionRecommendationServiceTest {
             .content(TEST_QUESTION_CONTENT)
             .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
-        willDoNothing().given(questionService).updateRecommendationCount(anyLong(), any(RecommendationType.class), anyBoolean());
 
         questionRecommendationService.createOrUpdateRecommendation(1L, 1L, RecommendationType.RECOMMENDED);
-
-        verify(questionService).updateRecommendationCount(eq(1L), eq(RecommendationType.RECOMMENDED), eq(false));
     }
 
     @DisplayName("추천 삭제")
@@ -66,7 +63,6 @@ class QuestionRecommendationServiceTest {
             .content(TEST_QUESTION_CONTENT)
             .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
-        willDoNothing().given(questionService).decreaseRecommendationCount(anyLong(), any(RecommendationType.class));
 
         questionRecommendationService.deleteRecommendation(1L, 1L);
 

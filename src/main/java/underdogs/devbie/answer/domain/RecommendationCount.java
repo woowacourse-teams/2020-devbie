@@ -1,4 +1,4 @@
-package underdogs.devbie.question.domain;
+package underdogs.devbie.answer.domain;
 
 import javax.persistence.Embeddable;
 
@@ -19,12 +19,12 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RecommendationCount {
 
-    @Formula("select count(*) from question_recommendation q "
-        + "where q.question_id = question_id and q.recommendation_type = 'RECOMMENDED'")
+    @Formula("select count(*) from answer_recommendation a "
+        + "where a.answer_id = answer_id and a.recommendation_type = 'RECOMMENDED'")
     private Long recommendedCount;
 
-    @Formula("select count(*) from question_recommendation q "
-        + "where q.question_id = question_id and q.recommendation_type = 'NON_RECOMMENDED'")
+    @Formula("select count(*) from answer_recommendation a "
+        + "where a.answer_id = answer_id and a.recommendation_type = 'NON_RECOMMENDED'")
     private Long nonRecommendedCount;
 
     public static RecommendationCount init() {
