@@ -6,9 +6,10 @@
       <v-btn
         v-if="isLoggedIn"
         id="question-create"
+        class="button"
         @click="$router.push('/create-question')"
         color="#DAEBEA"
-        >질문 올리기
+        >질문하기
       </v-btn>
     </div>
   </div>
