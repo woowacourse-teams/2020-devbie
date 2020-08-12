@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
@@ -35,6 +37,8 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody NoticeCreateRequest request) {
@@ -44,6 +48,8 @@ public class NoticeController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
@@ -56,6 +62,8 @@ public class NoticeController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

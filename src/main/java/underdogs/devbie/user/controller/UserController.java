@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
@@ -28,6 +30,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @GetMapping
     public ResponseEntity<UserResponse> findUser(@LoginUser User user) {
         return ResponseEntity
