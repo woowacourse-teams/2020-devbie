@@ -94,17 +94,7 @@ export default {
         console.log("you should login");
         return;
       }
-
-      await this.$store.commit("SET_ANSWER_RECOMMENDATION_COUNT", {
-        answerId: this.answer.id,
-        priorType: this.userRecommended,
-        newType: newType
-      });
-
-      if (
-        this.userRecommended === "NOT_EXIST" ||
-        this.userRecommended === priorType
-      ) {
+      if (this.isCreateOrUpdateRecommendation(priorType)) {
         await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
           answerId: this.answer.id,
           recommendationType: newType
@@ -117,6 +107,7 @@ export default {
         );
         this.userRecommended = "NOT_EXIST";
       }
+      await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
     },
     async fetchMyAnswerRecommendation(answerId, userId) {
       await this.$store.dispatch("FETCH_MY_ANSWER_RECOMMENDATION", {
@@ -124,6 +115,12 @@ export default {
         userId
       });
       this.userRecommended = this.myAnswerRecommendation.recommendationType;
+    },
+    isCreateOrUpdateRecommendation(priorType) {
+      return (
+        this.userRecommended === "NOT_EXIST" ||
+        this.userRecommended === priorType
+      );
     },
     isUserRecommendation(recommendationType) {
       return (

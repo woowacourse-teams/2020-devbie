@@ -10,14 +10,16 @@ export default {
       state.myQuestionRecommendation = data;
     },
     SET_MY_ANSWER_RECOMMENDATION(state, payload) {
-      const index = state.myAnswerRecommendation.findIndex(
-        a => a.answerId === payload.answerId
-      );
-      if (index > 0) {
-        state.myAnswerRecommendation[index] = payload;
-        return;
-      }
       state.myAnswerRecommendation.push(payload);
+    },
+    UPDATE_MY_ANSWER_RECOMMENDATION(state, payload) {
+      state.myAnswerRecommendation.some(answer => {
+        if (answer.answerId === payload.answerId) {
+          answer.recommendationType = payload.recommendationType;
+          return true;
+        }
+        return false;
+      });
     }
   },
   actions: {
@@ -75,16 +77,15 @@ export default {
     },
     async ON_ANSWER_RECOMMENDATION({ commit }, payload) {
       try {
-        const recommendationType = payload.recommendationType;
         await putAction(
           `/api/recommendation-answer?objectId=${payload.answerId}`,
           {
-            recommendationType: recommendationType
+            recommendationType: payload.recommendationType
           }
         );
-        commit("SET_MY_ANSWER_RECOMMENDATION", {
+        commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
           answerId: payload.answerId,
-          recommendationType: recommendationType
+          recommendationType: payload.recommendationType
         });
       } catch (error) {
         console.log(error);
@@ -94,7 +95,7 @@ export default {
     async DELETE_ANSWER_RECOMMENDATION({ commit }, answerId) {
       try {
         await deleteAction(`/api/recommendation-answer?objectId=${answerId}`);
-        commit("SET_MY_ANSWER_RECOMMENDATION", {
+        commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
           answerId: answerId,
           recommendationType: "NOT_EXIST"
         });
