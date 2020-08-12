@@ -84,7 +84,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
 
-                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
+                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
                     QuestionResponse.class);
 
                 assertAll(
@@ -105,7 +105,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
 
                 patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
 
-                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
+                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
                     QuestionResponse.class);
                 assertAll(
                     () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),

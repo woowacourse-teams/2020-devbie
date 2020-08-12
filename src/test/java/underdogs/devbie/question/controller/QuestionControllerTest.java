@@ -121,7 +121,7 @@ class QuestionControllerTest extends MvcTest {
 
         given(questionService.read(anyLong(), anyBoolean())).willReturn(response);
 
-        MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId())
+        MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId() + "?visit=true")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
