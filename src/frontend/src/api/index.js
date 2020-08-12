@@ -31,11 +31,11 @@ function putAction(url, request) {
   });
 }
 
-function patchAction(url, request, config_option) {
+function patchAction(url, request, configOption) {
   return axios.patch(`${config.baseUrl}${url}`, request, {
     headers: {
       Authorization: devbieToken,
-      ...config_option
+      ...configOption
     }
   });
 }
