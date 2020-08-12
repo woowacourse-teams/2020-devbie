@@ -131,13 +131,13 @@ export default {
     }
   },
   watch: {
-    fetchedLoginUser: async function() {
+    fetchedLoginUser() {
       this.loginUser = this.fetchedLoginUser;
       if (!this.fetchedLoginUser.id) {
         this.userRecommended = "NOT_EXIST";
         return;
       }
-      await this.fetchMyQuestionRecommendation(
+      this.fetchMyQuestionRecommendation(
         this.questionId,
         this.fetchedLoginUser.id
       );
