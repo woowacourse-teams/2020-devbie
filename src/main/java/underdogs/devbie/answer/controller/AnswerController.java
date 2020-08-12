@@ -35,7 +35,6 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity<Void> save(@LoginUser User user, @RequestBody @Valid AnswerCreateRequest request) {
         Long id = answerService.save(user, request);
-
         return ResponseEntity
             .created(URI.create(String.format("/api/answers/%d", id)))
             .build();

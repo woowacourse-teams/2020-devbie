@@ -81,7 +81,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser, languageTranslator } from "@/util";
+import { dateParser, languageTranslator } from "@/utils";
 
 export default {
   async created() {
@@ -125,8 +125,8 @@ export default {
         v => Number.isInteger(Number(v)) || "숫자를 입력해야합니다."
       ],
       textRules: [
-        v => !!v || "text is required",
-        v => (v && v.length > 0) || "Name must be less than 10 characters"
+        v => !!v || "문자를 입력하세요!",
+        v => (v && v.length > 0) || "문자를 1자이상 입력해주세요!"
       ],
       noticeTypeItems: [
         { text: "채용", value: "JOB" },

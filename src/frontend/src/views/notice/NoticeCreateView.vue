@@ -6,14 +6,14 @@
         item-value="value"
         v-model="request.noticeType"
         :items="noticeTypeItems"
-        :rules="[v => !!v || 'Item is required']"
+        :rules="selectRules"
         label="채용/교육"
         required
       ></v-select>
       <v-select
         v-model="request.jobPosition"
         :items="jobPositionItems"
-        :rules="[v => !!v || 'Item is required']"
+        :rules="selectRules"
         label="직군"
         required
       ></v-select>
@@ -32,20 +32,16 @@
         required
       ></v-text-field>
       <div class="duration">
-        <v-text-field
+        <input
+          aria-label="시작일"
           v-model="request.startDate"
-          :rules="textRules"
-          placeholder="2010-10-20 13:00"
-          label="시작일"
-          required
-        ></v-text-field>
-        <v-text-field
+          type="datetime-local"
+        />
+        <input
+          aria-labelledby="종료일"
           v-model="request.endDate"
-          :rules="textRules"
-          placeholder="2010-10-20 14:00"
-          label="종료일"
-          required
-        ></v-text-field>
+          type="datetime-local"
+        />
       </div>
       <v-text-field
         v-model="request.name"
@@ -65,7 +61,6 @@
         v-model="request.description"
         name="input-7-4"
         label="회사설명"
-        value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
       ></v-textarea>
       <v-btn
         :disabled="!valid"
@@ -87,13 +82,14 @@ export default {
   data: function() {
     return {
       valid: true,
+      selectRules: [v => !!v || "Item is required"],
       numberRules: [
         v => !!v || "숫자를 입력하세요.",
         v => Number.isInteger(Number(v)) || "숫자를 입력해야합니다."
       ],
       textRules: [
-        v => !!v || "text is required",
-        v => (v && v.length > 0) || "Name must be less than 10 characters"
+        v => !!v || "문자를 입력하세요!",
+        v => (v && v.length > 0) || "문자를 1자이상 입력해주세요!"
       ],
       noticeTypeItems: [
         { text: "채용", value: "JOB" },
@@ -159,6 +155,9 @@ export default {
 }
 .duration {
   display: flex;
+}
+.duration > input {
+  margin-right: 20px;
 }
 .duration:first-child {
   padding-right: 20px;
