@@ -45,6 +45,9 @@ export default {
   getters: {
     fetchedLoginUser(state) {
       return state.loginUser;
+    },
+    isLoggedIn(state) {
+      return state.loginUser.length !== 0;
     }
   }
 };

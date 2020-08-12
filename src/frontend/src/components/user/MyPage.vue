@@ -49,6 +49,7 @@
 <script>
 import { mapGetters } from "vuex";
 import validator from "../../utils/validator";
+import router from "../../router";
 
 export default {
   name: "MyPage",
@@ -62,20 +63,29 @@ export default {
       rules: { ...validator }
     };
   },
-
   computed: {
-    ...mapGetters(["fetchedLoginUser"])
+    ...mapGetters(["fetchedLoginUser", "isLoggedIn"])
   },
-  created() {
-    this.$store.dispatch("FETCH_LOGIN_USER");
+  async created() {
+    await this.$store.dispatch("FETCH_LOGIN_USER");
     this.initializeUserInfo();
+    this.checkLoggedIn();
   },
   watch: {
+    isLoggedIn() {
+      this.checkLoggedIn();
+    },
+
     fetchedLoginUser() {
       this.initializeUserInfo();
     }
   },
   methods: {
+    checkLoggedIn() {
+      if (!this.isLoggedIn) {
+        router.push("/");
+      }
+    },
     editImage() {
       this.$refs.avatar.click();
     },
