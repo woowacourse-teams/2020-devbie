@@ -8,14 +8,18 @@ branches:
     - develop
     - feature/116-docker
 
+env:
+  global:
+    - DOCKER_USER=kimseonggyu1
+    - secure: ec2wQor8w9an/d30ZDsj5Pv9ExYQNLX2hMI7NHxSDa2uufJIQtjw+EAL5krgmX4xcbiZlE+bBIaiVn8T1yFsRXWDtvya7D5CAb54vvLGMzBSnj4u5jGoFPWheTq2pHT0tmYmSFcGMvll97iGtNY5XaH3xzDHarJvKf5r/A7YmYbeO+XAMIN+WDavgCerBUenEploAqftFPX51dPgZViVcx0AtTd6yYY/A58PO1cjWpcwuFpDzh8k4vmxhW4iLXD/5BaPE3JxmgmteE2pvQ6CAYJCySFFE9nRiK7NDOrjuo6TN3AJtUIRgjKIwvku1A4UU8pXuftCMMAEEFj988cOW8oa3ojZQW4yU/MjhrXfH76VM2BCsbeYI2Q9/+Gk6g4e+OEi1CL/AIk6F39CMR79fBtIKoTUVxCuM9Tuf9hCT/EAsbx15FhHcgZ9dpIJjl6wP3uPnvzsWQhuC75OEIAY0WzoO1kQAiIZMI3j9nbpTFYB3xbCFijEv6N3gCBRjp+pJc6GqfsQlGSWxnnqUPG5hPQEuB7O6qeH7nSOr1B05IkOPj1UudXKijJHYKKyD0DOIpJ/L5CjKo/3PENLZQJdPX7V0AmFs8E9nkbrN/q21m0AlpBm/OaHsKVXFS+Gi3IzHxW8PF8QCv6tVEIqwGBzPwSEt/lMGx7sG+JtzLP9sm4=
+    - secure: XeUcpp6tJBwN5pUxTDp6Xt0OAzJp53c/po4IxV7a23U7D3KsxwJvtANCIgAvhDp/JxX/hO5e/FGImYyExw24v8nCjYIkgI2X2ChAlAlAKQ96D9Kdgsidl/pOhp5mXEYrsNwa2fHFKYj37BpuLzeVxhow6EbrEFtrzhPdr1nfuCc3zXxg6V3Z0wL34fI8eHZ9ZXIjeu+FdwAQvwcZGFBZeSXPXWuiuGPLy1QOyR8V5q7XZhKqCpfEhWIDhiCosJ5Dq0NfG3ClGGy092wBt+f1l4J1frwFbOHtB9NEZQLX1a205UN/Fe+MbbnphElu+bSC7+bqOVCV9rifpuXid8q47s29AMNMRz0TWmO50s4//utIcqCv94XSjn1Y8l/laqqSauKfN3KdkjVpFt64O9LUxS4pNUu3fK/aQkyzXD0mVAyq/RHOPGfPZ9US0kMsCSZ3/440P1CC+J6O/pi9Rm4SxbYTm72E7D2Te/TpXjXGp2x2ivcMU/jZTYW5Yjq96aDzXxo6Dux0ZXYpxVmVZasAz0MNDy6go6jlZhN6ttp7NCX1pKD+NnPfWu1D4O28mc4lu8IPQ3BTKv3HnlKyMlVjn1PMlwb6jdJwNtjqiiiifDUWXPG8vZg9RJs8kL+AyJ0ii8rdjFVmJUgciNsMMirJFqFAUU519rk7vC9U0JFH6GM=
+
 git:
   submodules: false
 
 before_install:
-  - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
-  - git lfs pull
-  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodule update --init --recursive
+    - sed -i 's/github.com/'$GITHUB_INFO'@github.com/' .gitmodules
+    - git submodule update --init --recursive
 
 cache:
   directories:
@@ -24,12 +28,8 @@ cache:
 
 script: "./gradlew clean build"
 
-env:
-  global:
-    - USER=kimseonggyu1
-    - secure: ec2wQor8w9an/d30ZDsj5Pv9ExYQNLX2hMI7NHxSDa2uufJIQtjw+EAL5krgmX4xcbiZlE+bBIaiVn8T1yFsRXWDtvya7D5CAb54vvLGMzBSnj4u5jGoFPWheTq2pHT0tmYmSFcGMvll97iGtNY5XaH3xzDHarJvKf5r/A7YmYbeO+XAMIN+WDavgCerBUenEploAqftFPX51dPgZViVcx0AtTd6yYY/A58PO1cjWpcwuFpDzh8k4vmxhW4iLXD/5BaPE3JxmgmteE2pvQ6CAYJCySFFE9nRiK7NDOrjuo6TN3AJtUIRgjKIwvku1A4UU8pXuftCMMAEEFj988cOW8oa3ojZQW4yU/MjhrXfH76VM2BCsbeYI2Q9/+Gk6g4e+OEi1CL/AIk6F39CMR79fBtIKoTUVxCuM9Tuf9hCT/EAsbx15FhHcgZ9dpIJjl6wP3uPnvzsWQhuC75OEIAY0WzoO1kQAiIZMI3j9nbpTFYB3xbCFijEv6N3gCBRjp+pJc6GqfsQlGSWxnnqUPG5hPQEuB7O6qeH7nSOr1B05IkOPj1UudXKijJHYKKyD0DOIpJ/L5CjKo/3PENLZQJdPX7V0AmFs8E9nkbrN/q21m0AlpBm/OaHsKVXFS+Gi3IzHxW8PF8QCv6tVEIqwGBzPwSEt/lMGx7sG+JtzLP9sm4=
 
 after_success:
   - docker build -t kimseonggyu1/devbie:latest .
-  - docker login -u $USER -p $PASSWORD
+  - docker login -u $DOCKER_USER -p $PASSWORD
   - docker push kimseonggyu1/devbie:latest
