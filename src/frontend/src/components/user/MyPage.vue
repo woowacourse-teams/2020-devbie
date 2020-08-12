@@ -64,8 +64,7 @@ export default {
       email: "",
       name: "",
       image: "",
-      rules: { ...validator },
-      img_files: ""
+      rules: { ...validator }
     };
   },
 
@@ -86,16 +85,17 @@ export default {
       this.$refs.avatar.click();
     },
 
-    preview() {
-      this.img_files = this.$refs.avatar.files[0];
-      if (this.img_files) {
+    async preview() {
+      const image_files = this.$refs.avatar.files[0];
+      if (image_files) {
         const reader = new FileReader();
 
         reader.onload = e => {
           this.image = e.target.result;
         };
 
-        reader.readAsDataURL(this.img_files);
+        reader.readAsDataURL(image_files);
+        await this.updateUserImage(image_files);
       }
     },
 
@@ -111,26 +111,25 @@ export default {
     },
 
     async updateUserInfo() {
-      this.img_files = this.$refs.avatar.files[0];
-      const formData = new FormData();
-      formData.append("image", this.img_files);
-
       const updated_info = {
-        id: this.id,
-        payload: {
-          name: this.name,
-          email: this.email
-        }
-      };
-
-      const updated_img = {
-        id: this.id,
-        payload: formData
+        name: this.name,
+        email: this.email
       };
 
       await this.$store.dispatch("UPDATE_USER_INFO", updated_info);
-      await this.$store.dispatch("UPDATE_USER_IMAGE", updated_img);
       this.$store.dispatch("FETCH_LOGIN_USER");
+    },
+
+    async updateUserImage(image_files) {
+      const formData = new FormData();
+      formData.append("image", image_files);
+      try {
+        await this.$store.dispatch("UPDATE_USER_IMAGE", formData);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.$store.dispatch("FETCH_LOGIN_USER");
+      }
     }
   }
 };

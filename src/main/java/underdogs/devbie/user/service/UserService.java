@@ -8,7 +8,7 @@ import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
-import underdogs.devbie.user.dto.UserUpdateRequest;
+import underdogs.devbie.user.dto.UserUpdateInfoRequest;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserInfo(User user, UserUpdateRequest request) {
+    public void updateUserInfo(User user, UserUpdateInfoRequest request) {
         user.updateUserInfo(request.toEntity());
     }
 

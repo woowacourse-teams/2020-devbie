@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import underdogs.devbie.user.domain.User;
 
@@ -17,7 +18,7 @@ import underdogs.devbie.user.domain.User;
 @Builder
 @Getter
 @ToString
-public class UserUpdateRequest {
+public class UserUpdateInfoRequest {
 
     @NotBlank
     private String name;
