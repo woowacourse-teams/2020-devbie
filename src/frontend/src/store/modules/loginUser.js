@@ -21,18 +21,18 @@ export default {
         console.log(error);
       }
     },
-    async UPDATE_USER_INFO({ commit }, { id, payload }) {
+    async UPDATE_USER_INFO({ commit }, payload) {
       try {
-        await patchAction(`/api/users/${id}`, payload);
+        await patchAction(`/api/users/me`, payload);
         commit();
       } catch (error) {
         console.log(error);
       }
     },
-    async UPDATE_USER_IMAGE({ commit }, { id, payload }) {
+    async UPDATE_USER_IMAGE({ commit }, payload) {
       try {
         await patchAction(
-          `/api/users/${id}/image`,
+          `/api/users/me/image`,
           payload,
           `content-type: multipart/form-data`
         );

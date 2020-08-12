@@ -27,6 +27,7 @@ import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserResponse;
 import underdogs.devbie.user.dto.UserUpdateRequest;
 import underdogs.devbie.user.service.UserService;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -50,25 +51,23 @@ public class UserController {
             .body(userId);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/me")
     public ResponseEntity<Void> updateUser(
         @LoginUser User user,
-        @PathVariable("id") Long userId,
         @Valid @RequestBody UserUpdateRequest request
     ) {
-        userService.updateUserInfo(user, userId ,request);
+        userService.updateUserInfo(user, request);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/image")
+    @PatchMapping("/me/image")
     public ResponseEntity<Void> updateImage(
         @LoginUser User user,
-        @PathVariable("id") Long userId,
         @RequestParam("image") MultipartFile imageFile
     ) throws IOException {
         if (!Objects.isNull(imageFile)) {
             String imagePath = s3Service.upload(imageFile);
-            userService.updateUserImage(user, userId, imagePath);
+            userService.updateUserImage(user, imagePath);
         }
         return ResponseEntity.noContent().build();
     }

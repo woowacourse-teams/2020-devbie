@@ -9,7 +9,6 @@ import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserUpdateRequest;
-import underdogs.devbie.user.exception.NotMatchedUserException;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,21 +28,13 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserInfo(User user, Long userId, UserUpdateRequest request) {
-        validateUser(user.getId(), userId);
+    public void updateUserInfo(User user, UserUpdateRequest request) {
         user.updateUserInfo(request.toEntity());
     }
 
     @Transactional
-    public void updateUserImage(User user, Long userId, String imagePath) {
-        validateUser(user.getId(), userId);
+    public void updateUserImage(User user, String imagePath) {
         user.updateUserImage(imagePath);
-    }
-
-    private void validateUser(Long userId, Long id) {
-        if (!userId.equals(id)) {
-            throw new NotMatchedUserException();
-        }
     }
 
     public User findById(long userId) {
