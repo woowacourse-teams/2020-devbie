@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-footer dark padless color="#87BDD6" id="footer">
-      <v-card flat tile color="#87BDD6" class="lighten-1 white--text">
+    <v-footer dark padless color="#9FD0D4" id="footer">
+      <v-card flat tile color="#9FD0D4" class="lighten-1 white--text">
         <v-card-text>
           <v-btn
             v-for="icon in icons"
