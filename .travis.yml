@@ -8,8 +8,12 @@ branches:
     - develop
     - feature/116-docker
 
+git:
+  submodules: false
+
 before_install:
-  - chmod +x gradlew
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
 
 cache:
   directories:
