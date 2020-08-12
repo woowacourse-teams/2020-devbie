@@ -119,7 +119,7 @@ class QuestionControllerTest extends MvcTest {
                 HashtagResponse.builder().tagName("network").build()))
             .build();
 
-        given(questionService.read(anyLong())).willReturn(response);
+        given(questionService.read(anyLong(), anyBoolean())).willReturn(response);
 
         MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId())
             .andExpect(status().isOk())

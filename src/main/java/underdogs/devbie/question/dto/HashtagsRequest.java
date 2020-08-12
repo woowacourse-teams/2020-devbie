@@ -1,6 +1,5 @@
 package underdogs.devbie.question.dto;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,7 @@ import underdogs.devbie.question.domain.TagName;
 public class HashtagsRequest {
 
     @NotEmpty
-    private Set<String> hashtags = new LinkedHashSet<>();
+    private Set<String> hashtags;
 
     public Set<Hashtag> toEntity() {
         return hashtags.stream()

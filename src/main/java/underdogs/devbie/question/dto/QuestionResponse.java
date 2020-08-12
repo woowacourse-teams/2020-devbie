@@ -1,6 +1,5 @@
 package underdogs.devbie.question.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -25,7 +24,7 @@ public class QuestionResponse {
     private Long nonRecommendedCount;
     private String title;
     private String content;
-    private List<HashtagResponse> hashtags = new ArrayList<>();
+    private List<HashtagResponse> hashtags;
 
     public static QuestionResponse from(Question question) {
         return QuestionResponse.builder()

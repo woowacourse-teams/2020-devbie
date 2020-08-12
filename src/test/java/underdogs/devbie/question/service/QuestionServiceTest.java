@@ -124,7 +124,7 @@ public class QuestionServiceTest {
     void read() {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
-        QuestionResponse response = questionService.read(1L);
+        QuestionResponse response = questionService.read(1L, true);
 
         assertAll(
             () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
@@ -163,7 +163,7 @@ public class QuestionServiceTest {
 
         questionService.update(1L, 1L, request);
 
-        QuestionResponse response = questionService.read(1L);
+        QuestionResponse response = questionService.read(1L, true);
         assertAll(
             () -> assertThat(response.getTitle()).isEqualTo(request.getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(request.getContent())
