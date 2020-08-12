@@ -15,7 +15,7 @@
       <template v-if="isLoggedIn">
         <v-menu transition="slide-y-transition" bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-avatar color="primary">
+            <v-avatar>
               <v-img
                 :src="fetchedLoginUser.image"
                 alt="avatar-image"

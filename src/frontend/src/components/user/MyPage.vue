@@ -6,12 +6,7 @@
           <span class="headline">회원 정보</span>
         </v-card-title>
         <v-card-subtitle class="subtitle">
-          <v-avatar
-            class="avatar"
-            color="primary"
-            size="200"
-            @click="editImage"
-          >
+          <v-avatar class="avatar" size="200" @click="editImage">
             <v-img :src="image" alt="avatar-image" />
           </v-avatar>
           <input
