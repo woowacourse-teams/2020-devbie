@@ -42,6 +42,7 @@
 <script>
 import axios from "axios";
 import { mapGetters } from "vuex";
+import router from "../router";
 
 export default {
   props: ["isLoggedIn"],
@@ -60,6 +61,7 @@ export default {
     },
     logout() {
       this.$emit("logout");
+      router.push("/");
     }
   }
 };
