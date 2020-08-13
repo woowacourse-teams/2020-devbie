@@ -13,7 +13,7 @@ import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Service
-public class QuestionRecommendationService extends RecommendationService {
+public class QuestionRecommendationService extends RecommendationService<QuestionRecommendation> {
 
     private QuestionService questionService;
 
