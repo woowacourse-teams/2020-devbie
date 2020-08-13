@@ -99,6 +99,7 @@ export default {
 .notice-header {
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
+  font-family: "Jua", sans-serif;
 }
 
 .notice-body {

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-app-bar color="#87BDD6" name="navigation">
+  <div class="navigation-bar">
+    <v-app-bar color="#9FD0D4" name="navigation">
       <v-app-bar-nav-icon @click="$router.push('/')" id="logo"
         >icon
       </v-app-bar-nav-icon>
@@ -68,6 +68,10 @@ export default {
 </script>
 
 <style scoped>
+.navigation-menu {
+  font-family: "Do Hyeon", sans-serif;
+}
+
 #logo {
   margin-left: 50px;
 }
