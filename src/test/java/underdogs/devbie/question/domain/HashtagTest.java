@@ -27,7 +27,7 @@ class HashtagTest {
             .build();
         Hashtag updateHashtag = Hashtag.builder()
             .id(100L)
-            .tagName(TagName.from("Changed Name"))
+            .tagName(TagName.from("changed name"))
             .build();
 
         hashtag.update(updateHashtag);

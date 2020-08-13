@@ -137,7 +137,7 @@ class HashtagControllerTest extends MvcTest {
     @Test
     void update() throws Exception {
         HashtagUpdateRequest request = HashtagUpdateRequest.builder()
-            .tagName("Changed Name")
+            .tagName("changed name")
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
 
