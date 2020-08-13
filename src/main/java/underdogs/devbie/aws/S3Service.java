@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Service
 @NoArgsConstructor
 public class S3Service {
+
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.region.static:sample}")
@@ -39,5 +40,4 @@ public class S3Service {
             .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
     }
-
 }

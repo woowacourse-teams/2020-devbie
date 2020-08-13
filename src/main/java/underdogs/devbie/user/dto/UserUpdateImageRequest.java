@@ -22,5 +22,4 @@ public class UserUpdateImageRequest {
 
     @NotNull
     private MultipartFile image;
-
 }
