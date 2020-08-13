@@ -24,6 +24,10 @@ export default {
   },
   methods: {
     createAnswer: async function() {
+      if (this.content.trim() === "") {
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+        return;
+      }
       try {
         await this.$store.dispatch("CREATE_ANSWER", {
           questionId: this.$route.params.id,

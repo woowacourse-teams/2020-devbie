@@ -88,7 +88,15 @@ export default {
     await this.isAdmin();
 
     this.id = this.$route.params.id;
-    await this.$store.dispatch("FETCH_NOTICE", this.id);
+    try {
+      await this.$store.dispatch("FETCH_NOTICE", this.id);
+    } catch (error) {
+      console.log("공고 불러오기 실패 " + error.response.data.message);
+      return this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고 불러오기 실패했습니다. "
+      );
+    }
 
     this.request = {
       title: this.fetchedNotice.title,
