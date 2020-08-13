@@ -9,7 +9,7 @@ import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Service
-public class QuestionRecommendationService extends RecommendationService {
+public class QuestionRecommendationService extends RecommendationService<QuestionRecommendation> {
 
     public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository) {
         this.recommendationRepository = questionRecommendationRepository;
