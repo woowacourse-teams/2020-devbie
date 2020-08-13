@@ -66,7 +66,7 @@
         :disabled="!valid"
         color="success"
         class="mr-4 submit"
-        @click="validate"
+        @click="submit"
       >
         작성하기
       </v-btn>
@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import { dateParser } from "../../utils/noticeUtil";
+
 export default {
   async created() {
     await this.isAdmin();
@@ -126,10 +128,14 @@ export default {
         await this.$router.push("/");
       }
     },
-    async validate() {
+    async submit() {
       if (!this.$refs.form.validate()) {
         return;
       }
+
+      this.request.startDate = dateParser(this.request.startDate);
+      this.request.endDate = dateParser(this.request.endDate);
+
       try {
         await this.$store.dispatch("CREATE_NOTICE", this.request);
         const id = await this.$store.getters.fetchedNewCreatedNoticeId;

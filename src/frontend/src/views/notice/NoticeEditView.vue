@@ -71,7 +71,7 @@
         :disabled="!valid"
         color="success"
         class="mr-4 submit"
-        @click="validate"
+        @click="submit"
       >
         작성하기
       </v-btn>
@@ -81,7 +81,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser, languageTranslator } from "@/utils";
+import { dateParser, languageTranslator } from "@/utils/noticeUtil";
 
 export default {
   async created() {
@@ -152,10 +152,14 @@ export default {
         await this.$router.push("/");
       }
     },
-    async validate() {
+    async submit() {
       if (!this.$refs.form.validate()) {
         return;
       }
+
+      this.request.startDate = dateParser(this.request.startDate);
+      this.request.endDate = dateParser(this.request.endDate);
+
       try {
         await this.$store.dispatch("EDIT_NOTICE", {
           id: this.id,
