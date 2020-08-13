@@ -22,6 +22,7 @@ a:hover {
 }
 
 .filters {
+  font-family: "Jua", sans-serif;
   margin-top: 25px;
   display: flex;
   flex-direction: column;

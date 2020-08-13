@@ -54,7 +54,7 @@ export default {
 }
 
 .title {
-  color: #7ec699;
+  color: #35495e;
   font-weight: normal;
   font-size: 24px;
   text-decoration: none;

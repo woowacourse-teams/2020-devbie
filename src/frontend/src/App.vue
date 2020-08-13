@@ -46,7 +46,8 @@ export default {
 
 <style>
 #app {
-  font-family: "Do Hyeon", sans-serif;
+  font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
+  color: #35495e;
 }
 
 .content {

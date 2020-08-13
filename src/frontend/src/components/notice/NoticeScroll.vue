@@ -39,7 +39,6 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
             <v-divider></v-divider>
           </template>
         </v-virtual-scroll>
@@ -58,12 +57,23 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("FETCH_NOTICES");
+    const param = {
+      noticeType: this.fetchedNoticeType,
+      jobPosition: this.fetchedJobPosition,
+      language: this.fetchedLanguage
+    };
+    const queryParam = new URLSearchParams(param).toString();
+    this.$store.dispatch("FETCH_NOTICES", queryParam);
   },
   computed: {
-    ...mapGetters(["fetchedNotices"]),
+    ...mapGetters([
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage"
+    ]),
     items() {
-      return this.fetchedNotices.noticeResponses;
+      return this.fetchedNotices;
     }
   }
 };

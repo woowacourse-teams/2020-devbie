@@ -167,6 +167,7 @@ generated
 
 # log
 ./logs/**
+logs
 *.gz
 
 # infra
