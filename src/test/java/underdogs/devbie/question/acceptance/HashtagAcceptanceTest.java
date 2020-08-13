@@ -83,7 +83,7 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
                 HashtagResponse firstHashtag = hashtagResponses.getHashtags().get(0);
 
                 HashtagUpdateRequest hashtagUpdateRequest = HashtagUpdateRequest.builder()
-                    .tagName("Changed Name")
+                    .tagName("changed name")
                     .build();
                 String inputJson = objectMapper.writeValueAsString(hashtagUpdateRequest);
 
@@ -93,7 +93,7 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
 
                 assertAll(
                     () -> assertThat(updatedHashtag.getId()).isEqualTo(firstHashtag.getId()),
-                    () -> assertThat(updatedHashtag.getTagName()).isEqualTo("Changed Name")
+                    () -> assertThat(updatedHashtag.getTagName()).isEqualTo("changed name")
                 );
             }),
             dynamicTest("해시태그 삭제", () -> {

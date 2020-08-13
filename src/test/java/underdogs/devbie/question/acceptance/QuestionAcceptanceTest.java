@@ -124,6 +124,5 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 assertThat(questions.getQuestions()).hasSize(1);
             })
         );
-
     }
 }

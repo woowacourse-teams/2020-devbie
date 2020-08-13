@@ -52,11 +52,16 @@ export default {
   },
   methods: {
     addHashtag() {
-      if (this.tagName.trim() === "") {
+      const item = this.tagName.trim().toLowerCase();
+      if (item === "") {
         console.log("태그 공백일 수 없습니다.");
         return;
       }
-      this.items.push(this.tagName);
+      if (this.items.includes(item)) {
+        this.tagName = "";
+        return;
+      }
+      this.items.push(item);
     },
     deleteHashtag(index) {
       this.items.splice(index, 1);

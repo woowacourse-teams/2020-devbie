@@ -39,13 +39,13 @@ public class QuestionHashtagService {
     }
 
     private QuestionHashtags mapToQuestionHashtags(Question question, Set<String> hashtags) {
-        return QuestionHashtags.from(hashtags
-                .stream()
-                .map(tagName -> {
-                    Hashtag hashtag = hashtagService.findOrCreateHashtag(tagName);
-                    return findOrCreateQuestionHashtag(question, hashtag);
-                })
-                .collect(Collectors.toSet()));
+        Set<QuestionHashtag> questionHashtags = hashtags.stream()
+            .map(tagName -> {
+                Hashtag hashtag = hashtagService.findOrCreateHashtag(tagName);
+                return findOrCreateQuestionHashtag(question, hashtag);
+            })
+            .collect(Collectors.toSet());
+        return QuestionHashtags.from(questionHashtags);
     }
 
     private QuestionHashtag findOrCreateQuestionHashtag(Question question, Hashtag hashtag) {

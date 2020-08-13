@@ -66,7 +66,7 @@ export default {
     }
   },
   watch: {
-    fetchedLoginUser: function() {
+    fetchedLoginUser() {
       this.title = this.fetchedQuestion.title;
       this.content = this.fetchedQuestion.content;
       this.hashtags = this.fetchedQuestion.hashtags;

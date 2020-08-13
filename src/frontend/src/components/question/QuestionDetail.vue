@@ -119,13 +119,13 @@ export default {
     }
   },
   watch: {
-    fetchedLoginUser: async function() {
+    fetchedLoginUser() {
       this.loginUser = this.fetchedLoginUser;
       if (!this.fetchedLoginUser.id) {
         this.userRecommended = "NOT_EXIST";
         return;
       }
-      await this.fetchMyQuestionRecommendation(
+      this.fetchMyQuestionRecommendation(
         this.questionId,
         this.fetchedLoginUser.id
       );
@@ -198,12 +198,15 @@ export default {
   margin-right: 15px;
   margin-bottom: 0;
 }
+
 .recommendation:hover {
   cursor: pointer;
 }
+
 .recommendation-clicked {
   color: #7ec699;
 }
+
 .question-info .infos:last-child {
   margin-right: 5px;
 }

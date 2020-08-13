@@ -103,7 +103,7 @@ class HashtagServiceTest {
     @Test
     void update() {
         HashtagUpdateRequest request = HashtagUpdateRequest.builder()
-            .tagName("Changed Name")
+            .tagName("changed name")
             .build();
         given(hashtagRepository.findById(anyLong())).willReturn(Optional.of(hashtag));
 

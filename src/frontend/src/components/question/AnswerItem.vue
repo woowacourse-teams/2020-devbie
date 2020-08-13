@@ -130,14 +130,14 @@ export default {
     }
   },
   watch: {
-    fetchedLoginUser: async function() {
+    fetchedLoginUser() {
       this.loginUser = this.fetchedLoginUser;
       if (!this.loginUser.id) {
         this.userRecommended = "NOT_EXIST";
         this.isAuthor();
         return;
       }
-      await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
+      this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
       this.isAuthor();
     }
   },

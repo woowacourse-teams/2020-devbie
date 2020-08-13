@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class TagNameTest {
 
-    public static final String TEST_HASHTAG_NAME = "Test TagName";
+    public static final String TEST_HASHTAG_NAME = "test tagname";
 
     @DisplayName("TagName - from")
     @Test
@@ -17,7 +17,7 @@ public class TagNameTest {
         assertThat(tagName.getName()).isEqualTo(TEST_HASHTAG_NAME);
     }
 
-    @DisplayName("TagName name - eqauls")
+    @DisplayName("TagName name - equals")
     @Test
     void equals() {
         TagName tagName = TagName.from(TEST_HASHTAG_NAME);
