@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
@@ -32,6 +34,8 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PostMapping
     public ResponseEntity<Void> save(
         @LoginUser User user,
@@ -68,6 +72,8 @@ public class QuestionController {
             .ok(response);
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
         @LoginUser User user,
@@ -80,6 +86,8 @@ public class QuestionController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @LoginUser User user,

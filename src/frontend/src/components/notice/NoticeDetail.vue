@@ -99,7 +99,6 @@ export default {
   },
   created() {
     const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICES");
     this.$store.dispatch("FETCH_NOTICE", noticeId);
   },
   computed: {

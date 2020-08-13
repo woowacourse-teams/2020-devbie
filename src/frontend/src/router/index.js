@@ -15,6 +15,14 @@ import NoticeEditView from "../views/notice/NoticeEditView";
 
 Vue.use(VueRouter);
 
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => {
+    window.location.reload();
+    return err;
+  });
+};
+
 export const router = new VueRouter({
   mode: "history",
   routes: [

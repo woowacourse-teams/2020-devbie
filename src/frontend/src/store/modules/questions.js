@@ -15,6 +15,9 @@ export default {
     },
     SET_NEW_QUESTION_ID(state, data) {
       state.questionId = data;
+    },
+    CLEAR_HASHTAGS(state) {
+      state.question.hashtags = [];
     }
   },
   actions: {
@@ -45,7 +48,11 @@ export default {
     },
     async UPDATE_QUESTION({ commit }, payload) {
       try {
-        await patchAction(`/api/questions/${payload.id}`, payload.request);
+        await patchAction(`/api/questions/${payload.questionId}`, {
+          title: payload.title,
+          content: payload.content,
+          hashtags: payload.hashtags
+        });
         commit();
       } catch (error) {
         console.log(error);
