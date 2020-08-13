@@ -30,6 +30,10 @@ script: "./gradlew clean build"
 
 
 after_success:
+  - cd docker
+  - git add ./nginx/static
+  - git commit -am "static file update"
+  - git push
   - docker build -t kimseonggyu1/devbie:latest .
   - docker login -u $DOCKER_USER -p $PASSWORD
   - docker push kimseonggyu1/devbie:latest
