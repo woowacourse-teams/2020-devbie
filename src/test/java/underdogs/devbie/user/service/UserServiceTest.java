@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import underdogs.devbie.auth.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
@@ -43,10 +43,10 @@ class UserServiceTest {
     @DisplayName("Oauth로부터 User 모델 신규 저장 및 업데이트")
     @Test
     void saveOrUpdateOauthUser() {
-        UserInfoResponse userInfoResponse = new UserInfoResponse(TEST_OAUTH_ID, TEST_USER_EMAIL);
+        UserInfoDto userInfoDto = new UserInfoDto(TEST_OAUTH_ID, TEST_USER_EMAIL, TEST_GITHUB_ID, TEST_AVATAR_URL);
         given(userRepository.findByOauthId(any())).willReturn(Optional.of(user));
 
-        User savedUser = userService.saveOrUpdateUser(userInfoResponse);
+        User savedUser = userService.saveOrUpdateUser(userInfoDto);
 
         assertAll(
             () -> assertThat(savedUser.getId()).isEqualTo(1L),
