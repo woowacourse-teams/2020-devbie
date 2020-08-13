@@ -7,7 +7,9 @@ export default {
     noticeType: "JOB",
     jobPosition: "",
     language: "",
-    noticeId: ""
+    noticeId: "",
+    languages: [],
+    jobPositions: []
   },
   mutations: {
     SET_NOTICES(state, data) {
@@ -42,6 +44,12 @@ export default {
         }
         return notice;
       });
+    },
+    SET_LANGUAGES(state, data) {
+      state.languages = data;
+    },
+    SET_JOB_POSITIONS(state, data) {
+      state.jobPositions = data;
     }
   },
   actions: {
@@ -86,6 +94,14 @@ export default {
       try {
         await patchAction(`/api/notices/${id}`, params);
         commit("UPDATE_NOTICE", id, params);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async FETCH_NOTICE_LANGUAGES({ commit }) {
+      try {
+        await patchAction(`/api/notices/languages`);
+        commit("SET_LANGUAGES");
       } catch (error) {
         console.log(error);
       }

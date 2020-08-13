@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   data() {
     return {
@@ -47,6 +49,13 @@ export default {
         { name: "Python", value: "PYTHON" }
       ]
     };
+  },
+  created() {
+    this.$store.dispatch("FETCH_NOTICE_LANGUAGES");
+    this.$store.dispatch("FETCH_NOTICE_JOB_POSITIONS");
+  },
+  computed: {
+    ...mapGetters(["fetched_notice_languages", "fetched_notice_job_positions"]);
   },
   methods: {
     changeJobPosition() {
