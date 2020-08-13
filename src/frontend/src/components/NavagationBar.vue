@@ -6,6 +6,9 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn @click="$router.push('/admin')" v-if="isAdmin()" text x-large
+        ><p class="navigation-menu">관리자</p></v-btn
+      >
       <v-btn @click="$router.push('/notices')" text x-large
         ><p class="navigation-menu">공고</p></v-btn
       >
@@ -51,6 +54,12 @@ export default {
     ...mapGetters(["fetchedLoginUser"])
   },
   methods: {
+    isAdmin() {
+      if (this.isLoggedIn) {
+        return this.fetchedLoginUser.roleType === "ADMIN";
+      }
+      return false;
+    },
     async showLoginPage() {
       try {
         const redirectUrlData = await axios.get("/api/auth/login-url");
