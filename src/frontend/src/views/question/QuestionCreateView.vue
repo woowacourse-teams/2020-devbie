@@ -1,16 +1,16 @@
 <template>
   <div>
     <h2 class="title">질문 작성</h2>
-    <create-form id="create-form"></create-form>
+    <question-create id="create-form"></question-create>
   </div>
 </template>
 
 <script>
-import CreateForm from "../../components/question/CreateForm";
+import QuestionCreate from "../../components/question/QuestionCreate";
 
 export default {
   components: {
-    CreateForm
+    QuestionCreate
   }
 };
 </script>

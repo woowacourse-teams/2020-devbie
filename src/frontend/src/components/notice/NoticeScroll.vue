@@ -39,7 +39,6 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
             <v-divider></v-divider>
           </template>
         </v-virtual-scroll>
@@ -81,7 +80,7 @@ export default {
       "fetchedLanguage"
     ]),
     items() {
-      return this.fetchedNotices.noticeResponses;
+      return this.fetchedNotices;
     }
   }
 };

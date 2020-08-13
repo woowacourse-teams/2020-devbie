@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 50px 150px 50px 150px">
+  <div class="notice-list" style="margin: 50px 150px 50px 150px">
     <div class="filters">
       <notice-type></notice-type>
       <notice-filters></notice-filters>
@@ -27,6 +27,10 @@ export default {
 </script>
 
 <style scoped>
+.notice-list {
+  font-family: "Jua", sans-serif;
+}
+
 .filters {
   display: flex;
   align-content: center;

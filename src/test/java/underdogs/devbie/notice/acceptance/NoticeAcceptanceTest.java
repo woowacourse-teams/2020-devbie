@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
-@Sql(value = "/notice_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/notice_create.sql")
 @Sql(value = "/notice_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class NoticeAcceptanceTest extends AcceptanceTest {
     private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
@@ -75,12 +75,12 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .title("언더독스 채용")
                     .noticeType(NoticeType.JOB)
                     .salary(50_000_000)
-                    .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+                    .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
                     .jobPosition(JobPosition.BACKEND)
                     .image("/static/image/underdogs")
                     .description("We are hiring!")
-                    .startDate(String.valueOf(LocalDateTime.of(2020, 7, 7, 10, 10)))
-                    .endDate(String.valueOf(LocalDateTime.of(2020, 7, 11, 10, 10)))
+                    .startDate("2020-10-10 13:00")
+                    .endDate("2020-10-10 14:00")
                     .build();
 
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
@@ -135,17 +135,17 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .noticeType(NoticeType.EDUCATION)
                     .salary(60_000_000)
                     .languages(
-                        Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName(), Language.CPP.getName()))
+                        Stream.of(Language.JAVA, Language.JAVASCRIPT, Language.CPP).collect(Collectors.toSet()))
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate(updatedDuration.getStartDate().toString())
-                    .endDate(updatedDuration.getEndDate().toString())
+                    .startDate("2020-10-21 13:00")
+                    .endDate("2020-10-21 14:00")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
             }),
-            dynamicTest("공고 게시글 하나르 상세 조회한다.", () -> {
+            dynamicTest("공고 게시글 하나를 상세 조회한다.", () -> {
                 NoticeDetailResponse result = get("/api/notices/1", NoticeDetailResponse.class);
 
                 assertAll(

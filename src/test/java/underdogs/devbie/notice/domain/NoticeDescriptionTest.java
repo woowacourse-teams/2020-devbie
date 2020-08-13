@@ -2,8 +2,9 @@ package underdogs.devbie.notice.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,8 @@ class NoticeDescriptionTest {
     @DisplayName("NoticeDetail 생성 테스트 - 설명이 없는경우 예외 발생")
     @Test
     void constructorWithoutDescription() {
-        assertThatThrownBy(() -> new NoticeDescription(new HashSet<>(Arrays.asList(Language.CPP.getName())), ""))
+        assertThatThrownBy(() -> new NoticeDescription(
+            Stream.of(Language.CPP).collect(Collectors.toSet()), ""))
             .isInstanceOf(CreateFailException.class);
     }
 }

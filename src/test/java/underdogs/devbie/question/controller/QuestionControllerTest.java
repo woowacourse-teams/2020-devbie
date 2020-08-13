@@ -7,12 +7,16 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
+import static underdogs.devbie.question.service.QuestionServiceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
+
+import java.util.LinkedHashSet;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.util.collections.Sets;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,7 +27,9 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
+import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
+import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -63,6 +69,7 @@ class QuestionControllerTest extends MvcTest {
         QuestionCreateRequest request = QuestionCreateRequest.builder()
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(TEST_HASHTAGS)
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
 
@@ -81,6 +88,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from(TEST_QUESTION_TITLE))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
 
@@ -105,6 +113,9 @@ class QuestionControllerTest extends MvcTest {
             .questionId(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
+            .hashtags(Lists.newArrayList(
+                HashtagResponse.builder().tagName("java").build(),
+                HashtagResponse.builder().tagName("network").build()))
             .build();
 
         given(questionService.read(anyLong())).willReturn(response);
@@ -117,7 +128,9 @@ class QuestionControllerTest extends MvcTest {
 
         assertAll(
             () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
-            () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+            () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT),
+            () -> assertThat(questionResponse.getHashtags().get(0).getTagName()).isEqualTo("java"),
+            () -> assertThat(questionResponse.getHashtags().get(1).getTagName()).isEqualTo("network")
         );
     }
 
@@ -127,6 +140,7 @@ class QuestionControllerTest extends MvcTest {
         QuestionUpdateRequest request = QuestionUpdateRequest.builder()
             .title("Changed Title")
             .content("Changed Content")
+            .hashtags(Sets.newSet("kotlin"))
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
 
@@ -155,6 +169,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from("스택과 큐의 차이"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         Question question2 = Question.builder()
@@ -162,6 +177,7 @@ class QuestionControllerTest extends MvcTest {
             .userId(1L)
             .title(QuestionTitle.from("오버스택플로우"))
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));

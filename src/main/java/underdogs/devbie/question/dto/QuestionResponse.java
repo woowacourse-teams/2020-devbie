@@ -1,5 +1,8 @@
 package underdogs.devbie.question.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +23,7 @@ public class QuestionResponse {
     private Long visits;
     private String title;
     private String content;
+    private List<HashtagResponse> hashtags = new ArrayList<>();
 
     public static QuestionResponse from(Question question) {
         return QuestionResponse.builder()
@@ -28,6 +32,7 @@ public class QuestionResponse {
             .visits(question.getVisits().getVisitCount())
             .title(question.getTitle().getTitle())
             .content(question.getContent().getContent())
+            .hashtags(HashtagResponse.listFrom(question.getHashtags()))
             .build();
     }
 }

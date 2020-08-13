@@ -1,4 +1,4 @@
-import { getAction } from "../../api";
+import { getAction, patchAction } from "../../api";
 
 export default {
   state: {
@@ -13,15 +13,38 @@ export default {
     }
   },
   actions: {
-    FETCH_LOGIN_USER({ commit }) {
-      return getAction("/api/users").then(({ data }) => {
-        commit("SET_LOGIN_USER", data);
-      });
+    async FETCH_LOGIN_USER({ commit }) {
+      const { data } = await getAction("/api/users");
+      commit("SET_LOGIN_USER", data);
+      return data;
+    },
+    async UPDATE_USER_INFO({ commit }, payload) {
+      try {
+        await patchAction(`/api/users/me`, payload);
+        commit();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async UPDATE_USER_IMAGE({ commit }, payload) {
+      try {
+        await patchAction(
+          `/api/users/me/image`,
+          payload,
+          `content-type: multipart/form-data`
+        );
+        commit();
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   getters: {
     fetchedLoginUser(state) {
       return state.loginUser;
+    },
+    isLoggedIn(state) {
+      return state.loginUser.length !== 0;
     }
   }
 };

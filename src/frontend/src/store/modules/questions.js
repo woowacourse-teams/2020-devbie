@@ -15,17 +15,9 @@ export default {
     },
     SET_NEW_QUESTION_ID(state, data) {
       state.questionId = data;
-    }
-  },
-  getters: {
-    fetchedQuestions(state) {
-      return state.questions;
     },
-    fetchedQuestion(state) {
-      return state.question;
-    },
-    fetchedNewCreatedQuestionId(state) {
-      return state.questionId;
+    CLEAR_HASHTAGS(state) {
+      state.question.hashtags = [];
     }
   },
   actions: {
@@ -51,11 +43,26 @@ export default {
       commit("SET_NEW_QUESTION_ID", id);
       return response;
     },
-    async UPDATE_QUESTION(state, data) {
-      return await patchAction(`/api/questions/${data.id}`, data.request);
+    async UPDATE_QUESTION(state, payload) {
+      return await patchAction(`/api/questions/${payload.questionId}`, {
+        title: payload.title,
+        content: payload.content,
+        hashtags: payload.hashtags
+      });
     },
     async DELETE_QUESTION(state, questionId) {
       return await deleteAction(`/api/questions/${questionId}`);
+    }
+  },
+  getters: {
+    fetchedQuestions(state) {
+      return state.questions;
+    },
+    fetchedQuestion(state) {
+      return state.question;
+    },
+    fetchedNewCreatedQuestionId(state) {
+      return state.questionId;
     }
   }
 };

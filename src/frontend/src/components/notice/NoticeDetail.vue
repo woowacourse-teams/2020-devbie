@@ -27,6 +27,24 @@
               <v-btn id="chatting-btn" depressed large color="primary"
                 >채팅방</v-btn
               >
+              <v-btn
+                class="admin-btn"
+                depressed
+                large
+                color="warning"
+                v-if="isAdmin()"
+                @click="onEditNotice"
+                >수정</v-btn
+              >
+              <v-btn
+                class="admin-btn"
+                depressed
+                large
+                color="warning"
+                v-if="isAdmin()"
+                @click="onDeleteNotice"
+                >삭제</v-btn
+              >
             </div>
           </div>
         </div>
@@ -64,8 +82,21 @@
 
 <script>
 import { mapGetters } from "vuex";
+import router from "../../router";
 
 export default {
+  methods: {
+    isAdmin() {
+      return this.fetchedLoginUser.roleType === "ADMIN";
+    },
+    async onDeleteNotice() {
+      await this.$store.dispatch("DELETE_NOTICE", this.$route.params.id);
+      await router.go(0); // 새로고침
+    },
+    onEditNotice() {
+      router.push(`/notices/edit/${this.$route.params.id}`);
+    }
+  },
   created() {
     const noticeId = this.$route.params.id;
     try {
@@ -78,6 +109,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["fetchedLoginUser"]),
     ...mapGetters(["fetchedNotice"])
   }
 };
@@ -106,6 +138,7 @@ export default {
 .notice-header {
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
+  font-family: "Jua", sans-serif;
 }
 
 .notice-body {
@@ -151,6 +184,12 @@ export default {
 }
 
 #chatting-btn {
+  width: 100px;
+  padding: 10px;
+  margin: 3px 3px;
+}
+
+.admin-btn {
   width: 100px;
   padding: 10px;
   margin: 3px 3px;

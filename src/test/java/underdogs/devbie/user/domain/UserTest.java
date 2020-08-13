@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.auth.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoDto;
 
 public class UserTest {
 
     public static final String TEST_USER_EMAIL = "underdogs@devbie.link";
     public static final String TEST_OAUTH_ID = "TEST_OAUTH_ID";
+    public static final String TEST_GITHUB_ID = "underdogs";
+    public static final String TEST_AVATAR_URL = "TEST_AVATAR_URL";
 
     @DisplayName("OauthId가 일치하지 않을 경우 예외발생")
     @Test
@@ -21,9 +23,9 @@ public class UserTest {
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
-        UserInfoResponse userInfoResponse = new UserInfoResponse("Different Oauth Id", TEST_USER_EMAIL);
+        UserInfoDto userInfoDto = new UserInfoDto("Different Oauth Id", TEST_USER_EMAIL, TEST_GITHUB_ID, TEST_AVATAR_URL);
 
-        assertThatThrownBy(() -> user.updateOauthInfo(userInfoResponse))
+        assertThatThrownBy(() -> user.updateOauthInfo(userInfoDto))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -35,9 +37,9 @@ public class UserTest {
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
-        UserInfoResponse userInfoResponse = new UserInfoResponse(TEST_OAUTH_ID, "Changed Email");
+        UserInfoDto userInfoDto = new UserInfoDto(TEST_OAUTH_ID, "Changed Email", TEST_GITHUB_ID, TEST_AVATAR_URL);
 
-        User updatedUser = user.updateOauthInfo(userInfoResponse);
+        User updatedUser = user.updateOauthInfo(userInfoDto);
 
         assertAll(
             () -> assertEquals(1L, updatedUser.getId()),

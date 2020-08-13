@@ -7,41 +7,51 @@
             Q{{ fetchedQuestion.questionId }}. {{ fetchedQuestion.title }}
           </h1>
         </div>
-        <div class="question-info">
-          <p class="infos">
-            <i class="fas fa-user-edit"></i>
-            {{ fetchedQuestion.userId }}
-          </p>
-          <p class="infos">
-            <i class="fas fa-eye"></i>
-            {{ fetchedQuestion.visits }}
-          </p>
-          <p class="infos">
-            <i
-              :class="{
-                'recommendation-clicked': isUserRecommendation('RECOMMENDED')
-              }"
-              class="far fa-thumbs-up recommendation"
-              @click="
-                onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
-              "
-            ></i>
-            {{ fetchedQuestionRecommendation.recommendedCount }}
-          </p>
-          <p class="infos">
-            <i
-              :class="{
-                'recommendation-clicked': isUserRecommendation(
-                  'NON_RECOMMENDED'
-                )
-              }"
-              class="far fa-thumbs-down recommendation"
-              @click="
-                onQuestionRecommendation('RECOMMENDED', 'NON_RECOMMENDED')
-              "
-            ></i>
-            {{ fetchedQuestionRecommendation.nonRecommendedCount }}
-          </p>
+        <div class="question-header-bottom">
+          <div class="hashtags">
+            <span
+              v-for="hashtag in fetchedQuestion.hashtags"
+              v-bind:key="hashtag.id"
+              class="hashtag"
+              >#{{ hashtag.tagName }}
+            </span>
+          </div>
+          <div class="question-info">
+            <p class="infos">
+              <i class="fas fa-user-edit"></i>
+              {{ fetchedQuestion.userId }}
+            </p>
+            <p class="infos">
+              <i class="fas fa-eye"></i>
+              {{ fetchedQuestion.visits }}
+            </p>
+            <p class="infos">
+              <i
+                :class="{
+                  'recommendation-clicked': isUserRecommendation('RECOMMENDED')
+                }"
+                class="far fa-thumbs-up recommendation"
+                @click="
+                  onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
+                "
+              ></i>
+              {{ fetchedQuestionRecommendation.recommendedCount }}
+            </p>
+            <p class="infos">
+              <i
+                :class="{
+                  'recommendation-clicked': isUserRecommendation(
+                    'NON_RECOMMENDED'
+                  )
+                }"
+                class="far fa-thumbs-down recommendation"
+                @click="
+                  onQuestionRecommendation('RECOMMENDED', 'NON_RECOMMENDED')
+                "
+              ></i>
+              {{ fetchedQuestionRecommendation.nonRecommendedCount }}
+            </p>
+          </div>
         </div>
       </div>
       <div class="question-content">
@@ -138,13 +148,13 @@ export default {
     }
   },
   watch: {
-    fetchedLoginUser: async function() {
+    fetchedLoginUser() {
       this.loginUser = this.fetchedLoginUser;
       if (!this.fetchedLoginUser.id) {
         this.userRecommended = "NOT_EXIST";
         return;
       }
-      await this.fetchMyQuestionRecommendation(
+      this.fetchMyQuestionRecommendation(
         this.questionId,
         this.fetchedLoginUser.id
       );
@@ -176,12 +186,35 @@ export default {
   margin-left: 20px;
 }
 
+.question-title {
+  margin-bottom: 12px;
+}
+
 .question-header {
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
 }
 
+.question-header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hashtag {
+  margin: 0 9px;
+  color: #0086b3;
+}
+
+.hashtag:hover {
+  cursor: pointer;
+  font-weight: bold;
+  color: #445588;
+  text-decoration: underline;
+}
+
 .question-info {
+  min-width: 180px;
   display: flex;
   justify-content: flex-end;
 }
@@ -189,6 +222,7 @@ export default {
 .question-info .infos {
   font-size: 16px;
   margin-right: 15px;
+  margin-bottom: 0;
 }
 .recommendation:hover {
   cursor: pointer;

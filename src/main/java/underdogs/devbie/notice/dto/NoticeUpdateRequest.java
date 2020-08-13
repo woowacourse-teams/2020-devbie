@@ -1,8 +1,8 @@
 package underdogs.devbie.notice.dto;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +18,7 @@ import lombok.ToString;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
@@ -46,7 +47,7 @@ public class NoticeUpdateRequest {
     private Integer salary;
 
     @NotEmpty
-    private List<String> languages;
+    private Set<Language> languages;
 
     private JobPosition jobPosition;
 
@@ -56,8 +57,10 @@ public class NoticeUpdateRequest {
     private String image;
 
     public Notice toEntity(Long id) {
-        LocalDateTime startLocalDate = LocalDateTime.parse(startDate);
-        LocalDateTime endLocalDate = LocalDateTime.parse(endDate);
+        LocalDateTime startLocalDate = LocalDateTime.parse(startDate,
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime endLocalDate = LocalDateTime.parse(endDate,
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
         return Notice.builder()
             .id(id)
@@ -66,7 +69,7 @@ public class NoticeUpdateRequest {
             .company(new Company(name, salary))
             .duration(new Duration(startLocalDate, endLocalDate))
             .jobPosition(jobPosition)
-            .noticeDescription(new NoticeDescription(new HashSet<>(languages), description))
+            .noticeDescription(new NoticeDescription(languages, description))
             .image(image)
             .build();
     }

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import underdogs.devbie.advice.dto.ErrorResponse;
 import underdogs.devbie.exception.BadRequestException;
@@ -22,7 +23,7 @@ public class ControllerAdvice {
             .body(errorResponse);
     }
 
-    @ExceptionHandler({BadRequestException.class, MethodArgumentNotValidException.class})
+    @ExceptionHandler({BadRequestException.class, MethodArgumentNotValidException.class, MethodNotAllowedException.class})
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(BadRequestException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

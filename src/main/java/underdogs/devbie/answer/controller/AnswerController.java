@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
@@ -32,10 +34,11 @@ public class AnswerController {
 
     private final AnswerService answerService;
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PostMapping
     public ResponseEntity<Void> save(@LoginUser User user, @RequestBody @Valid AnswerCreateRequest request) {
         Long id = answerService.save(user, request);
-
         return ResponseEntity
             .created(URI.create(String.format("/api/answers/%d", id)))
             .build();
@@ -53,6 +56,8 @@ public class AnswerController {
         return ResponseEntity.ok(answerService.readByQuestionId(questionId));
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
         @LoginUser User user,
@@ -66,6 +71,8 @@ public class AnswerController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable(value = "id") Long id) {
         answerService.delete(user, id);
