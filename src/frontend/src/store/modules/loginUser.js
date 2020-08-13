@@ -2,17 +2,14 @@ import { getAction } from "../../api";
 
 export default {
   state: {
-    isLoggedIn: false,
     loginUser: {}
   },
   mutations: {
     SET_LOGIN_USER(state, data) {
       state.loginUser = data;
-      state.isLoggedIn = true;
     },
     DELETE_LOGIN_USER(state) {
       state.loginUser = {};
-      state.isLoggedIn = false;
     }
   },
   actions: {
@@ -23,6 +20,26 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async UPDATE_USER_INFO({ commit }, payload) {
+      try {
+        await patchAction(`/api/users/me`, payload);
+        commit();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async UPDATE_USER_IMAGE({ commit }, payload) {
+      try {
+        await patchAction(
+          `/api/users/me/image`,
+          payload,
+          `content-type: multipart/form-data`
+        );
+        commit();
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   getters: {
@@ -30,7 +47,7 @@ export default {
       return state.loginUser;
     },
     isLoggedIn(state) {
-      return state.isLoggedIn;
+      return state.loginUser.length !== 0;
     }
   }
 };

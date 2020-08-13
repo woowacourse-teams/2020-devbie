@@ -12,15 +12,19 @@ import underdogs.devbie.user.domain.User;
 @AllArgsConstructor
 @Getter
 @ToString
-public class UserInfoResponse {
+public class UserInfoDto {
 
     private String id;
     private String email;
+    private String login;
+    private String avatar_url;
 
     public User toEntity() {
         return User.builder()
             .oauthId(id)
             .email(email)
+            .name(login)
+            .image(avatar_url)
             .roleType(RoleType.USER)
             .build();
     }
