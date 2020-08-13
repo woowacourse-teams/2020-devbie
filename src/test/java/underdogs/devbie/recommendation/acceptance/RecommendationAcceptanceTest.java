@@ -57,7 +57,7 @@ public class RecommendationAcceptanceTest extends AcceptanceTest {
                 QuestionResponse questionResponse = fetchFirstQuestion();
                 assertThat(questionResponse.getNonRecommendedCount()).isEqualTo(0L);
             }),
-            dynamicTest("1버누 질문 삭제", () -> {
+            dynamicTest("1번 질문 삭제", () -> {
                 delete("/api/questions/1");
             })
         );

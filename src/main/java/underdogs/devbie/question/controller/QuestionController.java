@@ -19,7 +19,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
-import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
@@ -27,7 +26,6 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.service.QuestionService;
-import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @RestController
@@ -38,8 +36,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
-    @Role(role = {RoleType.ADMIN})
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PostMapping
     public ResponseEntity<Void> save(
         @LoginUser User user,
@@ -81,8 +78,7 @@ public class QuestionController {
     }
 
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
-    @Role(role = {RoleType.ADMIN})
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
         @LoginUser User user,
@@ -96,8 +92,7 @@ public class QuestionController {
     }
 
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
-    @Role(role = {RoleType.ADMIN})
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @LoginUser User user,
