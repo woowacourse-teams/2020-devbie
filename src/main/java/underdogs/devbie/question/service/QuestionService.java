@@ -20,11 +20,13 @@ import underdogs.devbie.question.exception.QuestionNotExistedException;
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final QuestionHashtagService questionHashtagService;
     private final QuestionRepository questionRepository;
 
     @Transactional
     public Long save(Long userId, QuestionCreateRequest request) {
         Question savedQuestion = questionRepository.save(request.toEntity(userId));
+        questionHashtagService.saveHashtags(savedQuestion, request.getHashtags());
         return savedQuestion.getId();
     }
 
@@ -52,6 +54,7 @@ public class QuestionService {
         validateQuestionAuthor(userId, question);
 
         question.updateQuestionInfo(request.toEntity(userId));
+        questionHashtagService.updateHashtags(question, request.getHashtags());
     }
 
     private void validateQuestionAuthor(Long userId, Question question) {
