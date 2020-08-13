@@ -114,7 +114,7 @@ export default {
     async update() {
       const answerId = this.answer.id;
       const updateContent = this.updateContent;
-      if (updateContent === "") {
+      if (updateContent.trim() === "") {
         this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
         return;
       }
