@@ -9,6 +9,7 @@ import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/notice/NoticeDetailView";
 import NoticeDetail from "../components/notice/NoticeDetail";
+import MyPageView from "../views/user/MyPageView";
 import AdminMainView from "../views/admin/AdminMainView";
 import NoticeCreateView from "../views/notice/NoticeCreateView";
 import NoticeEditView from "../views/notice/NoticeEditView";
@@ -73,6 +74,11 @@ export const router = new VueRouter({
           component: NoticeDetail
         }
       ]
+    },
+    {
+      path: "/mypage",
+      name: "mypage",
+      component: MyPageView
     },
     {
       path: "/notices/create",

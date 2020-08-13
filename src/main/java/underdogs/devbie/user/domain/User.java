@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import underdogs.devbie.auth.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.config.BaseTimeEntity;
 
 @Entity
@@ -32,19 +32,32 @@ public class User extends BaseTimeEntity {
 
     private String email;
 
+    private String image;
+
+    private String name;
+
     @Enumerated(value = EnumType.STRING)
     private RoleType roleType;
 
-    public User updateOauthInfo(UserInfoResponse userInfoResponse) {
-        validateUserInfo(userInfoResponse);
-        this.email = userInfoResponse.getEmail();
+    public User updateOauthInfo(UserInfoDto userInfoDto) {
+        validateUserInfo(userInfoDto);
+        this.email = userInfoDto.getEmail();
         return this;
     }
 
-    private void validateUserInfo(UserInfoResponse userInfoResponse) {
-        if (!userInfoResponse.getId().equals(this.oauthId)) {
+    public void updateUserInfo(User user) {
+        this.name = user.name;
+        this.email = user.email;
+    }
+
+    public void updateUserImage(String image){
+        this.image = image;
+    }
+
+    private void validateUserInfo(UserInfoDto userInfoDto) {
+        if (!userInfoDto.getId().equals(this.oauthId)) {
             throw new IllegalArgumentException("일치하지않은 유저입니다. "
-                + "userInfoResponse=" + userInfoResponse
+                + "userInfoResponse=" + userInfoDto
                 + " User =" + this);
         }
     }
