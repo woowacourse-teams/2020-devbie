@@ -11,6 +11,8 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.JobPositionsResponse;
+import underdogs.devbie.notice.dto.LanguagesResponse;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -50,5 +52,13 @@ public class NoticeService {
     public NoticeResponses filteredRead(NoticeType noticeType, JobPosition jobPosition, Language language) {
         List<Notice> notices = noticeRepository.findAllBy(noticeType, jobPosition, language);
         return NoticeResponses.listFrom(notices);
+    }
+
+    public LanguagesResponse findLanguages() {
+        return LanguagesResponse.from(Language.getAllLanguageWithName());
+    }
+
+    public JobPositionsResponse findJobPositions() {
+        return JobPositionsResponse.from(JobPosition.getAllJobPositionWithName());
     }
 }

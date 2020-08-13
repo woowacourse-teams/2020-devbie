@@ -1,6 +1,8 @@
 package underdogs.devbie.notice.domain;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +34,10 @@ public enum Language {
             .filter(language -> language.name.equals(input))
             .findFirst()
             .orElseThrow(NoSuchLanguageException::new);
+    }
+
+    public static Map<String, String> getAllLanguageWithName() {
+        return Arrays.stream(values())
+            .collect(Collectors.toMap(Language::name, Language::getName));
     }
 }

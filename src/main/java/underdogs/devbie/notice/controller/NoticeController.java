@@ -21,6 +21,8 @@ import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.JobPositionsResponse;
+import underdogs.devbie.notice.dto.LanguagesResponse;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -81,5 +83,19 @@ public class NoticeController {
     public ResponseEntity<NoticeDetailResponse> read(@PathVariable Long id) {
         NoticeDetailResponse response = noticeService.read(id);
         return ResponseEntity.ok(response);
+    }
+
+    @NoValidate
+    @GetMapping("/languages")
+    public ResponseEntity<LanguagesResponse> findLanguages() {
+        LanguagesResponse languageResponses = noticeService.findLanguages();
+        return ResponseEntity.ok(languageResponses);
+    }
+
+    @NoValidate
+    @GetMapping("/job-positions")
+    public ResponseEntity<JobPositionsResponse> findJobPositions() {
+        JobPositionsResponse jobPositionsResponse = noticeService.findJobPositions();
+        return ResponseEntity.ok(jobPositionsResponse);
     }
 }
