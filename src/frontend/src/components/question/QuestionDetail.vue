@@ -3,9 +3,7 @@
     <div class="inner">
       <div class="question-header">
         <div class="question-title">
-          <h1>
-            Q{{ fetchedQuestion.questionId }}. {{ fetchedQuestion.title }}
-          </h1>
+          <h1>Q. {{ fetchedQuestion.title }}</h1>
         </div>
         <div class="question-header-bottom">
           <div class="hashtags">
