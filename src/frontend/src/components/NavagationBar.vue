@@ -13,7 +13,7 @@
         ><p class="navigation-menu">면접</p></v-btn
       >
       <template v-if="isLoggedIn">
-        <v-menu transition="slide-y-transition" bottom>
+        <v-menu transition="slide-y-transition" offset-y bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-avatar>
               <v-img

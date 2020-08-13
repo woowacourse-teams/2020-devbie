@@ -15,7 +15,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
 
 @Service
-@NoArgsConstructor
 public class S3Service {
 
     private AmazonS3 s3Client;
