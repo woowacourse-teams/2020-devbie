@@ -55,7 +55,7 @@
         label="연봉"
         required
       ></v-text-field>
-      <v-file-input label="사진" filled v-model="request.image"> </v-file-input>
+      <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
         v-model="request.description"
@@ -126,6 +126,24 @@ export default {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
       if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
         await this.$router.push("/");
+      }
+    },
+    async imageUpload() {
+      const image_files = this.$refs.image.files[0];
+      if (!image_files) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", image_files);
+
+      try {
+        this.request.image = await this.$store.dispatch(
+          "UPLOAD_NOTICE_IMAGE",
+          formData
+        );
+      } catch (e) {
+        console.error(e);
       }
     },
     async submit() {

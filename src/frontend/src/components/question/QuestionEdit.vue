@@ -69,14 +69,14 @@ export default {
     fetchedLoginUser() {
       this.title = this.fetchedQuestion.title;
       this.content = this.fetchedQuestion.content;
-      this.hashtags = this.fetchedQuestion.hashtags;
+      this.hashtags = this.fetchedQuestion.hashtags.map(h => h.tagName);
     }
   },
   async created() {
     await this.$store.dispatch("FETCH_QUESTION", this.questionId);
     this.title = this.fetchedQuestion.title;
     this.content = this.fetchedQuestion.content;
-    this.hashtags = this.fetchedQuestion.hashtags;
+    this.hashtags = this.fetchedQuestion.hashtags.map(h => h.tagName);
   },
   components: {
     HashtagBox,
