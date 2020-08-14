@@ -16,9 +16,7 @@ export default {
       state.myAnswerRecommendation.some(answer => {
         if (answer.answerId === answerId) {
           answer.recommendationType = recommendationType;
-          return true;
         }
-        return false;
       });
     }
   },

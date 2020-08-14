@@ -129,9 +129,9 @@ export default {
         this.fetchedLoginUser.id
       );
     },
-    fetchedMyQuestionRecommendation: async function() {
+    fetchedMyQuestionRecommendation() {
       this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-      await this.$store.dispatch(
+      this.$store.dispatch(
         "UPDATE_QUESTION_RECOMMENDATION_COUNT",
         this.questionId
       );
