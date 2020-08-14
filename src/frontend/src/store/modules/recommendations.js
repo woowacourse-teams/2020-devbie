@@ -12,10 +12,10 @@ export default {
     SET_MY_ANSWER_RECOMMENDATION(state, payload) {
       state.myAnswerRecommendation.push(payload);
     },
-    UPDATE_MY_ANSWER_RECOMMENDATION(state, payload) {
+    UPDATE_MY_ANSWER_RECOMMENDATION(state, { answerId, recommendationType }) {
       state.myAnswerRecommendation.some(answer => {
-        if (answer.answerId === payload.answerId) {
-          answer.recommendationType = payload.recommendationType;
+        if (answer.answerId === answerId) {
+          answer.recommendationType = recommendationType;
           return true;
         }
         return false;
@@ -23,26 +23,26 @@ export default {
     }
   },
   actions: {
-    async FETCH_MY_QUESTION_RECOMMENDATION({ commit }, payload) {
+    async FETCH_MY_QUESTION_RECOMMENDATION({ commit }, { questionId, userId }) {
       try {
         const { data } = await getAction(
-          `/api/recommendation-question?objectId=${payload.questionId}&userId=${payload.userId}`
+          `/api/recommendation-question?objectId=${questionId}&userId=${userId}`
         );
         commit("SET_MY_QUESTION_RECOMMENDATION", data);
       } catch (error) {
         console.log(error);
       }
     },
-    async ON_QUESTION_RECOMMENDATION({ commit }, payload) {
+    async ON_QUESTION_RECOMMENDATION(
+      { commit },
+      { questionId, recommendationType }
+    ) {
       try {
-        await putAction(
-          `/api/recommendation-question?objectId=${payload.questionId}`,
-          {
-            recommendationType: payload.recommendationType
-          }
-        );
+        await putAction(`/api/recommendation-question?objectId=${questionId}`, {
+          recommendationType
+        });
         commit("SET_MY_QUESTION_RECOMMENDATION", {
-          recommendationType: payload.recommendationType
+          recommendationType
         });
       } catch (error) {
         console.log(error);
@@ -62,30 +62,30 @@ export default {
         throw error;
       }
     },
-    async FETCH_MY_ANSWER_RECOMMENDATION({ commit }, payload) {
+    async FETCH_MY_ANSWER_RECOMMENDATION({ commit }, { answerId, userId }) {
       try {
         const { data } = await getAction(
-          `/api/recommendation-answer?objectId=${payload.answerId}&userId=${payload.userId}`
+          `/api/recommendation-answer?objectId=${answerId}&userId=${userId}`
         );
         commit("SET_MY_ANSWER_RECOMMENDATION", {
-          answerId: payload.answerId,
+          answerId,
           recommendationType: data.recommendationType
         });
       } catch (error) {
         console.log(error);
       }
     },
-    async ON_ANSWER_RECOMMENDATION({ commit }, payload) {
+    async ON_ANSWER_RECOMMENDATION(
+      { commit },
+      { answerId, recommendationType }
+    ) {
       try {
-        await putAction(
-          `/api/recommendation-answer?objectId=${payload.answerId}`,
-          {
-            recommendationType: payload.recommendationType
-          }
-        );
+        await putAction(`/api/recommendation-answer?objectId=${answerId}`, {
+          recommendationType
+        });
         commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
-          answerId: payload.answerId,
-          recommendationType: payload.recommendationType
+          answerId,
+          recommendationType
         });
       } catch (error) {
         console.log(error);
@@ -96,7 +96,7 @@ export default {
       try {
         await deleteAction(`/api/recommendation-answer?objectId=${answerId}`);
         commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
-          answerId: answerId,
+          answerId,
           recommendationType: "NOT_EXIST"
         });
       } catch (error) {

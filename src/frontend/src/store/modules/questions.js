@@ -48,22 +48,20 @@ export default {
         console.log(error);
       }
     },
-    async UPDATE_QUESTION({ commit }, payload) {
+    async UPDATE_QUESTION(state, { questionId, title, content, hashtags }) {
       try {
-        await patchAction(`/api/questions/${payload.questionId}`, {
-          title: payload.title,
-          content: payload.content,
-          hashtags: payload.hashtags
+        await patchAction(`/api/questions/${questionId}`, {
+          title,
+          content,
+          hashtags
         });
-        commit();
       } catch (error) {
         console.log(error);
       }
     },
-    async DELETE_QUESTION({ commit }, questionId) {
+    async DELETE_QUESTION(state, questionId) {
       try {
         await deleteAction(`/api/questions/${questionId}`);
-        commit();
       } catch (error) {
         console.log(error);
       }

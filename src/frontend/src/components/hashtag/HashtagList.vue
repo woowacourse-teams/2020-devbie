@@ -41,9 +41,6 @@ export default {
   computed: {
     ...mapGetters(["fetchedHashtags"])
   },
-  methods: {
-    searchByHashtag() {}
-  },
   created() {
     this.$store.dispatch("FETCH_HASHTAGS");
   }
