@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <navigation-bar :isLoggedIn="isLoggedIn" @logout="logout"></navigation-bar>
+    <navigation-bar @logout="logout"></navigation-bar>
     <transition name="page">
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
@@ -9,14 +9,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
 
 export default {
-  computed: {
-    ...mapGetters(["isLoggedIn"])
-  },
   async created() {
     const token = localStorage.getItem("devbieToken");
     if (token) {

@@ -1,15 +1,15 @@
-import { getAction } from "../../api";
+import { getAction, patchAction } from "../../api";
 
 export default {
   state: {
-    loginUser: {}
+    loginUser: []
   },
   mutations: {
     SET_LOGIN_USER(state, data) {
       state.loginUser = data;
     },
     DELETE_LOGIN_USER(state) {
-      state.loginUser = {};
+      state.loginUser = [];
     }
   },
   actions: {
