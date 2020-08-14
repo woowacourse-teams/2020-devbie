@@ -13,10 +13,12 @@
             <div class="notice-img">
               <v-img
                 :src="
-                  'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
+                  fetchedNotice.image === null
+                    ? 'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
+                    : fetchedNotice.image
                 "
                 class="white--text align-end"
-                height="200px"
+                max-width="300px"
               >
               </v-img>
             </div>

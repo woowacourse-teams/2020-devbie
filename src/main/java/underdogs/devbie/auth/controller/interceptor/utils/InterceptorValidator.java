@@ -3,6 +3,7 @@ package underdogs.devbie.auth.controller.interceptor.utils;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
@@ -10,6 +11,7 @@ import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.exception.NotExistUserRoleException;
 import underdogs.devbie.user.domain.RoleType;
 
+@Component
 public class InterceptorValidator {
 
     public boolean isNotValid(Object handler) {

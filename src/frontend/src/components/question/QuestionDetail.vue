@@ -3,9 +3,7 @@
     <div class="inner">
       <div class="question-header">
         <div class="question-title">
-          <h1>
-            Q{{ fetchedQuestion.questionId }}. {{ fetchedQuestion.title }}
-          </h1>
+          <h1>Q. {{ fetchedQuestion.title }}</h1>
         </div>
         <div class="question-header-bottom">
           <div class="hashtags">
@@ -55,7 +53,7 @@
         </div>
       </div>
       <div class="question-content">
-        <p>{{ fetchedQuestion.content }}</p>
+        <div v-html="content"></div>
       </div>
     </div>
   </div>
@@ -69,7 +67,8 @@ export default {
     return {
       loginUser: {},
       questionId: this.$route.params.id,
-      userRecommended: ""
+      userRecommended: "",
+      content: ""
     };
   },
   computed: {
@@ -158,11 +157,15 @@ export default {
         this.questionId,
         this.fetchedLoginUser.id
       );
+    },
+    fetchedQuestion() {
+      this.content = this.fetchedQuestion.content.split("\n").join("<br />");
     }
   },
   async created() {
     this.loginUser = this.fetchedLoginUser;
     await this.$store.dispatch("FETCH_QUESTION", this.questionId);
+    this.content = this.fetchedQuestion.content.split("\n").join("<br />");
     await this.$store.dispatch(
       "FETCH_QUESTION_RECOMMENDATION",
       this.questionId

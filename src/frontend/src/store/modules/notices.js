@@ -57,11 +57,7 @@ export default {
     },
     async CREATE_NOTICE({ commit }, noticeRequest) {
       try {
-        const temp = {
-          ...noticeRequest,
-          image: noticeRequest.image.name
-        };
-        const response = await postAction(`/api/notices`, temp);
+        const response = await postAction(`/api/notices`, noticeRequest);
         const id = response["headers"].location.split("/")[3];
         commit("SET_NOTICE_ID", id);
       } catch (error) {
@@ -80,6 +76,19 @@ export default {
       try {
         await patchAction(`/api/notices/${id}`, params);
         commit("UPDATE_NOTICE", id, params);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // eslint-disable-next-line no-unused-vars
+    async UPLOAD_NOTICE_IMAGE({ commit }, payload) {
+      try {
+        const response = await postAction(
+          `/api/notices/image`,
+          payload,
+          `content-type: multipart/form-data`
+        );
+        return response["headers"].location;
       } catch (error) {
         console.log(error);
       }

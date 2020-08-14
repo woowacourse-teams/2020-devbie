@@ -32,20 +32,16 @@
         required
       ></v-text-field>
       <div class="duration">
-        <v-text-field
+        <input
+          aria-label="시작일"
           v-model="request.startDate"
-          placeholder="2010-10-20 13:00"
-          :rules="textRules"
-          label="시작일"
-          required
-        ></v-text-field>
-        <v-text-field
+          type="datetime-local"
+        />
+        <input
+          aria-labelledby="종료일"
           v-model="request.endDate"
-          placeholder="2010-10-20 14:00"
-          :rules="textRules"
-          label="종료일"
-          required
-        ></v-text-field>
+          type="datetime-local"
+        />
       </div>
       <v-text-field
         v-model="request.name"
@@ -59,7 +55,7 @@
         label="연봉"
         required
       ></v-text-field>
-      <v-file-input label="사진" filled v-model="request.image"> </v-file-input>
+      <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
         v-model="request.description"
@@ -154,6 +150,24 @@ export default {
   },
 
   methods: {
+    async imageUpload() {
+      const image_files = this.$refs.image.files[0];
+      if (!image_files) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", image_files);
+
+      try {
+        this.request.image = await this.$store.dispatch(
+          "UPLOAD_NOTICE_IMAGE",
+          formData
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async isAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
       if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
