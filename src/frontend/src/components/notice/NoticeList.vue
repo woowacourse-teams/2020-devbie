@@ -2,7 +2,7 @@
   <div>
     <v-row dense>
       <v-col
-        v-for="notice in fetchedNotices.noticeResponses"
+        v-for="notice in fetchedNotices"
         :key="notice.id"
         :cols="2"
         class="selector-item"
@@ -16,7 +16,7 @@
           >
             <v-card-title
               class="card-title"
-              v-text="notice.name + `- 공고 타이틀`"
+              v-text="`${notice.name} - ${notice.title}`"
             ></v-card-title>
           </v-img>
 

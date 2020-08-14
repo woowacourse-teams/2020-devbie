@@ -1,8 +1,8 @@
 package underdogs.devbie.notice.domain;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -36,14 +36,13 @@ public class NoticeDescription {
     @Column(columnDefinition = "CLOB")
     private String content;
 
-    public NoticeDescription(Set<String> languages, String content) {
+    public NoticeDescription(Set<Language> languages, String content) {
         validateParameters(languages, content);
-        this.languages = languages.stream()
-            .map(Language::from).collect(Collectors.toSet());
+        this.languages = new HashSet<>(languages);
         this.content = content;
     }
 
-    private void validateParameters(Set<String> languages, String description) {
+    private void validateParameters(Set<Language> languages, String description) {
         if (Objects.isNull(languages)
             || languages.isEmpty()
             || Objects.isNull(description)

@@ -39,7 +39,6 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
             <v-divider></v-divider>
           </template>
         </v-virtual-scroll>
@@ -64,7 +63,6 @@ export default {
       language: this.fetchedLanguage
     };
     const queryParam = new URLSearchParams(param).toString();
-
     this.$store.dispatch("FETCH_NOTICES", queryParam);
   },
   computed: {
@@ -75,7 +73,7 @@ export default {
       "fetchedLanguage"
     ]),
     items() {
-      return this.fetchedNotices.noticeResponses;
+      return this.fetchedNotices;
     }
   }
 };

@@ -16,7 +16,7 @@ public class NoticeTest {
     @DisplayName("공고 업데이트")
     @Test
     void update() {
-        Set<String> languages = Stream.of(Language.JAVA.getName(), Language.JAVASCRIPT.getName())
+        Set<Language> languages = Stream.of(Language.JAVA, Language.JAVASCRIPT)
             .collect(Collectors.toSet());
         Notice notice = Notice.builder()
             .id(1L)

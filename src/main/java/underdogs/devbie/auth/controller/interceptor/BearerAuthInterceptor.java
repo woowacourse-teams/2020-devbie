@@ -18,11 +18,10 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
 
     private final AuthorizationExtractor authExtractor;
     private final JwtTokenProvider jwtTokenProvider;
+    private final InterceptorValidator interceptorValidator;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        InterceptorValidator interceptorValidator = new InterceptorValidator();
-
         if (interceptorValidator.isNotValid(handler)) {
             return true;
         }

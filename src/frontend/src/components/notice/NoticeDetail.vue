@@ -13,10 +13,12 @@
             <div class="notice-img">
               <v-img
                 :src="
-                  'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
+                  fetchedNotice.image === null
+                    ? 'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
+                    : fetchedNotice.image
                 "
                 class="white--text align-end"
-                height="200px"
+                max-width="300px"
               >
               </v-img>
             </div>
@@ -26,6 +28,24 @@
               >
               <v-btn id="chatting-btn" depressed large color="primary"
                 >채팅방</v-btn
+              >
+              <v-btn
+                class="admin-btn"
+                depressed
+                large
+                color="warning"
+                v-if="isAdmin()"
+                @click="onEditNotice"
+                >수정</v-btn
+              >
+              <v-btn
+                class="admin-btn"
+                depressed
+                large
+                color="warning"
+                v-if="isAdmin()"
+                @click="onDeleteNotice"
+                >삭제</v-btn
               >
             </div>
           </div>
@@ -64,13 +84,27 @@
 
 <script>
 import { mapGetters } from "vuex";
+import router from "../../router";
 
 export default {
+  methods: {
+    isAdmin() {
+      return this.fetchedLoginUser.roleType === "ADMIN";
+    },
+    async onDeleteNotice() {
+      await this.$store.dispatch("DELETE_NOTICE", this.$route.params.id);
+      await router.go(0); // 새로고침
+    },
+    onEditNotice() {
+      router.push(`/notices/edit/${this.$route.params.id}`);
+    }
+  },
   created() {
     const noticeId = this.$route.params.id;
     this.$store.dispatch("FETCH_NOTICE", noticeId);
   },
   computed: {
+    ...mapGetters(["fetchedLoginUser"]),
     ...mapGetters(["fetchedNotice"])
   }
 };
@@ -99,6 +133,7 @@ export default {
 .notice-header {
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
+  font-family: "Jua", sans-serif;
 }
 
 .notice-body {
@@ -144,6 +179,12 @@ export default {
 }
 
 #chatting-btn {
+  width: 100px;
+  padding: 10px;
+  margin: 3px 3px;
+}
+
+.admin-btn {
   width: 100px;
   padding: 10px;
   margin: 3px 3px;

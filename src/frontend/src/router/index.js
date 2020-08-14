@@ -11,6 +11,9 @@ import NoticeDetailView from "../views/notice/NoticeDetailView";
 import NoticeDetail from "../components/notice/NoticeDetail";
 import HashtagsView from "../views/hashtags/HashtagsView";
 import MyPageView from "../views/user/MyPageView";
+import AdminMainView from "../views/admin/AdminMainView";
+import NoticeCreateView from "../views/notice/NoticeCreateView";
+import NoticeEditView from "../views/notice/NoticeEditView";
 
 Vue.use(VueRouter);
 
@@ -70,7 +73,8 @@ export const router = new VueRouter({
       component: NoticeDetailView,
       children: [
         {
-          path: ":id",
+          path: ":id(\\d+)",
+          params: true,
           name: "notice-content",
           component: NoticeDetail
         }
@@ -85,6 +89,21 @@ export const router = new VueRouter({
       path: "/mypage",
       name: "mypage",
       component: MyPageView
+    },
+    {
+      path: "/notices/create",
+      name: "notice-create",
+      component: NoticeCreateView
+    },
+    {
+      path: "/notices/edit/:id",
+      name: "notice-edit",
+      component: NoticeEditView
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: AdminMainView
     }
   ]
 });

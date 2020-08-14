@@ -3,9 +3,11 @@
     <div class="author-name">작성자: {{ answer.userId }}</div>
     <div class="answer-temp">
       <div class="answer-content">
-        <p class="answer-content-value" v-if="!this.updateEditFlag">
-          {{ answer.content }}
-        </p>
+        <div
+          v-html="content"
+          class="answer-content-value"
+          v-if="!this.updateEditFlag"
+        ></div>
         <v-textarea
           class="update-form"
           outlined
@@ -63,7 +65,8 @@ export default {
       author: false,
       userRecommended: "",
       updateEditFlag: false,
-      updateContent: this.answer.content
+      updateContent: this.answer.content,
+      content: this.answer.content.split("\n").join("<br />")
     };
   },
   computed: {
@@ -88,6 +91,7 @@ export default {
         updateContent: this.updateContent
       });
       this.updateEditFlag = !this.updateEditFlag;
+      this.content = this.updateContent.split("\n").join("<br />");
     },
     async onAnswerRecommendation(priorType, newType) {
       if (!this.loginUser.id) {

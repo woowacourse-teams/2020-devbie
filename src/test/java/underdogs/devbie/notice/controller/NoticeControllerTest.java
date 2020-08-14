@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.aws.S3Service;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -49,6 +52,9 @@ public class NoticeControllerTest extends MvcTest {
     private NoticeService noticeService;
 
     @MockBean
+    private S3Service s3Service;
+
+    @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
 
     @MockBean
@@ -70,7 +76,7 @@ public class NoticeControllerTest extends MvcTest {
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
             .salary(50_000_000)
-            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+            .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
@@ -83,7 +89,7 @@ public class NoticeControllerTest extends MvcTest {
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
             .salary(50_000_000)
-            .languages(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+            .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
@@ -122,7 +128,7 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 프로그래밍 언어")
     @Test
     void saveRequestWithInvalidLanguages() throws Exception {
-        noticeCreateRequest.setLanguages(Arrays.asList());
+        noticeCreateRequest.setLanguages(new HashSet<>());
         validateNoticeCreateRequest();
     }
 
@@ -162,7 +168,7 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 프로그래밍 언어")
     @Test
     void updateRequestWithInvalidLanguages() throws Exception {
-        noticeUpdateRequest.setLanguages(Arrays.asList());
+        noticeUpdateRequest.setLanguages(new HashSet<>());
         validateUpdateRequest();
     }
 
@@ -194,7 +200,7 @@ public class NoticeControllerTest extends MvcTest {
             .image("/static/image/underdogs")
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(
-                new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName()))
+                Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet())
                 , "hi"))
             .build());
 
@@ -233,7 +239,7 @@ public class NoticeControllerTest extends MvcTest {
             .noticeDescription(
                 NoticeDescriptionResponse.from(
                     new NoticeDescription(
-                        new HashSet<>(Arrays.asList(Language.JAVA.getName(), Language.JAVASCRIPT.getName())),
+                        Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()),
                         "You are hired!")))
             .build();
 
