@@ -3,9 +3,12 @@ package underdogs.devbie.recommendation.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.AnswerRecommendation;
 import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
+import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Service
@@ -28,5 +31,14 @@ public class AnswerRecommendationService extends RecommendationService {
         }
 
         recommendationRepository.save(answerRecommendation);
+    }
+
+    @Transactional
+    public void deleteRecommendation(Long objectId, Long userId) {
+        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
+
+        Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
+
+        recommendationRepository.delete(recommendation);
     }
 }

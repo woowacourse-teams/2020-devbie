@@ -56,4 +56,9 @@ public class QuestionHashtagService {
                 .build());
         return questionHashtagRepository.save(questionHashtag);
     }
+
+    public List<Long> findIdsByHashtagName(String hashtag) {
+        Hashtag findHashtag = hashtagService.findOrCreateHashtag(hashtag);
+        return questionHashtagRepository.findQuestionIdsByHashtagId(findHashtag.getId());
+    }
 }

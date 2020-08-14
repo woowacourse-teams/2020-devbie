@@ -2,10 +2,12 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
@@ -30,15 +32,18 @@ public class QuestionService {
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAll() {
-        List<Question> questions = questionRepository.findAll();
+    public QuestionResponses readAllOrderBy(OrderBy condition) {
+        Sort sort = Sort.by(condition.getDirection(), condition.getPropertyName());
+        List<Question> questions = questionRepository.findAllOrderBy(sort);
         return QuestionResponses.from(questions);
     }
 
     @Transactional
-    public QuestionResponse read(Long id) {
+    public QuestionResponse read(Long id, boolean isVisit) {
         Question question = readOne(id);
-        question.increaseVisits();
+        if (isVisit) {
+            question.increaseVisits();
+        }
         return QuestionResponse.from(question);
     }
 
@@ -79,5 +84,16 @@ public class QuestionService {
     public QuestionResponses searchByTitle(String keyword) {
         List<Question> questions = questionRepository.findByTitleLike(keyword);
         return QuestionResponses.from(questions);
+    }
+
+    public QuestionResponses searchByHashtag(String hashtag) {
+        List<Long> questionIds = questionHashtagService.findIdsByHashtagName(hashtag);
+        List<Question> questions = questionRepository.findAllById(questionIds);
+        return QuestionResponses.from(questions);
+    }
+
+    public QuestionResponse readWithoutVisit(Long id) {
+        Question question = readOne(id);
+        return QuestionResponse.from(question);
     }
 }

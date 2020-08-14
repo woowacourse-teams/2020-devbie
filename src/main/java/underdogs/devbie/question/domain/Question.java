@@ -40,6 +40,9 @@ public class Question extends BaseTimeEntity {
     private Visits visits;
 
     @Embedded
+    private RecommendationCount recommendationCount;
+
+    @Embedded
     private QuestionHashtags hashtags;
 
     @Builder
@@ -51,6 +54,7 @@ public class Question extends BaseTimeEntity {
         this.content = content;
         this.hashtags = hashtags;
         this.visits = Visits.init();
+        this.recommendationCount = RecommendationCount.init();
     }
 
     private void validateParameters(Long userId, QuestionTitle title, QuestionContent content) {

@@ -48,10 +48,8 @@ import { mapGetters } from "vuex";
 import router from "../router";
 
 export default {
-  props: ["isLoggedIn"],
-
   computed: {
-    ...mapGetters(["fetchedLoginUser"])
+    ...mapGetters(["fetchedLoginUser", "isLoggedIn"])
   },
   methods: {
     isAdmin() {

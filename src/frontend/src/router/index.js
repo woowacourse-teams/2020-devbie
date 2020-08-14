@@ -9,6 +9,7 @@ import QuestionCreateView from "../views/question/QuestionCreateView";
 import QuestionEditView from "../views/question/QuestionEditView";
 import NoticeDetailView from "../views/notice/NoticeDetailView";
 import NoticeDetail from "../components/notice/NoticeDetail";
+import HashtagsView from "../views/hashtags/HashtagsView";
 import MyPageView from "../views/user/MyPageView";
 import AdminMainView from "../views/admin/AdminMainView";
 import NoticeCreateView from "../views/notice/NoticeCreateView";
@@ -45,7 +46,11 @@ export const router = new VueRouter({
     {
       path: "/questions",
       name: "questions",
-      component: QuestionListView
+      component: QuestionListView,
+      props: route => ({
+        hashtag: route.query.hashtag,
+        orderBy: route.query.orderBy
+      })
     },
     {
       path: "/questions/:id",
@@ -74,6 +79,11 @@ export const router = new VueRouter({
           component: NoticeDetail
         }
       ]
+    },
+    {
+      path: "/hashtags",
+      name: "hashtags",
+      component: HashtagsView
     },
     {
       path: "/mypage",

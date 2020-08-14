@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.auth.exception.InvalidAuthenticationException;
-import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationRequest;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 import underdogs.devbie.recommendation.service.RecommendationService;
@@ -40,15 +39,6 @@ public abstract class RecommendationController {
         }
     }
 
-    @NoValidate
-    @GetMapping(params = {"objectId"})
-    public ResponseEntity<RecommendationCountResponse> count(@RequestParam Long objectId) {
-        RecommendationCountResponse recommendationCountResponse = recommendationService.count(objectId);
-
-        return ResponseEntity.ok(recommendationCountResponse);
-    }
-
-    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PutMapping
     public ResponseEntity<Void> createOrUpdateRecommendation(
         @RequestParam Long objectId,
