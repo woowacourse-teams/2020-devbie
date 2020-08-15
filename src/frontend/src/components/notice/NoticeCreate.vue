@@ -59,7 +59,7 @@
         label="연봉"
         required
       ></v-text-field>
-      <v-file-input label="사진" filled v-model="request.image"> </v-file-input>
+      <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
         v-model="request.description"
@@ -80,6 +80,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { dateParser } from "../../utils/noticeUtil";
 
 export default {
   created() {
@@ -127,11 +128,32 @@ export default {
         await this.$router.push("/");
       }
     },
+    async imageUpload() {
+      const image_files = this.$refs.image.files[0];
+      if (!image_files) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", image_files);
+
+      try {
+        this.request.image = await this.$store.dispatch(
+          "UPLOAD_NOTICE_IMAGE",
+          formData
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async validate() {
       if (!this.$refs.form.validate()) {
         return;
       }
-      console.log(this.request);
+
+      this.request.startDate = dateParser(this.request.startDate);
+      this.request.endDate = dateParser(this.request.endDate);
+
       try {
         await this.$store.dispatch("CREATE_NOTICE", this.request);
         const id = await this.$store.getters.fetchedNewCreatedNoticeId;

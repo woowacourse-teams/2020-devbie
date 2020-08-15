@@ -1,4 +1,19 @@
 <template>
+  <div><notice-create></notice-create></div>
+</template>
+
+<script>
+import NoticeCreate from "../../components/notice/NoticeCreate";
+
+export default {
+  components: {
+    NoticeCreate
+  }
+};
+</script>
+
+<style scoped></style>
+<template>
   <div class="container">
     <v-form ref="form" v-model="valid" lazy-validation class="notice-form">
       <v-select
@@ -73,117 +88,3 @@
     </v-form>
   </div>
 </template>
-
-<script>
-import { dateParser } from "../../utils/noticeUtil";
-
-export default {
-  async created() {
-    await this.isAdmin();
-  },
-  data: function() {
-    return {
-      valid: true,
-      selectRules: [v => !!v || "Item is required"],
-      numberRules: [
-        v => !!v || "숫자를 입력하세요.",
-        v => Number.isInteger(Number(v)) || "숫자를 입력해야합니다."
-      ],
-      textRules: [
-        v => !!v || "문자를 입력하세요!",
-        v => (v && v.length > 0) || "문자를 1자이상 입력해주세요!"
-      ],
-      noticeTypeItems: [
-        { text: "채용", value: "JOB" },
-        { text: "교육", value: "EDUCATION" }
-      ],
-      jobPositionItems: [
-        { text: "백엔드 개발자", value: "BACKEND" },
-        { text: "프론트엔드 개발자", value: "FRONTEND" }
-      ],
-      languageItems: [
-        { text: "C", value: "C" },
-        { text: "C++", value: "CPP" },
-        { text: "JAVA", value: "JAVA" }
-      ],
-      request: {
-        jobPosition: "",
-        image: "",
-        title: "",
-        name: "",
-        salary: 0,
-        languages: [],
-        description: "",
-        startDate: "",
-        endDate: "",
-        noticeType: ""
-      }
-    };
-  },
-
-  methods: {
-    async isAdmin() {
-      const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
-      if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
-        await this.$router.push("/");
-      }
-    },
-    async imageUpload() {
-      const image_files = this.$refs.image.files[0];
-      if (!image_files) {
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("image", image_files);
-
-      try {
-        this.request.image = await this.$store.dispatch(
-          "UPLOAD_NOTICE_IMAGE",
-          formData
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async submit() {
-      if (!this.$refs.form.validate()) {
-        return;
-      }
-
-      this.request.startDate = dateParser(this.request.startDate);
-      this.request.endDate = dateParser(this.request.endDate);
-
-      try {
-        await this.$store.dispatch("CREATE_NOTICE", this.request);
-        const id = await this.$store.getters.fetchedNewCreatedNoticeId;
-        await this.$router.push(`/notices/${id}`);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-};
-</script>
-
-<style scoped>
-.container {
-  display: flex;
-  width: 500px;
-  justify-content: center !important;
-  align-items: center;
-}
-.notice-form {
-  width: 100%;
-  text-align: right;
-}
-.duration {
-  display: flex;
-}
-.duration > input {
-  margin-right: 20px;
-}
-.duration:first-child {
-  padding-right: 20px;
-}
-</style>

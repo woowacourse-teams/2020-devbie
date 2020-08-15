@@ -36,20 +36,16 @@
         required
       ></v-text-field>
       <div class="duration">
-        <v-text-field
+        <input
+          aria-label="시작일"
           v-model="request.startDate"
-          placeholder="2010-10-20 13:00"
-          :rules="textRules"
-          label="시작일"
-          required
-        ></v-text-field>
-        <v-text-field
+          type="datetime-local"
+        />
+        <input
+          aria-labelledby="종료일"
           v-model="request.endDate"
-          placeholder="2010-10-20 14:00"
-          :rules="textRules"
-          label="종료일"
-          required
-        ></v-text-field>
+          type="datetime-local"
+        />
       </div>
       <v-text-field
         v-model="request.name"
@@ -63,7 +59,7 @@
         label="연봉"
         required
       ></v-text-field>
-      <v-file-input label="사진" filled v-model="request.image"> </v-file-input>
+      <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
         v-model="request.description"
@@ -85,7 +81,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser, languageTranslator } from "@/utils";
+import { dateParser, languageTranslator } from "@/utils/noticeUtil";
 
 export default {
   async created() {
@@ -135,8 +131,8 @@ export default {
         v => (v && v.length > 0) || "문자를 1자이상 입력해주세요!"
       ],
       noticeTypeItems: [
-        { text: "채용", value: "JOB" },
-        { text: "교육", value: "EDUCATION" }
+        { text: "채용", key: "JOB" },
+        { text: "교육", key: "EDUCATION" }
       ],
       request: {}
     };
@@ -149,10 +145,32 @@ export default {
         await this.$router.push("/");
       }
     },
+    async imageUpload() {
+      const image_files = this.$refs.image.files[0];
+      if (!image_files) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", image_files);
+
+      try {
+        this.request.image = await this.$store.dispatch(
+          "UPLOAD_NOTICE_IMAGE",
+          formData
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async validate() {
       if (!this.$refs.form.validate()) {
         return;
       }
+
+      this.request.startDate = dateParser(this.request.startDate);
+      this.request.endDate = dateParser(this.request.endDate);
+
       try {
         await this.$store.dispatch("EDIT_NOTICE", {
           id: this.id,
