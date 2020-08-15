@@ -42,7 +42,7 @@ public class NoticeResponses {
         return notice.getNoticeDescription()
             .getLanguages()
             .stream()
-            .map(Language::getName)
+            .map(Language::getText)
             .collect(Collectors.toSet());
     }
 }

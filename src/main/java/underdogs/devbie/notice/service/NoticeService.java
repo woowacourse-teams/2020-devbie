@@ -55,10 +55,10 @@ public class NoticeService {
     }
 
     public LanguagesResponse findLanguages() {
-        return LanguagesResponse.from(Language.getAllLanguageWithName());
+        return LanguagesResponse.from();
     }
 
     public JobPositionsResponse findJobPositions() {
-        return JobPositionsResponse.from(JobPosition.getAllJobPositionWithName());
+        return JobPositionsResponse.from();
     }
 }
