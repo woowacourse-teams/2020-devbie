@@ -124,7 +124,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                     () -> assertThat(response)
                         .extracting(NoticeResponse::getLanguages)
-                        .anyMatch(language -> language.contains(Language.CPP.getName()))
+                        .anyMatch(language -> language.contains(Language.CPP.getText()))
                 );
 
             }),
@@ -156,8 +156,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
                     () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
                     () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
-                    () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getName(),
-                        Language.JAVASCRIPT.getName(), Language.CPP.getName())
+                    () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getText(),
+                        Language.JAVASCRIPT.getText(), Language.CPP.getText())
                 );
             }),
             dynamicTest("공고 게시글을 삭제한다.", () -> {

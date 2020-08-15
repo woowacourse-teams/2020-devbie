@@ -11,13 +11,13 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.domain.NoticeType;
-import underdogs.devbie.notice.dto.JobPositionsResponse;
-import underdogs.devbie.notice.dto.LanguagesResponse;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.expception.NoticeNotFoundException;
+import underdogs.devbie.notice.vo.JobPositionsResponse;
+import underdogs.devbie.notice.vo.LanguagesResponse;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,10 +55,10 @@ public class NoticeService {
     }
 
     public LanguagesResponse findLanguages() {
-        return LanguagesResponse.from();
+        return LanguagesResponse.get();
     }
 
     public JobPositionsResponse findJobPositions() {
-        return JobPositionsResponse.from();
+        return JobPositionsResponse.get();
     }
 }

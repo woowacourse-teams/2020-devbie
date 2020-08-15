@@ -1,27 +1,29 @@
-package underdogs.devbie.notice.dto;
+package underdogs.devbie.notice.vo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.JobPosition;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class LanguagePairDto {
+@EqualsAndHashCode
+public class JobPositionPair {
 
     private Map<String, String> pair;
 
-    public static LanguagePairDto from(Language language) {
+    public static JobPositionPair from(JobPosition jobPosition) {
         Map<String, String> map = new HashMap<>();
 
-        map.put("key", language.name());
-        map.put("text", language.getText());
+        map.put("key", jobPosition.name());
+        map.put("text", jobPosition.getText());
 
-        return new LanguagePairDto(map);
+        return new JobPositionPair(map);
     }
 }

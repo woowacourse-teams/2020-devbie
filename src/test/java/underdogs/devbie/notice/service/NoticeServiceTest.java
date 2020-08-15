@@ -144,8 +144,8 @@ public class NoticeServiceTest {
             () -> assertThat(noticeResponses.get(0).getId()).isEqualTo(1L),
             () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
             () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
-            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getName(),
-                Language.JAVASCRIPT.getName()),
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getText(),
+                Language.JAVASCRIPT.getText()),
             () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND)
         );
     }
@@ -176,7 +176,7 @@ public class NoticeServiceTest {
             () -> assertThat(noticeDetailResponse.getCompany().getSalary()).isEqualTo(50_000_000),
             () -> assertThat(noticeDetailResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getLanguages()).contains(
-                Language.JAVA.getName(), Language.JAVASCRIPT.getName()),
+                Language.JAVA.getText(), Language.JAVASCRIPT.getText()),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getContent()).isEqualTo("We are hiring!"),
             () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
         );

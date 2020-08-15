@@ -1,4 +1,4 @@
-package underdogs.devbie.notice.dto;
+package underdogs.devbie.notice.vo;
 
 import static java.util.stream.Collectors.*;
 
@@ -16,11 +16,13 @@ import underdogs.devbie.notice.domain.JobPosition;
 @Getter
 public class JobPositionsResponse {
 
-    private List<JobPositionPairDto> jobPositions;
+    private static final JobPositionsResponse jobPositionsResponse = Arrays.stream(JobPosition.values())
+        .map(JobPositionPair::from)
+        .collect(collectingAndThen(toList(), JobPositionsResponse::new));
 
-    public static JobPositionsResponse from() {
-        return Arrays.stream(JobPosition.values())
-            .map(JobPositionPairDto::from)
-            .collect(collectingAndThen(toList(), JobPositionsResponse::new));
+    private List<JobPositionPair> jobPositions;
+
+    public static JobPositionsResponse get() {
+        return jobPositionsResponse;
     }
 }

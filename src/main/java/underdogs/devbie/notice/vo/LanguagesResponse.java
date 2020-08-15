@@ -1,4 +1,4 @@
-package underdogs.devbie.notice.dto;
+package underdogs.devbie.notice.vo;
 
 import static java.util.stream.Collectors.*;
 
@@ -16,11 +16,13 @@ import underdogs.devbie.notice.domain.Language;
 @Getter
 public class LanguagesResponse {
 
-    private List<LanguagePairDto> languages;
+    private static final LanguagesResponse languagesResponse = Arrays.stream(Language.values())
+        .map(LanguagePair::from)
+        .collect(collectingAndThen(toList(), LanguagesResponse::new));
 
-    public static LanguagesResponse from() {
-        return Arrays.stream(Language.values())
-            .map(LanguagePairDto::from)
-            .collect(collectingAndThen(toList(), LanguagesResponse::new));
+    private List<LanguagePair> languages;
+
+    public static LanguagesResponse get() {
+        return languagesResponse;
     }
 }

@@ -1,5 +1,6 @@
 package underdogs.devbie.notice.controller;
 
+import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -34,8 +35,6 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
-import underdogs.devbie.notice.dto.JobPositionsResponse;
-import underdogs.devbie.notice.dto.LanguagesResponse;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -43,6 +42,10 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
+import underdogs.devbie.notice.vo.JobPositionPair;
+import underdogs.devbie.notice.vo.JobPositionsResponse;
+import underdogs.devbie.notice.vo.LanguagePair;
+import underdogs.devbie.notice.vo.LanguagesResponse;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
@@ -218,8 +221,8 @@ public class NoticeControllerTest extends MvcTest {
             () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
             () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND),
-            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getName(),
-                Language.JAVASCRIPT.getName())
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getText(),
+                Language.JAVASCRIPT.getText())
         );
     }
 
@@ -265,7 +268,7 @@ public class NoticeControllerTest extends MvcTest {
     @Test
     void findLanguages() throws Exception {
         given(noticeService.findLanguages())
-            .willReturn(LanguagesResponse.from(Language.getAllLanguageWithName()));
+            .willReturn(LanguagesResponse.get());
 
         MvcResult mvcResult = getAction("/api/notices/languages")
             .andExpect(status().isOk())
@@ -276,15 +279,19 @@ public class NoticeControllerTest extends MvcTest {
             LanguagesResponse.class
         );
 
+        List<LanguagePair> languagePairs = Arrays.stream(Language.values())
+            .map(LanguagePair::from)
+            .collect(toList());
+
         assertThat(languagesResponse.getLanguages())
-            .containsAllEntriesOf(Language.getAllLanguageWithName());
+            .containsAll(languagePairs);
     }
 
     @DisplayName("사용자 요청을 통해 모든 채용포지션 조회")
     @Test
-    void name() throws Exception {
+    void findJobPosition() throws Exception {
         given(noticeService.findJobPositions())
-            .willReturn(JobPositionsResponse.from(JobPosition.getAllJobPositionWithName()));
+            .willReturn(JobPositionsResponse.get());
 
         MvcResult mvcResult = getAction("/api/notices/job-positions")
             .andExpect(status().isOk())
@@ -295,8 +302,12 @@ public class NoticeControllerTest extends MvcTest {
             JobPositionsResponse.class
         );
 
+        List<JobPositionPair> jobPositionPairs = Arrays.stream(JobPosition.values())
+            .map(JobPositionPair::from)
+            .collect(toList());
+
         assertThat(jobPositionsResponse.getJobPositions())
-            .containsAllEntriesOf(JobPosition.getAllJobPositionWithName());
+            .containsAll(jobPositionPairs);
     }
 
     private void validateNoticeCreateRequest() throws Exception {
