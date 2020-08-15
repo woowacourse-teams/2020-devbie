@@ -103,8 +103,7 @@ export default {
     this.$store.dispatch("FETCH_NOTICE", noticeId);
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser"]),
-    ...mapGetters(["fetchedNotice"])
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
   }
 };
 </script>
