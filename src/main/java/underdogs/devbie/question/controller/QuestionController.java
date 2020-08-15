@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -32,6 +35,8 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PostMapping
     public ResponseEntity<Void> save(
         @LoginUser User user,
@@ -44,8 +49,10 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping
-    public ResponseEntity<QuestionResponses> readAll() {
-        QuestionResponses responses = questionService.readAll();
+    public ResponseEntity<QuestionResponses> readAllOrderBy(
+        @RequestParam(value = "orderBy", required = false) OrderBy condition
+    ) {
+        QuestionResponses responses = questionService.readAllOrderBy(condition);
         return ResponseEntity
             .ok(responses);
     }
@@ -62,12 +69,16 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionResponse> read(@PathVariable("id") Long id) {
-        QuestionResponse response = questionService.read(id);
+    public ResponseEntity<QuestionResponse> read(
+        @PathVariable("id") Long id,
+        @RequestParam(value = "visit") boolean isVisit) {
+        QuestionResponse response = questionService.read(id, isVisit);
         return ResponseEntity
             .ok(response);
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
         @LoginUser User user,
@@ -80,6 +91,8 @@ public class QuestionController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @LoginUser User user,
@@ -89,5 +102,15 @@ public class QuestionController {
         return ResponseEntity
             .noContent()
             .build();
+    }
+
+    @NoValidate
+    @GetMapping(params = "hashtag")
+    public ResponseEntity<QuestionResponses> searchByHashtag(
+        @RequestParam("hashtag") String hashtag
+    ) {
+        QuestionResponses responses = questionService.searchByHashtag(hashtag);
+        return ResponseEntity
+            .ok(responses);
     }
 }

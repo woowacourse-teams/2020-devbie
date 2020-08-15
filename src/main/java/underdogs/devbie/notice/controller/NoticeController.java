@@ -1,5 +1,6 @@
 package underdogs.devbie.notice.controller;
 
+import java.io.IOException;
 import java.net.URI;
 
 import javax.validation.Valid;
@@ -7,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
+import underdogs.devbie.auth.controller.resolver.LoginUser;
+import underdogs.devbie.aws.S3Service;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.ImageUploadRequest;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -29,6 +36,7 @@ import underdogs.devbie.notice.service.NoticeService;
 import underdogs.devbie.notice.vo.JobPositionsResponse;
 import underdogs.devbie.notice.vo.LanguagesResponse;
 import underdogs.devbie.user.domain.RoleType;
+import underdogs.devbie.user.domain.User;
 
 @RestController
 @RequestMapping("/api/notices")
@@ -36,7 +44,10 @@ import underdogs.devbie.user.domain.RoleType;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final S3Service s3Service;
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody NoticeCreateRequest request) {
@@ -46,6 +57,8 @@ public class NoticeController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
@@ -58,6 +71,19 @@ public class NoticeController {
             .build();
     }
 
+    @PostMapping("/image")
+    public ResponseEntity<Void> updateImage(
+        @LoginUser User user,
+        @Valid @ModelAttribute ImageUploadRequest request
+    ) throws IOException {
+        String imagePath = s3Service.upload(request.getImage());
+        return ResponseEntity
+            .created(URI.create(imagePath))
+            .build();
+    }
+
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

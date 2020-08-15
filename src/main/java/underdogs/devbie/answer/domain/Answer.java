@@ -2,6 +2,7 @@ package underdogs.devbie.answer.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ import underdogs.devbie.exception.CreateFailException;
 public class Answer extends BaseTimeEntity {
 
     @Id
+    @Column(name = "answer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -33,6 +35,9 @@ public class Answer extends BaseTimeEntity {
     @Embedded
     private AnswerContent content;
 
+    @Embedded
+    private RecommendationCount recommendationCount;
+
     @Builder
     public Answer(Long id, Long userId, Long questionId, AnswerContent content) {
         validateParameters(userId, questionId, content);
@@ -40,10 +45,11 @@ public class Answer extends BaseTimeEntity {
         this.userId = userId;
         this.questionId = questionId;
         this.content = content;
+        this.recommendationCount = RecommendationCount.init();
     }
 
-    private void validateParameters(Long userId, Long questionid, AnswerContent content) {
-        if (Objects.isNull(userId) || Objects.isNull(questionid) || Objects.isNull(content)) {
+    private void validateParameters(Long userId, Long questionId, AnswerContent content) {
+        if (Objects.isNull(userId) || Objects.isNull(questionId) || Objects.isNull(content)) {
             throw new CreateFailException();
         }
     }

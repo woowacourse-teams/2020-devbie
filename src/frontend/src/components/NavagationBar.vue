@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-app-bar color="#87BDD6" name="navigation">
+  <div class="navigation-bar">
+    <v-app-bar color="#9FD0D4" name="navigation">
       <v-app-bar-nav-icon @click="$router.push('/')" id="logo"
         >icon
       </v-app-bar-nav-icon>
@@ -16,8 +16,24 @@
         ><p class="navigation-menu">면접</p></v-btn
       >
       <template v-if="isLoggedIn">
-        <v-avatar color="primary">image</v-avatar>
-        <v-btn @click="logout">Logout</v-btn>
+        <v-menu transition="slide-y-transition" offset-y bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-avatar>
+              <v-img
+                :src="fetchedLoginUser.image"
+                alt="avatar-image"
+                v-bind="attrs"
+                v-on="on"
+              />
+            </v-avatar>
+          </template>
+          <v-list>
+            <v-list-item @click="$router.push('/mypage')">
+              마이페이지
+            </v-list-item>
+            <v-list-item @click="logout"> 로그아웃 </v-list-item>
+          </v-list>
+        </v-menu>
       </template>
       <v-btn @click="showLoginPage" color="#E8E8E8" id="login-btn" large v-else
         >Login with Github
@@ -29,9 +45,12 @@
 <script>
 import axios from "axios";
 import { mapGetters } from "vuex";
+import router from "../router";
 
 export default {
-  props: ["isLoggedIn"],
+  computed: {
+    ...mapGetters(["fetchedLoginUser", "isLoggedIn"])
+  },
   methods: {
     isAdmin() {
       if (this.isLoggedIn) {
@@ -49,15 +68,17 @@ export default {
     },
     logout() {
       this.$emit("logout");
+      router.push("/");
     }
-  },
-  computed: {
-    ...mapGetters(["fetchedLoginUser"])
   }
 };
 </script>
 
 <style scoped>
+.navigation-menu {
+  font-family: "Do Hyeon", sans-serif;
+}
+
 #logo {
   margin-left: 50px;
 }

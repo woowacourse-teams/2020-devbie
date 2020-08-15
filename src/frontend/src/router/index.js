@@ -12,8 +12,18 @@ import NoticeDetail from "../components/notice/NoticeDetail";
 import AdminMainView from "../views/admin/AdminMainView";
 import NoticeCreateView from "../views/notice/NoticeCreateView";
 import NoticeEditView from "../views/notice/NoticeEditView";
+import HashtagsView from "../views/hashtags/HashtagsView";
+import MyPageView from "../views/user/MyPageView";
 
 Vue.use(VueRouter);
+
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => {
+    window.location.reload();
+    return err;
+  });
+};
 
 export const router = new VueRouter({
   mode: "history",
@@ -36,7 +46,11 @@ export const router = new VueRouter({
     {
       path: "/questions",
       name: "questions",
-      component: QuestionListView
+      component: QuestionListView,
+      props: route => ({
+        hashtag: route.query.hashtag,
+        orderBy: route.query.orderBy
+      })
     },
     {
       path: "/questions/:id",
@@ -65,6 +79,16 @@ export const router = new VueRouter({
           component: NoticeDetail
         }
       ]
+    },
+    {
+      path: "/hashtags",
+      name: "hashtags",
+      component: HashtagsView
+    },
+    {
+      path: "/mypage",
+      name: "mypage",
+      component: MyPageView
     },
     {
       path: "/notices/create",

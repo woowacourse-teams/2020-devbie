@@ -13,10 +13,12 @@
             <div class="notice-img">
               <v-img
                 :src="
-                  'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
+                  fetchedNotice.image === null
+                    ? 'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
+                    : fetchedNotice.image
                 "
                 class="white--text align-end"
-                height="200px"
+                max-width="300px"
               >
               </v-img>
             </div>
@@ -99,7 +101,6 @@ export default {
   },
   created() {
     const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICES");
     this.$store.dispatch("FETCH_NOTICE", noticeId);
   },
   computed: {
@@ -131,6 +132,7 @@ export default {
 .notice-header {
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
+  font-family: "Jua", sans-serif;
 }
 
 .notice-body {

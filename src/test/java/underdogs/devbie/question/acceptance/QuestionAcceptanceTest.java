@@ -9,10 +9,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.mockito.internal.util.collections.Sets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -46,6 +45,9 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             WHEN 질문의 제목에 포함된 단어로 검색한다.
             THEN 해당 단어가 포함된 질문 목록이 조회된다.
 
+            WHEN 질문에 해시태그를 추가한다.
+            THEN 해시태그로 질문을 검색할 수 있다.
+
             WHEN 질문을 삭제 요청한다..
             THEN 질문이 삭제된다.
      */
@@ -59,7 +61,8 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 createQuestion(TEST_TITLE_FOR_SEARCH);
             }),
             dynamicTest("전체 질문 조회", () -> {
-                QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+                QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
+
                 QuestionResponse firstQuestion = questions.getQuestions().get(0);
                 assertAll(
                     () -> assertThat(questions.getQuestions()).hasSize(2),
@@ -71,6 +74,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             dynamicTest("특정 질문 검색", () -> {
                 QuestionResponses searchedQuestions = get("/api/questions?keyword=" + SEARCH_KEYWORD,
                     QuestionResponses.class);
+
                 assertAll(
                     () -> assertThat(searchedQuestions.getQuestions()).hasSize(1),
                     () -> assertThat(searchedQuestions.getQuestions().get(0).getTitle()).isEqualTo(
@@ -79,8 +83,10 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
-                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
+
+                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
                     QuestionResponse.class);
+
                 assertAll(
                     () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
                     () -> assertThat(questionResponse.getVisits()).isEqualTo(1L),
@@ -93,39 +99,30 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 QuestionUpdateRequest updateRequest = QuestionUpdateRequest.builder()
                     .title("Changed Title")
                     .content("Changed Content")
+                    .hashtags(Sets.newSet("kotlin"))
                     .build();
                 String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
+
                 patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
-                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
+
+                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
                     QuestionResponse.class);
                 assertAll(
                     () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
                     () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
                     () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
-                    () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content")
+                    () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content"),
+                    () -> assertThat(updatedQuestion.getHashtags().get(0).getTagName()).isEqualTo("kotlin")
                 );
             }),
             dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
                 delete("/api/questions/" + firstQuestion.getQuestionId());
-                QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+
+                QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
+
                 assertThat(questions.getQuestions()).hasSize(1);
             })
         );
-
-    }
-
-    private void createQuestion(String title) throws JsonProcessingException {
-        QuestionCreateRequest createRequest = QuestionCreateRequest.builder()
-            .title(title)
-            .content(TEST_QUESTION_CONTENT)
-            .build();
-        String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
-        post("/api/questions", inputJsonForCreate);
-    }
-
-    private QuestionResponse fetchFirstQuestion() {
-        QuestionResponses questions = get("/api/questions", QuestionResponses.class);
-        return questions.getQuestions().get(0);
     }
 }

@@ -2,6 +2,7 @@ package underdogs.devbie.question.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ import underdogs.devbie.exception.CreateFailException;
 public class Question extends BaseTimeEntity {
 
     @Id
+    @Column(name = "question_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -37,13 +39,22 @@ public class Question extends BaseTimeEntity {
     @Embedded
     private Visits visits;
 
+    @Embedded
+    private RecommendationCount recommendationCount;
+
+    @Embedded
+    private QuestionHashtags hashtags;
+
     @Builder
-    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content) {
+    public Question(Long id, Long userId, QuestionTitle title, QuestionContent content, QuestionHashtags hashtags) {
         validateParameters(userId, title, content);
+        this.id = id;
         this.userId = userId;
         this.title = title;
         this.content = content;
+        this.hashtags = hashtags;
         this.visits = Visits.init();
+        this.recommendationCount = RecommendationCount.init();
     }
 
     private void validateParameters(Long userId, QuestionTitle title, QuestionContent content) {
@@ -59,5 +70,9 @@ public class Question extends BaseTimeEntity {
 
     public void increaseVisits() {
         this.visits.increase();
+    }
+
+    public void setHashtags(QuestionHashtags hashtags) {
+        this.hashtags.setHashtags(hashtags.getQuestionHashtags());
     }
 }

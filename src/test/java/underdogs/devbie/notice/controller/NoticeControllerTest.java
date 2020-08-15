@@ -28,6 +28,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.aws.S3Service;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -54,6 +55,9 @@ public class NoticeControllerTest extends MvcTest {
 
     @MockBean
     private NoticeService noticeService;
+
+    @MockBean
+    private S3Service s3Service;
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;

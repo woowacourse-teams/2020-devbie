@@ -15,10 +15,11 @@ function getAction(url) {
   });
 }
 
-function postAction(url, request) {
+function postAction(url, request, configOption) {
   return axios.post(`${config.baseUrl}${url}`, request, {
     headers: {
-      Authorization: devbieToken
+      Authorization: devbieToken,
+      ...configOption
     }
   });
 }
@@ -31,10 +32,11 @@ function putAction(url, request) {
   });
 }
 
-function patchAction(url, request) {
+function patchAction(url, request, configOption) {
   return axios.patch(`${config.baseUrl}${url}`, request, {
     headers: {
-      Authorization: devbieToken
+      Authorization: devbieToken,
+      ...configOption
     }
   });
 }

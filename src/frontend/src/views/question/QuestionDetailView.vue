@@ -2,13 +2,13 @@
   <div class="detail">
     <div class="left-menu">
       <router-link :to="`/questions`">
-        <v-btn color="#DAEBEA" class="menu-btn">돌아가기</v-btn>
+        <v-btn color="#DAEBEA" class="menu-btn button">돌아가기</v-btn>
       </router-link>
       <div class="author-btn" v-if="author">
         <router-link :to="`/edit-question/${this.$route.params.id}`">
-          <v-btn color="#DAEBEA" class="menu-btn">수정하기</v-btn>
+          <v-btn color="#DAEBEA" class="menu-btn button">수정하기</v-btn>
         </router-link>
-        <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn"
+        <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn button"
           >삭제하기
         </v-btn>
       </div>
@@ -79,9 +79,11 @@ a {
   align-items: center;
   min-width: 220px;
 }
+
 #question-detail {
   margin-bottom: 60px;
 }
+
 .menu-btn {
   margin-top: 30px;
 }

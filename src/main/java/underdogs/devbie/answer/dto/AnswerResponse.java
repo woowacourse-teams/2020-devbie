@@ -15,9 +15,16 @@ public class AnswerResponse {
     private Long userId;
     private Long questionId;
     private String content;
+    private Long recommendedCount;
+    private Long nonRecommendedCount;
 
     public static AnswerResponse from(Answer answer) {
-        return new AnswerResponse(answer.getId(), answer.getUserId(), answer.getQuestionId(),
-            answer.getContent().getContent());
+        return new AnswerResponse(
+            answer.getId(),
+            answer.getUserId(),
+            answer.getQuestionId(),
+            answer.getContent().getContent(),
+            answer.getRecommendationCount().getRecommendedCount(),
+            answer.getRecommendationCount().getNonRecommendedCount());
     }
 }

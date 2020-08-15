@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.dto.JwtTokenResponse;
-import underdogs.devbie.auth.dto.UserInfoResponse;
+import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.auth.oauth.GithubClient;
@@ -26,9 +26,9 @@ public class AuthService {
     public JwtTokenResponse createToken(String code) {
         String accessToken = githubClient.fetchAccessToken(code);
 
-        UserInfoResponse userInfoResponse = githubClient.fetchUserInfo(accessToken);
+        UserInfoDto userInfoDto = githubClient.fetchUserInfo(accessToken);
 
-        User user = userService.saveOrUpdateUser(userInfoResponse);
+        User user = userService.saveOrUpdateUser(userInfoDto);
 
         String token = jwtTokenProvider.createToken(UserTokenDto.from(user));
         return JwtTokenResponse.from(token);
