@@ -1,21 +1,26 @@
 package underdogs.devbie.notice.dto;
 
-import java.util.HashMap;
-import java.util.Map;
+import static java.util.stream.Collectors.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import underdogs.devbie.notice.domain.Language;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class LanguagesResponse {
 
-    private Map<String, String> languages;
+    private List<LanguagePairDto> languages;
 
-    public static LanguagesResponse from(Map<String, String> languages) {
-        return new LanguagesResponse(new HashMap<>(languages));
+    public static LanguagesResponse from() {
+        return Arrays.stream(Language.values())
+            .map(LanguagePairDto::from)
+            .collect(collectingAndThen(toList(), LanguagesResponse::new));
     }
 }
