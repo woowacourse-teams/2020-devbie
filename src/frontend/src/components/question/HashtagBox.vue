@@ -10,15 +10,13 @@
         #{{ item }}
       </button>
     </div>
-    <div class="input-box">
-      <v-text-field
-        label="#해시태그"
-        class="input hashtag-input-text"
-        placeholder="Enter로 태그 추가"
-        v-model="tagName"
-        @keydown.enter="addHashtag"
-      ></v-text-field>
-    </div>
+    <v-text-field
+      label="해시태그"
+      class="input hashtag-input-text"
+      placeholder="Enter로 태그 추가"
+      v-model="tagName"
+      @keydown.enter="addHashtag"
+    ></v-text-field>
   </div>
 </template>
 
@@ -71,19 +69,16 @@ export default {
 </script>
 
 <style scoped>
-.input-box {
+.hashtag-box {
   display: flex;
   align-items: center;
-}
-
-.input {
-  margin-left: 10px;
 }
 
 .hashtags {
   display: flex;
   justify-items: center;
   flex-wrap: wrap;
+  flex-grow: 1;
 }
 
 .hashtag-item {
@@ -111,7 +106,8 @@ export default {
   transform: translateY(-7px);
 }
 .hashtag-input-text {
-  margin-right: 20px;
-  min-width: 190px;
+  flex-grow: 1;
+  max-width: 50%;
+  min-width: 50%;
 }
 </style>

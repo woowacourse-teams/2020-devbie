@@ -1,35 +1,23 @@
 <template>
   <div class="question-form">
     <div class="inner">
-      <v-card max-width="700" color="#CFE1E8" class="inner-card">
-        <v-text-field
-          class="input-box"
-          label="질문 제목"
-          counter="30"
-          autofocus
-          required
-          v-model="title"
-        ></v-text-field>
-        <v-textarea
-          class="input-box"
-          label="질문 내용"
-          counter
-          no-resize
-          clearable
-          rows="2"
-          row-height="1"
-          required
-          v-model="content"
-        ></v-textarea>
-        <div class="control-box">
-          <hashtag-box @hashtags="receiveHashtags"></hashtag-box>
-          <form-button>
-            <button class="button" @click="onCreateQuestion">
-              <span>질문하기</span>
-            </button>
-          </form-button>
-        </div>
-      </v-card>
+      <v-text-field
+        class="input-box"
+        label="질문 제목"
+        counter="30"
+        autofocus
+        required
+        v-model="title"
+      ></v-text-field>
+      <hashtag-box @hashtags="receiveHashtags"></hashtag-box>
+      <div class="control-box">
+        <v-md-editor v-model="content" height="250px"></v-md-editor>
+        <form-button>
+          <button class="button" @click="onCreateQuestion">
+            <span>질문하기</span>
+          </button>
+        </form-button>
+      </div>
     </div>
   </div>
 </template>
@@ -77,20 +65,12 @@ export default {
 }
 
 .inner {
-  width: 600px;
-}
-
-.inner .inner-card {
+  min-width: 80%;
   padding: 25px;
 }
 
 .input-box {
   margin-bottom: 25px;
-}
-
-.control-box {
-  display: flex;
-  justify-content: space-between;
 }
 
 .button {

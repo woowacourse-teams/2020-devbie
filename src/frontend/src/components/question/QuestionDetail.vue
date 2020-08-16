@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="question-content">
-        <div v-html="content"></div>
+        <div v-html="changeToMarkdown"></div>
       </div>
     </div>
   </div>
@@ -62,14 +62,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+import marked from "marked";
 
 export default {
   data() {
     return {
       loginUser: {},
       questionId: this.$route.params.id,
-      userRecommended: "",
-      content: ""
+      userRecommended: ""
     };
   },
   computed: {
@@ -77,7 +77,10 @@ export default {
       "fetchedLoginUser",
       "fetchedQuestion",
       "fetchedMyQuestionRecommendation"
-    ])
+    ]),
+    changeToMarkdown() {
+      return marked(this.fetchedQuestion.content);
+    }
   },
   methods: {
     async onQuestionRecommendation(priorType, newType) {
@@ -143,7 +146,6 @@ export default {
   async created() {
     this.loginUser = this.fetchedLoginUser;
     await this.$store.dispatch("FETCH_QUESTION", this.questionId);
-    this.content = this.fetchedQuestion.content.split("\n").join("<br />");
     if (this.fetchedLoginUser.id) {
       await this.fetchMyQuestionRecommendation(
         this.questionId,
