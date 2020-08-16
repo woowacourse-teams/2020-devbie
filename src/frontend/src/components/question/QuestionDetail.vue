@@ -18,7 +18,7 @@
           <div class="question-info">
             <p class="infos">
               <i class="fas fa-user-edit"></i>
-              {{ fetchedQuestion.userId }}
+              {{ fetchedLoginUser.name }}
             </p>
             <p class="infos">
               <i class="fas fa-eye"></i>
@@ -66,24 +66,23 @@ import { mapGetters } from "vuex";
 import MarkdownContent from "./MarkdownContent";
 
 export default {
+  props: ["questionId"],
   data() {
     return {
-      loginUser: {},
-      questionId: this.$route.params.id,
       userRecommended: "",
       content: ""
     };
   },
   computed: {
     ...mapGetters([
-      "fetchedLoginUser",
       "fetchedQuestion",
+      "fetchedLoginUser",
       "fetchedMyQuestionRecommendation"
     ])
   },
   methods: {
     async onQuestionRecommendation(priorType, newType) {
-      if (!this.loginUser.id) {
+      if (!this.fetchedLoginUser) {
         console.log("you should login");
         return;
       }
@@ -99,13 +98,6 @@ export default {
         );
       }
     },
-    async fetchMyQuestionRecommendation(questionId, userId) {
-      await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
-        questionId,
-        userId
-      });
-      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-    },
     isCreateOrUpdateRecommendation(priorType) {
       return (
         this.userRecommended === "NOT_EXIST" ||
@@ -120,17 +112,6 @@ export default {
     }
   },
   watch: {
-    fetchedLoginUser() {
-      this.loginUser = this.fetchedLoginUser;
-      if (!this.fetchedLoginUser.id) {
-        this.userRecommended = "NOT_EXIST";
-        return;
-      }
-      this.fetchMyQuestionRecommendation(
-        this.questionId,
-        this.fetchedLoginUser.id
-      );
-    },
     fetchedQuestion() {
       this.content = this.fetchedQuestion.content;
     },
@@ -143,15 +124,12 @@ export default {
     }
   },
   async created() {
-    this.loginUser = this.fetchedLoginUser;
-    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
-    if (this.fetchedLoginUser.id) {
-      await this.fetchMyQuestionRecommendation(
-        this.questionId,
-        this.fetchedLoginUser.id
-      );
-    }
-    await this.$emit("fetchUserId", this.fetchedQuestion.userId);
+    await this.$store.dispatch("FETCH_LOGIN_USER");
+    await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
+      questionId: this.questionId,
+      userId: this.fetchedLoginUser.id
+    });
+    this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
   },
   components: {
     MarkdownContent

@@ -4,7 +4,7 @@
     <v-btn
       v-if="isLoggedIn"
       class="control-btn question-create"
-      @click="$router.push('/create-question')"
+      @click="$router.push('/question/create')"
       color="#DAEBEA"
       >질문 하기
     </v-btn>

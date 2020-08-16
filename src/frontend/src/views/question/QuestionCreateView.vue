@@ -9,7 +9,7 @@
 
 <script>
 import QuestionCreate from "../../components/question/QuestionForm";
-import FormTitle from "../../components/question/FormTItle";
+import FormTitle from "../../components/question/FormTitle";
 
 export default {
   components: {

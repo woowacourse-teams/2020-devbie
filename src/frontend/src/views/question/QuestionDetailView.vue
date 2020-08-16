@@ -1,21 +1,9 @@
 <template>
   <div class="detail">
-    <div class="left-menu">
-      <router-link :to="`/questions`">
-        <v-btn color="#DAEBEA" class="menu-btn button">돌아가기</v-btn>
-      </router-link>
-      <div class="author-btn" v-if="author">
-        <router-link :to="`/edit-question/${this.$route.params.id}`">
-          <v-btn color="#DAEBEA" class="menu-btn button">수정하기</v-btn>
-        </router-link>
-        <v-btn @click="onDeleteQuestion" color="#E8E8E8" class="menu-btn button"
-          >삭제하기
-        </v-btn>
-      </div>
-    </div>
+    <question-detail-menu :isAuthor="isAuthor"></question-detail-menu>
     <div class="question-box">
       <question-detail
-        @fetchUserId="isAuthor"
+        :questionId="questionId"
         id="question-detail"
       ></question-detail>
       <answer-list></answer-list>
@@ -26,35 +14,31 @@
 
 <script>
 import { mapGetters } from "vuex";
+import QuestionDetailMenu from "../../components/question/QuestionDetailMenu";
 import QuestionDetail from "../../components/question/QuestionDetail";
 import AnswerList from "../../components/question/AnswerList";
 import AnswerCreate from "../../components/question/AnswerCreate";
 
 export default {
-  components: {
-    QuestionDetail,
-    AnswerList,
-    AnswerCreate
-  },
   data() {
     return {
-      author: false
+      questionId: this.$route.params.id
     };
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser"])
-  },
-  methods: {
-    async onDeleteQuestion() {
-      if (confirm("정말 삭제하시겠습니까?")) {
-        const questionId = this.$route.params.id;
-        await this.$store.dispatch("DELETE_QUESTION", questionId);
-        window.location.href = `/questions`;
-      }
-    },
-    isAuthor(userId) {
-      return (this.author = userId === this.fetchedLoginUser.id);
+    ...mapGetters(["fetchedQuestion", "fetchedLoginUser"]),
+    isAuthor() {
+      return this.fetchedQuestion.userId === this.fetchedLoginUser.id;
     }
+  },
+  async created() {
+    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
+  },
+  components: {
+    QuestionDetailMenu,
+    QuestionDetail,
+    AnswerList,
+    AnswerCreate
   }
 };
 </script>
@@ -71,27 +55,8 @@ a {
   max-width: 95%;
 }
 
-.left-menu {
-  flex-grow: 1;
-  border-right: solid 1px #e8e8e8;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 220px;
-}
-
 #question-detail {
   margin-bottom: 60px;
-}
-
-.menu-btn {
-  margin-top: 30px;
-}
-
-.author-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .question-box {
