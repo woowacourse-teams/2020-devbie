@@ -21,31 +21,21 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
+  props: ["existHashtags"],
   data() {
     return {
       tagName: "",
       items: []
     };
   },
-  computed: {
-    ...mapGetters(["fetchedQuestion"]),
-    tagNames() {
-      return (
-        this.fetchedQuestion &&
-        this.fetchedQuestion.hashtags.map(h => h.tagName)
-      );
-    }
-  },
   watch: {
-    fetchedQuestion: function() {
-      this.items = this.tagNames;
-    },
-    items: function() {
+    items() {
       this.$emit("hashtags", this.items);
       this.tagName = "";
+    },
+    existHashtags() {
+      this.items = this.existHashtags;
     }
   },
   methods: {

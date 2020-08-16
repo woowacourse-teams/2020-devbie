@@ -1,28 +1,22 @@
 <template>
-  <div class="edit-form">
-    <h2 class="title">질문 수정 페이지</h2>
-    <question-edit id="edit-form"></question-edit>
+  <div>
+    <form-title>
+      <span>질문 수정</span>
+    </form-title>
+    <question-create :editingFlag="true"></question-create>
   </div>
 </template>
 
 <script>
-import QuestionEdit from "../../components/question/QuestionEdit";
+import QuestionCreate from "../../components/question/QuestionForm";
+import FormTitle from "../../components/question/FormTItle";
 
 export default {
   components: {
-    QuestionEdit
+    FormTitle,
+    QuestionCreate
   }
 };
 </script>
 
-<style scoped>
-.title {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#edit-form {
-  margin-top: 15px;
-}
-</style>
+<style scoped></style>

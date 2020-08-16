@@ -1,28 +1,22 @@
 <template>
   <div>
-    <h2 class="title">질문 작성</h2>
-    <question-create id="create-form"></question-create>
+    <form-title>
+      <span>질문 수정</span>
+    </form-title>
+    <question-create :editingFlag="false"></question-create>
   </div>
 </template>
 
 <script>
-import QuestionCreate from "../../components/question/QuestionCreate";
+import QuestionCreate from "../../components/question/QuestionForm";
+import FormTitle from "../../components/question/FormTItle";
 
 export default {
   components: {
+    FormTitle,
     QuestionCreate
   }
 };
 </script>
 
-<style scoped>
-.title {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#create-form {
-  margin-top: 15px;
-}
-</style>
+<style scoped></style>
