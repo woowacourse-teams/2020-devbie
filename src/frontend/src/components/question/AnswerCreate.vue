@@ -1,15 +1,6 @@
 <template>
   <div class="answer-create-item-box">
-    <v-textarea
-      class="input-box"
-      label="답변 내용"
-      counter
-      no-resize
-      clearable
-      row-height="1"
-      required
-      v-model="content"
-    ></v-textarea>
+    <v-md-editor v-model="content" height="350px"></v-md-editor>
     <v-btn class="create-btn" @click="createAnswer">답변하기</v-btn>
   </div>
 </template>

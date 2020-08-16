@@ -4,7 +4,7 @@
     <div class="answer-temp">
       <div class="answer-content">
         <div
-          v-html="content"
+          v-html="changeToMarkdown"
           class="answer-content-value"
           v-if="!this.updateEditFlag"
         ></div>
@@ -56,6 +56,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import marked from "marked";
 
 export default {
   props: ["answer"],
@@ -66,13 +67,16 @@ export default {
       userRecommended: "",
       updateEditFlag: false,
       updateContent: this.answer.content,
-      content: this.answer.content.split("\n").join("<br />")
+      content: this.answer.content
     };
   },
   computed: {
     ...mapGetters(["fetchedLoginUser", "fetchedMyAnswerRecommendation"]),
     myAnswerRecommendation() {
       return this.fetchedMyAnswerRecommendation(this.answer.id);
+    },
+    changeToMarkdown() {
+      return marked(this.content);
     }
   },
   methods: {
@@ -91,7 +95,7 @@ export default {
         updateContent: this.updateContent
       });
       this.updateEditFlag = !this.updateEditFlag;
-      this.content = this.updateContent.split("\n").join("<br />");
+      this.content = this.updateContent;
     },
     async onAnswerRecommendation(priorType, newType) {
       if (!this.loginUser.id) {
