@@ -2,10 +2,12 @@ package underdogs.devbie.notice.domain;
 
 import static underdogs.devbie.notice.domain.QNotice.*;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +18,20 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition, Language language) {
-        return jpaQueryFactory
+    public Page<Notice> findAllBy(
+        NoticeType noticeType, JobPosition jobPosition,
+        Language language, Pageable pageable
+    ) {
+        QueryResults<Notice> queryResults = jpaQueryFactory
             .selectFrom(notice)
             .where(equalNoticeType(noticeType),
                 equalJobPosition(jobPosition),
                 containLanguage(language))
-            .fetch();
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
+
+        return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
     }
 
     private BooleanExpression equalNoticeType(NoticeType noticeType) {
