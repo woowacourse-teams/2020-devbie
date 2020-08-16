@@ -1,23 +1,21 @@
 <template>
   <div class="container">
-    <v-form ref="form" v-model="valid" lazy-validation class="notice-form">
+    <v-form ref="form" lazy-validation class="notice-form">
       <v-select
         item-text="text"
         item-value="key"
         v-model="request.noticeType"
         :items="noticeTypeItems"
-        :rules="[v => !!v || 'Item is required']"
         label="채용/교육"
-        required
+        :rules="rules.selected"
       ></v-select>
       <v-select
         item-text="text"
         item-value="key"
         v-model="request.jobPosition"
         :items="fetchedJobPositions"
-        :rules="[v => !!v || 'Item is required']"
         label="직군"
-        required
+        :rules="rules.selected"
       ></v-select>
       <v-select
         item-text="text"
@@ -28,12 +26,12 @@
         chips
         label="프로그래밍 언어"
         multiple
+        :rules="rules.language"
       ></v-select>
       <v-text-field
         v-model="request.title"
-        :rules="textRules"
         label="공고 이름"
-        required
+        :rules="rules.text"
       ></v-text-field>
       <div class="duration">
         <input
@@ -49,15 +47,13 @@
       </div>
       <v-text-field
         v-model="request.name"
-        :rules="textRules"
         label="회사이름"
-        required
+        :rules="rules.text"
       ></v-text-field>
       <v-text-field
         v-model="request.salary"
-        :rules="numberRules"
         label="연봉"
-        required
+        :rules="rules.salary"
       ></v-text-field>
       <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
@@ -66,13 +62,9 @@
         name="input-7-4"
         label="회사설명"
         value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+        :rules="rules.text"
       ></v-textarea>
-      <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4 submit"
-        @click="validate"
-      >
+      <v-btn color="success" class="mr-4 submit" @click="submit">
         작성하기
       </v-btn>
     </v-form>
@@ -82,54 +74,26 @@
 <script>
 import { mapGetters } from "vuex";
 import { dateParser, languageTranslator } from "@/utils/noticeUtil";
+import validator from "../../utils/validator";
 
 export default {
   async created() {
-    await this.isAdmin();
+    await this.checkAdmin();
     await this.$store.dispatch("FETCH_LANGUAGES");
     await this.$store.dispatch("FETCH_JOB_POSITIONS");
 
     this.id = this.$route.params.id;
     await this.$store.dispatch("FETCH_NOTICE", this.id);
 
-    this.request = {
-      title: this.fetchedNotice.title,
-      name: this.fetchedNotice.company.name,
-      jobPosition: this.fetchedNotice.jobPosition,
-      noticeType: this.fetchedNotice.noticeType,
-      startDate: dateParser(
-        this.fetchedNotice.duration === null
-          ? ""
-          : this.fetchedNotice.duration.startDate
-      ),
-      endDate: dateParser(
-        this.fetchedNotice.duration === null
-          ? ""
-          : this.fetchedNotice.duration.endDate
-      ),
-      description: this.fetchedNotice.noticeDescription.content,
-      languages: this.fetchedNotice.noticeDescription.languages.map(language =>
-        languageTranslator(language)
-      ),
-      salary: this.fetchedNotice.company.salary,
-      image: this.fetchedNotice.image
-    };
+    this.request = await this.parameterInitialize();
   },
   computed: {
     ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
   },
   data: function() {
     return {
+      rules: { ...validator.notice },
       id: "",
-      valid: true,
-      numberRules: [
-        v => !!v || "숫자를 입력하세요.",
-        v => Number.isInteger(Number(v)) || "숫자를 입력해야합니다."
-      ],
-      textRules: [
-        v => !!v || "문자를 입력하세요!",
-        v => (v && v.length > 0) || "문자를 1자이상 입력해주세요!"
-      ],
       noticeTypeItems: [
         { text: "채용", key: "JOB" },
         { text: "교육", key: "EDUCATION" }
@@ -139,7 +103,7 @@ export default {
   },
 
   methods: {
-    async isAdmin() {
+    async checkAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
       if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
         await this.$router.push("/");
@@ -163,11 +127,7 @@ export default {
         console.error(e);
       }
     },
-    async validate() {
-      if (!this.$refs.form.validate()) {
-        return;
-      }
-
+    async submit() {
       this.request.startDate = dateParser(this.request.startDate);
       this.request.endDate = dateParser(this.request.endDate);
 
@@ -180,6 +140,30 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    parameterInitialize() {
+      return {
+        title: this.fetchedNotice.title,
+        name: this.fetchedNotice.company.name,
+        jobPosition: this.fetchedNotice.jobPosition,
+        noticeType: this.fetchedNotice.noticeType,
+        startDate: dateParser(
+          this.fetchedNotice.duration === null
+            ? ""
+            : this.fetchedNotice.duration.startDate
+        ),
+        endDate: dateParser(
+          this.fetchedNotice.duration === null
+            ? ""
+            : this.fetchedNotice.duration.endDate
+        ),
+        description: this.fetchedNotice.noticeDescription.content,
+        languages: this.fetchedNotice.noticeDescription.languages.map(
+          language => languageTranslator(language)
+        ),
+        salary: this.fetchedNotice.company.salary,
+        image: this.fetchedNotice.image
+      };
     }
   }
 };

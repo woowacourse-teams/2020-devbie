@@ -1,23 +1,21 @@
 <template>
   <div class="container">
-    <v-form ref="form" v-model="valid" lazy-validation class="notice-form">
+    <v-form ref="form" lazy-validation class="notice-form">
       <v-select
         item-text="text"
         item-value="key"
         v-model="request.noticeType"
         :items="noticeTypeItems"
-        :rules="selectRules"
         label="채용/교육"
-        required
+        :rules="rules.selected"
       ></v-select>
       <v-select
         v-model="request.jobPosition"
         item-text="text"
         item-value="key"
         :items="fetchedJobPositions"
-        :rules="selectRules"
         label="직군"
-        required
+        :rules="rules.selected"
       ></v-select>
       <v-select
         item-text="text"
@@ -28,12 +26,12 @@
         chips
         label="프로그래밍 언어"
         multiple
+        :rules="rules.language"
       ></v-select>
       <v-text-field
         v-model="request.title"
-        :rules="textRules"
         label="공고 이름"
-        required
+        :rules="rules.text"
       ></v-text-field>
       <div class="duration">
         <input
@@ -49,15 +47,15 @@
       </div>
       <v-text-field
         v-model="request.name"
-        :rules="textRules"
         label="회사이름"
         required
+        :rules="rules.text"
       ></v-text-field>
       <v-text-field
         v-model="request.salary"
-        :rules="numberRules"
         label="연봉"
         required
+        :rules="rules.salary"
       ></v-text-field>
       <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
@@ -65,13 +63,9 @@
         v-model="request.description"
         name="input-7-4"
         label="회사설명"
+        :rules="rules.text"
       ></v-textarea>
-      <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4 submit"
-        @click="validate"
-      >
+      <v-btn color="success" class="mr-4 submit" @click="validate">
         작성하기
       </v-btn>
     </v-form>
@@ -81,10 +75,11 @@
 <script>
 import { mapGetters } from "vuex";
 import { dateParser } from "../../utils/noticeUtil";
+import validator from "../../utils/validator";
 
 export default {
   created() {
-    this.isAdmin();
+    this.checkAdmin();
     this.$store.dispatch("FETCH_LANGUAGES");
     this.$store.dispatch("FETCH_JOB_POSITIONS");
   },
@@ -93,20 +88,12 @@ export default {
   },
   data: function() {
     return {
-      valid: true,
-      selectRules: [v => !!v || "Item is required"],
-      numberRules: [
-        v => !!v || "숫자를 입력하세요.",
-        v => Number.isInteger(Number(v)) || "숫자를 입력해야합니다."
-      ],
-      textRules: [
-        v => !!v || "문자를 입력하세요!",
-        v => (v && v.length > 0) || "문자를 1자이상 입력해주세요!"
-      ],
+      rules: { ...validator.notice },
       noticeTypeItems: [
         { text: "채용", key: "JOB" },
         { text: "교육", key: "EDUCATION" }
       ],
+      title: "",
       request: {
         jobPosition: "",
         image: "",
@@ -122,7 +109,7 @@ export default {
     };
   },
   methods: {
-    async isAdmin() {
+    async checkAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
       if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
         await this.$router.push("/");
