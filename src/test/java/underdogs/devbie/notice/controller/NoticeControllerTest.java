@@ -20,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +40,7 @@ import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
+import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
@@ -209,7 +211,7 @@ public class NoticeControllerTest extends MvcTest {
                 , "hi"))
             .build());
 
-        given(noticeService.filteredRead(any(NoticeType.class), any(), any()))
+        given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
             .willReturn(NoticeResponses.listFrom(notices));
 
         MvcResult mvcResult = getAction("/api/notices?noticeType=JOB")
