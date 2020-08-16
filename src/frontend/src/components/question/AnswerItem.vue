@@ -3,11 +3,11 @@
     <div class="author-name">작성자: {{ answer.userId }}</div>
     <div class="answer-temp">
       <div class="answer-content">
-        <div
-          v-html="changeToMarkdown"
+        <markdown-content
           class="answer-content-value"
           v-if="!this.updateEditFlag"
-        ></div>
+          :content="content"
+        ></markdown-content>
         <v-textarea
           class="update-form"
           outlined
@@ -56,7 +56,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import marked from "marked";
+import MarkdownContent from "./MarkdownContent";
 
 export default {
   props: ["answer"],
@@ -74,9 +74,6 @@ export default {
     ...mapGetters(["fetchedLoginUser", "fetchedMyAnswerRecommendation"]),
     myAnswerRecommendation() {
       return this.fetchedMyAnswerRecommendation(this.answer.id);
-    },
-    changeToMarkdown() {
-      return marked(this.content);
     }
   },
   methods: {
@@ -155,6 +152,9 @@ export default {
       await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
     }
     await this.isAuthor();
+  },
+  components: {
+    MarkdownContent
   }
 };
 </script>

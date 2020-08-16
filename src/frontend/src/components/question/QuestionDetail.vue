@@ -53,23 +53,25 @@
           </div>
         </div>
       </div>
-      <div class="question-content">
-        <div v-html="changeToMarkdown"></div>
-      </div>
+      <markdown-content
+        class="question-content"
+        :content="content"
+      ></markdown-content>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import marked from "marked";
+import MarkdownContent from "./MarkdownContent";
 
 export default {
   data() {
     return {
       loginUser: {},
       questionId: this.$route.params.id,
-      userRecommended: ""
+      userRecommended: "",
+      content: ""
     };
   },
   computed: {
@@ -77,10 +79,7 @@ export default {
       "fetchedLoginUser",
       "fetchedQuestion",
       "fetchedMyQuestionRecommendation"
-    ]),
-    changeToMarkdown() {
-      return marked(this.fetchedQuestion.content);
-    }
+    ])
   },
   methods: {
     async onQuestionRecommendation(priorType, newType) {
@@ -132,15 +131,15 @@ export default {
         this.fetchedLoginUser.id
       );
     },
+    fetchedQuestion() {
+      this.content = this.fetchedQuestion.content;
+    },
     fetchedMyQuestionRecommendation() {
       this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       this.$store.dispatch(
         "UPDATE_QUESTION_RECOMMENDATION_COUNT",
         this.questionId
       );
-    },
-    fetchedQuestion() {
-      this.content = this.fetchedQuestion.content.split("\n").join("<br />");
     }
   },
   async created() {
@@ -153,6 +152,9 @@ export default {
       );
     }
     await this.$emit("fetchUserId", this.fetchedQuestion.userId);
+  },
+  components: {
+    MarkdownContent
   }
 };
 </script>
