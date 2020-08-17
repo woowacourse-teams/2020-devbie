@@ -2,10 +2,8 @@
   <div class="question-detail">
     <div class="inner">
       <div class="question-header">
-        <div class="question-title">
+        <div class="left-container">
           <h1>Q. {{ fetchedQuestion.title }}</h1>
-        </div>
-        <div class="question-header-bottom">
           <div class="hashtags">
             <span
               v-for="hashtag in fetchedQuestion.hashtags"
@@ -15,6 +13,8 @@
               >#{{ hashtag.tagName }}
             </span>
           </div>
+        </div>
+        <div class="right-container">
           <div class="question-info">
             <p class="infos">
               <i class="fas fa-user-edit"></i>
@@ -24,11 +24,11 @@
               <i class="fas fa-eye"></i>
               {{ fetchedQuestion.visits }}
             </p>
-            <recommendation-control
-              :targetObject="fetchedQuestion"
-              :isQuestion="true"
-            ></recommendation-control>
           </div>
+          <recommendation-control
+            :targetObject="fetchedQuestion"
+            :isQuestion="true"
+          ></recommendation-control>
         </div>
       </div>
       <markdown-content
@@ -40,20 +40,23 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import MarkdownContent from "./MarkdownContent";
 import RecommendationControl from "./RecommendationControl";
 
 export default {
-  props: ["loginUser", "fetchedQuestion"],
+  props: ["loginUser"],
   data() {
     return {
       content: ""
     };
   },
-  watch: {
-    fetchedQuestion() {
-      this.content = this.fetchedQuestion.content;
-    }
+  computed: {
+    ...mapGetters(["fetchedQuestion"])
+  },
+  async created() {
+    await this.$store.dispatch("FETCH_QUESTION", this.$route.params.id);
+    this.content = this.fetchedQuestion.content;
   },
   components: {
     MarkdownContent,
@@ -70,23 +73,24 @@ export default {
   margin-left: 20px;
 }
 
-.question-title {
-  margin-bottom: 12px;
-}
-
 .question-header {
+  display: flex;
+  justify-content: space-between;
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
 }
 
-.question-header-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.left-container h1 {
+  margin-bottom: 12px;
+}
+
+.right-container {
+  min-width: 190px;
+  margin-top: 7px;
 }
 
 .hashtag {
-  margin: 0 9px;
+  margin: 3px 9px;
   color: #0086b3;
 }
 
@@ -100,13 +104,14 @@ export default {
 .question-info {
   min-width: 180px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .question-info .infos {
-  font-size: 16px;
+  font-size: 18px;
   margin-right: 15px;
   margin-bottom: 0;
+  color: #6d819c;
 }
 
 .question-info .infos:last-child {

@@ -5,10 +5,13 @@
       <question-detail
         :loginUser="fetchedLoginUser"
         :fetchedQuestion="fetchedQuestion"
-        id="question-detail"
+        class="detail-items"
       ></question-detail>
-      <answer-list :loginUser="fetchedLoginUser"></answer-list>
-      <answer-create></answer-create>
+      <answer-list
+        class="detail-items"
+        :loginUser="fetchedLoginUser"
+      ></answer-list>
+      <answer-create class="detail-items"></answer-create>
     </div>
   </div>
 </template>
@@ -47,12 +50,11 @@ a {
 .detail {
   display: flex;
   justify-content: center;
-  margin: 20px 0 auto;
-  max-width: 95%;
+  margin: 20px 30px 0 0;
 }
 
-#question-detail {
-  margin-bottom: 60px;
+.detail-items {
+  max-width: 90%;
 }
 
 .question-box {

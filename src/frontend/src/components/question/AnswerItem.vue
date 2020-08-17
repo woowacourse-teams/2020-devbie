@@ -1,34 +1,62 @@
 <template>
   <div class="answer-item-box">
-    <div class="author-name">작성자: {{ answer.userId }}</div>
-    <div class="answer-temp">
-      <div class="answer-content">
-        <markdown-content
-          class="answer-content-value"
-          v-if="!this.updateEditFlag"
-          :content="content"
-        ></markdown-content>
-        <v-textarea
-          class="update-form"
-          outlined
-          v-else
-          v-model="content"
-        ></v-textarea>
+    <div class="left-container">
+      <div class="author-name">
+        <p class="infos">
+          <i class="fas fa-user-edit"></i>
+          작성자: {{ answer.userId }}
+        </p>
       </div>
+      <div class="answer-temp">
+        <div class="answer-content">
+          <markdown-content
+            class="answer-content-value"
+            v-if="!this.updateEditFlag"
+            :content="content"
+          ></markdown-content>
+          <v-textarea
+            class="update-form"
+            outlined
+            v-else
+            v-model="content"
+          ></v-textarea>
+        </div>
+      </div>
+    </div>
+    <div class="right-container">
       <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
+        <div class="author-button" v-if="isAuthor">
+          <v-btn
+            color="#DAEBEA"
+            small
+            class="button answer-btn"
+            v-if="updateEditFlag"
+            @click="update"
+          >
+            수정 확인
+          </v-btn>
+          <v-btn
+            color="#DAEBEA"
+            small
+            class="button answer-btn"
+            v-else
+            @click="updateBtnHandler"
+          >
+            수정
+          </v-btn>
+          <v-btn
+            color="#DAEBEA"
+            class="button answer-btn delete-btn"
+            small
+            @click="deleteBtnHandler"
+          >
+            삭제
+          </v-btn>
+        </div>
         <recommendation-control
           :targetObject="answer"
           :isQuestion="false"
         ></recommendation-control>
-        <div v-if="isAuthor">
-          <v-btn class="update-btn" v-if="updateEditFlag" @click="update">
-            수정 확인
-          </v-btn>
-          <v-btn class="update-btn" v-else @click="updateBtnHandler"
-            >수정
-          </v-btn>
-          <v-btn @click="deleteBtnHandler">삭제</v-btn>
-        </div>
       </div>
     </div>
   </div>
@@ -75,54 +103,52 @@ export default {
 
 <style scoped>
 .author-name {
-  margin-top: 15px;
-  color: #7ec699;
+  margin-top: 8px;
+  color: #6d819c;
+}
+
+.author-name .infos {
+  font-size: 14px;
+  margin: 0 30px;
 }
 
 .answer-item-box {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 10px;
+  border-bottom: solid #e8e8e8 1px;
+  min-height: 150px;
 }
 
 .answer-content {
-  padding: 30px 20px 30px 50px;
+  padding: 20px 15px 30px 30px;
 }
 
 .answer-temp {
   display: flex;
   justify-content: space-between;
-  border-bottom: solid #e8e8e8 1px;
-}
-
-.recommendations {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .answer-infos {
-  min-width: 135px;
+  min-width: 170px;
 }
 
-.recommendations .infos {
-  margin: 0 10px 10px 0;
+.answer-btn {
+  margin: 0 4px;
 }
 
-.recommendation:hover {
-  cursor: pointer;
+.delete-btn:hover {
+  background-color: #fc9d9a !important;
 }
 
-.recommendation-clicked {
-  color: #7ec699;
+.author-button {
+  display: flex;
+  justify-content: center;
 }
 
 .answer-content {
   min-width: 80%;
-}
-
-.update-btn {
-  margin-right: 7px;
 }
 
 .answer-content-value {

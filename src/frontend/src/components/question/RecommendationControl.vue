@@ -1,25 +1,27 @@
 <template>
-  <div>
-    <p class="infos">
-      <i
-        :class="{
-          'recommendation-clicked': isUserAction('RECOMMENDED')
-        }"
-        class="far fa-thumbs-up recommendation"
-        @click="onRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
-      ></i>
-      {{ targetObject.recommendedCount }}
-    </p>
-    <p class="infos">
-      <i
-        :class="{
-          'recommendation-clicked': isUserAction('NON_RECOMMENDED')
-        }"
-        class="far fa-thumbs-down recommendation"
-        @click="onRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
-      ></i>
-      {{ targetObject.nonRecommendedCount }}
-    </p>
+  <div class="container">
+    <v-btn
+      rounded
+      class="recommendation-btn"
+      :class="{
+        clicked: isUserAction('RECOMMENDED')
+      }"
+      @click="onRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
+    >
+      <i class="far fa-thumbs-up recommendation"></i>
+      <span class="recommendation">{{ targetObject.recommendedCount }}</span>
+    </v-btn>
+    <v-btn
+      rounded
+      class="recommendation-btn"
+      :class="{
+        clicked: isUserAction('NON_RECOMMENDED')
+      }"
+      @click="onRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
+    >
+      <i class="far fa-thumbs-down recommendation"></i>
+      <span class="recommendation">{{ targetObject.nonRecommendedCount }}</span>
+    </v-btn>
   </div>
 </template>
 
@@ -55,17 +57,16 @@ export default {
           objectId: this.targetObject.id,
           recommendationType: newType
         });
-        this.userRecommended = newType;
       } else {
-        await this.$store.dispatch(
-          "DELETE_RECOMMENDATION",
-          this.targetObject.id
-        );
-        this.userRecommended = "NOT_EXIST";
+        await this.$store.dispatch("DELETE_RECOMMENDATION", {
+          object: this.isQuestion ? "question" : "answer",
+          objectId: this.targetObject.id
+        });
       }
 
       if (!this.isQuestion) {
         await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
+        this.userRecommended = this.myAnswerRecommendation.recommendationType;
       }
     },
     isCreateOrUpdateRecommendation(priorType) {
@@ -76,13 +77,6 @@ export default {
     },
     isUserAction(recommendationType) {
       return this.userRecommended === recommendationType;
-    },
-    initUserRecommended() {
-      if (this.isQuestion) {
-        this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-      } else {
-        this.userRecommended = this.myAnswerRecommendation.recommendationType;
-      }
     }
   },
   watch: {
@@ -92,6 +86,7 @@ export default {
           "UPDATE_QUESTION_RECOMMENDATION_COUNT",
           this.targetObject.id
         );
+        this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       }
     }
   },
@@ -102,17 +97,37 @@ export default {
       objectId: this.targetObject.id,
       userId: this.fetchedLoginUser.id
     });
-    this.initUserRecommended();
+    if (!this.isQuestion) {
+      this.userRecommended = this.myAnswerRecommendation.recommendationType;
+    }
   }
 };
 </script>
 
 <style scoped>
-.recommendation:hover {
+.container {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 9px;
+}
+
+.recommendation {
+  font-size: 19px;
+}
+
+.recommendation-btn:hover {
   cursor: pointer;
 }
 
-.recommendation-clicked {
-  color: #7ec699;
+.fa-thumbs-up {
+  color: #4ea1d3;
+}
+
+.fa-thumbs-down {
+  color: #e85a71;
+}
+
+.clicked {
+  background-color: #f6ea8c !important;
 }
 </style>

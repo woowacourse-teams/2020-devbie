@@ -4,19 +4,19 @@
       color="#DAEBEA"
       @click="$router.push(`/questions`)"
       class="menu-btn button"
-      >돌아가기</v-btn
-    >
+      >돌아가기
+    </v-btn>
     <div class="author-btn" v-if="isAuthor">
       <v-btn
         color="#DAEBEA"
         @click="$router.push(`/question/edit/${$route.params.id}`)"
         class="menu-btn button"
-        >수정하기</v-btn
-      >
+        >수정하기
+      </v-btn>
       <v-btn
         @click="onDeleteQuestion"
         color="#DAEBEA"
-        class="menu-btn button primary"
+        class="menu-btn button delete-btn"
         >삭제하기
       </v-btn>
     </div>
@@ -56,5 +56,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.delete-btn:hover {
+  background-color: #fc9d9a !important;
 }
 </style>

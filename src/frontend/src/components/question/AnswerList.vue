@@ -39,7 +39,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 100%;
+  margin-left: 20px;
 }
 
 #count-of-answer {
@@ -57,7 +57,7 @@ export default {
 }
 
 .inner {
-  width: 90%;
+  width: 95%;
   box-sizing: border-box;
   padding: 10px 0 40px 0;
 }
