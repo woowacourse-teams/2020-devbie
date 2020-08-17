@@ -27,6 +27,7 @@
           </div>
           <recommendation-control
             :targetObject="fetchedQuestion"
+            :loginUser="loginUser"
             :isQuestion="true"
           ></recommendation-control>
         </div>

@@ -55,6 +55,7 @@
         </div>
         <recommendation-control
           :targetObject="answer"
+          :loginUser="loginUser"
           :isQuestion="false"
         ></recommendation-control>
       </div>

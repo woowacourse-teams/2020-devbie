@@ -29,7 +29,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["targetObject", "isQuestion"],
+  props: ["targetObject", "loginUser", "isQuestion"],
   data() {
     return {
       userRecommended: ""
@@ -37,6 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "isLoggedIn",
       "fetchedLoginUser",
       "fetchedMyQuestionRecommendation",
       "fetchedMyAnswerRecommendation"
@@ -47,23 +48,22 @@ export default {
   },
   methods: {
     async onRecommendation(priorType, newType) {
-      if (!this.fetchedLoginUser) {
+      if (!this.isLoggedIn) {
         console.log("you should login");
         return;
       }
       if (this.isCreateOrUpdateRecommendation(priorType)) {
         await this.$store.dispatch("CREATE_RECOMMENDATION", {
           object: this.isQuestion ? "question" : "answer",
-          objectId: this.targetObject.id,
+          objectId: this.targetObject && this.targetObject.id,
           recommendationType: newType
         });
       } else {
         await this.$store.dispatch("DELETE_RECOMMENDATION", {
           object: this.isQuestion ? "question" : "answer",
-          objectId: this.targetObject.id
+          objectId: this.targetObject && this.targetObject.id
         });
       }
-
       if (!this.isQuestion) {
         await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
         this.userRecommended = this.myAnswerRecommendation.recommendationType;
@@ -84,21 +84,23 @@ export default {
       if (this.isQuestion) {
         this.$store.dispatch(
           "UPDATE_QUESTION_RECOMMENDATION_COUNT",
-          this.targetObject.id
+          this.targetObject && this.targetObject.id
         );
         this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       }
     }
   },
   async created() {
-    await this.$store.dispatch("FETCH_LOGIN_USER");
-    await this.$store.dispatch("FETCH_MY_RECOMMENDATION", {
-      object: this.isQuestion ? "question" : "answer",
-      objectId: this.targetObject.id,
-      userId: this.fetchedLoginUser.id
-    });
-    if (!this.isQuestion) {
-      this.userRecommended = this.myAnswerRecommendation.recommendationType;
+    if (this.isLoggedIn) {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_RECOMMENDATION", {
+        object: this.isQuestion ? "question" : "answer",
+        objectId: this.targetObject && this.targetObject.id,
+        userId: this.fetchedLoginUser && this.fetchedLoginUser.id
+      });
+      if (!this.isQuestion) {
+        this.userRecommended = this.myAnswerRecommendation.recommendationType;
+      }
     }
   }
 };
