@@ -105,10 +105,11 @@ export default {
   min-width: 180px;
   display: flex;
   justify-content: center;
+  margin-bottom: 6px;
 }
 
 .question-info .infos {
-  font-size: 18px;
+  font-size: 17px;
   margin-right: 15px;
   margin-bottom: 0;
   color: #6d819c;

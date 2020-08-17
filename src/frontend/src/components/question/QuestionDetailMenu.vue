@@ -2,6 +2,7 @@
   <div class="left-menu">
     <v-btn
       color="#DAEBEA"
+      large
       @click="$router.push(`/questions`)"
       class="menu-btn button"
       >돌아가기
@@ -9,12 +10,14 @@
     <div class="author-btn" v-if="isAuthor">
       <v-btn
         color="#DAEBEA"
+        large
         @click="$router.push(`/question/edit/${$route.params.id}`)"
         class="menu-btn button"
         >수정하기
       </v-btn>
       <v-btn
         @click="onDeleteQuestion"
+        large
         color="#DAEBEA"
         class="menu-btn button delete-btn"
         >삭제하기
@@ -45,7 +48,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 220px;
+  min-width: 200px;
 }
 
 .menu-btn {

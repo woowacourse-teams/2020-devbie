@@ -51,7 +51,6 @@ export default {
 
 .answer-list {
   list-style: none;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }

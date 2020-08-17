@@ -1,7 +1,9 @@
 <template>
   <div class="answer-create-item-box">
     <v-md-editor v-model="content" class="editor" height="350px"></v-md-editor>
-    <v-btn class="create-btn" @click="createAnswer">답변하기</v-btn>
+    <v-btn color="#E8E8E8" class="create-btn button" @click="createAnswer"
+      >답변하기</v-btn
+    >
   </div>
 </template>
 
@@ -41,5 +43,9 @@ export default {
 
 .create-btn {
   width: 95%;
+}
+
+.create-btn:hover {
+  background-color: #99f19e !important;
 }
 </style>

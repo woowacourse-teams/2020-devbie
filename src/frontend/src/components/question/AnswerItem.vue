@@ -103,8 +103,8 @@ export default {
 
 <style scoped>
 .author-name {
-  margin-top: 8px;
   color: #6d819c;
+  margin-bottom: 6px;
 }
 
 .author-name .infos {
