@@ -25,16 +25,17 @@ a:hover {
   margin-top: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding-right: 20px;
   border-right: solid 1px #e8e8e8;
+  height: 90%;
 }
 
 .condition {
   text-decoration: none;
   color: #cfe1e8;
-  font-size: 24px;
+  font-size: 26px;
   margin-bottom: 10px;
 }
 

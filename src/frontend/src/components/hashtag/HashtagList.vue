@@ -1,24 +1,31 @@
 <template>
   <div class="inner">
     <v-btn
-      class="control-btn hashtag-list"
+      class="button control-btn hashtag-list"
+      large
       color="#DAEBEA"
       @click.stop="drawer = !drawer"
       >태그 목록
     </v-btn>
     <v-navigation-drawer right v-model="drawer" absolute temporary>
-      <v-list-item>
+      <v-list-item class="drawer-title">
         <v-list-item-content>
           <v-list-item-title>태그 목록</v-list-item-title>
         </v-list-item-content>
+        <i
+          @click="drawer = false"
+          class="fa fa-times btn"
+          aria-hidden="true"
+        ></i>
       </v-list-item>
 
       <v-divider></v-divider>
       <div class="hashtag-list">
         <v-btn
           small
+          rounded
           color="#E8E8E8"
-          class="hashtag"
+          class="hashtag button"
           v-for="hashtag in fetchedHashtags.hashtags"
           :key="hashtag.id"
           @click="$router.push(`/questions?hashtag=${hashtag.tagName}`)"
@@ -41,6 +48,11 @@ export default {
   computed: {
     ...mapGetters(["fetchedHashtags"])
   },
+  methods: {
+    close() {
+      this.drawer = false;
+    }
+  },
   created() {
     this.$store.dispatch("FETCH_HASHTAGS");
   }
@@ -57,16 +69,27 @@ export default {
 }
 
 .hashtag {
+  font-size: 6px !important;
   margin: 4px;
   padding: 7px !important;
 }
 
 .hashtag:hover {
-  color: darkorange;
-  text-decoration: underline;
+  background-color: #daebea !important;
 }
 
 .control-btn {
   width: 95px;
+}
+
+.btn:hover {
+  cursor: pointer;
+  color: #fc8c84;
+}
+
+.drawer-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

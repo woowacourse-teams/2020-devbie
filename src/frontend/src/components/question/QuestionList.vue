@@ -56,18 +56,22 @@ export default {
 }
 
 .question {
-  border: solid 2px #87bdd6;
-  border-radius: 10px;
-  margin-bottom: 15px;
+  border-top: solid 2px #87bdd6;
+  min-height: 120px;
   padding: 10px;
   display: flex;
   align-items: center;
   width: 95%;
 }
 
+.question:last-child {
+  border-bottom: solid 2px #87bdd6;
+}
+
 .count-infos {
   display: flex;
   flex-direction: column;
+  min-width: 95px;
 }
 
 .count {
@@ -78,8 +82,6 @@ export default {
 
 .title {
   color: #35495e;
-  font-weight: normal;
-  font-size: 24px;
   text-decoration: none;
   margin-bottom: 0;
   margin-right: 7px;
@@ -94,6 +96,7 @@ export default {
 .hashtags {
   margin: 0 3px;
   font-size: 13px;
+  color: #60c5ba;
 }
 
 .hashtags:first-child {

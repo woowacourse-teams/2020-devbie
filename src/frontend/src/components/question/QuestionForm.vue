@@ -19,16 +19,18 @@
         <form-button>
           <v-btn
             v-if="editingFlag"
+            large
             color="#DAEBEA"
-            class="button"
+            class="button green-hover"
             @click="onUpdateQuestion"
           >
             <span>수정하기</span>
           </v-btn>
           <v-btn
             v-else
+            large
             color="#DAEBEA"
-            class="button"
+            class="button green-hover"
             @click="onCreateQuestion"
           >
             <span>질문하기</span>
