@@ -84,7 +84,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
 
-                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
+                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getId() + "?visit=true",
                     QuestionResponse.class);
 
                 assertAll(
@@ -103,9 +103,9 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                     .build();
                 String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
 
-                patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
+                patch("/api/questions/" + firstQuestion.getId(), inputJsonForUpdate);
 
-                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
+                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getId() + "?visit=true",
                     QuestionResponse.class);
                 assertAll(
                     () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
@@ -117,7 +117,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
-                delete("/api/questions/" + firstQuestion.getQuestionId());
+                delete("/api/questions/" + firstQuestion.getId());
 
                 QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
 

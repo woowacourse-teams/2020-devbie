@@ -7,7 +7,6 @@ import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import java.util.LinkedHashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,7 +30,6 @@ import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
-import java.util.Set;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -110,7 +108,7 @@ public class QuestionServiceTest {
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
-            () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
+            () -> assertThat(response.getId()).isEqualTo(question.getId()),
             () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
@@ -129,7 +127,7 @@ public class QuestionServiceTest {
         QuestionResponse response = questionService.read(1L, true);
 
         assertAll(
-            () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
+            () -> assertThat(response.getId()).isEqualTo(question.getId()),
             () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
@@ -238,7 +236,7 @@ public class QuestionServiceTest {
 
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getUserId()).isEqualTo(1L),
-            () -> assertThat(responses.getQuestions().get(0).getQuestionId()).isEqualTo(100L),
+            () -> assertThat(responses.getQuestions().get(0).getId()).isEqualTo(100L),
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(responses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );

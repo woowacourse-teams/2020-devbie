@@ -7,8 +7,9 @@
       <div class="answer-list">
         <answer-item
           v-for="answer in fetchedAnswers"
-          v-bind:key="answer.id"
-          v-bind:answer="answer"
+          :key="answer.id"
+          :answer="answer"
+          :loginUser="loginUser"
         ></answer-item>
       </div>
     </div>
@@ -20,6 +21,7 @@ import AnswerItem from "./AnswerItem.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  props: ["loginUser"],
   computed: {
     ...mapGetters(["fetchedAnswers"])
   },

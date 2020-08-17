@@ -12,10 +12,7 @@
             추천수 : {{ question.recommendedCount }}
           </p>
         </div>
-        <p
-          @click="$router.push(`/questions/${question.questionId}`)"
-          class="title"
-        >
+        <p @click="$router.push(`/questions/${question.id}`)" class="title">
           Q. {{ question.title }}
         </p>
         <div

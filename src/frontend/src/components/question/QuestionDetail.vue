@@ -18,38 +18,16 @@
           <div class="question-info">
             <p class="infos">
               <i class="fas fa-user-edit"></i>
-              {{ fetchedLoginUser.name }}
+              {{ loginUser.name }}
             </p>
             <p class="infos">
               <i class="fas fa-eye"></i>
               {{ fetchedQuestion.visits }}
             </p>
-            <p class="infos">
-              <i
-                :class="{
-                  'recommendation-clicked': isUserRecommendation('RECOMMENDED')
-                }"
-                class="far fa-thumbs-up recommendation"
-                @click="
-                  onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
-                "
-              ></i>
-              {{ fetchedQuestion.recommendedCount }}
-            </p>
-            <p class="infos">
-              <i
-                :class="{
-                  'recommendation-clicked': isUserRecommendation(
-                    'NON_RECOMMENDED'
-                  )
-                }"
-                class="far fa-thumbs-down recommendation"
-                @click="
-                  onQuestionRecommendation('RECOMMENDED', 'NON_RECOMMENDED')
-                "
-              ></i>
-              {{ fetchedQuestion.nonRecommendedCount }}
-            </p>
+            <recommendation-control
+              :targetObject="fetchedQuestion"
+              :isQuestion="true"
+            ></recommendation-control>
           </div>
         </div>
       </div>
@@ -62,77 +40,24 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import MarkdownContent from "./MarkdownContent";
+import RecommendationControl from "./RecommendationControl";
 
 export default {
-  props: ["questionId"],
+  props: ["loginUser", "fetchedQuestion"],
   data() {
     return {
-      userRecommended: "",
       content: ""
     };
-  },
-  computed: {
-    ...mapGetters([
-      "fetchedQuestion",
-      "fetchedLoginUser",
-      "fetchedMyQuestionRecommendation"
-    ])
-  },
-  methods: {
-    async onQuestionRecommendation(priorType, newType) {
-      if (!this.fetchedLoginUser) {
-        console.log("you should login");
-        return;
-      }
-      if (this.isCreateOrUpdateRecommendation(priorType)) {
-        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
-          questionId: this.questionId,
-          recommendationType: newType
-        });
-      } else {
-        await this.$store.dispatch(
-          "DELETE_QUESTION_RECOMMENDATION",
-          this.questionId
-        );
-      }
-    },
-    isCreateOrUpdateRecommendation(priorType) {
-      return (
-        this.userRecommended === "NOT_EXIST" ||
-        this.userRecommended === priorType
-      );
-    },
-    isUserRecommendation(recommendationType) {
-      return (
-        this.fetchedMyQuestionRecommendation &&
-        this.userRecommended === recommendationType
-      );
-    }
   },
   watch: {
     fetchedQuestion() {
       this.content = this.fetchedQuestion.content;
-    },
-    fetchedMyQuestionRecommendation() {
-      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-      this.$store.dispatch(
-        "UPDATE_QUESTION_RECOMMENDATION_COUNT",
-        this.questionId
-      );
     }
   },
-  async created() {
-    await this.$store.dispatch("FETCH_LOGIN_USER");
-    await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
-      questionId: this.questionId,
-      userId: this.fetchedLoginUser.id
-    });
-    this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-  },
   components: {
-    MarkdownContent
+    MarkdownContent,
+    RecommendationControl
   }
 };
 </script>
@@ -182,14 +107,6 @@ export default {
   font-size: 16px;
   margin-right: 15px;
   margin-bottom: 0;
-}
-
-.recommendation:hover {
-  cursor: pointer;
-}
-
-.recommendation-clicked {
-  color: #7ec699;
 }
 
 .question-info .infos:last-child {

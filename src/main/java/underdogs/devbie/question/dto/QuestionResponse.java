@@ -17,7 +17,7 @@ import underdogs.devbie.question.domain.Question;
 @ToString
 public class QuestionResponse {
 
-    private Long questionId;
+    private Long id;
     private Long userId;
     private Long visits;
     private Long recommendedCount;
@@ -28,7 +28,7 @@ public class QuestionResponse {
 
     public static QuestionResponse from(Question question) {
         return QuestionResponse.builder()
-            .questionId(question.getId())
+            .id(question.getId())
             .userId(question.getUserId())
             .visits(question.getVisits().getVisitCount())
             .recommendedCount(question.getRecommendationCount().getRecommendedCount())

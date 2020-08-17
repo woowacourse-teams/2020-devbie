@@ -3,10 +3,11 @@
     <question-detail-menu :isAuthor="isAuthor"></question-detail-menu>
     <div class="question-box">
       <question-detail
-        :questionId="questionId"
+        :loginUser="fetchedLoginUser"
+        :fetchedQuestion="fetchedQuestion"
         id="question-detail"
       ></question-detail>
-      <answer-list></answer-list>
+      <answer-list :loginUser="fetchedLoginUser"></answer-list>
       <answer-create></answer-create>
     </div>
   </div>
@@ -20,11 +21,6 @@ import AnswerList from "../../components/question/AnswerList";
 import AnswerCreate from "../../components/question/AnswerCreate";
 
 export default {
-  data() {
-    return {
-      questionId: this.$route.params.id
-    };
-  },
   computed: {
     ...mapGetters(["fetchedQuestion", "fetchedLoginUser"]),
     isAuthor() {
@@ -32,7 +28,7 @@ export default {
     }
   },
   async created() {
-    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
+    await this.$store.dispatch("FETCH_QUESTION", this.$route.params.id);
   },
   components: {
     QuestionDetailMenu,

@@ -12,35 +12,15 @@
           class="update-form"
           outlined
           v-else
-          v-model="updateContent"
+          v-model="content"
         ></v-textarea>
       </div>
-      <div :class="{ 'vertical-center': !author }" class="answer-infos">
-        <div class="recommendations">
-          <p class="infos">
-            <i
-              :class="{
-                'recommendation-clicked': isUserRecommendation('RECOMMENDED')
-              }"
-              class="far fa-thumbs-up recommendation"
-              @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
-            ></i>
-            {{ answer.recommendedCount }}
-          </p>
-          <p class="infos">
-            <i
-              :class="{
-                'recommendation-clicked': isUserRecommendation(
-                  'NON_RECOMMENDED'
-                )
-              }"
-              class="far fa-thumbs-down recommendation"
-              @click="onAnswerRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
-            ></i>
-            {{ answer.nonRecommendedCount }}
-          </p>
-        </div>
-        <div v-if="author">
+      <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
+        <recommendation-control
+          :targetObject="answer"
+          :isQuestion="false"
+        ></recommendation-control>
+        <div v-if="isAuthor">
           <v-btn class="update-btn" v-if="updateEditFlag" @click="update">
             수정 확인
           </v-btn>
@@ -55,31 +35,23 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import MarkdownContent from "./MarkdownContent";
+import RecommendationControl from "../../components/question/RecommendationControl";
 
 export default {
-  props: ["answer"],
+  props: ["answer", "loginUser"],
   data: function() {
     return {
-      loginUser: {},
-      author: false,
-      userRecommended: "",
       updateEditFlag: false,
-      updateContent: this.answer.content,
       content: this.answer.content
     };
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser", "fetchedMyAnswerRecommendation"]),
-    myAnswerRecommendation() {
-      return this.fetchedMyAnswerRecommendation(this.answer.id);
+    isAuthor() {
+      return this.answer.userId === this.loginUser.id;
     }
   },
   methods: {
-    isAuthor() {
-      return (this.author = this.answer.userId === this.loginUser.id);
-    },
     async deleteBtnHandler() {
       await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
@@ -89,72 +61,14 @@ export default {
     async update() {
       await this.$store.dispatch("UPDATE_ANSWER", {
         answerId: this.answer.id,
-        updateContent: this.updateContent
+        updateContent: this.content
       });
       this.updateEditFlag = !this.updateEditFlag;
-      this.content = this.updateContent;
-    },
-    async onAnswerRecommendation(priorType, newType) {
-      if (!this.loginUser.id) {
-        console.log("you should login");
-        return;
-      }
-      if (this.isCreateOrUpdateRecommendation(priorType)) {
-        await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
-          answerId: this.answer.id,
-          recommendationType: newType
-        });
-        this.userRecommended = newType;
-      } else {
-        await this.$store.dispatch(
-          "DELETE_ANSWER_RECOMMENDATION",
-          this.answer.id
-        );
-        this.userRecommended = "NOT_EXIST";
-      }
-      await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
-    },
-    async fetchMyAnswerRecommendation(answerId, userId) {
-      await this.$store.dispatch("FETCH_MY_ANSWER_RECOMMENDATION", {
-        answerId,
-        userId
-      });
-      this.userRecommended = this.myAnswerRecommendation.recommendationType;
-    },
-    isCreateOrUpdateRecommendation(priorType) {
-      return (
-        this.userRecommended === "NOT_EXIST" ||
-        this.userRecommended === priorType
-      );
-    },
-    isUserRecommendation(recommendationType) {
-      return (
-        this.myAnswerRecommendation &&
-        this.userRecommended === recommendationType
-      );
     }
-  },
-  watch: {
-    fetchedLoginUser() {
-      this.loginUser = this.fetchedLoginUser;
-      if (!this.loginUser.id) {
-        this.userRecommended = "NOT_EXIST";
-        this.isAuthor();
-        return;
-      }
-      this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
-      this.isAuthor();
-    }
-  },
-  async created() {
-    this.loginUser = this.fetchedLoginUser;
-    if (this.loginUser.id) {
-      await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
-    }
-    await this.isAuthor();
   },
   components: {
-    MarkdownContent
+    MarkdownContent,
+    RecommendationControl
   }
 };
 </script>
