@@ -19,6 +19,7 @@ import underdogs.devbie.user.domain.User;
 public class QuestionResponse {
 
     private Long id;
+    private Long userId;
     private String author;
     private Long visits;
     private Long recommendedCount;
@@ -30,6 +31,7 @@ public class QuestionResponse {
     public static QuestionResponse of(Question question, User author) {
         return QuestionResponse.builder()
             .id(question.getId())
+            .userId(question.getUserId())
             .author(author.getName())
             .visits(question.getVisits().getVisitCount())
             .recommendedCount(question.getRecommendationCount().getRecommendedCount())
@@ -43,6 +45,7 @@ public class QuestionResponse {
     public static QuestionResponse from(Question question) {
         return QuestionResponse.builder()
             .id(question.getId())
+            .userId(question.getId())
             .visits(question.getVisits().getVisitCount())
             .recommendedCount(question.getRecommendationCount().getRecommendedCount())
             .nonRecommendedCount(question.getRecommendationCount().getNonRecommendedCount())

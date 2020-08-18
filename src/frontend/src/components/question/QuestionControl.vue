@@ -2,10 +2,9 @@
   <div class="question-control">
     <hashtag-list></hashtag-list>
     <v-btn
-      v-if="isLoggedIn"
       large
       class="control-btn question-create button"
-      @click="$router.push('/question/create')"
+      @click="onCreateForm"
       color="#DAEBEA"
       >질문 하기
     </v-btn>
@@ -22,6 +21,15 @@ export default {
   },
   components: {
     HashtagList
+  },
+  methods: {
+    onCreateForm() {
+      if (!this.isLoggedIn) {
+        console.log("you should login");
+        return;
+      }
+      this.$router.push("/question/create");
+    }
   }
 };
 </script>
