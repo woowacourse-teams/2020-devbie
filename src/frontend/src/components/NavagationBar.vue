@@ -13,7 +13,7 @@
         ><p class="navigation-menu">공고</p></v-btn
       >
       <v-btn @click="$router.push('/questions')" text x-large
-        ><p class="navigation-menu">면접</p></v-btn
+        ><p class="navigation-menu">면접 질문</p></v-btn
       >
       <template v-if="isLoggedIn">
         <v-menu transition="slide-y-transition" offset-y bottom>
