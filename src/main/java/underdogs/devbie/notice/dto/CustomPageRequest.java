@@ -2,8 +2,6 @@ package underdogs.devbie.notice.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -19,13 +17,12 @@ import lombok.ToString;
 @ToString
 public final class CustomPageRequest {
 
-    private static final int MAX_SIZE = 50;
+    private static final int FIRST_PAGE = 1;
     private static final int DEFAULT_SIZE = 10;
+    private static final int MAX_SIZE = 50;
 
-    @NotNull
     private Integer page;
 
-    @NotNull
     private Integer size;
 
     private Sort.Direction direction;
@@ -39,9 +36,19 @@ public final class CustomPageRequest {
     }
 
     public PageRequest toPageRequest() {
+        setDefaultValue();
+        return PageRequest.of(page - 1, size, Sort.by(direction, "createdDate"));
+    }
+
+    private void setDefaultValue() {
         if (Objects.isNull(direction)) {
             this.direction = Sort.Direction.DESC;
         }
-        return PageRequest.of(page - 1, size, Sort.by(direction, "createdDate"));
+        if (Objects.isNull(size)) {
+            this.size = DEFAULT_SIZE;
+        }
+        if (Objects.isNull(page)) {
+            this.page = FIRST_PAGE;
+        }
     }
 }
