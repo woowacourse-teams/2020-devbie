@@ -83,6 +83,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.820')
     implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
     compileOnly 'org.projectlombok:lombok'
     compile 'org.springframework.boot:spring-boot-starter-log4j2'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'

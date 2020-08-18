@@ -2,6 +2,9 @@ package underdogs.devbie.notice.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,16 +34,20 @@ public class NoticeService {
     }
 
     @Transactional
-    public void update(Long id, NoticeUpdateRequest request) {
+    @CachePut(value = "NoticeDetailResponses", key = "#id")
+    public NoticeDetailResponse update(Long id, NoticeUpdateRequest request) {
         Notice notice = noticeRepository.findById(id).orElseThrow(NoticeNotFoundException::new);
         notice.update(request.toEntity(id));
+        return NoticeDetailResponse.from(request.toEntity(id));
     }
 
     @Transactional
+    @CacheEvict(value = "NoticeDetailResponses", key = "#id")
     public void delete(Long id) {
         noticeRepository.deleteById(id);
     }
 
+    @Cacheable(value = "NoticeDetailResponses")
     public NoticeDetailResponse read(Long id) {
         Notice notice = noticeRepository.findById(id)
             .orElseThrow(NoticeNotFoundException::new);
