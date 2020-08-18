@@ -18,7 +18,7 @@
           <div class="question-info">
             <p class="infos">
               <i class="fas fa-user-edit"></i>
-              {{ loginUser.name }}
+              {{ fetchedQuestion.author }}
             </p>
             <p class="infos">
               <i class="fas fa-eye"></i>
@@ -27,7 +27,6 @@
           </div>
           <recommendation-control
             :targetObject="fetchedQuestion"
-            :loginUser="loginUser"
             :isQuestion="true"
           ></recommendation-control>
         </div>

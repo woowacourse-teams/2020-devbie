@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.question.domain.Question;
+import underdogs.devbie.user.domain.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,7 +19,7 @@ import underdogs.devbie.question.domain.Question;
 public class QuestionResponse {
 
     private Long id;
-    private Long userId;
+    private String author;
     private Long visits;
     private Long recommendedCount;
     private Long nonRecommendedCount;
@@ -26,10 +27,22 @@ public class QuestionResponse {
     private String content;
     private List<HashtagResponse> hashtags;
 
+    public static QuestionResponse of(Question question, User author) {
+        return QuestionResponse.builder()
+            .id(question.getId())
+            .author(author.getName())
+            .visits(question.getVisits().getVisitCount())
+            .recommendedCount(question.getRecommendationCount().getRecommendedCount())
+            .nonRecommendedCount(question.getRecommendationCount().getNonRecommendedCount())
+            .title(question.getTitle().getTitle())
+            .content(question.getContent().getContent())
+            .hashtags(HashtagResponse.listFrom(question.getHashtags()))
+            .build();
+    }
+
     public static QuestionResponse from(Question question) {
         return QuestionResponse.builder()
             .id(question.getId())
-            .userId(question.getUserId())
             .visits(question.getVisits().getVisitCount())
             .recommendedCount(question.getRecommendationCount().getRecommendedCount())
             .nonRecommendedCount(question.getRecommendationCount().getNonRecommendedCount())

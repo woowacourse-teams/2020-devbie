@@ -66,6 +66,7 @@ public abstract class AcceptanceTest {
 
     private Long createUser() throws JsonProcessingException {
         UserCreateRequest userCreateRequest = UserCreateRequest.builder()
+            .name("bsdg")
             .email("atdd@atdd.com")
             .build();
         return post("/api/users", objectMapper.writeValueAsString(userCreateRequest), Long.class);
