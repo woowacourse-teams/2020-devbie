@@ -1,7 +1,6 @@
 package underdogs.devbie.notice.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,13 +50,13 @@ public class NoticeService {
     public NoticeResponses filteredRead(
         NoticeReadRequest noticeReadRequest, Pageable pageable
     ) {
-        List<Notice> notices = noticeRepository.findAllBy(
+        Page<Notice> noticePage = noticeRepository.findAllBy(
             noticeReadRequest.getNoticeType(),
             noticeReadRequest.getJobPosition(),
             noticeReadRequest.getLanguage(),
             pageable
-        ).getContent();
-        return NoticeResponses.listFrom(notices);
+        );
+        return NoticeResponses.listFrom(noticePage.getContent(), noticePage.getTotalPages());
     }
 
     public LanguagesResponse findLanguages() {

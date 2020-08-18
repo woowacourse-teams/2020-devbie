@@ -24,8 +24,8 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     ) {
         QueryResults<Notice> queryResults = jpaQueryFactory
             .selectFrom(notice)
-            .innerJoin(notice.noticeDescription.languages)
-            .fetchJoin()
+            // .innerJoin(notice.noticeDescription.languages)
+            // .fetchJoin()
             .where(equalNoticeType(noticeType),
                 equalJobPosition(jobPosition),
                 containLanguage(language))
