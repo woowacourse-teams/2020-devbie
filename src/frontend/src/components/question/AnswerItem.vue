@@ -1,5 +1,5 @@
 <template>
-  <div class="answer-item-box">
+  <div class="answer-item-box" :class="{ editing: updateEditFlag }">
     <div class="left-container">
       <div class="author-name">
         <p class="infos">
@@ -8,22 +8,20 @@
         </p>
       </div>
       <div class="answer-temp">
-        <div class="answer-content">
-          <markdown-content
-            class="answer-content-value"
-            v-if="!this.updateEditFlag"
-            :content="content"
-          ></markdown-content>
-          <v-textarea
-            class="update-form"
-            outlined
-            v-else
-            v-model="content"
-          ></v-textarea>
-        </div>
+        <markdown-content
+          class="answer-content-value"
+          v-if="!updateEditFlag"
+          :content="content"
+        ></markdown-content>
+        <v-md-editor
+          v-else
+          class="update-editor"
+          height="250px"
+          v-model="content"
+        ></v-md-editor>
       </div>
     </div>
-    <div class="right-container">
+    <div class="right-container" :class="{ editingButton: updateEditFlag }">
       <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
         <div class="author-button" v-if="isAuthor">
           <v-btn
@@ -129,13 +127,27 @@ export default {
   min-height: 150px;
 }
 
-.answer-content {
-  padding: 20px 15px 30px 30px;
+.editing {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: unset !important;
+  justify-content: center !important;
+}
+
+.editingButton {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.update-editor {
+  width: 100%;
 }
 
 .answer-temp {
   display: flex;
   justify-content: space-between;
+  padding: 20px 15px 20px 30px;
 }
 
 .answer-infos {
@@ -153,10 +165,6 @@ export default {
 .author-button {
   display: flex;
   justify-content: center;
-}
-
-.answer-content {
-  min-width: 80%;
 }
 
 .answer-content-value {
