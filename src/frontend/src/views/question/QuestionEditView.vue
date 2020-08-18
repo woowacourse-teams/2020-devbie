@@ -10,7 +10,7 @@
 <script>
 import QuestionCreate from "../../components/question/QuestionForm";
 import FormTitle from "../../components/question/FormTitle";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import router from "../../router";
 
 export default {

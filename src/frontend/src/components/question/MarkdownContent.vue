@@ -10,11 +10,13 @@ import markedImages from "marked-images";
 
 export default {
   props: ["content"],
+
   computed: {
     changeToMarkdown() {
       return marked(this.content);
     }
   },
+
   created() {
     const opts = {
       xhtml: false,

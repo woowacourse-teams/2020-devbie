@@ -9,12 +9,12 @@
 
 <script>
 export default {
-  name: "AnswerCreateFrom",
   data: function() {
     return {
       content: ""
     };
   },
+
   methods: {
     createAnswer: async function() {
       await this.$store.dispatch("CREATE_ANSWER", {

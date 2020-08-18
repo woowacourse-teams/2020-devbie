@@ -51,6 +51,7 @@ export default {
   computed: {
     ...mapGetters(["fetchedLoginUser", "isLoggedIn"])
   },
+
   methods: {
     isAdmin() {
       if (this.isLoggedIn) {
@@ -58,6 +59,7 @@ export default {
       }
       return false;
     },
+
     async showLoginPage() {
       try {
         const redirectUrlData = await axios.get("/api/auth/login-url");
@@ -66,6 +68,7 @@ export default {
         console.error("로그인 화면 로딩 실패");
       }
     },
+
     logout() {
       this.$emit("logout");
       router.push("/");

@@ -68,26 +68,36 @@ import MarkdownContent from "./MarkdownContent";
 import RecommendationControl from "../../components/question/RecommendationControl";
 
 export default {
+  components: {
+    MarkdownContent,
+    RecommendationControl
+  },
+
   props: ["answer", "loginUser"],
+
   data: function() {
     return {
       updateEditFlag: false,
       content: this.answer.content
     };
   },
+
   computed: {
     ...mapGetters(["isLoggedIn"]),
     isAuthor() {
       return this.isLoggedIn && this.answer.userId === this.loginUser.id;
     }
   },
+
   methods: {
     async deleteBtnHandler() {
       await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
     },
+
     updateBtnHandler() {
       this.updateEditFlag = !this.updateEditFlag;
     },
+
     async update() {
       await this.$store.dispatch("UPDATE_ANSWER", {
         answerId: this.answer.id,
@@ -95,10 +105,6 @@ export default {
       });
       this.updateEditFlag = !this.updateEditFlag;
     }
-  },
-  components: {
-    MarkdownContent,
-    RecommendationControl
   }
 };
 </script>

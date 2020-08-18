@@ -24,8 +24,16 @@ import AnswerList from "../../components/question/AnswerList";
 import AnswerCreate from "../../components/question/AnswerCreate";
 
 export default {
+  components: {
+    QuestionDetailMenu,
+    QuestionDetail,
+    AnswerList,
+    AnswerCreate
+  },
+
   computed: {
     ...mapGetters(["fetchedQuestion", "fetchedLoginUser", "isLoggedIn"]),
+
     isAuthor() {
       return (
         this.isLoggedIn &&
@@ -33,14 +41,9 @@ export default {
       );
     }
   },
+
   async created() {
     await this.$store.dispatch("FETCH_QUESTION", this.$route.params.id);
-  },
-  components: {
-    QuestionDetailMenu,
-    QuestionDetail,
-    AnswerList,
-    AnswerCreate
   }
 };
 </script>

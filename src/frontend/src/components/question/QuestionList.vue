@@ -41,9 +41,11 @@ export default {
       orderBy: ""
     };
   },
+
   computed: {
     ...mapGetters(["fetchedQuestions"])
   },
+
   created() {
     this.hashtag = this.$route.query.hashtag;
     this.orderBy = this.$route.query.orderBy || "CREATED_DATE";

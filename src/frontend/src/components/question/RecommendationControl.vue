@@ -30,11 +30,13 @@ import { mapGetters } from "vuex";
 
 export default {
   props: ["targetObject", "isQuestion"],
+
   data() {
     return {
       userRecommended: ""
     };
   },
+
   computed: {
     ...mapGetters([
       "isLoggedIn",
@@ -42,10 +44,12 @@ export default {
       "fetchedMyQuestionRecommendation",
       "fetchedMyAnswerRecommendation"
     ]),
+
     myAnswerRecommendation() {
       return this.fetchedMyAnswerRecommendation(this.targetObject.id);
     }
   },
+
   watch: {
     fetchedMyQuestionRecommendation() {
       if (this.isQuestion) {
@@ -56,15 +60,18 @@ export default {
         this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       }
     },
+
     isLoggedIn() {
       this.initRecommendationState();
     }
   },
+
   created() {
     if (this.isLoggedIn) {
       this.initRecommendationState();
     }
   },
+
   methods: {
     async initRecommendationState() {
       await this.$store.dispatch("FETCH_LOGIN_USER");
@@ -77,6 +84,7 @@ export default {
         this.userRecommended = this.myAnswerRecommendation.recommendationType;
       }
     },
+
     async onRecommendation(priorType, newType) {
       if (!this.isLoggedIn) {
         console.log("you should login");
@@ -94,17 +102,20 @@ export default {
           objectId: this.targetObject.id
         });
       }
+
       if (!this.isQuestion) {
         await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
         this.userRecommended = this.myAnswerRecommendation.recommendationType;
       }
     },
+
     isCreateOrUpdateRecommendation(priorType) {
       return (
         this.userRecommended === "NOT_EXIST" ||
         this.userRecommended === priorType
       );
     },
+
     isUserAction(recommendationType) {
       return this.userRecommended === recommendationType;
     }

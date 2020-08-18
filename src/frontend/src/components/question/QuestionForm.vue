@@ -46,7 +46,13 @@ import FormButton from "./FormButton";
 import { mapGetters } from "vuex";
 
 export default {
+  components: {
+    HashtagBox,
+    FormButton
+  },
+
   props: ["editingFlag"],
+
   data() {
     return {
       questionId: this.$route.params.id,
@@ -55,8 +61,10 @@ export default {
       hashtags: []
     };
   },
+
   computed: {
     ...mapGetters(["fetchedQuestion", "fetchedLoginUser"]),
+
     payload() {
       return {
         title: this.title,
@@ -65,37 +73,41 @@ export default {
       };
     }
   },
+
+  created() {
+    if (this.editingFlag) {
+      this.fetchQuestionInfo();
+      return;
+    }
+    this.$store.commit("CLEAR_HASHTAGS");
+  },
+
   methods: {
     receiveHashtags(hashtags) {
       this.hashtags = hashtags;
     },
+
     async onCreateQuestion() {
       await this.$store.dispatch("CREATE_QUESTION", this.payload);
       await this.$router.push(
         `/questions/${this.$store.getters.fetchedQuestionId}`
       );
     },
+
     async onUpdateQuestion() {
       await this.$store.dispatch("UPDATE_QUESTION", {
         questionId: this.questionId,
         ...this.payload
       });
       await this.$router.push(`/questions/${this.questionId}`);
-    }
-  },
-  async created() {
-    if (this.editingFlag) {
+    },
+
+    async fetchQuestionInfo() {
       await this.$store.dispatch("FETCH_QUESTION", this.questionId);
       this.title = this.fetchedQuestion.title;
       this.content = this.fetchedQuestion.content;
       this.hashtags = this.fetchedQuestion.hashtags.map(h => h.tagName);
-      return;
     }
-    this.$store.commit("CLEAR_HASHTAGS");
-  },
-  components: {
-    HashtagBox,
-    FormButton
   }
 };
 </script>

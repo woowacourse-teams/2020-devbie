@@ -45,22 +45,32 @@ import MarkdownContent from "./MarkdownContent";
 import RecommendationControl from "./RecommendationControl";
 
 export default {
+  components: {
+    MarkdownContent,
+    RecommendationControl
+  },
+
   props: ["loginUser"],
+
   data() {
     return {
       content: ""
     };
   },
+
   computed: {
     ...mapGetters(["fetchedQuestion"])
   },
-  async created() {
-    await this.$store.dispatch("FETCH_QUESTION", this.$route.params.id);
-    this.content = this.fetchedQuestion.content;
+
+  created() {
+    this.fetchCurrentQuestion();
   },
-  components: {
-    MarkdownContent,
-    RecommendationControl
+
+  methods: {
+    async fetchCurrentQuestion() {
+      await this.$store.dispatch("FETCH_QUESTION", this.$route.params.id);
+      this.content = this.fetchedQuestion.content;
+    }
   }
 };
 </script>

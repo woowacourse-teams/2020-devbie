@@ -16,12 +16,14 @@ import { mapGetters } from "vuex";
 import HashtagList from "../../components/hashtag/HashtagList";
 
 export default {
-  computed: {
-    ...mapGetters(["isLoggedIn"])
-  },
   components: {
     HashtagList
   },
+
+  computed: {
+    ...mapGetters(["isLoggedIn"])
+  },
+
   methods: {
     onCreateForm() {
       if (!this.isLoggedIn) {

@@ -21,15 +21,18 @@ import AnswerItem from "./AnswerItem.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  components: {
+    AnswerItem
+  },
+
   props: ["loginUser"],
+
   computed: {
     ...mapGetters(["fetchedAnswers"])
   },
+
   async created() {
     await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
-  },
-  components: {
-    AnswerItem
   }
 };
 </script>

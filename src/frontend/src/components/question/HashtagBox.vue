@@ -23,21 +23,25 @@
 <script>
 export default {
   props: ["existHashtags"],
+
   data() {
     return {
       tagName: "",
       items: []
     };
   },
+
   watch: {
     items() {
       this.$emit("hashtags", this.items);
       this.tagName = "";
     },
+
     existHashtags() {
       this.items = this.existHashtags;
     }
   },
+
   methods: {
     addHashtag() {
       const item = this.tagName.trim().toLowerCase();
@@ -51,6 +55,7 @@ export default {
       }
       this.items.push(item);
     },
+
     deleteHashtag(index) {
       this.items.splice(index, 1);
     }
