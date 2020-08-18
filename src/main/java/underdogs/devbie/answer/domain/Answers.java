@@ -15,6 +15,8 @@ public class Answers {
     private List<Answer> answers;
 
     public static Answers from(List<Answer> answers) {
+        System.out.println(answers + ">>>>>>>>>>>>");
+        System.out.println(answers.get(0).getRecommendationCount().getRecommendedCount() + ">>>>>>>>>>>>");
         return new Answers(answers);
     }
 

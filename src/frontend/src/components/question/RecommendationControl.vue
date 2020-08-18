@@ -57,8 +57,8 @@ export default {
           "UPDATE_QUESTION_RECOMMENDATION_COUNT",
           this.targetObject.id
         );
+        this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       }
-      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
     },
 
     isLoggedIn() {
