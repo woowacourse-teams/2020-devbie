@@ -25,9 +25,12 @@ import AnswerCreate from "../../components/question/AnswerCreate";
 
 export default {
   computed: {
-    ...mapGetters(["fetchedQuestion", "fetchedLoginUser"]),
+    ...mapGetters(["fetchedQuestion", "fetchedLoginUser", "isLoggedIn"]),
     isAuthor() {
-      return this.fetchedQuestion.userId === this.fetchedLoginUser.id;
+      return (
+        this.isLoggedIn &&
+        this.fetchedQuestion.userId === this.fetchedLoginUser.id
+      );
     }
   },
   async created() {

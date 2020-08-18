@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import MarkdownContent from "./MarkdownContent";
 import RecommendationControl from "../../components/question/RecommendationControl";
 
@@ -75,8 +76,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["isLoggedIn"]),
     isAuthor() {
-      return this.answer.userId === this.loginUser.id;
+      return this.isLoggedIn && this.answer.userId === this.loginUser.id;
     }
   },
   methods: {
