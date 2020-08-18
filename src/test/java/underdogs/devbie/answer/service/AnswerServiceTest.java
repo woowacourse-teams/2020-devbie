@@ -107,7 +107,7 @@ class AnswerServiceTest {
             .questionId(3L)
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
-        given(answerRepository.findByQuestionId(anyLong())).willReturn(Collections.singletonList(expectAnswer));
+        given(answerRepository.findByQuestionIdOrderByRecommendationCount(anyLong())).willReturn(Collections.singletonList(expectAnswer));
         given(userService.findById(anyLong())).willReturn(user);
 
         AnswerResponses answerResponses = answerService.readByQuestionId(expectAnswer.getQuestionId());

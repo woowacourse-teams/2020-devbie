@@ -57,8 +57,8 @@ export default {
           "UPDATE_QUESTION_RECOMMENDATION_COUNT",
           this.targetObject.id
         );
-        this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       }
+      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
     },
 
     isLoggedIn() {
@@ -80,8 +80,13 @@ export default {
         objectId: this.targetObject.id,
         userId: this.fetchedLoginUser.id
       });
-      if (!this.isQuestion) {
-        this.userRecommended = this.myAnswerRecommendation.recommendationType;
+
+      if (this.isQuestion) {
+        this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
+      } else {
+        this.userRecommended =
+          this.myAnswerRecommendation &&
+          this.myAnswerRecommendation.recommendationType;
       }
     },
 

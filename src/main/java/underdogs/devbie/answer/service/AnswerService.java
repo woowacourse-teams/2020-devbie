@@ -85,7 +85,7 @@ public class AnswerService {
     }
 
     public AnswerResponses readByQuestionId(Long questionId) {
-        Answers answers = Answers.from(answerRepository.findByQuestionId(questionId));
+        Answers answers = Answers.from(answerRepository.findByQuestionIdOrderByRecommendationCount(questionId));
 
         List<User> users = answers.getAnswers().stream()
             .map(answer -> userService.findById(answer.getUserId()))
