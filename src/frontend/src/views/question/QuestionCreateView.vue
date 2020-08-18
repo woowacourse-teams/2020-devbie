@@ -1,7 +1,7 @@
 <template>
   <div>
     <form-title>
-      <span>질문 수정</span>
+      <span>질문 생성</span>
     </form-title>
     <question-create :editingFlag="false"></question-create>
   </div>
