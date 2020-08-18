@@ -4,7 +4,7 @@
       <div class="author-name">
         <p class="infos">
           <i class="fas fa-user-edit"></i>
-          작성자: {{ answer.userId }}
+          작성자: {{ answer.author }}
         </p>
       </div>
       <div class="answer-temp">
@@ -55,7 +55,6 @@
         </div>
         <recommendation-control
           :targetObject="answer"
-          :loginUser="loginUser"
           :isQuestion="false"
         ></recommendation-control>
       </div>

@@ -10,6 +10,7 @@ import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 import java.util.Collections;
 import java.util.List;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,7 @@ public class AnswerControllerTest extends MvcTest {
     void setUp() {
         user = User.builder()
             .id(1L)
+            .name("TEST_NAME")
             .oauthId("TEST_USER")
             .email("TEST_EMAIL")
             .build();
@@ -119,9 +121,11 @@ public class AnswerControllerTest extends MvcTest {
             .questionId(3L)
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
-        AnswerResponses expectAnswers = AnswerResponses.from(
-            Answers.from(Collections.singletonList(expectAnswer))
-        );
+
+        List<User> users = Lists.newArrayList(user);
+        AnswerResponses expectAnswers = AnswerResponses.of(
+            Answers.from(Collections.singletonList(expectAnswer)),
+            users);
         given(answerService.readAll()).willReturn(expectAnswers);
 
         MvcResult mvcResult = getAction("/api/answers").andReturn();
@@ -133,10 +137,10 @@ public class AnswerControllerTest extends MvcTest {
         assertThat(answerResponses.getAnswerResponses()).isNotNull();
         List<AnswerResponse> actual = answerResponses.getAnswerResponses();
         assertAll(
-            () -> assertEquals(actual.get(0).getId(), 1L),
-            () -> assertEquals(actual.get(0).getUserId(), 2L),
-            () -> assertEquals(actual.get(0).getQuestionId(), 3L),
-            () -> assertEquals(actual.get(0).getContent(), TEST_ANSWER_CONTENT)
+            () -> assertThat(actual.get(0).getId()).isEqualTo(1L),
+            () -> assertThat(actual.get(0).getAuthor()).isEqualTo("TEST_NAME"),
+            () -> assertThat(actual.get(0).getQuestionId()).isEqualTo(3L),
+            () -> assertThat(actual.get(0).getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
     }
 
@@ -149,7 +153,8 @@ public class AnswerControllerTest extends MvcTest {
             .questionId(3L)
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
-        given(answerService.read(anyLong())).willReturn(AnswerResponse.from(expectAnswer));
+
+        given(answerService.read(anyLong())).willReturn(AnswerResponse.of(expectAnswer, user));
 
         MvcResult mvcResult = getAction(String.format("/api/answers/%d", 1L)).andReturn();
 
@@ -158,10 +163,10 @@ public class AnswerControllerTest extends MvcTest {
 
         assertThat(answerResponse).isNotNull();
         assertAll(
-            () -> assertEquals(answerResponse.getId(), 1L),
-            () -> assertEquals(answerResponse.getUserId(), 2L),
-            () -> assertEquals(answerResponse.getQuestionId(), 3L),
-            () -> assertEquals(answerResponse.getContent(), TEST_ANSWER_CONTENT)
+            () -> assertThat(answerResponse.getId()).isEqualTo(1L),
+            () -> assertThat(answerResponse.getAuthor()).isEqualTo("TEST_NAME"),
+            () -> assertThat(answerResponse.getQuestionId()).isEqualTo(3L),
+            () -> assertThat(answerResponse.getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
     }
 
@@ -195,7 +200,10 @@ public class AnswerControllerTest extends MvcTest {
             .questionId(1L)
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
-        AnswerResponses expected = AnswerResponses.from(Answers.from(Collections.singletonList(expectedAnswerItem)));
+
+        List<User> users = Lists.newArrayList(user);
+        AnswerResponses expected = AnswerResponses.of(Answers.from(Collections.singletonList(expectedAnswerItem)),
+            users);
         given(answerService.readByQuestionId(expectedAnswerItem.getQuestionId())).willReturn(expected);
         MvcResult result = getAction(String.format("/api/answers?questionId=%d", expectedAnswerItem.getQuestionId()))
             .andExpect(status().isOk())

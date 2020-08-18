@@ -27,6 +27,7 @@ import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.exception.AnswerNotExistedException;
 import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
 import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class AnswerServiceTest {
@@ -36,21 +37,28 @@ class AnswerServiceTest {
     private AnswerService answerService;
 
     @Mock
+    private UserService userService;
+
+    @Mock
     private AnswerRepository answerRepository;
+
+    private User user;
 
     @BeforeEach
     void setUp() {
-        answerService = new AnswerService(answerRepository);
+        answerService = new AnswerService(userService, answerRepository);
+
+        user = User.builder()
+            .id(USER_ID)
+            .name(TEST_NAME)
+            .oauthId(TEST_OAUTH_ID)
+            .email(TEST_USER_EMAIL)
+            .build();
     }
 
     @DisplayName("면접 답변 저장")
     @Test
     void save() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         Answer expected = Answer.builder()
             .id(1L)
             .userId(USER_ID)
@@ -75,6 +83,7 @@ class AnswerServiceTest {
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
         given(answerRepository.findAll()).willReturn(Collections.singletonList(expectAnswer));
+        given(userService.findById(anyLong())).willReturn(user);
 
         AnswerResponses answerResponses = answerService.readAll();
 
@@ -83,7 +92,7 @@ class AnswerServiceTest {
         List<AnswerResponse> actual = answerResponses.getAnswerResponses();
         assertAll(
             () -> assertThat(actual.get(0).getId()).isEqualTo(1L),
-            () -> assertThat(actual.get(0).getUserId()).isEqualTo(2L),
+            () -> assertThat(actual.get(0).getAuthor()).isEqualTo(TEST_NAME),
             () -> assertThat(actual.get(0).getQuestionId()).isEqualTo(3L),
             () -> assertThat(actual.get(0).getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
@@ -99,6 +108,7 @@ class AnswerServiceTest {
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
         given(answerRepository.findByQuestionId(anyLong())).willReturn(Collections.singletonList(expectAnswer));
+        given(userService.findById(anyLong())).willReturn(user);
 
         AnswerResponses answerResponses = answerService.readByQuestionId(expectAnswer.getQuestionId());
 
@@ -107,7 +117,7 @@ class AnswerServiceTest {
         List<AnswerResponse> actual = answerResponses.getAnswerResponses();
         assertAll(
             () -> assertThat(actual.get(0).getId()).isEqualTo(1L),
-            () -> assertThat(actual.get(0).getUserId()).isEqualTo(2L),
+            () -> assertThat(actual.get(0).getAuthor()).isEqualTo(TEST_NAME),
             () -> assertThat(actual.get(0).getQuestionId()).isEqualTo(3L),
             () -> assertThat(actual.get(0).getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
@@ -124,15 +134,16 @@ class AnswerServiceTest {
             .build();
         given(answerRepository.findById(anyLong()))
             .willReturn(Optional.of(expectAnswer));
+        given(userService.findById(anyLong())).willReturn(user);
 
         AnswerResponse actual = answerService.read(1L);
 
         assertAll(
             () -> assertThat(actual).isNotNull(),
-            () -> assertEquals(actual.getId(), 1L),
-            () -> assertEquals(actual.getUserId(), 2L),
-            () -> assertEquals(actual.getQuestionId(), 3L),
-            () -> assertEquals(actual.getContent(), TEST_ANSWER_CONTENT)
+            () -> assertThat(actual.getId()).isEqualTo(1L),
+            () -> assertThat(actual.getAuthor()).isEqualTo(TEST_NAME),
+            () -> assertThat(actual.getQuestionId()).isEqualTo(3L),
+            () -> assertThat(actual.getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
     }
 
@@ -147,11 +158,6 @@ class AnswerServiceTest {
     @DisplayName("면접 답변 수정")
     @Test
     void update() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         String changedAnswerContent = "Changed Answer Content";
         AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(changedAnswerContent);
         Answer expectAnswer = Answer.builder()
@@ -162,6 +168,7 @@ class AnswerServiceTest {
             .build();
         given(answerRepository.findById(anyLong()))
             .willReturn(Optional.of(expectAnswer));
+        given(userService.findById(anyLong())).willReturn(user);
 
         Long requestedUpdateRequestId = 1L;
         answerService.update(user, requestedUpdateRequestId, answerUpdateRequest);
@@ -169,7 +176,7 @@ class AnswerServiceTest {
         AnswerResponse updatedAnswer = answerService.read(requestedUpdateRequestId);
         assertAll(
             () -> assertEquals(updatedAnswer.getId(), requestedUpdateRequestId),
-            () -> assertEquals(updatedAnswer.getUserId(), expectAnswer.getUserId()),
+            () -> assertEquals(updatedAnswer.getAuthor(), user.getName()),
             () -> assertEquals(updatedAnswer.getQuestionId(), expectAnswer.getQuestionId()),
             () -> assertEquals(updatedAnswer.getContent(), changedAnswerContent)
         );
@@ -178,11 +185,6 @@ class AnswerServiceTest {
     @DisplayName("면접 답변 수정 실패 - 존재 하지 않는 answerId")
     @Test
     void updateFailCauseByNotExistedAnswer() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         String changedAnswerContent = "Changed Answer Content";
         AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(changedAnswerContent);
         given(answerRepository.findById(anyLong())).willThrow(AnswerNotExistedException.class);
@@ -194,11 +196,6 @@ class AnswerServiceTest {
     @DisplayName("면접 답변 수정 실패 - 권한 없는 요청")
     @Test
     void updateFailCauseByNoAuthor() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         String changedAnswerContent = "Changed Answer Content";
         AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(changedAnswerContent);
         Long anotherUserId = USER_ID + 1;
@@ -210,19 +207,12 @@ class AnswerServiceTest {
             .build();
         given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
 
-        assertThatThrownBy(() -> {
-            answerService.update(user, 1L, answerUpdateRequest);
-        }).isInstanceOf(NotMatchedAnswerAuthorException.class);
+        assertThatThrownBy(() -> answerService.update(user, 1L, answerUpdateRequest)).isInstanceOf(NotMatchedAnswerAuthorException.class);
     }
 
     @DisplayName("면접 답변 삭제 실패 - 권한 없는 요청")
     @Test
     void deleteFailCauseByNoAuthor() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         Long anotherUserId = USER_ID + 1;
         Answer expectAnswer = Answer.builder()
             .id(1L)
@@ -239,11 +229,6 @@ class AnswerServiceTest {
     @DisplayName("면접 답변 삭제 실패 - 존재하지 않는 면접 답변")
     @Test
     void deleteFailCauseByNotExistedAnswer() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         Long anotherUserId = USER_ID + 1;
         Answer expectAnswer = Answer.builder()
             .id(1L)
@@ -260,11 +245,6 @@ class AnswerServiceTest {
     @DisplayName("면접 답변 삭제 성공")
     @Test
     void delete() {
-        User user = User.builder()
-            .id(USER_ID)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
         Answer expectAnswer = Answer.builder()
             .id(1L)
             .userId(USER_ID)
