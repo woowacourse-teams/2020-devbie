@@ -9,11 +9,13 @@ export default {
     language: "",
     noticeId: "",
     languages: [],
-    jobPositions: []
+    jobPositions: [],
+    page: 1,
+    lastPage: 1000
   },
   mutations: {
-    SET_NOTICES(state, data) {
-      state.notices = data;
+    UPDATE_NOTICES(state, data) {
+      state.notices = state.notices.concat(data);
     },
     SET_NOTICE(state, data) {
       state.notice = data;
@@ -25,12 +27,18 @@ export default {
       state.notices = state.notices.filter(notice => notice.id !== noticeId);
     },
     SET_NOTICE_TYPE(state, data) {
+      state.notices = [];
+      state.page = 1;
       state.noticeType = data;
     },
     SET_JOB_POSITION(state, data) {
+      state.notices = [];
+      state.page = 1;
       state.jobPosition = data;
     },
     SET_LANGUAGE(state, data) {
+      state.notices = [];
+      state.page = 1;
       state.language = data;
     },
     UPDATE_NOTICE(state, noticeId, data) {
@@ -52,13 +60,19 @@ export default {
     SET_JOB_POSITIONS(state, data) {
       const jobPositions = [{ key: "", text: "무관" }];
       state.jobPositions = jobPositions.concat(data.map(res => res.pair));
+    },
+    SET_PAGING(state, lastPage) {
+      state.page = state.page + 1;
+      state.lastPage = lastPage;
     }
   },
   actions: {
     async FETCH_NOTICES({ commit }, queryUrl) {
       try {
         const { data } = await getAction(`/api/notices?` + queryUrl);
-        commit("SET_NOTICES", data["noticeResponses"]);
+        commit("UPDATE_NOTICES", data["noticeResponses"]);
+        commit("SET_PAGING", data["lastPage"]);
+        return data;
       } catch (error) {
         console.log(error);
       }
@@ -150,6 +164,12 @@ export default {
     },
     fetchedJobPositions(state) {
       return state.jobPositions;
+    },
+    fetchedPage(state) {
+      return state.page;
+    },
+    fetchedLastPage(state) {
+      return state.lastPage;
     }
   }
 };

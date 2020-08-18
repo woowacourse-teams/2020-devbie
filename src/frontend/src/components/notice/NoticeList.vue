@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row dense>
+    <v-row dense v-scroll="onScroll">
       <v-col
         v-for="notice in fetchedNotices"
         :key="notice.id"
@@ -34,6 +34,16 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-progress-circular
+      v-if="isBottom"
+      :size="50"
+      color="primary"
+      indeterminate
+      class="loading-progress"
+    ></v-progress-circular>
+    <template v-if="isEndPage()">
+      모든 공고를 조회하셨습니다.
+    </template>
   </div>
 </template>
 
@@ -41,37 +51,77 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      isBottom: false
+    };
+  },
   methods: {
-    getNotices() {
+    async onScroll({ target }) {
+      const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
+      let clientCurrentHeight = scrollTop + clientHeight;
+      let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
+      const currentState = clientCurrentHeight > componentHeight;
+
+      if (
+        this.isBottom !== currentState &&
+        this.fetchedPage < this.fetchedLastPage
+      ) {
+        this.isBottom = true;
+        await this.addNotices();
+        this.isBottom = false;
+      }
+    },
+
+    isEndPage() {
+      return this.fetchedPage >= this.fetchedLastPage;
+    },
+
+    async addNotices() {
       const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
-        language: this.fetchedLanguage
+        language: this.fetchedLanguage,
+        page: this.fetchedPage
       };
       const queryParam = new URLSearchParams(param).toString();
-      this.$store.dispatch("FETCH_NOTICES", queryParam);
+      const { noticeResponses, lastPage } = await this.$store.dispatch(
+        "FETCH_NOTICES",
+        queryParam
+      );
+      this.notices = this.notices.concat(noticeResponses);
+      this.lastPage = lastPage;
+      this.page = this.page + 1;
     }
   },
+
   computed: {
     ...mapGetters([
       "fetchedNotices",
       "fetchedNoticeType",
       "fetchedJobPosition",
-      "fetchedLanguage"
+      "fetchedLanguage",
+      "fetchedPage",
+      "fetchedLastPage"
     ])
   },
+
   created() {
-    this.getNotices();
+    if (this.fetchedNotices.length > 0) {
+      return;
+    }
+    this.addNotices();
   },
+
   watch: {
     fetchedNoticeType() {
-      this.getNotices();
+      this.addNotices();
     },
     fetchedJobPosition() {
-      this.getNotices();
+      this.addNotices();
     },
     fetchedLanguage() {
-      this.getNotices();
+      this.addNotices();
     }
   }
 };
@@ -100,5 +150,9 @@ export default {
 }
 .v-card:hover {
   opacity: 0.6;
+}
+.loading-progress {
+  text-align: center;
+  left: 50%;
 }
 </style>

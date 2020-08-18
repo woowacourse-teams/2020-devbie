@@ -23,6 +23,9 @@ import { mapGetters } from "vuex";
 export default {
   methods: {
     async changeNoticeType(e) {
+      if (e.currentTarget.name === this.fetchedNoticeType) {
+        return;
+      }
       await this.$store.commit("SET_NOTICE_TYPE", e.currentTarget.name);
     },
     isJob() {
