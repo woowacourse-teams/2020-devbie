@@ -20,12 +20,20 @@ export default {
 
   async beforeCreate() {
     const code = this.$route.query.code;
+    const redirectUri = this.$route.query["redirect-uri"];
+
     const response = await axios.post("/api/auth/login?code=" + code);
     const { token } = await response.data;
 
-    localStorage.setItem("devbieToken", token);
+    await localStorage.setItem("devbieToken", token);
     this.isNotCompleted = false;
-    window.location.href = "/";
+
+    let nextUrl = "/";
+    if (redirectUri !== undefined) {
+      nextUrl = redirectUri;
+    }
+
+    window.location.href = nextUrl;
   }
 };
 </script>
