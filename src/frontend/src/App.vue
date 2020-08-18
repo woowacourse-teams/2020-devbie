@@ -13,7 +13,7 @@ import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
 
 export default {
-  async created() {
+  async beforeCreate() {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {

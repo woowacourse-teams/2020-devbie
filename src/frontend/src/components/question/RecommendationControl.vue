@@ -29,7 +29,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["targetObject", "loginUser", "isQuestion"],
+  props: ["targetObject", "isQuestion"],
   data() {
     return {
       userRecommended: ""
@@ -55,13 +55,13 @@ export default {
       if (this.isCreateOrUpdateRecommendation(priorType)) {
         await this.$store.dispatch("CREATE_RECOMMENDATION", {
           object: this.isQuestion ? "question" : "answer",
-          objectId: this.targetObject && this.targetObject.id,
+          objectId: this.targetObject.id,
           recommendationType: newType
         });
       } else {
         await this.$store.dispatch("DELETE_RECOMMENDATION", {
           object: this.isQuestion ? "question" : "answer",
-          objectId: this.targetObject && this.targetObject.id
+          objectId: this.targetObject.id
         });
       }
       if (!this.isQuestion) {
@@ -84,10 +84,18 @@ export default {
       if (this.isQuestion) {
         this.$store.dispatch(
           "UPDATE_QUESTION_RECOMMENDATION_COUNT",
-          this.targetObject && this.targetObject.id
+          this.targetObject.id
         );
         this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
       }
+    },
+    async isLoggedIn() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_RECOMMENDATION", {
+        object: this.isQuestion ? "question" : "answer",
+        objectId: this.targetObject.id,
+        userId: this.fetchedLoginUser.id
+      });
     }
   },
   async created() {
@@ -95,8 +103,8 @@ export default {
       await this.$store.dispatch("FETCH_LOGIN_USER");
       await this.$store.dispatch("FETCH_MY_RECOMMENDATION", {
         object: this.isQuestion ? "question" : "answer",
-        objectId: this.targetObject && this.targetObject.id,
-        userId: this.fetchedLoginUser && this.fetchedLoginUser.id
+        objectId: this.targetObject.id,
+        userId: this.fetchedLoginUser.id
       });
       if (!this.isQuestion) {
         this.userRecommended = this.myAnswerRecommendation.recommendationType;
