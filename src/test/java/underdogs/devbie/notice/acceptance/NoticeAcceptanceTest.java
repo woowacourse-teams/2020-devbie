@@ -86,14 +86,15 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
             }),
             dynamicTest("채용공고 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB", NoticeResponses.class);
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&page=1&size=10",
+                    NoticeResponses.class);
 
                 assertThat(noticeResponses.getNoticeResponses())
                     .extracting(NoticeResponse::getNoticeType)
                     .contains(NoticeType.JOB);
             }),
             dynamicTest("채용공고와 포지션 별 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND",
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&page=1&size=10",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();
@@ -109,7 +110,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
             }),
             dynamicTest("채용공고와 포지션과 언어별 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP",
+                NoticeResponses noticeResponses = get(
+                    "/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP&page=1&size=10",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();

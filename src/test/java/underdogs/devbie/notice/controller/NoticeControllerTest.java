@@ -214,7 +214,7 @@ public class NoticeControllerTest extends MvcTest {
         given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
             .willReturn(NoticeResponses.listFrom(notices));
 
-        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB")
+        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB&page=1&size=10")
             .andExpect(status().isOk())
             .andReturn();
 
