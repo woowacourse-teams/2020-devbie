@@ -84,7 +84,8 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
 
-                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
+                QuestionResponse questionResponse = get(
+                    "/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
                     QuestionResponse.class);
 
                 assertAll(
@@ -105,11 +106,12 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
 
                 patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
 
-                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
+                QuestionResponse updatedQuestion = get(
+                    "/api/questions/" + firstQuestion.getQuestionId() + "?visit=true",
                     QuestionResponse.class);
                 assertAll(
                     () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
-                    () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
+                    () -> assertThat(updatedQuestion.getVisits()).isEqualTo(1L),
                     () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
                     () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content"),
                     () -> assertThat(updatedQuestion.getHashtags().get(0).getTagName()).isEqualTo("kotlin")

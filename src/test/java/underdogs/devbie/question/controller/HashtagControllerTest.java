@@ -140,8 +140,12 @@ class HashtagControllerTest extends MvcTest {
             .tagName("changed name")
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
+        Hashtag hashtag = Hashtag.builder()
+            .tagName(TagName.from("changed name"))
+            .build();
 
-        willDoNothing().given(hashtagService).update(anyLong(), any(HashtagUpdateRequest.class));
+        given(hashtagService.update(anyLong(), any(HashtagUpdateRequest.class)))
+            .willReturn(HashtagResponse.from(hashtag));
 
         patchAction("/api/hashtags/1", inputJson, TEST_TOKEN);
 
