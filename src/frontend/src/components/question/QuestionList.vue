@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="hashtag-header" v-if="hashtag">
+      "<span>{{ hashtag }}</span
+      >" 태그로 검색한 결과입니다.
+    </div>
     <ul class="question-list">
       <li
         v-for="question in fetchedQuestions.questions"
@@ -12,10 +16,7 @@
             추천수 : {{ question.recommendedCount }}
           </p>
         </div>
-        <p
-          @click="$router.push(`/questions/${question.questionId}`)"
-          class="title"
-        >
+        <p @click="$router.push(`/questions/${question.id}`)" class="title">
           Q. {{ question.title }}
         </p>
         <div
@@ -34,17 +35,25 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      hashtag: "",
+      orderBy: ""
+    };
+  },
+
   computed: {
     ...mapGetters(["fetchedQuestions"])
   },
+
   created() {
-    const hashtag = this.$route.query.hashtag;
-    const orderBy = this.$route.query.orderBy || "CREATED_DATE";
-    if (hashtag) {
-      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", hashtag);
+    this.hashtag = this.$route.query.hashtag;
+    this.orderBy = this.$route.query.orderBy || "CREATED_DATE";
+    if (this.hashtag) {
+      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
       return;
     }
-    this.$store.dispatch("FETCH_QUESTIONS", orderBy);
+    this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
   }
 };
 </script>
@@ -59,18 +68,22 @@ export default {
 }
 
 .question {
-  border: solid 2px #87bdd6;
-  border-radius: 10px;
-  margin-bottom: 15px;
+  border-top: solid 2px #87bdd6;
+  min-height: 120px;
   padding: 10px;
   display: flex;
   align-items: center;
   width: 95%;
 }
 
+.question:last-child {
+  border-bottom: solid 2px #87bdd6;
+}
+
 .count-infos {
   display: flex;
   flex-direction: column;
+  min-width: 95px;
 }
 
 .count {
@@ -81,8 +94,6 @@ export default {
 
 .title {
   color: #35495e;
-  font-weight: normal;
-  font-size: 24px;
   text-decoration: none;
   margin-bottom: 0;
   margin-right: 7px;
@@ -97,9 +108,23 @@ export default {
 .hashtags {
   margin: 0 3px;
   font-size: 13px;
+  color: #60c5ba;
 }
 
 .hashtags:first-child {
   margin-left: 7px;
+}
+
+.hashtag-header {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.hashtag-header span {
+  color: #fc8c84;
+  font-size: 26px;
 }
 </style>

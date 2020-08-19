@@ -16,12 +16,15 @@ import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.question.exception.QuestionNotExistedException;
+import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.service.UserService;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final UserService userService;
     private final QuestionHashtagService questionHashtagService;
     private final QuestionRepository questionRepository;
 
@@ -44,7 +47,8 @@ public class QuestionService {
         if (isVisit) {
             question.increaseVisits();
         }
-        return QuestionResponse.from(question);
+        User author = userService.findById(question.getUserId());
+        return QuestionResponse.of(question, author);
     }
 
     private Question readOne(Long questionId) {
@@ -90,10 +94,5 @@ public class QuestionService {
         List<Long> questionIds = questionHashtagService.findIdsByHashtagName(hashtag);
         List<Question> questions = questionRepository.findAllById(questionIds);
         return QuestionResponses.from(questions);
-    }
-
-    public QuestionResponse readWithoutVisit(Long id) {
-        Question question = readOne(id);
-        return QuestionResponse.from(question);
     }
 }

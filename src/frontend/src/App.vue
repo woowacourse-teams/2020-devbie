@@ -15,7 +15,7 @@ import FooterBar from "./components/FooterBar.vue";
 import ChatDrawer from "./components/chat/ChatDrawer";
 
 export default {
-  async created() {
+  async beforeCreate() {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {
