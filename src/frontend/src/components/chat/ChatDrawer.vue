@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-navigation-drawer v-model="drawer" absolute right temporary>
-      <v-card>
+      <v-card min-height="100%" max-height="100%">
         <v-container>
           <v-row style="flex-wrap: nowrap;">
             <v-col cols="7" class="flex-grow-1">
@@ -22,7 +22,9 @@
           </v-row>
         </v-container>
         <v-divider></v-divider>
-        <chat-list> </chat-list>
+        <chat-list></chat-list>
+        <v-divider></v-divider>
+        <chat-input></chat-input>
       </v-card>
     </v-navigation-drawer>
   </div>
@@ -31,6 +33,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ChatList from "./ChatList";
+import ChatInput from "./ChatInput";
 
 export default {
   computed: {
@@ -42,6 +45,7 @@ export default {
     }
   },
   components: {
+    ChatInput,
     ChatList
   }
 };
