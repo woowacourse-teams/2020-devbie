@@ -29,7 +29,7 @@ public class ChatService {
 
         Chat savedChat = saveChat(messageSendRequest, chatRoom);
 
-        simpMessagingTemplate.convertAndSend(PUBLISH_URL + chatRoom.getId(), MessageResponse.from(savedChat));
+        simpMessagingTemplate.convertAndSend(PUBLISH_URL + messageSendRequest.getNoticeId(), MessageResponse.from(savedChat));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {

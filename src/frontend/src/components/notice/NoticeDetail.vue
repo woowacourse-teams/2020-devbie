@@ -31,7 +31,7 @@
                 depressed
                 large
                 color="primary"
-                @click="toggleChatDrawer"
+                @click="openChatDrawer"
                 >채팅방</v-btn
               >
               <v-btn
@@ -92,6 +92,11 @@ import { mapGetters } from "vuex";
 import router from "../../router";
 
 export default {
+  data() {
+    return {
+      stompClient: {}
+    };
+  },
   methods: {
     isAdmin() {
       return this.fetchedLoginUser.roleType === "ADMIN";
@@ -103,8 +108,9 @@ export default {
     onEditNotice() {
       router.push(`/notices/edit/${this.$route.params.id}`);
     },
-    toggleChatDrawer() {
-      this.$store.dispatch("TOGGLE_DRAWER");
+    openChatDrawer() {
+      this.$store.dispatch("OPEN_DRAWER");
+      this.$store.dispatch("CONNECT", this.fetchedNotice.id);
     }
   },
   created() {

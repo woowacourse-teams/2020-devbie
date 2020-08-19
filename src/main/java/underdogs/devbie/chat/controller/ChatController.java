@@ -15,6 +15,7 @@ public class ChatController {
 
     @MessageMapping("/message")
     public void sendMessage(MessageSendRequest messageSendRequest) {
+        System.out.println(messageSendRequest.getNoticeId());
         chatService.sendMessage(messageSendRequest);
     }
 }

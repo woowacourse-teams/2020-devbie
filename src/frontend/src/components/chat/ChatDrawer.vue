@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     closeChatDrawer() {
-      this.$store.dispatch("TOGGLE_DRAWER");
+      this.$store.dispatch("CLOSE_DRAWER");
     }
   },
   components: {
