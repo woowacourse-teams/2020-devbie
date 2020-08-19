@@ -17,7 +17,7 @@ import underdogs.devbie.chat.dto.MessageSendRequest;
 @RequiredArgsConstructor
 public class ChatService {
 
-    public static final String PUBLISH_URL = "/publish/room/";
+    public static final String PUBLISH_URL = "/channel/";
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRepository chatRepository;
