@@ -144,8 +144,15 @@ class QuestionControllerTest extends MvcTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
+        Question question = Question.builder()
+            .userId(1L)
+            .title(QuestionTitle.from("Changed Title"))
+            .content(QuestionContent.from("Changed Content"))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
+            .build();
 
-        willDoNothing().given(questionService).update(anyLong(), anyLong(), any(QuestionUpdateRequest.class));
+        given(questionService.update(anyLong(), anyLong(), any(QuestionUpdateRequest.class)))
+            .willReturn(QuestionResponse.from(question));
 
         patchAction("/api/questions/1", inputJson, TEST_TOKEN)
             .andExpect(status().isNoContent());

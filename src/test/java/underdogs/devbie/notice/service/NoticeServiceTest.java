@@ -94,8 +94,8 @@ public class NoticeServiceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf("2020-10-20 13:00"))
-            .endDate(String.valueOf("2020-10-20 14:00"))
+            .startDate("2020-10-20 13:00")
+            .endDate("2020-10-20 14:00")
             .build();
 
         given(noticeRepository.findById(anyLong())).willReturn(Optional.of(request.toEntity(2L)));
