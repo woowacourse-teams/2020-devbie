@@ -8,6 +8,7 @@
         @click="deleteHashtag(index)"
       >
         #{{ item }}
+        <i class="fa fa-times btn" aria-hidden="true"></i>
       </button>
     </div>
     <v-text-field
@@ -77,7 +78,7 @@ export default {
 }
 
 .hashtag-item {
-  padding: 8px;
+  padding: 8px 12px;
   margin-right: 5px;
   margin-bottom: 8px;
   font-family: "Roboto", sans-serif;
@@ -85,7 +86,7 @@ export default {
   letter-spacing: 2.5px;
   font-weight: 500;
   color: #000;
-  background-color: #fff;
+  background-color: #daebea;
   border: none;
   border-radius: 20px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -95,14 +96,28 @@ export default {
 }
 
 .hashtag-item:hover {
-  background-color: #2ee59d;
-  box-shadow: 0 15px 20px rgba(46, 229, 157, 0.4);
+  background-color: #9fd0d4;
   color: #fff;
-  transform: translateY(-7px);
+  font-weight: 600;
+  transform: translateY(-3px);
+  display: flex;
+  align-items: center;
 }
+
+.hashtag-item:hover .btn {
+  display: flex;
+  margin-left: 5px;
+  padding-bottom: 2px;
+  color: #e62739;
+}
+
 .hashtag-input-text {
   flex-grow: 1;
   max-width: 50%;
   min-width: 50%;
+}
+
+.btn {
+  display: none;
 }
 </style>
