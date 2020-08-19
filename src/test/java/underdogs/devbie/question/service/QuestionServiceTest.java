@@ -63,7 +63,7 @@ public class QuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionService =   new QuestionService(userService, questionHashtagService, questionRepository);
+        questionService = new QuestionService(userService, questionHashtagService, questionRepository);
 
         user = User.builder()
             .id(1L)
