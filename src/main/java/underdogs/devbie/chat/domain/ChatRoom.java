@@ -8,12 +8,14 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @Getter
 public class ChatRoom {
 
@@ -23,4 +25,10 @@ public class ChatRoom {
     private Long id;
 
     private Long noticeId;
+
+    public static ChatRoom from(Long noticeId) {
+        return ChatRoom.builder()
+            .noticeId(noticeId)
+            .build();
+    }
 }

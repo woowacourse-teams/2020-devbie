@@ -9,12 +9,14 @@ import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @Getter
 public class Chat {
 
@@ -29,4 +31,12 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
+
+    public static Chat of(String name, String message, ChatRoom chatRoom) {
+        return Chat.builder()
+            .name(name)
+            .message(message)
+            .chatRoom(chatRoom)
+            .build();
+    }
 }
