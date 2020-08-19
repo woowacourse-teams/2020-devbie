@@ -137,8 +137,8 @@ export default {
 .inner {
   width: 95%;
   box-sizing: border-box;
-  padding: 10px 0 40px 0;
+  padding: 10px 0 30px 0;
   border-bottom: solid 1px #e8e8e8;
-  height: 400px;
+  min-height: 400px;
 }
 </style>

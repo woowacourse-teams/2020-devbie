@@ -1,6 +1,7 @@
 package underdogs.devbie.question.domain;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class QuestionContent {
 
+    @Lob
     private String content;
 
     public static QuestionContent from(String content) {
