@@ -26,7 +26,12 @@
               <v-btn id="apply-btn" depressed large color="primary"
                 >지원하기</v-btn
               >
-              <v-btn id="chatting-btn" depressed large color="primary"
+              <v-btn
+                id="chatting-btn"
+                depressed
+                large
+                color="primary"
+                @click="toggleChatDrawer"
                 >채팅방</v-btn
               >
               <v-btn
@@ -97,6 +102,9 @@ export default {
     },
     onEditNotice() {
       router.push(`/notices/edit/${this.$route.params.id}`);
+    },
+    toggleChatDrawer() {
+      this.$store.dispatch("TOGGLE_DRAWER");
     }
   },
   created() {

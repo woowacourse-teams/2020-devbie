@@ -6,6 +6,7 @@ import answers from "./modules/answers";
 import notices from "./modules/notices";
 import recommendations from "./modules/recommendations";
 import hashtags from "./modules/hashtags";
+import chat from "./modules/chat";
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export const store = new Vuex.Store({
     answers,
     notices,
     recommendations,
-    hashtags
+    hashtags,
+    chat
   }
 });

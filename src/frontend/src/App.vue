@@ -4,6 +4,7 @@
     <transition name="page">
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
+    <chat-drawer></chat-drawer>
     <footer-bar></footer-bar>
   </v-app>
 </template>
@@ -11,6 +12,7 @@
 <script>
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
+import ChatDrawer from "./components/chat/ChatDrawer";
 
 export default {
   async created() {
@@ -31,6 +33,7 @@ export default {
     }
   },
   components: {
+    ChatDrawer,
     NavigationBar,
     FooterBar
   }
