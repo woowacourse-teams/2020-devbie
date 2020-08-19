@@ -107,7 +107,7 @@ export default {
 .hashtag:hover {
   cursor: pointer;
   font-weight: bold;
-  color: #445588;
+  color: #fc8c84;
   text-decoration: underline;
 }
 
