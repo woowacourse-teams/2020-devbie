@@ -21,6 +21,8 @@
             </v-col>
           </v-row>
         </v-container>
+        <v-divider></v-divider>
+        <chat-list> </chat-list>
       </v-card>
     </v-navigation-drawer>
   </div>
@@ -28,6 +30,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import ChatList from "./ChatList";
 
 export default {
   computed: {
@@ -37,6 +40,9 @@ export default {
     closeChatDrawer() {
       this.$store.dispatch("TOGGLE_DRAWER");
     }
+  },
+  components: {
+    ChatList
   }
 };
 </script>
