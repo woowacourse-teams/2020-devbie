@@ -16,7 +16,7 @@
       class="input hashtag-input-text"
       placeholder="Enter로 태그 추가"
       v-model="tagName"
-      @keydown.enter="addHashtag"
+      @keyup.enter="addHashtag"
     ></v-text-field>
   </div>
 </template>
