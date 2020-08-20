@@ -115,7 +115,7 @@ export default {
 
 .author-name .infos {
   font-size: 14px;
-  margin: 0 30px;
+  margin: 15px 30px 0 30px;
 }
 
 .answer-item-box {
@@ -147,7 +147,7 @@ export default {
 .answer-temp {
   display: flex;
   justify-content: space-between;
-  padding: 20px 15px 20px 30px;
+  padding: 15px 15px 20px 30px;
 }
 
 .answer-infos {
