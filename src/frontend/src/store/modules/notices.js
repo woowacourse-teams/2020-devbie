@@ -57,62 +57,38 @@ export default {
   },
   actions: {
     async FETCH_NOTICES({ commit }, queryUrl) {
-      try {
-        const { data } = await getAction(`/api/notices?` + queryUrl);
-        commit("SET_NOTICES", data["noticeResponses"]);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(`/api/notices?` + queryUrl);
+      commit("SET_NOTICES", data["noticeResponses"]);
     },
     async FETCH_NOTICE({ commit }, noticeId) {
-      try {
-        const { data } = await getAction(`/api/notices/${noticeId}`);
-        commit("SET_NOTICE", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(`/api/notices/${noticeId}`);
+      commit("SET_NOTICE", data);
     },
     async DELETE_NOTICE({ commit }, noticeId) {
-      try {
-        await deleteAction(`/api/notices/${noticeId}`);
-        commit("DELETE_NOTICE", Number(noticeId));
-      } catch (error) {
-        console.log(error);
-      }
+      await deleteAction(`/api/notices/${noticeId}`);
+      commit("DELETE_NOTICE", Number(noticeId));
     },
     async EDIT_NOTICE({ commit }, { id, params }) {
-      try {
-        await patchAction(`/api/notices/${id}`, params);
-        commit("UPDATE_NOTICE", id, params);
-      } catch (error) {
-        console.log(error);
-      }
+      await patchAction(`/api/notices/${id}`, params);
+      commit("UPDATE_NOTICE", id, params);
     },
     async FETCH_FILTERS({ commit }) {
       const { data } = await getAction(`/api/notices/filters`);
       commit("SET_FILTERS", data);
     },
     async CREATE_NOTICE({ commit }, noticeRequest) {
-      try {
-        const response = await postAction(`/api/notices`, noticeRequest);
-        const id = response["headers"].location.split("/")[3];
-        commit("SET_NOTICE_ID", id);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await postAction(`/api/notices`, noticeRequest);
+      const id = response["headers"].location.split("/")[3];
+      commit("SET_NOTICE_ID", id);
     },
     // eslint-disable-next-line no-unused-vars
     async UPLOAD_NOTICE_IMAGE({ commit }, payload) {
-      try {
-        const response = await postAction(
-          `/api/notices/image`,
-          payload,
-          `content-type: multipart/form-data`
-        );
-        return response["headers"].location;
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await postAction(
+        `/api/notices/image`,
+        payload,
+        `content-type: multipart/form-data`
+      );
+      return response["headers"].location;
     }
   },
   getters: {
