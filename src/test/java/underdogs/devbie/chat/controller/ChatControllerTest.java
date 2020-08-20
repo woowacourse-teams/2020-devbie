@@ -20,7 +20,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRoom;
-import underdogs.devbie.chat.dto.MessageResponses;
+import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.service.ChatService;
 import underdogs.devbie.user.domain.User;
 
@@ -52,30 +52,33 @@ class ChatControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
     }
 
-    @DisplayName("공고 ID로 채팅 내역 가져오기")
+    @DisplayName("공고 ID로 채팅방 가져오기")
     @Test
-    void readAll() throws Exception {
+    void fetchChatRoom() throws Exception {
         Long noticeId = 1L;
-        MessageResponses messageResponses = MessageResponses.from(Arrays.asList(
-            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
-            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
-            Chat.of("user2", "message3", ChatRoom.from(noticeId))
-        ));
-        given(chatService.readByNoticeId(anyLong())).willReturn(messageResponses);
+
+        ChatRoomResponse chatRoomResponse = ChatRoomResponse.of(
+            Arrays.asList(
+                Chat.of("user0", "message1", ChatRoom.from(noticeId)),
+                Chat.of("user1", "message2", ChatRoom.from(noticeId)),
+                Chat.of("user2", "message3", ChatRoom.from(noticeId))),
+            "홍길동");
+        given(chatService.fetchChatRoom(anyLong())).willReturn(chatRoomResponse);
 
         MvcResult result = getAction(String.format("/api/chats?noticeId=%s", 1L))
             .andExpect(status().isOk())
             .andDo(print())
             .andReturn();
 
-        MessageResponses resultResponse = objectMapper.readValue(result.getResponse().getContentAsString(),
-            MessageResponses.class);
+        ChatRoomResponse resultResponse = objectMapper.readValue(result.getResponse().getContentAsString(),
+            ChatRoomResponse.class);
 
         assertAll(
-            () -> assertEquals(resultResponse.getMessageResponses().size(), 3),
-            () -> assertEquals(resultResponse.getMessageResponses().get(0).getName(), "user0"),
-            () -> assertEquals(resultResponse.getMessageResponses().get(1).getName(), "user1"),
-            () -> assertEquals(resultResponse.getMessageResponses().get(2).getName(), "user2")
+            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().size(), 3),
+            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(0).getName(), "user0"),
+            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(1).getName(), "user1"),
+            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(2).getName(), "user2"),
+            () -> assertEquals(resultResponse.getNickName(), "홍길동")
         );
     }
 }

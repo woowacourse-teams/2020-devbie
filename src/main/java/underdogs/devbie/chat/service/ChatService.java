@@ -1,7 +1,5 @@
 package underdogs.devbie.chat.service;
 
-import java.util.List;
-
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +9,8 @@ import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
-import underdogs.devbie.chat.dto.MessageResponses;
 import underdogs.devbie.chat.dto.MessageSendRequest;
 
 @Service
@@ -46,8 +44,9 @@ public class ChatService {
         return chatRepository.save(chat);
     }
 
-    public MessageResponses readByNoticeId(Long noticeId) {
-        List<Chat> chats = chatRepository.findByNoticeId(noticeId);
-        return MessageResponses.from(chats);
+    public ChatRoomResponse fetchChatRoom(Long noticeId) {
+        ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
+
+        return ChatRoomResponse.of(chatRoom.getChats(), "홍길동");
     }
 }

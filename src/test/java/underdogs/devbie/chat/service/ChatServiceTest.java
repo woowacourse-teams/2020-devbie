@@ -2,8 +2,7 @@ package underdogs.devbie.chat.service;
 
 import static org.mockito.BDDMockito.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
@@ -39,14 +37,10 @@ class ChatServiceTest {
     @Test
     void readByNoticeId() {
         Long noticeId = 1L;
-        List<Chat> chats = Arrays.asList(
-            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
-            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
-            Chat.of("user2", "message3", ChatRoom.from(noticeId))
-        );
-        given(chatRepository.findByNoticeId(noticeId)).willReturn(chats);
-        chatService.readByNoticeId(noticeId);
+        Optional<ChatRoom> optionalChatRoom = Optional.of(ChatRoom.from(1L));
+        given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(optionalChatRoom);
+        chatService.fetchChatRoom(noticeId);
 
-        verify(chatRepository).findByNoticeId(eq(noticeId));
+        verify(chatRoomRepository).findByNoticeId(eq(noticeId));
     }
 }

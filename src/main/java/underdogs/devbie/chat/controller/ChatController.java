@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
-import underdogs.devbie.chat.dto.MessageResponses;
+import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
 import underdogs.devbie.chat.service.ChatService;
 
@@ -25,7 +25,7 @@ public class ChatController {
 
     @NoValidate
     @GetMapping("/api/chats")
-    public ResponseEntity<MessageResponses> readAll(@RequestParam(name = "noticeId") Long noticeId) {
-        return ResponseEntity.ok().body(chatService.readByNoticeId(noticeId));
+    public ResponseEntity<ChatRoomResponse> fetchChatRoom(@RequestParam(name = "noticeId") Long noticeId) {
+        return ResponseEntity.ok().body(chatService.fetchChatRoom(noticeId));
     }
 }
