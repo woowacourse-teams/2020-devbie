@@ -54,13 +54,13 @@ a {
   text-decoration: none;
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s;
 }
 
-.page-enter,
-.page-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
