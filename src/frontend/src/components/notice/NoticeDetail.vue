@@ -111,6 +111,7 @@ export default {
     openChatDrawer() {
       this.$store.dispatch("OPEN_DRAWER");
       this.$store.dispatch("CONNECT", this.fetchedNotice.id);
+      this.$store.dispatch("FETCH_CHATS", this.fetchedNotice.id);
     }
   },
   created() {
