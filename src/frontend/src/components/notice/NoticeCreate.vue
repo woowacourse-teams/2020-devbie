@@ -74,7 +74,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser } from "../../utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
@@ -136,9 +135,6 @@ export default {
       if (!this.$refs.form.validate()) {
         return;
       }
-
-      this.request.startDate = dateParser(this.request.startDate);
-      this.request.endDate = dateParser(this.request.endDate);
 
       try {
         await this.$store.dispatch("CREATE_NOTICE", this.request);

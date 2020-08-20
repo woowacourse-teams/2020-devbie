@@ -73,19 +73,20 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser, languageTranslator } from "@/utils/noticeUtil";
+import { languageTranslator } from "@/utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
   async created() {
     await this.checkAdmin();
-    await this.$store.dispatch("FETCH_LANGUAGES");
-    await this.$store.dispatch("FETCH_JOB_POSITIONS");
+    await this.$store.dispatch("FETCH_FILTERS");
 
     this.id = this.$route.params.id;
     await this.$store.dispatch("FETCH_NOTICE", this.id);
 
-    this.request = await this.parameterInitialize();
+    this.request = {
+      ...(await this.parameterInitialize())
+    };
   },
   computed: {
     ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
@@ -128,9 +129,6 @@ export default {
       }
     },
     async submit() {
-      this.request.startDate = dateParser(this.request.startDate);
-      this.request.endDate = dateParser(this.request.endDate);
-
       try {
         await this.$store.dispatch("EDIT_NOTICE", {
           id: this.id,
@@ -147,16 +145,14 @@ export default {
         name: this.fetchedNotice.company.name,
         jobPosition: this.fetchedNotice.jobPosition,
         noticeType: this.fetchedNotice.noticeType,
-        startDate: dateParser(
+        startDate:
           this.fetchedNotice.duration === null
             ? ""
-            : this.fetchedNotice.duration.startDate
-        ),
-        endDate: dateParser(
+            : this.fetchedNotice.duration.startDate,
+        endDate:
           this.fetchedNotice.duration === null
             ? ""
-            : this.fetchedNotice.duration.endDate
-        ),
+            : this.fetchedNotice.duration.endDate,
         description: this.fetchedNotice.noticeDescription.content,
         languages: this.fetchedNotice.noticeDescription.languages.map(
           language => languageTranslator(language)
