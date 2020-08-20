@@ -45,13 +45,14 @@ export default {
         return notice;
       });
     },
-    SET_LANGUAGES(state, data) {
+    SET_FILTERS(state, data) {
       const languages = [{ key: "", text: "무관" }];
-      state.languages = languages.concat(data.map(res => res.pair));
-    },
-    SET_JOB_POSITIONS(state, data) {
+      state.languages = languages.concat(data.languages.map(res => res.pair));
+
       const jobPositions = [{ key: "", text: "무관" }];
-      state.jobPositions = jobPositions.concat(data.map(res => res.pair));
+      state.jobPositions = jobPositions.concat(
+        data.jobPositions.map(res => res.pair)
+      );
     }
   },
   actions: {
@@ -87,21 +88,9 @@ export default {
         console.log(error);
       }
     },
-    async FETCH_LANGUAGES({ commit }) {
-      try {
-        const { data } = await getAction(`/api/notices/languages`);
-        commit("SET_LANGUAGES", data.languages);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async FETCH_JOB_POSITIONS({ commit }) {
-      try {
-        const { data } = await getAction(`/api/notices/job-positions`);
-        commit("SET_JOB_POSITIONS", data.jobPositions);
-      } catch (error) {
-        console.log(error);
-      }
+    async FETCH_FILTERS({ commit }) {
+      const { data } = await getAction(`/api/notices/filters`);
+      commit("SET_FILTERS", data);
     },
     async CREATE_NOTICE({ commit }, noticeRequest) {
       try {

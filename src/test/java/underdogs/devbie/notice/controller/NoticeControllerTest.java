@@ -44,9 +44,7 @@ import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 import underdogs.devbie.notice.vo.JobPositionPair;
-import underdogs.devbie.notice.vo.JobPositionsResponse;
 import underdogs.devbie.notice.vo.LanguagePair;
-import underdogs.devbie.notice.vo.LanguagesResponse;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
