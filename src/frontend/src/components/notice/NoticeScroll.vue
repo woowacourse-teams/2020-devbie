@@ -19,13 +19,12 @@
         </v-card-title>
         <v-divider></v-divider>
 
-        <v-virtual-scroll
-          :bench="benched"
-          :items="items"
-          height="500"
-          item-height="64"
+        <div
+          style="overflow-y: scroll; height:500px;"
+          class="scroll-content"
+          @scroll="onScroll"
         >
-          <template v-slot="{ item }">
+          <template v-for="item in items">
             <v-list-item :key="item.id">
               <v-list-item-action>
                 <v-btn fab small depressed color="primary">
@@ -39,9 +38,9 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider></v-divider>
+            <v-divider :key="item.id"></v-divider>
           </template>
-        </v-virtual-scroll>
+        </div>
       </v-card>
     </div>
   </div>
@@ -53,10 +52,13 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      benched: 0
+      isBottom: false
     };
   },
   created() {
+    if (this.fetchedNotices.length !== 0) {
+      return;
+    }
     const param = {
       noticeType: this.fetchedNoticeType,
       jobPosition: this.fetchedJobPosition,
@@ -70,10 +72,34 @@ export default {
       "fetchedNotices",
       "fetchedNoticeType",
       "fetchedJobPosition",
-      "fetchedLanguage"
+      "fetchedLanguage",
+      "fetchedPage",
+      "fetchedLastPage"
     ]),
     items() {
       return this.fetchedNotices;
+    }
+  },
+  methods: {
+    async onScroll({ target }) {
+      if (
+        target.scrollTop + target.clientHeight >= target.scrollHeight &&
+        this.fetchedPage <= this.fetchedLastPage
+      ) {
+        this.isBottom = true;
+        await this.addNotices();
+        this.isBottom = false;
+      }
+    },
+    async addNotices() {
+      const param = {
+        noticeType: this.fetchedNoticeType,
+        jobPosition: this.fetchedJobPosition,
+        language: this.fetchedLanguage,
+        page: this.fetchedPage
+      };
+      const queryParam = new URLSearchParams(param).toString();
+      await this.$store.dispatch("FETCH_NOTICES", queryParam);
     }
   }
 };
