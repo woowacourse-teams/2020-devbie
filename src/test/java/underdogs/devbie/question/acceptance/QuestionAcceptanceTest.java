@@ -111,7 +111,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                     QuestionResponse.class);
                 assertAll(
                     () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
-                    () -> assertThat(updatedQuestion.getVisits()).isEqualTo(1L),
+                    () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
                     () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
                     () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content"),
                     () -> assertThat(updatedQuestion.getHashtags().get(0).getTagName()).isEqualTo("kotlin")

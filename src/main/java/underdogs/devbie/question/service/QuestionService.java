@@ -2,9 +2,6 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +39,6 @@ public class QuestionService {
     }
 
     @Transactional
-    @Cacheable(value = "QuestionResponse", key = "#id")
     public QuestionResponse read(Long id, boolean isVisit) {
         Question question = readOne(id);
         if (isVisit) {
@@ -57,15 +53,13 @@ public class QuestionService {
     }
 
     @Transactional
-    @CachePut(value = "QuestionResponse", key = "#questionId")
-    public QuestionResponse update(Long userId, Long questionId, QuestionUpdateRequest request) {
+    public void update(Long userId, Long questionId, QuestionUpdateRequest request) {
         Question question = readOne(questionId);
 
         validateQuestionAuthor(userId, question);
 
         question.updateQuestionInfo(request.toEntity(userId));
         questionHashtagService.updateHashtags(question, request.getHashtags());
-        return QuestionResponse.from(question);
     }
 
     private void validateQuestionAuthor(Long userId, Question question) {
@@ -79,7 +73,6 @@ public class QuestionService {
     }
 
     @Transactional
-    @CacheEvict(value = "QuestionResponse", key = "#questionId")
     public void delete(Long userId, Long questionId) {
         Question question = readOne(questionId);
 
