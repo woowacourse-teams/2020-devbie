@@ -62,6 +62,7 @@ export default {
       "fetchedNoticeType",
       "fetchedJobPosition",
       "fetchedLanguage",
+      "fetchedKeyword",
       "fetchedPage",
       "fetchedLastPage"
     ]),
@@ -99,7 +100,8 @@ export default {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
         language: this.fetchedLanguage,
-        page: this.fetchedPage
+        page: this.fetchedPage,
+        keyword: this.fetchedKeyword
       };
       const queryParam = new URLSearchParams(param).toString();
       await this.$store.dispatch("FETCH_NOTICES", queryParam);
