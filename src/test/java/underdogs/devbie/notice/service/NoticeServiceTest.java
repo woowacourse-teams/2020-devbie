@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -140,10 +141,12 @@ public class NoticeServiceTest {
         NoticeReadRequest noticeReadRequest = NoticeReadRequest.builder()
             .noticeType(NoticeType.JOB)
             .jobPosition(JobPosition.BACKEND)
-            .language(Language.JAVA).build();
+            .language(Language.JAVA)
+            .keyword(Strings.EMPTY)
+            .build();
 
-        given(noticeRepository.findAllBy(any(NoticeType.class), any(JobPosition.class), any(Language.class), any(
-            Pageable.class)))
+        given(noticeRepository.findAllBy(any(NoticeType.class), any(JobPosition.class), any(Language.class),
+            any(String.class), any(Pageable.class)))
             .willReturn(new PageImpl<>(Arrays.asList(expected)));
 
         List<NoticeResponse> noticeResponses = noticeService.filteredRead(
