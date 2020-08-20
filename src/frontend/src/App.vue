@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <navigation-bar @logout="logout"></navigation-bar>
-    <transition name="page">
+    <transition name="fade">
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
     <chat-drawer></chat-drawer>
