@@ -87,6 +87,15 @@ import { mapGetters } from "vuex";
 import router from "../../router";
 
 export default {
+  computed: {
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
+  },
+
+  created() {
+    const noticeId = this.$route.params.id;
+    this.$store.dispatch("FETCH_NOTICE", noticeId);
+  },
+
   methods: {
     isAdmin() {
       return this.fetchedLoginUser.roleType === "ADMIN";
@@ -98,13 +107,6 @@ export default {
     onEditNotice() {
       router.push(`/notices/edit/${this.$route.params.id}`);
     }
-  },
-  created() {
-    const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICE", noticeId);
-  },
-  computed: {
-    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
   }
 };
 </script>

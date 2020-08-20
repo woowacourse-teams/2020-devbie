@@ -38,13 +38,16 @@ export default {
       selectedLanguage: ""
     };
   },
+
+  computed: {
+    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
+  },
+
   created() {
     this.$store.dispatch("FETCH_LANGUAGES");
     this.$store.dispatch("FETCH_JOB_POSITIONS");
   },
-  computed: {
-    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
-  },
+
   methods: {
     changeJobPosition() {
       this.$store.commit("SET_JOB_POSITION", this.selectedPosition);

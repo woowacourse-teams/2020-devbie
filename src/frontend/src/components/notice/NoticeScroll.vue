@@ -55,18 +55,7 @@ export default {
       isBottom: false
     };
   },
-  created() {
-    if (this.fetchedNotices.length !== 0) {
-      return;
-    }
-    const param = {
-      noticeType: this.fetchedNoticeType,
-      jobPosition: this.fetchedJobPosition,
-      language: this.fetchedLanguage
-    };
-    const queryParam = new URLSearchParams(param).toString();
-    this.$store.dispatch("FETCH_NOTICES", queryParam);
-  },
+
   computed: {
     ...mapGetters([
       "fetchedNotices",
@@ -80,6 +69,20 @@ export default {
       return this.fetchedNotices;
     }
   },
+
+  created() {
+    if (this.fetchedNotices.length !== 0) {
+      return;
+    }
+    const param = {
+      noticeType: this.fetchedNoticeType,
+      jobPosition: this.fetchedJobPosition,
+      language: this.fetchedLanguage
+    };
+    const queryParam = new URLSearchParams(param).toString();
+    this.$store.dispatch("FETCH_NOTICES", queryParam);
+  },
+
   methods: {
     async onScroll({ target }) {
       if (

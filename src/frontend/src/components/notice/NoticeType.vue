@@ -21,6 +21,10 @@
 import { mapGetters } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters(["fetchedNoticeType"])
+  },
+
   methods: {
     async changeNoticeType(e) {
       if (e.currentTarget.name === this.fetchedNoticeType) {
@@ -34,9 +38,6 @@ export default {
     isEducation() {
       return this.fetchedNoticeType === "EDUCATION";
     }
-  },
-  computed: {
-    ...mapGetters(["fetchedNoticeType"])
   }
 };
 </script>

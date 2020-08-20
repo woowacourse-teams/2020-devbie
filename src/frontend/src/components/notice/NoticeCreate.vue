@@ -78,15 +78,7 @@ import { dateParser } from "../../utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
-  created() {
-    this.checkAdmin();
-    this.$store.dispatch("FETCH_LANGUAGES");
-    this.$store.dispatch("FETCH_JOB_POSITIONS");
-  },
-  computed: {
-    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
-  },
-  data: function() {
+  data() {
     return {
       rules: { ...validator.notice },
       noticeTypeItems: [
@@ -108,6 +100,17 @@ export default {
       }
     };
   },
+
+  computed: {
+    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
+  },
+
+  created() {
+    this.checkAdmin();
+    this.$store.dispatch("FETCH_LANGUAGES");
+    this.$store.dispatch("FETCH_JOB_POSITIONS");
+  },
+
   methods: {
     async checkAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;

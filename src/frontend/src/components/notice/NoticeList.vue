@@ -56,6 +56,37 @@ export default {
       isBottom: false
     };
   },
+
+  computed: {
+    ...mapGetters([
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage",
+      "fetchedPage",
+      "fetchedLastPage"
+    ])
+  },
+
+  watch: {
+    fetchedNoticeType() {
+      this.addNotices();
+    },
+    fetchedJobPosition() {
+      this.addNotices();
+    },
+    fetchedLanguage() {
+      this.addNotices();
+    }
+  },
+
+  created() {
+    if (this.fetchedNotices.length > 0) {
+      return;
+    }
+    this.addNotices();
+  },
+
   methods: {
     async onScroll({ target }) {
       const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
@@ -86,36 +117,6 @@ export default {
       };
       const queryParam = new URLSearchParams(param).toString();
       await this.$store.dispatch("FETCH_NOTICES", queryParam);
-    }
-  },
-
-  computed: {
-    ...mapGetters([
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage",
-      "fetchedPage",
-      "fetchedLastPage"
-    ])
-  },
-
-  created() {
-    if (this.fetchedNotices.length > 0) {
-      return;
-    }
-    this.addNotices();
-  },
-
-  watch: {
-    fetchedNoticeType() {
-      this.addNotices();
-    },
-    fetchedJobPosition() {
-      this.addNotices();
-    },
-    fetchedLanguage() {
-      this.addNotices();
     }
   }
 };

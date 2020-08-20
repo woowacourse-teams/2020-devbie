@@ -77,20 +77,7 @@ import { dateParser, languageTranslator } from "@/utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
-  async created() {
-    await this.checkAdmin();
-    await this.$store.dispatch("FETCH_LANGUAGES");
-    await this.$store.dispatch("FETCH_JOB_POSITIONS");
-
-    this.id = this.$route.params.id;
-    await this.$store.dispatch("FETCH_NOTICE", this.id);
-
-    this.request = await this.parameterInitialize();
-  },
-  computed: {
-    ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
-  },
-  data: function() {
+  data() {
     return {
       rules: { ...validator.notice },
       id: "",
@@ -100,6 +87,21 @@ export default {
       ],
       request: {}
     };
+  },
+
+  computed: {
+    ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
+  },
+
+  async created() {
+    await this.checkAdmin();
+    await this.$store.dispatch("FETCH_LANGUAGES");
+    await this.$store.dispatch("FETCH_JOB_POSITIONS");
+
+    this.id = this.$route.params.id;
+    await this.$store.dispatch("FETCH_NOTICE", this.id);
+
+    this.request = await this.parameterInitialize();
   },
 
   methods: {
