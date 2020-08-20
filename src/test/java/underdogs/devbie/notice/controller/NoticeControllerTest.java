@@ -36,6 +36,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -269,47 +270,32 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 통해 모든 프로그래밍 언어 조회")
     @Test
     void findLanguages() throws Exception {
-        given(noticeService.findLanguages())
-            .willReturn(LanguagesResponse.get());
+        given(noticeService.findFilters())
+            .willReturn(FilterResponses.get());
 
-        MvcResult mvcResult = getAction("/api/notices/languages")
+        MvcResult mvcResult = getAction("/api/notices/filters")
             .andExpect(status().isOk())
             .andReturn();
 
-        LanguagesResponse languagesResponse = objectMapper.readValue(
+        FilterResponses actual = objectMapper.readValue(
             mvcResult.getResponse().getContentAsString(),
-            LanguagesResponse.class
+            FilterResponses.class
         );
 
-        List<LanguagePair> languagePairs = Arrays.stream(Language.values())
+        List<LanguagePair> expectLanguages = Arrays.stream(Language.values())
             .map(LanguagePair::from)
             .collect(toList());
-
-        assertThat(languagesResponse.getLanguages())
-            .containsAll(languagePairs);
-    }
-
-    @DisplayName("사용자 요청을 통해 모든 채용포지션 조회")
-    @Test
-    void findJobPosition() throws Exception {
-        given(noticeService.findJobPositions())
-            .willReturn(JobPositionsResponse.get());
-
-        MvcResult mvcResult = getAction("/api/notices/job-positions")
-            .andExpect(status().isOk())
-            .andReturn();
-
-        JobPositionsResponse jobPositionsResponse = objectMapper.readValue(
-            mvcResult.getResponse().getContentAsString(),
-            JobPositionsResponse.class
-        );
-
-        List<JobPositionPair> jobPositionPairs = Arrays.stream(JobPosition.values())
+        List<JobPositionPair> expectJobPositions = Arrays.stream(JobPosition.values())
             .map(JobPositionPair::from)
             .collect(toList());
 
-        assertThat(jobPositionsResponse.getJobPositions())
-            .containsAll(jobPositionPairs);
+        assertAll(
+            () -> assertThat(actual.getLanguages())
+                .containsAll(expectLanguages),
+
+            () -> assertThat(actual.getJobPositions())
+                .containsAll(expectJobPositions)
+        );
     }
 
     private void validateNoticeCreateRequest() throws Exception {
