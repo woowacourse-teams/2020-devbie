@@ -20,15 +20,17 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     @Override
     public Page<Notice> findAllBy(
         NoticeType noticeType, JobPosition jobPosition,
-        Language language, Pageable pageable
+        Language language, String keyword, Pageable pageable
     ) {
         QueryResults<Notice> queryResults = jpaQueryFactory
             .selectFrom(notice)
-            // .innerJoin(notice.noticeDescription.languages)
-            // .fetchJoin()
+            .leftJoin(notice.noticeDescription.languages)
+            .fetchJoin()
             .where(equalNoticeType(noticeType),
                 equalJobPosition(jobPosition),
-                containLanguage(language))
+                containLanguage(language),
+                containKeyword(keyword)
+            )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();
@@ -62,5 +64,20 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
             .noticeDescription
             .languages
             .contains(language);
+    }
+
+    private BooleanExpression containKeyword(String keyword) {
+        if (StringUtils.isEmpty(keyword) || keyword.isEmpty()) {
+            return null;
+        }
+        BooleanExpression containCompany = notice
+            .company
+            .name
+            .contains(keyword);
+        BooleanExpression containTitle = notice
+            .title
+            .contains(keyword);
+
+        return containTitle.or(containCompany);
     }
 }

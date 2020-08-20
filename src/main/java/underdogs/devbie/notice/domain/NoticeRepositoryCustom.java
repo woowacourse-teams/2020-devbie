@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 public interface NoticeRepositoryCustom {
 
     Page<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition,
-        Language language, Pageable pageable);
+        Language language, String keyword, Pageable pageable);
 }
