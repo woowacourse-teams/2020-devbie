@@ -11,7 +11,8 @@ export default {
     languages: [],
     jobPositions: [],
     page: 1,
-    lastPage: 1000
+    lastPage: 1000,
+    keyword: ""
   },
   mutations: {
     UPDATE_NOTICES(state, data) {
@@ -63,9 +64,10 @@ export default {
       const jobPositions = [{ key: "", text: "무관" }];
       state.jobPositions = jobPositions.concat(data.map(res => res.pair));
     },
-    SET_PAGING(state, lastPage) {
-      state.page = state.page + 1;
-      state.lastPage = lastPage;
+    SET_KEYWORD(state, data) {
+      state.notices = [];
+      state.page = 1;
+      state.keyword = data;
     }
   },
   actions: {
@@ -171,6 +173,9 @@ export default {
     },
     fetchedLastPage(state) {
       return state.lastPage;
+    },
+    fetchedKeyword(state) {
+      return state.keyword;
     }
   }
 };
