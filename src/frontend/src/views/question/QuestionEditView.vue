@@ -3,12 +3,12 @@
     <form-title>
       <span>질문 수정</span>
     </form-title>
-    <question-create :editingFlag="true"></question-create>
+    <question-form :editingFlag="true"></question-form>
   </div>
 </template>
 
 <script>
-import QuestionCreate from "../../components/question/QuestionForm";
+import QuestionForm from "../../components/question/QuestionForm";
 import FormTitle from "../../components/question/FormTitle";
 import { mapGetters } from "vuex";
 import router from "../../router";
@@ -16,7 +16,7 @@ import router from "../../router";
 export default {
   components: {
     FormTitle,
-    QuestionCreate
+    QuestionForm
   },
 
   computed: {

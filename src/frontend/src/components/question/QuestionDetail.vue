@@ -63,12 +63,15 @@ export default {
   },
 
   created() {
-    this.fetchCurrentQuestion();
+    this.updateCurrentQuestion();
   },
 
   methods: {
-    async fetchCurrentQuestion() {
-      await this.$store.dispatch("FETCH_QUESTION", this.$route.params.id);
+    async updateCurrentQuestion() {
+      await this.$store.dispatch(
+        "FETCH_QUESTION_WITHOUT_VISITS",
+        this.$route.params.id
+      );
       this.content = this.fetchedQuestion.content;
     }
   }
