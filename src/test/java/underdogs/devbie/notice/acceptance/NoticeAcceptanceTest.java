@@ -130,6 +130,23 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                 );
 
             }),
+            dynamicTest("채용공고 중 키워드로 검색한다.", () -> {
+                NoticeResponses noticeResponses = get(
+                    "/api/notices?noticeType=JOB&keyword=bossdog",
+                    NoticeResponses.class);
+
+                List<NoticeResponse> response = noticeResponses.getNoticeResponses();
+                assertAll(
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getNoticeType)
+                        .contains(NoticeType.JOB),
+
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getName)
+                        .contains("bossdog")
+                );
+
+            }),
             dynamicTest("공고 게시글을 수정한다.", () -> {
                 NoticeUpdateRequest noticeUpdateRequest = NoticeUpdateRequest.builder()
                     .name("bossdog")
