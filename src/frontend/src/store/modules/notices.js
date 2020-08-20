@@ -15,7 +15,9 @@ export default {
   },
   mutations: {
     UPDATE_NOTICES(state, data) {
-      state.notices = state.notices.concat(data);
+      state.page = state.page + 1;
+      state.lastPage = data["lastPage"];
+      state.notices = state.notices.concat(data["noticeResponses"]);
     },
     SET_NOTICE(state, data) {
       state.notice = data;
@@ -70,8 +72,7 @@ export default {
     async FETCH_NOTICES({ commit }, queryUrl) {
       try {
         const { data } = await getAction(`/api/notices?` + queryUrl);
-        commit("UPDATE_NOTICES", data["noticeResponses"]);
-        commit("SET_PAGING", data["lastPage"]);
+        commit("UPDATE_NOTICES", data);
         return data;
       } catch (error) {
         console.log(error);

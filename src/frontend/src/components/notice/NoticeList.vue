@@ -65,7 +65,7 @@ export default {
 
       if (
         this.isBottom !== currentState &&
-        this.fetchedPage < this.fetchedLastPage
+        this.fetchedPage <= this.fetchedLastPage
       ) {
         this.isBottom = true;
         await this.addNotices();
@@ -85,13 +85,7 @@ export default {
         page: this.fetchedPage
       };
       const queryParam = new URLSearchParams(param).toString();
-      const { noticeResponses, lastPage } = await this.$store.dispatch(
-        "FETCH_NOTICES",
-        queryParam
-      );
-      this.notices = this.notices.concat(noticeResponses);
-      this.lastPage = lastPage;
-      this.page = this.page + 1;
+      await this.$store.dispatch("FETCH_NOTICES", queryParam);
     }
   },
 
