@@ -79,8 +79,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.BACKEND)
                     .image("/static/image/underdogs")
                     .description("We are hiring!")
-                    .startDate("2020-10-10 13:00")
-                    .endDate("2020-10-10 14:00")
+                    .startDate("2020-10-10T13:00")
+                    .endDate("2020-10-10T14:00")
                     .build();
 
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
@@ -139,8 +139,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate("2020-10-21 13:00")
-                    .endDate("2020-10-21 14:00")
+                    .startDate("2020-10-21T13:00")
+                    .endDate("2020-10-21T14:00")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
