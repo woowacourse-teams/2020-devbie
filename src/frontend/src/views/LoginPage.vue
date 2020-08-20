@@ -2,7 +2,7 @@
   <div class="flex-box">
     <v-progress-circular
       v-if="isNotCompleted"
-      :size="200"
+      :size="150"
       indeterminate
       class="progress-circular"
     ></v-progress-circular>
