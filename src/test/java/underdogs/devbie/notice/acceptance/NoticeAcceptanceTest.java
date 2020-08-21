@@ -70,18 +70,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     Stream<DynamicTest> notice() {
         return Stream.of(
             dynamicTest("공고 게시글을 생성한다.", () -> {
-                NoticeCreateRequest noticeCreateRequest = NoticeCreateRequest.builder()
-                    .name("underdogs")
-                    .title("언더독스 채용")
-                    .noticeType(NoticeType.JOB)
-                    .salary(50_000_000)
-                    .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
-                    .jobPosition(JobPosition.BACKEND)
-                    .image("/static/image/underdogs")
-                    .description("We are hiring!")
-                    .startDate("2020-10-10 13:00")
-                    .endDate("2020-10-10 14:00")
-                    .build();
+                NoticeCreateRequest noticeCreateRequest = createNotice();
 
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
             }),

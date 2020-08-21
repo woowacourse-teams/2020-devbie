@@ -3,6 +3,8 @@ package underdogs.devbie.acceptance;
 import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,10 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -89,6 +95,35 @@ public abstract class AcceptanceTest {
     protected QuestionResponse fetchFirstQuestion() {
         QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
         return questions.getQuestions().get(0);
+    }
+
+    protected NoticeCreateRequest createNotice() {
+        return NoticeCreateRequest.builder()
+            .name("underdogs")
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
+            .salary(50_000_000)
+            .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
+            .jobPosition(JobPosition.BACKEND)
+            .image("/static/image/underdogs")
+            .description("We are hiring!")
+            .startDate("2020-10-10 13:00")
+            .endDate("2020-10-10 14:00")
+            .build();
+    }
+
+    protected <T> void post(String path) {
+        // @formatter:off
+        given().
+            auth().oauth2(bearerToken).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            post(path).
+            then().
+            log().all().
+            statusCode(HttpStatus.CREATED.value());
+        // @formatter:on
     }
 
     protected <T> void post(String path, String inputJson) {
