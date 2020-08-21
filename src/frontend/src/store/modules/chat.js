@@ -1,4 +1,4 @@
-import { getAction } from "../../api";
+import { getAction, patchAction } from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
@@ -15,6 +15,7 @@ export default {
       const socket = new SockJS("/chat");
       state.stompClient = Stomp.over(socket);
       state.stompClient.connect({}, function(frame) {
+        patchAction("/api/chatrooms", { noticeId: noticeId }, {});
         console.log("frame: " + frame);
         state.stompClient.subscribe("/channel/" + noticeId, tick => {
           state.chats.push(JSON.parse(tick.body));
