@@ -20,6 +20,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRoom;
+import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.service.ChatService;
 import underdogs.devbie.user.domain.User;
@@ -80,5 +81,16 @@ class ChatControllerTest extends MvcTest {
             () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(2).getName(), "user2"),
             () -> assertEquals(resultResponse.getNickName(), "홍길동")
         );
+    }
+
+    @DisplayName("Notice ID로 Chatroom 생성")
+    @Test
+    void createChatRoom() throws Exception {
+        Long noticeId = 1L;
+        ChatRoomCreateRequest chatRoomCreateRequest = new ChatRoomCreateRequest(noticeId);
+
+        patchAction("/api/chatrooms", objectMapper.writeValueAsString(chatRoomCreateRequest))
+            .andDo(print())
+            .andExpect(status().isNoContent());
     }
 }

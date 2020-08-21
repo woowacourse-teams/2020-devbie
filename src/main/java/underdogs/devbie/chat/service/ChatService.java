@@ -9,6 +9,7 @@ import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -34,7 +35,7 @@ public class ChatService {
             MessageResponse.from(savedChat));
     }
 
-    private ChatRoom getOrCreateChatRoom(Long noticeId) {
+    public ChatRoom getOrCreateChatRoom(Long noticeId) {
         return chatRoomRepository.findByNoticeId(noticeId)
             .orElseGet(() -> chatRoomRepository.save(ChatRoom.from(noticeId)));
     }
@@ -48,5 +49,9 @@ public class ChatService {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
         return ChatRoomResponse.of(chatRoom.getChats(), "홍길동");
+    }
+
+    public void createIfNotExist(ChatRoomCreateRequest chatRoomCreateRequest) {
+        getOrCreateChatRoom(chatRoomCreateRequest.getNoticeId());
     }
 }
