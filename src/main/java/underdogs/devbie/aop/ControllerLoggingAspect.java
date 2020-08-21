@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class ControllerLoggingAspect {
 
-    @Pointcut("execution(* underdogs.devbie..*Controller.*(..))")
+    @Pointcut("execution(* underdogs.devbie..*Controller.*(..)) && !execution(* underdogs.devbie..ChatController.*(..))")
     public void loggerPointCut() {
     }
 
