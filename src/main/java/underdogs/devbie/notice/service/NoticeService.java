@@ -51,4 +51,9 @@ public class NoticeService {
         List<Notice> notices = noticeRepository.findAllBy(noticeType, jobPosition, language);
         return NoticeResponses.listFrom(notices);
     }
+
+    public NoticeResponses findAllByIds(List<Long> noticeIds) {
+        List<Notice> notices = noticeRepository.findAllById(noticeIds);
+        return NoticeResponses.listFrom(notices);
+    }
 }
