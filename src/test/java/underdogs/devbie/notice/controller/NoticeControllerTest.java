@@ -268,7 +268,7 @@ public class NoticeControllerTest extends MvcTest {
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
         postAction("/api/notices", inputJson, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 

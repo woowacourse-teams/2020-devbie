@@ -83,7 +83,7 @@ public class AnswerControllerTest extends MvcTest {
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
 
         postAction("/api/answers", inputString, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 
@@ -96,7 +96,7 @@ public class AnswerControllerTest extends MvcTest {
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
 
         postAction("/api/answers", inputString, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 
@@ -108,7 +108,7 @@ public class AnswerControllerTest extends MvcTest {
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
 
         postAction("/api/answers", inputString, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 
