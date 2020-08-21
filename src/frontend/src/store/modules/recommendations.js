@@ -21,95 +21,74 @@ export default {
     }
   },
   actions: {
-    async FETCH_MY_QUESTION_RECOMMENDATION({ commit }, { questionId, userId }) {
-      try {
-        const { data } = await getAction(
-          `/api/recommendation-question?objectId=${questionId}&userId=${userId}`
-        );
+    async FETCH_MY_RECOMMENDATION({ commit }, { object, objectId, userId }) {
+      const { data } = await getAction(
+        `/api/recommendation-${object}?objectId=${objectId}&userId=${userId}`
+      );
+
+      if (object === "question") {
         commit("SET_MY_QUESTION_RECOMMENDATION", data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async ON_QUESTION_RECOMMENDATION(
-      { commit },
-      { questionId, recommendationType }
-    ) {
-      try {
-        await putAction(`/api/recommendation-question?objectId=${questionId}`, {
-          recommendationType
-        });
-        commit("SET_MY_QUESTION_RECOMMENDATION", {
-          recommendationType
-        });
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    async DELETE_QUESTION_RECOMMENDATION({ commit }, questionId) {
-      try {
-        await deleteAction(
-          `/api/recommendation-question?objectId=${questionId}`
-        );
-        commit("SET_MY_QUESTION_RECOMMENDATION", {
-          recommendationType: "NOT_EXIST"
-        });
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    async FETCH_MY_ANSWER_RECOMMENDATION({ commit }, { answerId, userId }) {
-      try {
-        const { data } = await getAction(
-          `/api/recommendation-answer?objectId=${answerId}&userId=${userId}`
-        );
+      } else {
         commit("SET_MY_ANSWER_RECOMMENDATION", {
-          answerId,
+          objectId,
           recommendationType: data.recommendationType
         });
-      } catch (error) {
-        console.log(error);
       }
     },
-    async ON_ANSWER_RECOMMENDATION(
+
+    async CREATE_RECOMMENDATION(
       { commit },
-      { answerId, recommendationType }
+      { object, objectId, recommendationType }
     ) {
-      try {
-        await putAction(`/api/recommendation-answer?objectId=${answerId}`, {
+      await putAction(`/api/recommendation-${object}?objectId=${objectId}`, {
+        recommendationType
+      });
+
+      if (object === "question") {
+        commit("SET_MY_QUESTION_RECOMMENDATION", {
           recommendationType
         });
+      } else {
         commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
-          answerId,
+          objectId,
           recommendationType
         });
-      } catch (error) {
-        console.log(error);
-        throw error;
       }
     },
-    async DELETE_ANSWER_RECOMMENDATION({ commit }, answerId) {
-      try {
-        await deleteAction(`/api/recommendation-answer?objectId=${answerId}`);
-        commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
-          answerId,
+
+    async DELETE_RECOMMENDATION({ commit }, { object, objectId }) {
+      await deleteAction(`/api/recommendation-${object}?objectId=${objectId}`);
+
+      if (object === "question") {
+        commit("SET_MY_QUESTION_RECOMMENDATION", {
           recommendationType: "NOT_EXIST"
         });
-      } catch (error) {
-        console.log(error);
-        throw error;
+      } else {
+        commit("UPDATE_MY_ANSWER_RECOMMENDATION", {
+          objectId,
+          recommendationType: "NOT_EXIST"
+        });
       }
+    },
+
+    async FETCH_MY_ANSWER_RECOMMENDATION({ commit }, { answerId, userId }) {
+      const { data } = await getAction(
+        `/api/recommendation-answer?objectId=${answerId}&userId=${userId}`
+      );
+      commit("SET_MY_ANSWER_RECOMMENDATION", {
+        answerId,
+        recommendationType: data.recommendationType
+      });
     }
   },
+
   getters: {
     fetchedMyQuestionRecommendation(state) {
       return state.myQuestionRecommendation;
     },
     fetchedMyAnswerRecommendation: state => answerId => {
       return state.myAnswerRecommendation.filter(
-        my => my.answerId === answerId
+        my => my.objectId === answerId
       )[0];
     }
   }

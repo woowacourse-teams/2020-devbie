@@ -22,12 +22,8 @@ export default {
   },
   actions: {
     async FETCH_QUESTIONS({ commit }, orderBy) {
-      try {
-        const { data } = await getAction(`/api/questions?orderBy=${orderBy}`);
-        commit("SET_QUESTIONS", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(`/api/questions?orderBy=${orderBy}`);
+      commit("SET_QUESTIONS", data);
     },
     async FETCH_QUESTION({ commit }, questionId) {
       try {
@@ -40,49 +36,30 @@ export default {
       }
     },
     async CREATE_QUESTION({ commit }, request) {
-      try {
-        const response = await postAction("/api/questions", request);
-        const id = response["headers"].location.split("/")[3];
-        commit("SET_NEW_QUESTION_ID", id);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await postAction("/api/questions", request);
+      const id = response["headers"].location.split("/")[3];
+      commit("SET_NEW_QUESTION_ID", id);
+      return response;
     },
-    async UPDATE_QUESTION(state, { questionId, title, content, hashtags }) {
-      try {
-        await patchAction(`/api/questions/${questionId}`, {
-          title,
-          content,
-          hashtags
-        });
-      } catch (error) {
-        console.log(error);
-      }
+    async UPDATE_QUESTION(state, payload) {
+      return await patchAction(`/api/questions/${payload.questionId}`, {
+        title: payload.title,
+        content: payload.content,
+        hashtags: payload.hashtags
+      });
     },
     async DELETE_QUESTION(state, questionId) {
-      try {
-        await deleteAction(`/api/questions/${questionId}`);
-      } catch (error) {
-        console.log(error);
-      }
+      return await deleteAction(`/api/questions/${questionId}`);
     },
     async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
-      try {
-        const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
-        commit("SET_QUESTIONS", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
+      commit("SET_QUESTIONS", data);
     },
     async UPDATE_QUESTION_RECOMMENDATION_COUNT({ commit }, questionId) {
-      try {
-        const { data } = await getAction(
-          `/api/questions/${questionId}?visit=false`
-        );
-        commit("SET_QUESTION", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(
+        `/api/questions/${questionId}?visit=false`
+      );
+      commit("SET_QUESTION", data);
     }
   },
   getters: {
@@ -92,7 +69,7 @@ export default {
     fetchedQuestion(state) {
       return state.question;
     },
-    fetchedNewCreatedQuestionId(state) {
+    fetchedQuestionId(state) {
       return state.questionId;
     }
   }

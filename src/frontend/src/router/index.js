@@ -58,12 +58,12 @@ export const router = new VueRouter({
       component: QuestionDetailView
     },
     {
-      path: "/create-question",
+      path: "/question/create",
       name: "create-question",
       component: QuestionCreateView
     },
     {
-      path: "/edit-question/:id",
+      path: "/question/edit/:id",
       name: "edit-question",
       component: QuestionEditView
     },

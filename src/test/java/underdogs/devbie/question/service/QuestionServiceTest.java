@@ -7,7 +7,6 @@ import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import java.util.LinkedHashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,7 +30,6 @@ import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
-import java.util.Set;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -39,6 +37,7 @@ import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionServiceTest {
@@ -46,6 +45,9 @@ public class QuestionServiceTest {
     public static final Set<String> TEST_HASHTAGS = Sets.newSet("java", "network");
 
     private QuestionService questionService;
+
+    @Mock
+    private UserService userService;
 
     @Mock
     private QuestionHashtagService questionHashtagService;
@@ -61,10 +63,11 @@ public class QuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionHashtagService, questionRepository);
+        questionService = new QuestionService(userService, questionHashtagService, questionRepository);
 
         user = User.builder()
             .id(1L)
+            .name(TEST_NAME)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
@@ -110,8 +113,7 @@ public class QuestionServiceTest {
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
-            () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
-            () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
+            () -> assertThat(response.getId()).isEqualTo(question.getId()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent()),
@@ -125,12 +127,13 @@ public class QuestionServiceTest {
     @Test
     void read() {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        given(userService.findById(anyLong())).willReturn(user);
 
         QuestionResponse response = questionService.read(1L, true);
 
         assertAll(
-            () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
-            () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
+            () -> assertThat(response.getId()).isEqualTo(question.getId()),
+            () -> assertThat(response.getAuthor()).isEqualTo(user.getName()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent()),
@@ -162,6 +165,7 @@ public class QuestionServiceTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        given(userService.findById(anyLong())).willReturn(user);
 
         questionService.update(1L, 1L, request);
 
@@ -237,8 +241,7 @@ public class QuestionServiceTest {
         QuestionResponses responses = questionService.searchByHashtag("java");
 
         assertAll(
-            () -> assertThat(responses.getQuestions().get(0).getUserId()).isEqualTo(1L),
-            () -> assertThat(responses.getQuestions().get(0).getQuestionId()).isEqualTo(100L),
+            () -> assertThat(responses.getQuestions().get(0).getId()).isEqualTo(100L),
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(responses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
         );

@@ -57,12 +57,14 @@ export default {
   },
   actions: {
     async FETCH_NOTICES({ commit }, queryUrl) {
-      const { data } = await getAction(`/api/notices?` + queryUrl);
-      commit("SET_NOTICES", data["noticeResponses"]);
+      const response = await getAction(`/api/notices?` + queryUrl);
+      commit("SET_NOTICES", response.data["noticeResponses"]);
+      return response;
     },
     async FETCH_NOTICE({ commit }, noticeId) {
-      const { data } = await getAction(`/api/notices/${noticeId}`);
-      commit("SET_NOTICE", data);
+      const response = await getAction(`/api/notices/${noticeId}`);
+      commit("SET_NOTICE", response.data);
+      return response;
     },
     async DELETE_NOTICE({ commit }, noticeId) {
       await deleteAction(`/api/notices/${noticeId}`);

@@ -18,10 +18,14 @@ import underdogs.devbie.user.domain.User;
 public class UserCreateRequest {
 
     @NotBlank
+    private String name;
+
+    @NotBlank
     private String email;
 
     public User toEntity() {
         return User.builder()
+            .name(name)
             .email(email)
             .build();
     }

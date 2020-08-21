@@ -17,7 +17,8 @@ public class QuestionRecommendationService extends RecommendationService<Questio
 
     private QuestionService questionService;
 
-    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository, QuestionService questionService) {
+    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository,
+        QuestionService questionService) {
         this.recommendationRepository = questionRecommendationRepository;
         this.questionService = questionService;
     }
@@ -40,7 +41,7 @@ public class QuestionRecommendationService extends RecommendationService<Questio
     public void deleteRecommendation(Long objectId, Long userId) {
         Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
+        Recommendation recommendation = optRecommendation.orElseThrow(() -> new NotExistException("Recommendation"));
 
         recommendationRepository.delete(recommendation);
     }

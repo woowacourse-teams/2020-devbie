@@ -36,33 +36,29 @@ export default {
       }
     },
     async UPDATE_ANSWER({ commit }, payload) {
-      try {
-        await patchAction(`/api/answers/${payload.answerId}`, {
-          content: payload.updateContent
-        });
-        commit("UPDATE_ANSWER", payload);
-      } catch (error) {
-        console.log(error);
-      }
+      const updateContent = payload.updateContent;
+      const response = await patchAction(`/api/answers/${payload.answerId}`, {
+        content: updateContent
+      });
+      commit("UPDATE_ANSWER", payload);
+      return response;
     },
     async DELETE_ANSWER({ commit }, answerId) {
-      try {
-        await deleteAction(`/api/answers/${answerId}`).then(() => {
-          commit("DELETE_ANSWER", answerId);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await deleteAction(`/api/answers/${answerId}`);
+      commit("DELETE_ANSWER", answerId);
+      return response;
     },
     async CREATE_ANSWER({ commit }, payload) {
-      try {
-        const createdResponse = await postAction(`/api/answers`, payload);
-        const createdAnswerLocation = createdResponse.headers.location;
-        const createdItemResponse = await getAction(createdAnswerLocation);
-        commit("CREATE_ANSWER", createdItemResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
+      const questionId = payload.questionId;
+      const content = payload.content;
+      const createdResponse = await postAction(`/api/answers`, {
+        questionId,
+        content
+      });
+      const createdAnswerLocation = createdResponse.headers.location;
+      const createdItemResponse = await getAction(createdAnswerLocation);
+      commit("CREATE_ANSWER", createdItemResponse.data);
+      return createdResponse;
     }
   },
   getters: {

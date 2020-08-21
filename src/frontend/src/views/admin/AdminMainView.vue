@@ -6,9 +6,10 @@
 
 <script>
 export default {
-  async created() {
-    await this.isAdmin();
+  created() {
+    this.isAdmin();
   },
+
   methods: {
     async isAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;

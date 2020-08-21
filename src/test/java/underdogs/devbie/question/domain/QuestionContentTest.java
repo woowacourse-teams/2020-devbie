@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import underdogs.devbie.question.exception.QuestionNotMeetingEssentialsException;
+
 class QuestionContentTest {
 
     public static final String TEST_QUESTION_CONTENT = "Test Content";
@@ -15,6 +17,14 @@ class QuestionContentTest {
         QuestionContent questionContent = QuestionContent.from(TEST_QUESTION_CONTENT);
 
         assertThat(questionContent.getContent()).isEqualTo(TEST_QUESTION_CONTENT);
+    }
+
+    @DisplayName("Question Content - throw QuestionNotMeetingEssentialsException")
+    @Test
+    void fromThrownQuestionNotMeetingEssentialsException() {
+        assertThatThrownBy(() -> {
+            QuestionContent questionContent = QuestionContent.from("");
+        }).isInstanceOf(QuestionNotMeetingEssentialsException.class);
     }
 
     @DisplayName("QuestionContent - equals")
