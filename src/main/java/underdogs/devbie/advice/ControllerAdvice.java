@@ -23,10 +23,17 @@ public class ControllerAdvice {
             .body(errorResponse);
     }
 
-    @ExceptionHandler({BadRequestException.class, MethodArgumentNotValidException.class, MethodNotAllowedException.class})
+    @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(BadRequestException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(errorResponse);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, MethodNotAllowedException.class})
+    public ResponseEntity<ErrorResponse> badRequestExceptionHandler(Exception exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
             .body(errorResponse);
     }
 

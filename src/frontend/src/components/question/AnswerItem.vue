@@ -117,7 +117,7 @@ export default {
     },
 
     async update() {
-      if (this.updateContent.trim() === "") {
+      if (this.content.trim() === "") {
         this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
         return;
       }
@@ -127,7 +127,7 @@ export default {
           updateContent: this.content
         });
         this.updateEditFlag = !this.updateEditFlag;
-        this.content = this.updateContent.split("\n").join("<br />");
+        this.content = this.content.split("\n").join("<br />");
       } catch (error) {
         console.error(error);
         console.error(error.response.data.message);
