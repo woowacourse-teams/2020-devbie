@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <navigation-bar @logout="logout"></navigation-bar>
-    <transition name="page">
+    <transition name="fade" mode="out-in">
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
     <chat-drawer></chat-drawer>
@@ -15,7 +15,7 @@ import FooterBar from "./components/FooterBar.vue";
 import ChatDrawer from "./components/chat/ChatDrawer";
 
 export default {
-  async created() {
+  async beforeCreate() {
     const token = localStorage.getItem("devbieToken");
     if (token) {
       try {
@@ -54,13 +54,13 @@ a {
   text-decoration: none;
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s;
 }
 
-.page-enter,
-.page-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

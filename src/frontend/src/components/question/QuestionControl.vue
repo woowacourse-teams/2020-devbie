@@ -2,9 +2,9 @@
   <div class="question-control">
     <hashtag-list></hashtag-list>
     <v-btn
-      v-if="isLoggedIn"
-      class="control-btn question-create"
-      @click="$router.push('/create-question')"
+      large
+      class="control-btn question-create button"
+      @click="onCreateForm"
       color="#DAEBEA"
       >질문 하기
     </v-btn>
@@ -16,11 +16,22 @@ import { mapGetters } from "vuex";
 import HashtagList from "../../components/hashtag/HashtagList";
 
 export default {
+  components: {
+    HashtagList
+  },
+
   computed: {
     ...mapGetters(["isLoggedIn"])
   },
-  components: {
-    HashtagList
+
+  methods: {
+    onCreateForm() {
+      if (!this.isLoggedIn) {
+        console.log("you should login");
+        return;
+      }
+      this.$router.push("/question/create");
+    }
   }
 };
 </script>

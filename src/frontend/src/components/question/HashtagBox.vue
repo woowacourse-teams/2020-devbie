@@ -8,48 +8,41 @@
         @click="deleteHashtag(index)"
       >
         #{{ item }}
+        <i class="fa fa-times btn" aria-hidden="true"></i>
       </button>
     </div>
-    <div class="input-box">
-      <v-text-field
-        label="#해시태그"
-        class="input hashtag-input-text"
-        placeholder="Enter로 태그 추가"
-        v-model="tagName"
-        @keydown.enter="addHashtag"
-      ></v-text-field>
-    </div>
+    <v-text-field
+      label="해시태그"
+      class="input hashtag-input-text"
+      placeholder="Enter로 태그 추가"
+      v-model="tagName"
+      @keyup.enter="addHashtag"
+    ></v-text-field>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
+  props: ["existHashtags"],
+
   data() {
     return {
       tagName: "",
       items: []
     };
   },
-  computed: {
-    ...mapGetters(["fetchedQuestion"]),
-    tagNames() {
-      return (
-        this.fetchedQuestion &&
-        this.fetchedQuestion.hashtags.map(h => h.tagName)
-      );
-    }
-  },
+
   watch: {
-    fetchedQuestion: function() {
-      this.items = this.tagNames;
-    },
-    items: function() {
+    items() {
       this.$emit("hashtags", this.items);
       this.tagName = "";
+    },
+
+    existHashtags() {
+      this.items = this.existHashtags;
     }
   },
+
   methods: {
     addHashtag() {
       const item = this.tagName.trim().toLowerCase();
@@ -63,6 +56,7 @@ export default {
       }
       this.items.push(item);
     },
+
     deleteHashtag(index) {
       this.items.splice(index, 1);
     }
@@ -71,23 +65,20 @@ export default {
 </script>
 
 <style scoped>
-.input-box {
+.hashtag-box {
   display: flex;
   align-items: center;
-}
-
-.input {
-  margin-left: 10px;
 }
 
 .hashtags {
   display: flex;
   justify-items: center;
   flex-wrap: wrap;
+  flex-grow: 1;
 }
 
 .hashtag-item {
-  padding: 8px;
+  padding: 8px 12px;
   margin-right: 5px;
   margin-bottom: 8px;
   font-family: "Roboto", sans-serif;
@@ -95,7 +86,7 @@ export default {
   letter-spacing: 2.5px;
   font-weight: 500;
   color: #000;
-  background-color: #fff;
+  background-color: #daebea;
   border: none;
   border-radius: 20px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -105,13 +96,28 @@ export default {
 }
 
 .hashtag-item:hover {
-  background-color: #2ee59d;
-  box-shadow: 0 15px 20px rgba(46, 229, 157, 0.4);
+  background-color: #9fd0d4;
   color: #fff;
-  transform: translateY(-7px);
+  font-weight: 600;
+  transform: translateY(-3px);
+  display: flex;
+  align-items: center;
 }
+
+.hashtag-item:hover .btn {
+  display: flex;
+  margin-left: 5px;
+  padding-bottom: 2px;
+  color: #e62739;
+}
+
 .hashtag-input-text {
-  margin-right: 20px;
-  min-width: 190px;
+  flex-grow: 1;
+  max-width: 50%;
+  min-width: 50%;
+}
+
+.btn {
+  display: none;
 }
 </style>

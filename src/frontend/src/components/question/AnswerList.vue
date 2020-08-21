@@ -7,8 +7,9 @@
       <div class="answer-list">
         <answer-item
           v-for="answer in fetchedAnswers"
-          v-bind:key="answer.id"
-          v-bind:answer="answer"
+          :key="answer.id"
+          :answer="answer"
+          :loginUser="loginUser"
         ></answer-item>
       </div>
     </div>
@@ -20,14 +21,18 @@ import AnswerItem from "./AnswerItem.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  components: {
+    AnswerItem
+  },
+
+  props: ["loginUser"],
+
   computed: {
     ...mapGetters(["fetchedAnswers"])
   },
+
   async created() {
     await this.$store.dispatch("FETCH_ANSWERS", this.$route.params.id);
-  },
-  components: {
-    AnswerItem
   }
 };
 </script>
@@ -37,7 +42,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 100%;
+  margin-left: 20px;
 }
 
 #count-of-answer {
@@ -49,15 +54,13 @@ export default {
 
 .answer-list {
   list-style: none;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }
 
 .inner {
-  width: 90%;
+  width: 95%;
   box-sizing: border-box;
   padding: 10px 0 40px 0;
-  border-bottom: solid 1px #e8e8e8;
 }
 </style>

@@ -1,28 +1,40 @@
 <template>
   <div>
-    <h2 class="title">질문 작성</h2>
-    <question-create id="create-form"></question-create>
+    <form-title>
+      <span>질문 생성</span>
+    </form-title>
+    <question-create :editingFlag="false"></question-create>
   </div>
 </template>
 
 <script>
-import QuestionCreate from "../../components/question/QuestionCreate";
+import { mapGetters } from "vuex";
+import QuestionCreate from "../../components/question/QuestionForm";
+import FormTitle from "../../components/question/FormTitle";
+import router from "../../router";
 
 export default {
   components: {
+    FormTitle,
     QuestionCreate
+  },
+
+  computed: {
+    ...mapGetters(["isLoggedIn"])
+  },
+
+  created() {
+    this.checkLoggedIn();
+  },
+
+  methods: {
+    checkLoggedIn() {
+      if (!this.isLoggedIn) {
+        router.push("/");
+      }
+    }
   }
 };
 </script>
 
-<style scoped>
-.title {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#create-form {
-  margin-top: 15px;
-}
-</style>
+<style scoped></style>
