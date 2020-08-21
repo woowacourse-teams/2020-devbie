@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
@@ -29,6 +32,8 @@ public class HashtagController {
 
     private final HashtagService hashtagService;
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody HashtagCreateRequest request) {
@@ -38,6 +43,7 @@ public class HashtagController {
             .build();
     }
 
+    @NoValidate
     @GetMapping
     public ResponseEntity<HashtagResponses> readAll() {
         HashtagResponses hashtagResponses = hashtagService.readAll();
@@ -59,6 +65,8 @@ public class HashtagController {
             .ok(hashtagResponse);
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
@@ -71,6 +79,8 @@ public class HashtagController {
             .build();
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header", allowableValues = "ADMIN")})
     @Role(role = {RoleType.ADMIN})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {

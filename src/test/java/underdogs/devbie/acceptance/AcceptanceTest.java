@@ -1,9 +1,12 @@
 package underdogs.devbie.acceptance;
 
+import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
+
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.internal.util.collections.Sets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -16,6 +19,9 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionResponse;
+import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
@@ -60,6 +66,7 @@ public abstract class AcceptanceTest {
 
     private Long createUser() throws JsonProcessingException {
         UserCreateRequest userCreateRequest = UserCreateRequest.builder()
+            .name("bsdg")
             .email("atdd@atdd.com")
             .build();
         return post("/api/users", objectMapper.writeValueAsString(userCreateRequest), Long.class);
@@ -67,6 +74,21 @@ public abstract class AcceptanceTest {
 
     private void deleteUser() {
         delete("/api/users/" + userId);
+    }
+
+    protected void createQuestion(String title) throws JsonProcessingException {
+        QuestionCreateRequest createRequest = QuestionCreateRequest.builder()
+            .title(title)
+            .content(TEST_QUESTION_CONTENT)
+            .hashtags(Sets.newSet("java", "network"))
+            .build();
+        String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
+        post("/api/questions", inputJsonForCreate);
+    }
+
+    protected QuestionResponse fetchFirstQuestion() {
+        QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
+        return questions.getQuestions().get(0);
     }
 
     protected <T> void post(String path, String inputJson) {

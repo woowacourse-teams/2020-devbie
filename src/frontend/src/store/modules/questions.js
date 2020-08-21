@@ -21,17 +21,15 @@ export default {
     }
   },
   actions: {
-    async FETCH_QUESTIONS({ commit }) {
-      try {
-        const { data } = await getAction("/api/questions");
-        commit("SET_QUESTIONS", data);
-      } catch (error) {
-        console.log(error);
-      }
+    async FETCH_QUESTIONS({ commit }, orderBy) {
+      const { data } = await getAction(`/api/questions?orderBy=${orderBy}`);
+      commit("SET_QUESTIONS", data);
     },
     async FETCH_QUESTION({ commit }, questionId) {
       try {
-        const { data } = await getAction(`/api/questions/${questionId}`);
+        const { data } = await getAction(
+          `/api/questions/${questionId}?visit=true`
+        );
         commit("SET_QUESTION", data);
       } catch (error) {
         console.log(error);
@@ -52,6 +50,16 @@ export default {
     },
     async DELETE_QUESTION(state, questionId) {
       return await deleteAction(`/api/questions/${questionId}`);
+    },
+    async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
+      const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
+      commit("SET_QUESTIONS", data);
+    },
+    async UPDATE_QUESTION_RECOMMENDATION_COUNT({ commit }, questionId) {
+      const { data } = await getAction(
+        `/api/questions/${questionId}?visit=false`
+      );
+      commit("SET_QUESTION", data);
     }
   },
   getters: {
@@ -61,7 +69,7 @@ export default {
     fetchedQuestion(state) {
       return state.question;
     },
-    fetchedNewCreatedQuestionId(state) {
+    fetchedQuestionId(state) {
       return state.questionId;
     }
   }

@@ -11,9 +11,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.mockito.internal.util.collections.Sets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -63,12 +61,11 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 createQuestion(TEST_TITLE_FOR_SEARCH);
             }),
             dynamicTest("전체 질문 조회", () -> {
-                QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+                QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
 
                 QuestionResponse firstQuestion = questions.getQuestions().get(0);
                 assertAll(
                     () -> assertThat(questions.getQuestions()).hasSize(2),
-                    () -> assertThat(firstQuestion.getUserId()).isEqualTo(userId),
                     () -> assertThat(firstQuestion.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
                     () -> assertThat(firstQuestion.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
                 );
@@ -86,11 +83,11 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
 
-                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getQuestionId(),
+                QuestionResponse questionResponse = get("/api/questions/" + firstQuestion.getId() + "?visit=true",
                     QuestionResponse.class);
 
                 assertAll(
-                    () -> assertThat(questionResponse.getUserId()).isEqualTo(userId),
+                    () -> assertThat(questionResponse.getAuthor()).isEqualTo("bsdg"),
                     () -> assertThat(questionResponse.getVisits()).isEqualTo(1L),
                     () -> assertThat(questionResponse.getTitle()).isEqualTo(TEST_QUESTION_TITLE),
                     () -> assertThat(questionResponse.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
@@ -105,12 +102,11 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                     .build();
                 String inputJsonForUpdate = objectMapper.writeValueAsString(updateRequest);
 
-                patch("/api/questions/" + firstQuestion.getQuestionId(), inputJsonForUpdate);
+                patch("/api/questions/" + firstQuestion.getId(), inputJsonForUpdate);
 
-                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getQuestionId(),
+                QuestionResponse updatedQuestion = get("/api/questions/" + firstQuestion.getId() + "?visit=true",
                     QuestionResponse.class);
                 assertAll(
-                    () -> assertThat(updatedQuestion.getUserId()).isEqualTo(userId),
                     () -> assertThat(updatedQuestion.getVisits()).isEqualTo(2L),
                     () -> assertThat(updatedQuestion.getTitle()).isEqualTo("Changed Title"),
                     () -> assertThat(updatedQuestion.getContent()).isEqualTo("Changed Content"),
@@ -119,28 +115,12 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("질문 삭제", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
-                delete("/api/questions/" + firstQuestion.getQuestionId());
+                delete("/api/questions/" + firstQuestion.getId());
 
-                QuestionResponses questions = get("/api/questions", QuestionResponses.class);
+                QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
 
                 assertThat(questions.getQuestions()).hasSize(1);
             })
         );
-
-    }
-
-    private void createQuestion(String title) throws JsonProcessingException {
-        QuestionCreateRequest createRequest = QuestionCreateRequest.builder()
-            .title(title)
-            .content(TEST_QUESTION_CONTENT)
-            .hashtags(Sets.newSet("java", "network"))
-            .build();
-        String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
-        post("/api/questions", inputJsonForCreate);
-    }
-
-    private QuestionResponse fetchFirstQuestion() {
-        QuestionResponses questions = get("/api/questions", QuestionResponses.class);
-        return questions.getQuestions().get(0);
     }
 }

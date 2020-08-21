@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import underdogs.devbie.exception.CreateFailException;
 
-class AnswerTest {
+public class AnswerTest {
 
     public static final AnswerContent TEST_ANSWER_CONTENT = AnswerContent.from("test answer content");
 

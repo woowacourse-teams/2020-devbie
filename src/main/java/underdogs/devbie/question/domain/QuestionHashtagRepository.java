@@ -17,4 +17,7 @@ public interface QuestionHashtagRepository extends JpaRepository<QuestionHashtag
     @Modifying
     @Query("delete from QuestionHashtag q where q.hashtag.id in :ids")
     void deleteAllByHashtagIds(@Param("ids") List<Long> ids);
+
+    @Query("select q.question.id from QuestionHashtag q where q.hashtag.id = :hashtagId")
+    List<Long> findQuestionIdsByHashtagId(@Param("hashtagId") Long hashtagId);
 }

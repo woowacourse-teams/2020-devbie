@@ -1,56 +1,60 @@
 <template>
-  <div class="answer-item-box">
-    <div class="author-name">작성자: {{ answer.userId }}</div>
-    <div class="answer-temp">
-      <div class="answer-content">
-        <div
-          v-html="content"
-          class="answer-content-value"
-          v-if="!this.updateEditFlag"
-        ></div>
-        <v-textarea
-          class="update-form"
-          outlined
-          v-else
-          v-model="updateContent"
-        ></v-textarea>
+  <div class="answer-item-box" :class="{ editing: updateEditFlag }">
+    <div class="left-container">
+      <div class="author-name">
+        <p class="infos">
+          <i class="fas fa-user-edit"></i>
+          작성자: {{ answer.author }}
+        </p>
       </div>
-      <div :class="{ 'vertical-center': !author }" class="answer-infos">
-        <div class="recommendations">
-          <p class="infos">
-            <i
-              :class="{
-                'recommendation-clicked': isUserRecommendation('RECOMMENDED')
-              }"
-              class="far fa-thumbs-up recommendation"
-              @click="onAnswerRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
-            ></i>
-            {{ answerRecommendation && answerRecommendation.recommendedCount }}
-          </p>
-          <p class="infos">
-            <i
-              :class="{
-                'recommendation-clicked': isUserRecommendation(
-                  'NON_RECOMMENDED'
-                )
-              }"
-              class="far fa-thumbs-down recommendation"
-              @click="onAnswerRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
-            ></i>
-            {{
-              answerRecommendation && answerRecommendation.nonRecommendedCount
-            }}
-          </p>
-        </div>
-        <div v-if="author">
-          <v-btn class="update-btn" v-if="updateEditFlag" @click="update">
+      <div class="answer-temp">
+        <markdown-content
+          class="answer-content-value"
+          v-if="!updateEditFlag"
+          :content="content"
+        ></markdown-content>
+        <v-md-editor
+          v-else
+          class="update-editor"
+          height="250px"
+          v-model="content"
+        ></v-md-editor>
+      </div>
+    </div>
+    <div class="right-container" :class="{ editingButton: updateEditFlag }">
+      <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
+        <div class="author-button" v-if="isAuthor">
+          <v-btn
+            color="#DAEBEA"
+            small
+            class="button answer-btn"
+            v-if="updateEditFlag"
+            @click="update"
+          >
             수정 확인
           </v-btn>
-          <v-btn class="update-btn" v-else @click="updateBtnHandler"
-            >수정
+          <v-btn
+            color="#DAEBEA"
+            small
+            class="button answer-btn"
+            v-else
+            @click="updateBtnHandler"
+          >
+            수정
           </v-btn>
-          <v-btn @click="deleteBtnHandler">삭제</v-btn>
+          <v-btn
+            color="#DAEBEA"
+            class="button answer-btn delete-btn"
+            small
+            @click="deleteBtnHandler"
+          >
+            삭제
+          </v-btn>
         </div>
+        <recommendation-control
+          :targetObject="answer"
+          :isQuestion="false"
+        ></recommendation-control>
       </div>
     </div>
   </div>
@@ -58,36 +62,32 @@
 
 <script>
 import { mapGetters } from "vuex";
+import MarkdownContent from "./MarkdownContent";
+import RecommendationControl from "../../components/question/RecommendationControl";
 
 export default {
-  props: ["answer"],
+  components: {
+    MarkdownContent,
+    RecommendationControl
+  },
+
+  props: ["answer", "loginUser"],
+
   data: function() {
     return {
-      loginUser: {},
-      author: false,
-      userRecommended: "",
       updateEditFlag: false,
-      updateContent: this.answer.content,
-      content: this.answer.content.split("\n").join("<br />")
+      content: this.answer.content
     };
   },
+
   computed: {
-    ...mapGetters([
-      "fetchedLoginUser",
-      "fetchedAnswerRecommendation",
-      "fetchedMyAnswerRecommendation"
-    ]),
-    answerRecommendation() {
-      return this.fetchedAnswerRecommendation(this.answer.id);
-    },
-    myAnswerRecommendation() {
-      return this.fetchedMyAnswerRecommendation(this.answer.id);
+    ...mapGetters(["isLoggedIn"]),
+    isAuthor() {
+      return this.isLoggedIn && this.answer.userId === this.loginUser.id;
     }
   },
+
   methods: {
-    isAuthor() {
-      return (this.author = this.answer.userId === this.loginUser.id);
-    },
     async deleteBtnHandler() {
       try {
         await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
@@ -111,20 +111,20 @@ export default {
         }
       }
     },
+
     updateBtnHandler() {
       this.updateEditFlag = !this.updateEditFlag;
     },
+
     async update() {
-      const answerId = this.answer.id;
-      const updateContent = this.updateContent;
-      if (updateContent.trim() === "") {
+      if (this.updateContent.trim() === "") {
         this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
         return;
       }
       try {
         await this.$store.dispatch("UPDATE_ANSWER", {
-          answerId,
-          updateContent
+          answerId: this.answer.id,
+          updateContent: this.content
         });
         this.updateEditFlag = !this.updateEditFlag;
         this.content = this.updateContent.split("\n").join("<br />");
@@ -208,80 +208,68 @@ export default {
         this.userRecommended === recommendationType
       );
     }
-  },
-  watch: {
-    fetchedLoginUser() {
-      this.loginUser = this.fetchedLoginUser;
-      if (!this.loginUser.id) {
-        this.userRecommended = "NOT_EXIST";
-        this.isAuthor();
-        return;
-      }
-      this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
-      this.isAuthor();
-    }
-  },
-  async created() {
-    this.loginUser = this.fetchedLoginUser;
-    await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", this.answer.id);
-    if (this.loginUser.id) {
-      await this.fetchMyAnswerRecommendation(this.answer.id, this.loginUser.id);
-    }
-    await this.isAuthor();
   }
 };
 </script>
 
 <style scoped>
 .author-name {
-  margin-top: 15px;
-  color: #7ec699;
+  color: #6d819c;
+  margin-bottom: 6px;
+}
+
+.author-name .infos {
+  font-size: 14px;
+  margin: 0 30px;
 }
 
 .answer-item-box {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 10px;
+  border-bottom: solid #e8e8e8 1px;
+  min-height: 150px;
 }
 
-.answer-content {
-  padding: 30px 20px 30px 50px;
+.editing {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: unset !important;
+  justify-content: center !important;
+}
+
+.editingButton {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.update-editor {
+  width: 100%;
 }
 
 .answer-temp {
   display: flex;
   justify-content: space-between;
-  border-bottom: solid #e8e8e8 1px;
-}
-
-.recommendations {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 20px 15px 20px 30px;
 }
 
 .answer-infos {
-  min-width: 135px;
+  min-width: 170px;
 }
 
-.recommendations .infos {
-  margin: 0 10px 10px 0;
+.answer-btn {
+  margin: 0 4px;
 }
 
-.recommendation:hover {
-  cursor: pointer;
+.delete-btn:hover {
+  background-color: #fc9d9a !important;
 }
 
-.recommendation-clicked {
-  color: #7ec699;
-}
-
-.answer-content {
-  min-width: 80%;
-}
-
-.update-btn {
-  margin-right: 7px;
+.author-button {
+  display: flex;
+  justify-content: center;
 }
 
 .answer-content-value {

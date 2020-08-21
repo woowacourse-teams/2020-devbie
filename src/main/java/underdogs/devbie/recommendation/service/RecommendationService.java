@@ -4,12 +4,9 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
-import underdogs.devbie.recommendation.domain.Recommendations;
-import underdogs.devbie.recommendation.dto.RecommendationCountResponse;
 import underdogs.devbie.recommendation.dto.RecommendationResponse;
 
 @Transactional(readOnly = true)
@@ -23,22 +20,9 @@ public abstract class RecommendationService<T extends Recommendation> {
         return RecommendationResponse.from(optRecommendation);
     }
 
-    public RecommendationCountResponse count(Long objectId) {
-        Recommendations recommendations = Recommendations.from(recommendationRepository.findByObjectId(objectId));
-
-        return RecommendationCountResponse.from(recommendations);
-    }
-
     @Transactional
-    public void deleteRecommendation(Long objectId, Long userId) {
-        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
+    public abstract void deleteRecommendation(Long objectId, Long userId);
 
-        Recommendation recommendation = optRecommendation.orElseThrow(() -> new NotExistException("Recommendation이 존재하지 않습니다."));
-
-        recommendationRepository.delete(recommendation);
-    }
-
-    // save시 구체적인 클래스를 명시해주기 위해 abstract
     @Transactional
     public abstract void createOrUpdateRecommendation(Long objectId, Long id, RecommendationType recommendationType);
 }

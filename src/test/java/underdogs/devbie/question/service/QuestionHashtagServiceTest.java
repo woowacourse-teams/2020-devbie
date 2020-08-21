@@ -7,6 +7,7 @@ import static underdogs.devbie.question.domain.QuestionTest.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.google.common.collect.Lists;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
@@ -101,5 +103,16 @@ class QuestionHashtagServiceTest {
             () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
                 .isEqualTo(updateHashtag.getTagName())
         );
+    }
+
+    @DisplayName("태그 이름이 속한 질문 아이디 검색")
+    @Test
+    void findIdsByHashtagName() {
+        given(hashtagService.findOrCreateHashtag(anyString())).willReturn(hashtag);
+        given(questionHashtagRepository.findQuestionIdsByHashtagId(anyLong())).willReturn(Lists.newArrayList(1L));
+
+        List<Long> questionIds = questionHashtagService.findIdsByHashtagName("java");
+
+        assertThat(questionIds.get(0)).isEqualTo(1L);
     }
 }

@@ -31,13 +31,6 @@ class QuestionRecommendationControllerTest extends MvcTest {
     @MockBean
     private QuestionRecommendationService questionRecommendationService;
 
-    @DisplayName("추천 수 조회")
-    @Test
-    void count() throws Exception {
-        getAction(URL)
-            .andExpect(status().isOk());
-    }
-
     @DisplayName("추천")
     @Test
     void createRecommendation() throws Exception {

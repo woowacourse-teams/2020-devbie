@@ -1,13 +1,12 @@
 <template>
   <div class="filters">
     <router-link class="condition" :to="`/questions`">전체 질문</router-link>
-    <router-link class="condition" :to="`questions22`">인기 질문</router-link>
-    <router-link class="condition" :to="`/questions?orderBy=actual`"
-      >면접에 나온 질문
-    </router-link>
-    <router-link class="condition" :to="`/questions?orderBy=expected`"
-      >면접 예상 질문
-    </router-link>
+    <router-link class="condition" :to="`/questions?orderBy=VISITS`"
+      >인기 질문</router-link
+    >
+    <router-link class="condition" :to="`/questions?orderBy=RECOMMENDATIONS`"
+      >추천 질문</router-link
+    >
   </div>
 </template>
 
@@ -26,16 +25,17 @@ a:hover {
   margin-top: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding-right: 20px;
   border-right: solid 1px #e8e8e8;
+  height: 90%;
 }
 
 .condition {
   text-decoration: none;
   color: #cfe1e8;
-  font-size: 24px;
+  font-size: 26px;
   margin-bottom: 10px;
 }
 

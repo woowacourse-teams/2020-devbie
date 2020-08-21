@@ -1,5 +1,6 @@
 package underdogs.devbie.question.dto;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ public class HashtagResponse {
         return hashtags.getQuestionHashtags()
             .stream()
             .map(h -> HashtagResponse.from(createHashtag(h)))
+            .sorted(Comparator.comparingLong(HashtagResponse::getId))
             .collect(Collectors.toList());
     }
 

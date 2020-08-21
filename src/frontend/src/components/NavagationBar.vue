@@ -13,7 +13,7 @@
         ><p class="navigation-menu">공고</p></v-btn
       >
       <v-btn @click="$router.push('/questions')" text x-large
-        ><p class="navigation-menu">면접</p></v-btn
+        ><p class="navigation-menu">면접 질문</p></v-btn
       >
       <template v-if="isLoggedIn">
         <v-menu transition="slide-y-transition" offset-y bottom>
@@ -48,11 +48,10 @@ import { mapGetters } from "vuex";
 import router from "../router";
 
 export default {
-  props: ["isLoggedIn"],
-
   computed: {
-    ...mapGetters(["fetchedLoginUser"])
+    ...mapGetters(["fetchedLoginUser", "isLoggedIn"])
   },
+
   methods: {
     isAdmin() {
       if (this.isLoggedIn) {
@@ -60,6 +59,7 @@ export default {
       }
       return false;
     },
+
     async showLoginPage() {
       try {
         const redirectUrlData = await axios.get("/api/auth/login-url");
@@ -68,6 +68,7 @@ export default {
         console.error("로그인 화면 로딩 실패");
       }
     },
+
     logout() {
       this.$emit("logout");
       router.push("/");

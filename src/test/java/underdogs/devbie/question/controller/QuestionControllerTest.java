@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtags;
@@ -92,9 +93,9 @@ class QuestionControllerTest extends MvcTest {
             .build();
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
 
-        given(questionService.readAll()).willReturn(responses);
+        given(questionService.readAllOrderBy(OrderBy.CREATED_DATE)).willReturn(responses);
 
-        MvcResult mvcResult = getAction("/api/questions/")
+        MvcResult mvcResult = getAction("/api/questions?orderBy=CREATED_DATE")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
@@ -110,7 +111,7 @@ class QuestionControllerTest extends MvcTest {
     @Test
     void read() throws Exception {
         QuestionResponse response = QuestionResponse.builder()
-            .questionId(1L)
+            .id(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
             .hashtags(Lists.newArrayList(
@@ -118,9 +119,9 @@ class QuestionControllerTest extends MvcTest {
                 HashtagResponse.builder().tagName("network").build()))
             .build();
 
-        given(questionService.read(anyLong())).willReturn(response);
+        given(questionService.read(anyLong(), anyBoolean())).willReturn(response);
 
-        MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId())
+        MvcResult mvcResult = getAction("/api/questions/" + response.getId() + "?visit=true")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
