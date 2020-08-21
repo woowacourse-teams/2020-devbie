@@ -83,7 +83,7 @@ public class AnswerControllerTest extends MvcTest {
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
 
         postAction("/api/answers", inputString, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 
@@ -96,7 +96,7 @@ public class AnswerControllerTest extends MvcTest {
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
 
         postAction("/api/answers", inputString, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 
@@ -108,40 +108,8 @@ public class AnswerControllerTest extends MvcTest {
         String inputString = OBJECT_MAPPER.writeValueAsString(answerCreateRequest);
 
         postAction("/api/answers", inputString, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
-    }
-
-    @DisplayName("Answer 전체 조회")
-    @Test
-    void readAll() throws Exception {
-        Answer expectAnswer = Answer.builder()
-            .id(1L)
-            .userId(2L)
-            .questionId(3L)
-            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
-            .build();
-
-        List<User> users = Lists.newArrayList(user);
-        AnswerResponses expectAnswers = AnswerResponses.of(
-            Answers.from(Collections.singletonList(expectAnswer)),
-            users);
-        given(answerService.readAll()).willReturn(expectAnswers);
-
-        MvcResult mvcResult = getAction("/api/answers").andReturn();
-
-        AnswerResponses answerResponses = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsString(),
-            AnswerResponses.class);
-
-        assertThat(answerResponses).isNotNull();
-        assertThat(answerResponses.getAnswerResponses()).isNotNull();
-        List<AnswerResponse> actual = answerResponses.getAnswerResponses();
-        assertAll(
-            () -> assertThat(actual.get(0).getId()).isEqualTo(1L),
-            () -> assertThat(actual.get(0).getAuthor()).isEqualTo("TEST_NAME"),
-            () -> assertThat(actual.get(0).getQuestionId()).isEqualTo(3L),
-            () -> assertThat(actual.get(0).getContent()).isEqualTo(TEST_ANSWER_CONTENT)
-        );
     }
 
     @DisplayName("Answer id로 하나의 Answer 조회")

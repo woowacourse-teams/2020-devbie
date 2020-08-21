@@ -37,7 +37,7 @@ public class AnswerRecommendationService extends RecommendationService {
     public void deleteRecommendation(Long objectId, Long userId) {
         Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
 
-        Recommendation recommendation = optRecommendation.orElseThrow(NotExistException::new);
+        Recommendation recommendation = optRecommendation.orElseThrow(() -> new NotExistException("Recommendation"));
 
         recommendationRepository.delete(recommendation);
     }

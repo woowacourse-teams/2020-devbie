@@ -93,6 +93,7 @@ export default {
     async onRecommendation(priorType, newType) {
       if (!this.isLoggedIn) {
         console.log("you should login");
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인이 필요합니다.");
         return;
       }
       if (this.isCreateOrUpdateRecommendation(priorType)) {

@@ -116,7 +116,15 @@ export default {
   },
   created() {
     const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICE", noticeId);
+    try {
+      this.$store.dispatch("FETCH_NOTICE", noticeId);
+    } catch (error) {
+      console.log("공고 불러오기 실패 " + error.response.data.message);
+      this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고를 불러오지 못했습니다."
+      );
+    }
   },
   computed: {
     ...mapGetters(["fetchedLoginUser"]),

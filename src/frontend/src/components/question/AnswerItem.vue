@@ -89,7 +89,27 @@ export default {
 
   methods: {
     async deleteBtnHandler() {
-      await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+      try {
+        await this.$store.dispatch("DELETE_ANSWER", this.answer.id);
+      } catch (error) {
+        console.error(error);
+        if (error.response.status === 401) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "로그인 정보가 확인되지 않습니다."
+          );
+        } else if (error.response.status === 403) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "삭제할 수 있는 권한이 없습니다."
+          );
+        } else {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "삭제 요청에 실패했습니다."
+          );
+        }
+      }
     },
 
     updateBtnHandler() {
@@ -97,11 +117,96 @@ export default {
     },
 
     async update() {
-      await this.$store.dispatch("UPDATE_ANSWER", {
-        answerId: this.answer.id,
-        updateContent: this.content
+      if (this.content.trim() === "") {
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+        return;
+      }
+      try {
+        await this.$store.dispatch("UPDATE_ANSWER", {
+          answerId: this.answer.id,
+          updateContent: this.content
+        });
+        this.updateEditFlag = !this.updateEditFlag;
+        this.content = this.content.split("\n").join("<br />");
+      } catch (error) {
+        console.error(error);
+        console.error(error.response.data.message);
+        if (error.response.status === 405) {
+          this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+        } else if (error.response.status === 401) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "로그인 정보가 확인되지 않습니다."
+          );
+        } else if (error.response.status === 403) {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "수정할 수 있는 권한이 없습니다."
+          );
+        } else {
+          this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "수정 요청에 실패했습니다."
+          );
+        }
+      }
+    },
+    async onAnswerRecommendation(priorType, newType) {
+      if (!this.loginUser.id) {
+        this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "로그인 후 추천/비추천 할 수 있습니다. "
+        );
+        return;
+      }
+      const answerId = this.answer.id;
+      if (
+        this.userRecommended === "NOT_EXIST" ||
+        this.userRecommended === priorType
+      ) {
+        try {
+          await this.$store.dispatch("ON_ANSWER_RECOMMENDATION", {
+            answerId,
+            recommendationType: newType
+          });
+          this.userRecommended = newType;
+        } catch (error) {
+          console.log(error);
+          if (error.response.status === 401) {
+            this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "로그인 후 추천/비추천 할 수 있습니다. "
+            );
+          }
+        }
+      } else {
+        try {
+          await this.$store.dispatch("DELETE_ANSWER_RECOMMENDATION", answerId);
+          this.userRecommended = "NOT_EXIST";
+        } catch (error) {
+          console.log(error);
+          if (error.response.status === 401) {
+            this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "로그인 후 추천/비추천 할 수 있습니다. "
+            );
+          }
+        }
+      }
+      await this.$store.dispatch("FETCH_ANSWER_RECOMMENDATION", answerId);
+    },
+    async fetchMyAnswerRecommendation(answerId, userId) {
+      await this.$store.dispatch("FETCH_MY_ANSWER_RECOMMENDATION", {
+        answerId,
+        userId
       });
-      this.updateEditFlag = !this.updateEditFlag;
+      this.userRecommended = this.myAnswerRecommendation.recommendationType;
+    },
+    isUserRecommendation(recommendationType) {
+      return (
+        this.myAnswerRecommendation &&
+        this.userRecommended === recommendationType
+      );
     }
   }
 };

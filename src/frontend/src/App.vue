@@ -4,6 +4,7 @@
     <transition name="fade" mode="out-in">
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
+    <snack-bar></snack-bar>
     <chat-drawer></chat-drawer>
     <footer-bar></footer-bar>
   </v-app>
@@ -12,6 +13,7 @@
 <script>
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
+import SnackBar from "./components/SnackBar";
 import ChatDrawer from "./components/chat/ChatDrawer";
 
 export default {
@@ -21,6 +23,8 @@ export default {
       try {
         await this.$store.dispatch("FETCH_LOGIN_USER");
       } catch (error) {
+        console.log(error.response.data.message);
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인 실패하였습니다.");
         localStorage.removeItem("devbieToken");
         this.$store.commit("DELETE_LOGIN_USER");
       }
@@ -35,7 +39,8 @@ export default {
   components: {
     ChatDrawer,
     NavigationBar,
-    FooterBar
+    FooterBar,
+    SnackBar
   }
 };
 </script>

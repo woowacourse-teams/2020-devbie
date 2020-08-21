@@ -88,10 +88,35 @@ export default {
     },
 
     async onCreateQuestion() {
-      await this.$store.dispatch("CREATE_QUESTION", this.payload);
-      await this.$router.push(
-        `/questions/${this.$store.getters.fetchedQuestionId}`
-      );
+      try {
+        await this.$store.dispatch("CREATE_QUESTION", this.payload);
+        await this.$router.push(
+          `/questions/${this.$store.getters.fetchedQuestionId}`
+        );
+      } catch (error) {
+        console.log(error);
+        switch (error.response.status) {
+          case 401: {
+            this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "로그인 후 사용할 수 있습니다."
+            );
+            break;
+          }
+          case 405: {
+            this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "항목을 채워주세요.");
+            break;
+          }
+          default: {
+            console.log("에러입니다" + error);
+            this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "요청에 실패했습니다."
+            );
+            break;
+          }
+        }
+      }
     },
 
     async onUpdateQuestion() {
