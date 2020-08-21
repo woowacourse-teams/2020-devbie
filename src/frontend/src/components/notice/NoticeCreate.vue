@@ -65,7 +65,7 @@
         label="회사설명"
         :rules="rules.text"
       ></v-textarea>
-      <v-btn color="success" class="mr-4 submit" @click="validate">
+      <v-btn color="success" class="mr-4 submit" @click="submit">
         작성하기
       </v-btn>
     </v-form>
@@ -84,7 +84,7 @@ export default {
   computed: {
     ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
   },
-  data: function() {
+  data() {
     return {
       rules: { ...validator.notice },
       noticeTypeItems: [
@@ -131,7 +131,7 @@ export default {
         console.error(e);
       }
     },
-    async validate() {
+    async submit() {
       if (!this.$refs.form.validate()) {
         return;
       }

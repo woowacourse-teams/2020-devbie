@@ -61,7 +61,6 @@
         v-model="request.description"
         name="input-7-4"
         label="회사설명"
-        value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
         :rules="rules.text"
       ></v-textarea>
       <v-btn color="success" class="mr-4 submit" @click="submit">
@@ -99,7 +98,7 @@ export default {
   computed: {
     ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
   },
-  data: function() {
+  data() {
     return {
       rules: { ...validator.notice },
       id: "",
@@ -177,7 +176,7 @@ export default {
 .container {
   display: flex;
   width: 500px;
-  justify-content: center !important;
+  justify-content: center;
   align-items: center;
 }
 .notice-form {

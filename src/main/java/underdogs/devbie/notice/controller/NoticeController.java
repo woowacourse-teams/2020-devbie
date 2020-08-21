@@ -116,11 +116,4 @@ public class NoticeController {
         FilterResponses filterResponse = noticeService.findFilters();
         return ResponseEntity.ok(filterResponse);
     }
-
-    // @NoValidate
-    // @GetMapping("/job-positions")
-    // public ResponseEntity<JobPositionsResponse> findJobPositions() {
-    //     JobPositionsResponse jobPositionsResponse = noticeService.findJobPositions();
-    //     return ResponseEntity.ok(jobPositionsResponse);
-    // }
 }
