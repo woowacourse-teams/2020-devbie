@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" absolute right temporary>
+    <v-navigation-drawer absolute right permanent>
       <v-card min-height="100%" max-height="100%">
         <v-container>
           <v-row style="flex-wrap: nowrap;">
@@ -31,14 +31,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import ChatList from "./ChatList";
 import ChatInput from "./ChatInput";
 
 export default {
-  computed: {
-    ...mapGetters(["drawer"])
-  },
   methods: {
     closeChatDrawer() {
       this.$store.dispatch("CLOSE_DRAWER");

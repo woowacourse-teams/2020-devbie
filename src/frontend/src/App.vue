@@ -5,12 +5,13 @@
       <router-view :key="$route.fullPath" class="content"></router-view>
     </transition>
     <snack-bar></snack-bar>
-    <chat-drawer></chat-drawer>
+    <chat-drawer v-if="drawer"></chat-drawer>
     <footer-bar></footer-bar>
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
 import SnackBar from "./components/SnackBar";
@@ -35,6 +36,9 @@ export default {
       localStorage.removeItem("devbieToken");
       this.$store.commit("DELETE_LOGIN_USER");
     }
+  },
+  computed: {
+    ...mapGetters(["drawer"])
   },
   components: {
     ChatDrawer,
