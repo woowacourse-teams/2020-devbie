@@ -7,7 +7,7 @@ export default {
     stompClient: {},
     noticeId: "",
     drawer: false,
-    chats: []
+    chats: [{ id: 0, name: "유안", message: "임시" }]
   },
   mutations: {
     CONNECT(state, noticeId) {
@@ -59,7 +59,7 @@ export default {
     },
     async FETCH_CHATS({ commit }, noticeId) {
       const { data } = await getAction("/api/chats?noticeId=" + noticeId);
-      commit("SET_CHATS", data.messageResponses);
+      commit("SET_CHATS", data.messageResponses.messageResponses);
     }
   },
   getters: {
