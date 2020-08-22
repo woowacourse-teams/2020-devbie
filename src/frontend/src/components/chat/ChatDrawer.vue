@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-navigation-drawer fixed right permanent style="height: 100vh">
+    <v-navigation-drawer
+      fixed
+      right
+      permanent
+      width="260"
+      style="height: 100vh"
+    >
       <div id="chat_components">
         <div id="chat_info_box">
           <chat-info></chat-info>
