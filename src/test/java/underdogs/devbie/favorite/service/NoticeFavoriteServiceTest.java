@@ -1,5 +1,6 @@
 package underdogs.devbie.favorite.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import underdogs.devbie.exception.BadRequestException;
 import underdogs.devbie.favorite.domain.NoticeFavorite;
 import underdogs.devbie.favorite.domain.NoticeFavoriteRepository;
 import underdogs.devbie.notice.service.NoticeService;
@@ -50,6 +52,17 @@ class NoticeFavoriteServiceTest {
     @Test
     void createFavorite() {
         noticeFavoriteService.createFavorite(1L, 1L);
+    }
+
+    @DisplayName("공고 즐겨찾기 중복 추가시 에외 발생")
+    @Test
+    void createFavorite_Throw_BadRequestException_When_DuplicatedFavoriteRequest() {
+        given(noticeFavoriteRepository.findByObjectAndUserId(anyLong(), anyLong()))
+            .willReturn(Optional.of(NoticeFavorite.of(1L, 1L)));
+
+        assertThatThrownBy(() -> {
+            noticeFavoriteService.createFavorite(1L, 1L);
+        }).isInstanceOf(BadRequestException.class);
     }
 
     @DisplayName("공고 즐겨찾기 삭제")

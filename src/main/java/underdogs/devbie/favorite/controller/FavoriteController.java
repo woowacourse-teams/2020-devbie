@@ -21,9 +21,8 @@ public abstract class FavoriteController {
 
     @ApiImplicitParams({
         @ApiImplicitParam(name = "Authorization", value = "Bearer devbieToken", required = true, dataType = "String", paramType = "header")})
-    @GetMapping(params = {"userId", "objectType"})
+    @GetMapping(params = {"userId"})
     public ResponseEntity<Object> getMyFavorites(
-        @RequestParam String objectType,
         @RequestParam Long userId,
         @LoginUser User user
     ) {
@@ -33,7 +32,7 @@ public abstract class FavoriteController {
 
     private void validateUser(Long userId, User user) {
         if (!user.getId().equals(userId)) {
-            throw new InvalidAuthenticationException();
+            throw new InvalidAuthenticationException("인가되지 않는 요청입니다.");
         }
     }
 
