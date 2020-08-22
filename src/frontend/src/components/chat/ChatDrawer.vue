@@ -1,31 +1,19 @@
 <template>
   <div>
-    <v-navigation-drawer absolute right permanent>
-      <v-card min-height="100%" max-height="100%">
-        <v-container>
-          <v-row style="flex-wrap: nowrap;">
-            <v-col cols="7" class="flex-grow-1">
-              <p style="text-align: center">
-                제목은이쁘게
-              </p>
-            </v-col>
-            <v-col cols="3">
-              <p>
-                30명
-              </p>
-            </v-col>
-            <v-col cols="2" class="flex-shrink-1">
-              <v-btn smallv absolute right icon @click="closeChatDrawer"
-                ><i class="fas fa-times"></i
-              ></v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
+    <v-navigation-drawer fixed right permanent style="height: 100vh">
+      <div id="chat_components">
+        <div id="chat_info_box">
+          <chat-info></chat-info>
+        </div>
         <v-divider></v-divider>
-        <chat-list></chat-list>
+        <div id="chat_list_box">
+          <chat-list></chat-list>
+        </div>
         <v-divider></v-divider>
-        <chat-input></chat-input>
-      </v-card>
+        <div id="chat_input_box">
+          <chat-input></chat-input>
+        </div>
+      </div>
     </v-navigation-drawer>
   </div>
 </template>
@@ -33,14 +21,11 @@
 <script>
 import ChatList from "./ChatList";
 import ChatInput from "./ChatInput";
+import ChatInfo from "./chatInfo";
 
 export default {
-  methods: {
-    closeChatDrawer() {
-      this.$store.dispatch("CLOSE_DRAWER");
-    }
-  },
   components: {
+    ChatInfo,
     ChatInput,
     ChatList
   }
@@ -48,7 +33,20 @@ export default {
 </script>
 
 <style scoped>
-.chat-drawer-header {
-  max-lines: 1;
+#chat_components {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#chat_info_box {
+  flex-basis: 60px;
+}
+#chat_list_box {
+  flex-basis: 500px;
+  flex-grow: 1;
+  position: relative;
+}
+#chat_input_box {
+  flex-basis: 120px;
 }
 </style>

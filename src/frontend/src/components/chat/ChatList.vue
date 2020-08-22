@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <v-card-text>
-      <v-list ref="chatList" id="chats">
-        <template v-for="item in fetchedChats">
-          <chat-item v-bind:key="item.id" :chat="item" />
-        </template>
-      </v-list>
-    </v-card-text>
+  <div id="default_box">
+    <v-list ref="chatList" id="chats">
+      <template v-for="item in fetchedChats">
+        <chat-item v-bind:key="item.id" :chat="item" />
+      </template>
+    </v-list>
   </div>
 </template>
 
@@ -30,8 +28,12 @@ export default {
 </script>
 
 <style scoped>
+#default_box {
+  height: 100%;
+  position: absolute;
+}
 #chats {
-  height: 630px;
+  height: 100%;
   overflow: auto;
 }
 </style>

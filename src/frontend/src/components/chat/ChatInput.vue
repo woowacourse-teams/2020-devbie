@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%" class="d-flex flex-column">
+  <div class="d-flex flex-column">
     <div>
       익명의 이름
     </div>
@@ -9,7 +9,7 @@
         placeholder="욕설은 삼가해주세요"
         solo
         background-color="grey"
-        height="100px"
+        height="80px"
         v-on:keyup.enter="submit"
         v-model="chatMessage"
       ></v-text-field>

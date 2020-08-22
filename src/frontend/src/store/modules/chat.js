@@ -7,7 +7,7 @@ export default {
     stompClient: {},
     noticeId: "",
     drawer: false,
-    chats: [{ id: 0, name: "유안", message: "임시" }]
+    chats: []
   },
   mutations: {
     CONNECT(state, noticeId) {
