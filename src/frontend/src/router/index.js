@@ -49,7 +49,8 @@ export const router = new VueRouter({
       component: QuestionListView,
       props: route => ({
         hashtag: route.query.hashtag,
-        orderBy: route.query.orderBy
+        orderBy: route.query.orderBy,
+        searchBy: route.query.searchBy
       })
     },
     {

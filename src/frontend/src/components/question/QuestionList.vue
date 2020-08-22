@@ -4,6 +4,7 @@
       "<span>{{ hashtag }}</span
       >" 태그로 검색한 결과입니다.
     </div>
+    <search-bar v-else :searchBy="searchBy"></search-bar>
     <ul class="question-list">
       <li
         v-for="question in fetchedQuestions.questions"
@@ -33,12 +34,17 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import SearchBar from "./SearchBar";
 export default {
+  components: {
+    SearchBar
+  },
+
   data() {
     return {
-      hashtag: "",
-      orderBy: ""
+      hashtag: this.$route.query.hashtag,
+      orderBy: this.$route.query.orderBy || "CREATED_DATE",
+      searchBy: this.$route.query.searchBy
     };
   },
 
@@ -47,8 +53,6 @@ export default {
   },
 
   created() {
-    this.hashtag = this.$route.query.hashtag;
-    this.orderBy = this.$route.query.orderBy || "CREATED_DATE";
     if (this.hashtag) {
       this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
       return;
