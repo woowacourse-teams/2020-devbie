@@ -3,8 +3,11 @@ package underdogs.devbie.chat.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
@@ -28,5 +31,13 @@ public class ChatController {
     @PatchMapping("/api/chatrooms")
     public ResponseEntity<ChatRoomResponse> createIfNotExist(@RequestBody ChatRoomCreateRequest chatRoomCreateRequest) {
         return ResponseEntity.ok().body(chatService.createIfNotExist(chatRoomCreateRequest));
+    }
+
+    @NoValidate
+    @DeleteMapping("/api/chatrooms/{nickName}")
+    public ResponseEntity<Void> deleteNickName(@PathVariable(name = "nickName") String nickName,
+        @RequestParam(value = "noticeId") Long noticeId) {
+        chatService.deleteNickName(nickName, noticeId);
+        return ResponseEntity.noContent().build();
     }
 }
