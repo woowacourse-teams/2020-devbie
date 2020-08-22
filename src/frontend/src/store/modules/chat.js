@@ -21,6 +21,9 @@ export default {
         });
       });
     },
+    DISCONNECT(state) {
+      state.stompClient.disconnect();
+    },
     SEND(state, { name, message }) {
       const request = {
         noticeId: state.noticeId,
@@ -55,6 +58,7 @@ export default {
       commit("SET_DRAWER", true);
     },
     CLOSE_DRAWER({ commit }) {
+      commit("DISCONNECT");
       commit("SET_DRAWER", false);
     },
     async FETCH_CHATS({ commit }, noticeId) {
