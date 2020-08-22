@@ -1,10 +1,12 @@
 <template>
   <div>
-    <v-virtual-scroll :items="fetchedChats" :item-height="50" height="660">
-      <template v-slot="{ item }">
-        <chat-item :chat="item" />
-      </template>
-    </v-virtual-scroll>
+    <v-card-text>
+      <v-list ref="chatList" id="chats">
+        <template v-for="item in fetchedChats">
+          <chat-item v-bind:key="item.id" :chat="item" />
+        </template>
+      </v-list>
+    </v-card-text>
   </div>
 </template>
 
@@ -16,8 +18,20 @@ export default {
   computed: {
     ...mapGetters(["fetchedChats"])
   },
+  watch: {
+    fetchedChats() {
+      setTimeout(() => {
+        this.$refs.chatList.$el.scrollTop = this.$refs.chatList.$el.scrollHeight;
+      }, 0);
+    }
+  },
   components: { ChatItem }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#chats {
+  height: 630px;
+  overflow: auto;
+}
+</style>
