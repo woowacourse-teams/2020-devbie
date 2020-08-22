@@ -2,7 +2,7 @@
   <div>
     <v-row dense>
       <v-col
-        v-for="notice in fetchedNotices"
+        v-for="notice in fetchedNoticeFavorites"
         :key="notice.id"
         :cols="2"
         class="selector-item"
@@ -49,56 +49,24 @@ export default {
     ...mapGetters([
       "isLoggedIn",
       "fetchedLoginUser",
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage",
       "isUserNoticeFavorites",
       "fetchedNoticeFavorites"
     ])
   },
 
   watch: {
-    fetchedNoticeType() {
-      this.getNotices();
-    },
-    fetchedJobPosition() {
-      this.getNotices();
-    },
-    fetchedLanguage() {
-      this.getNotices();
-    },
     isLoggedIn() {
       this.initFavoriteState();
     }
   },
 
   created() {
-    this.getNotices();
-
     if (this.isLoggedIn) {
       this.initFavoriteState();
     }
   },
 
   methods: {
-    getNotices() {
-      const param = {
-        noticeType: this.fetchedNoticeType,
-        jobPosition: this.fetchedJobPosition,
-        language: this.fetchedLanguage
-      };
-      const queryParam = new URLSearchParams(param).toString();
-      try {
-        this.$store.dispatch("FETCH_NOTICES", queryParam);
-      } catch (error) {
-        console.log("공고 리스트 불러오기 실패 " + error.response.data.message);
-        this.$store.dispatch(
-          "UPDATE_SNACKBAR_TEXT",
-          "공고를 불러오지 못했습니다."
-        );
-      }
-    },
     onFavorite(noticeId) {
       if (!this.isLoggedIn) {
         console.log("you should login");
@@ -145,30 +113,6 @@ export default {
 </script>
 
 <style scoped>
-.selector-item {
-  margin: 0 30px 50px 0;
-}
-
-.card-title {
-  justify-content: center;
-}
-
-.notice-info {
-  display: flex;
-  justify-content: space-between;
-}
-
-.notice-info :first-child {
-  margin-left: 10px;
-}
-
-.notice-info :last-child {
-  margin-right: 10px;
-}
-.v-card:hover {
-  opacity: 0.6;
-}
-
 .clicked {
   background-color: pink;
 }
