@@ -12,8 +12,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import underdogs.devbie.auth.dto.UserTokenDto;
+import underdogs.devbie.auth.exception.AccessTokenLoadException;
 import underdogs.devbie.auth.exception.ExpiredTokenException;
-import underdogs.devbie.auth.exception.InvalidAuthenticationException;
 
 @Component
 public class JwtTokenProvider {
@@ -56,7 +56,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             validateExpiredTime(claims);
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidAuthenticationException();
+            throw new AccessTokenLoadException();
         }
     }
 

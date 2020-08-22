@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import underdogs.devbie.notice.expception.CreateFailException;
+import underdogs.devbie.exception.CreateFailException;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,7 +30,7 @@ public class Company {
         this.salary = salary;
     }
 
-    private void validateParameters(String name, int salary) {
+    private void validateParameters(String name, int salary) throws CreateFailException {
         if (checkEmpty(name)) {
             throw new CreateFailException();
         }

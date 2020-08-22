@@ -31,7 +31,7 @@
                 depressed
                 large
                 color="primary"
-                @click="toggleChatDrawer"
+                @click="openChatDrawer"
                 >채팅방</v-btn
               >
               <v-btn
@@ -92,6 +92,11 @@ import { mapGetters } from "vuex";
 import router from "../../router";
 
 export default {
+  data() {
+    return {
+      stompClient: {}
+    };
+  },
   methods: {
     isAdmin() {
       return this.fetchedLoginUser.roleType === "ADMIN";
@@ -103,13 +108,23 @@ export default {
     onEditNotice() {
       router.push(`/notices/edit/${this.$route.params.id}`);
     },
-    toggleChatDrawer() {
-      this.$store.dispatch("TOGGLE_DRAWER");
+    openChatDrawer() {
+      this.$store.dispatch("OPEN_DRAWER");
+      this.$store.dispatch("CONNECT", this.fetchedNotice.id);
+      this.$store.dispatch("FETCH_CHATS", this.fetchedNotice.id);
     }
   },
   created() {
     const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICE", noticeId);
+    try {
+      this.$store.dispatch("FETCH_NOTICE", noticeId);
+    } catch (error) {
+      console.log("공고 불러오기 실패 " + error.response.data.message);
+      this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고를 불러오지 못했습니다."
+      );
+    }
   },
   computed: {
     ...mapGetters(["fetchedLoginUser"]),

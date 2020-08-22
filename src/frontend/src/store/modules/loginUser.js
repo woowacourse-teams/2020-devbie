@@ -14,12 +14,9 @@ export default {
   },
   actions: {
     async FETCH_LOGIN_USER({ commit }) {
-      try {
-        const { data } = await getAction("/api/users");
-        commit("SET_LOGIN_USER", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction("/api/users");
+      commit("SET_LOGIN_USER", data);
+      return data;
     },
     async UPDATE_USER_INFO(state, payload) {
       try {

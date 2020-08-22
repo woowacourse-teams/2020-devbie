@@ -39,16 +39,17 @@ export default {
       const response = await postAction("/api/questions", request);
       const id = response["headers"].location.split("/")[3];
       commit("SET_NEW_QUESTION_ID", id);
+      return response;
     },
-    async UPDATE_QUESTION(state, { questionId, title, content, hashtags }) {
-      await patchAction(`/api/questions/${questionId}`, {
-        title,
-        content,
-        hashtags
+    async UPDATE_QUESTION(state, payload) {
+      return await patchAction(`/api/questions/${payload.questionId}`, {
+        title: payload.title,
+        content: payload.content,
+        hashtags: payload.hashtags
       });
     },
     async DELETE_QUESTION(state, questionId) {
-      await deleteAction(`/api/questions/${questionId}`);
+      return await deleteAction(`/api/questions/${questionId}`);
     },
     async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
       const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);

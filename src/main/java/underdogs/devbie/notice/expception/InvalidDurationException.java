@@ -1,8 +1,12 @@
 package underdogs.devbie.notice.expception;
 
-public class InvalidDurationException extends IllegalArgumentException {
+import underdogs.devbie.exception.BadRequestException;
+
+public class InvalidDurationException extends BadRequestException {
+
+    private static final String MESSAGE = "시작일은 종료일 이전이어야 합니다.";
 
     public InvalidDurationException() {
-        super("시작일은 종료일 이전이어야 합니다.");
+        super(MESSAGE);
     }
 }

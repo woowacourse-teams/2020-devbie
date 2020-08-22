@@ -10,6 +10,8 @@
         solo
         background-color="grey"
         height="100px"
+        v-on:keyup.enter="submit"
+        v-model="chatMessage"
       ></v-text-field>
     </div>
   </div>
@@ -17,7 +19,20 @@
 
 <script>
 export default {
-  name: "ChatInput"
+  data() {
+    return {
+      chatMessage: ""
+    };
+  },
+  methods: {
+    submit() {
+      this.$store.dispatch("SEND", {
+        name: "유안",
+        message: this.chatMessage
+      });
+      this.chatMessage = "";
+    }
+  }
 };
 </script>
 

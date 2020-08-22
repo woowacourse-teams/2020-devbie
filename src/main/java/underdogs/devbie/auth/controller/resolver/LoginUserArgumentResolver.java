@@ -10,7 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.auth.exception.UserNotFoundException;
+import underdogs.devbie.auth.exception.LoginUserNotFoundException;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
 
@@ -32,7 +32,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         try {
             return userService.findById(Long.parseLong(userId));
         } catch (Exception e) {
-            throw new UserNotFoundException();
+            throw new LoginUserNotFoundException();
         }
     }
 }
