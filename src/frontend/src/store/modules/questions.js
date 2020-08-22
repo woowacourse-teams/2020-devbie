@@ -60,6 +60,12 @@ export default {
         `/api/questions/${questionId}?visit=false`
       );
       commit("SET_QUESTION", data);
+    },
+    async SEARCH_QUESTIONS({ commit }, { keyword, scope }) {
+      const { data } = await getAction(
+        `/api/questions?searchBy=${keyword}&scope=${scope}`
+      );
+      commit("SET_QUESTIONS", data);
     }
   },
   getters: {

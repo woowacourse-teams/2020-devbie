@@ -44,7 +44,8 @@ export default {
     return {
       hashtag: this.$route.query.hashtag,
       orderBy: this.$route.query.orderBy || "CREATED_DATE",
-      searchBy: this.$route.query.searchBy
+      searchBy: this.$route.query.searchBy,
+      scope: this.$route.query.scope
     };
   },
 
@@ -57,7 +58,15 @@ export default {
       this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
       return;
     }
-    this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
+    if (this.orderBy) {
+      this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
+    }
+    if (this.searchBy && this.scope) {
+      this.$store.dispatch("SEARCH_QUESTIONS", {
+        keyword: this.searchBy,
+        scope: this.scope
+      });
+    }
   }
 };
 </script>

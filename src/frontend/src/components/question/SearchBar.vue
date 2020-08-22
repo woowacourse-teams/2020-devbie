@@ -36,19 +36,18 @@ export default {
         { name: "내용", value: "CONTENT" },
         { name: "제목 + 내용", value: "BOTH" }
       ],
-      selectedScope: { name: "제목", value: "TITLE" },
+      selectedScope: this.$route.query.scope
+        ? this.getCurrentScope(this.$route.query.scope)
+        : {
+            name: "제목",
+            value: "TITLE"
+          },
       keyword: ""
     };
   },
 
-  computed: {
-    defaultScope() {
-      return this.scopes[0];
-    }
-  },
-
   created() {
-    this.search = this.searchBy;
+    this.keyword = this.searchBy;
   },
 
   methods: {
@@ -56,6 +55,16 @@ export default {
       this.$router.push(
         `/questions?searchBy=${this.keyword}&scope=${this.selectedScope.value}`
       );
+    },
+
+    getCurrentScope(scope) {
+      if (scope === "TITLE") {
+        return { name: "제목", value: "TITLE" };
+      } else if (scope === "CONTENT") {
+        return { name: "내용", value: "CONTENT" };
+      } else {
+        return { name: "제목 + 내용", value: "BOTH" };
+      }
     }
   }
 };

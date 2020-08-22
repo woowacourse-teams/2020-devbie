@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.question.domain.OrderBy;
+import underdogs.devbie.question.domain.SearchScope;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -58,11 +59,12 @@ public class QuestionController {
     }
 
     @NoValidate
-    @GetMapping(params = "keyword")
+    @GetMapping(params = {"searchBy", "scope"})
     public ResponseEntity<QuestionResponses> searchByTitle(
-        @RequestParam("keyword") String keyword
+        @RequestParam("searchBy") String keyword,
+        @RequestParam("scope") SearchScope scope
     ) {
-        QuestionResponses responses = questionService.searchByTitle(keyword);
+        QuestionResponses responses = questionService.searchQuestionBy(keyword, scope);
         return ResponseEntity
             .ok(responses);
     }

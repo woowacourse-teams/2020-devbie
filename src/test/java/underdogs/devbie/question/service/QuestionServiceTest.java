@@ -217,7 +217,7 @@ public class QuestionServiceTest {
 
         given(questionRepository.findByTitleLike(anyString())).willReturn(questions);
 
-        QuestionResponses responses = questionService.searchByTitle("스택");
+        QuestionResponses responses = questionService.searchQuestionBy("스택", scope);
 
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),

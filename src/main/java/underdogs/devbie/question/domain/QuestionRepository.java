@@ -12,6 +12,13 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("select q from Question q where q.title.title like %:keyword%")
     List<Question> findByTitleLike(@Param("keyword") String keyword);
 
+    @Query("select q from Question q where q.content.content like %:keyword%")
+    List<Question> findByContentLike(@Param("keyword") String keyword);
+
+    @Query("select q from Question q where q.title.title like %:keyword% "
+        + "or q.content.content like %:keyword%")
+    List<Question> findByBothLike(@Param("keyword") String keyword);
+
     @Query("select q from Question q")
     List<Question> findAllOrderBy(Sort sort);
 }
