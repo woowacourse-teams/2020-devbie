@@ -4,7 +4,7 @@ import Stomp from "webstomp-client";
 
 export default {
   state: {
-    stompClient: {},
+    stompClient: null,
     noticeId: "",
     drawer: false,
     name: "",
@@ -12,6 +12,9 @@ export default {
   },
   mutations: {
     CONNECT(state, noticeId) {
+      if (state.stompClient) {
+        state.stompClient.disconnect();
+      }
       state.noticeId = noticeId;
       const socket = new SockJS("/chat");
       state.stompClient = Stomp.over(socket);
