@@ -80,8 +80,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-10 13:00")
+            .endDate("2020-10-20 14:00")
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -93,8 +93,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-20 13:00")
+            .endDate("2020-10-20 14:00")
             .build();
         ;
     }
@@ -144,7 +144,8 @@ public class NoticeControllerTest extends MvcTest {
     void update() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
 
-        doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
+        given(noticeService.update(anyLong(), any(NoticeUpdateRequest.class)))
+            .willReturn(NoticeDetailResponse.from(noticeUpdateRequest.toEntity(1L)));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().isNoContent())
@@ -274,8 +275,6 @@ public class NoticeControllerTest extends MvcTest {
 
     private void validateUpdateRequest() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
-
-        willDoNothing().given(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().is4xxClientError())
