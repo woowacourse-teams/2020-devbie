@@ -1,5 +1,7 @@
 package underdogs.devbie.chat.domain;
 
+import javax.persistence.Embeddable;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode
+@Embeddable
 public class ChatName {
 
     private String chatName;

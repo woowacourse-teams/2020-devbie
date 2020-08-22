@@ -1,11 +1,13 @@
 package underdogs.devbie.chat.controller;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +24,7 @@ import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
+import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.service.ChatService;
 import underdogs.devbie.user.domain.User;
 
@@ -53,44 +56,36 @@ class ChatControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
     }
 
-    @DisplayName("공고 ID로 채팅방 가져오기")
+    @DisplayName("Notice ID에 매칭되는 ChatRoom이 없을 경우 ChatRoom 생성 후 ChatRoomResponse 반환")
     @Test
-    void fetchChatRoom() throws Exception {
+    void createChatRoom() throws Exception {
         Long noticeId = 1L;
-
+        ChatRoomCreateRequest chatRoomCreateRequest = new ChatRoomCreateRequest(noticeId);
         ChatRoomResponse chatRoomResponse = ChatRoomResponse.of(
             Arrays.asList(
                 Chat.of("user0", "message1", ChatRoom.from(noticeId)),
                 Chat.of("user1", "message2", ChatRoom.from(noticeId)),
                 Chat.of("user2", "message3", ChatRoom.from(noticeId))),
             "홍길동");
-        given(chatService.fetchChatRoom(anyLong())).willReturn(chatRoomResponse);
 
-        MvcResult result = getAction(String.format("/api/chats?noticeId=%s", 1L))
-            .andExpect(status().isOk())
+        given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
+
+        MvcResult mvcResult = patchAction("/api/chatrooms", objectMapper.writeValueAsString(chatRoomCreateRequest))
             .andDo(print())
+            .andExpect(status().isOk())
             .andReturn();
 
-        ChatRoomResponse resultResponse = objectMapper.readValue(result.getResponse().getContentAsString(),
+        ChatRoomResponse resultResponse = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),
             ChatRoomResponse.class);
 
+        assertThat(resultResponse).isNotNull();
+        assertThat(resultResponse.getMessageResponses()).isNotNull();
+        List<MessageResponse> messageResponses = resultResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().size(), 3),
-            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(0).getName(), "user0"),
-            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(1).getName(), "user1"),
-            () -> assertEquals(resultResponse.getMessageResponses().getMessageResponses().get(2).getName(), "user2"),
-            () -> assertEquals(resultResponse.getNickName(), "홍길동")
+            () -> assertEquals(resultResponse.getNickName(), "홍길동"),
+            () -> assertEquals(messageResponses.get(0).getName(), "user0"),
+            () -> assertEquals(messageResponses.get(1).getName(), "user1"),
+            () -> assertEquals(messageResponses.get(2).getName(), "user2")
         );
-    }
-
-    @DisplayName("Notice ID로 Chatroom 생성")
-    @Test
-    void createChatRoom() throws Exception {
-        Long noticeId = 1L;
-        ChatRoomCreateRequest chatRoomCreateRequest = new ChatRoomCreateRequest(noticeId);
-
-        patchAction("/api/chatrooms", objectMapper.writeValueAsString(chatRoomCreateRequest))
-            .andDo(print())
-            .andExpect(status().isNoContent());
     }
 }

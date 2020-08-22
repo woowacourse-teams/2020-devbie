@@ -1,7 +1,12 @@
 package underdogs.devbie.chat.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +17,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import underdogs.devbie.chat.domain.Chat;
+import underdogs.devbie.chat.domain.ChatName;
+import underdogs.devbie.chat.domain.ChatNames;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
 import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
+import underdogs.devbie.chat.dto.ChatRoomResponse;
+import underdogs.devbie.chat.dto.MessageResponse;
+import underdogs.devbie.chat.dto.MessageSendRequest;
 
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
@@ -37,36 +48,111 @@ class ChatServiceTest {
     }
 
     @Test
-    void readByNoticeId() {
+    void sendMessage() {
         Long noticeId = 1L;
-        Optional<ChatRoom> optionalChatRoom = Optional.of(ChatRoom.from(1L));
-        given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(optionalChatRoom);
-        chatService.fetchChatRoom(noticeId);
+        List<Chat> chats = Arrays.asList(
+            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
+            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
+            Chat.of("user2", "message3", ChatRoom.from(noticeId)));
+        List<ChatName> chatNames = Arrays.asList(
+            ChatName.of("말하는 원숭이"),
+            ChatName.of("돌리는 사자"),
+            ChatName.of("만지는 표범")
+        );
+        ChatRoom chatRoom = ChatRoom.builder()
+            .noticeId(noticeId)
+            .chats(chats)
+            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .build();
+        MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
+            , "말하는 원숭이", "메세지");
+
+        given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+        given(chatRepository.save(any(Chat.class))).willReturn(Chat.of("말하는 원숭이", "메세지", chatRoom));
+        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(MessageResponse.class));
+
+        chatService.sendMessage(messageSendRequest);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(chatRepository).save(any());
     }
 
-    @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatrrom 생성 하지 않음")
+    @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성 하지 않음")
     @Test
     void noCreateIfExist() {
         Long noticeId = 1L;
 
-        chatRoomRepository.save(ChatRoom.builder()
-            .noticeId(noticeId)
-            .build());
+        List<Chat> chats = Arrays.asList(
+            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
+            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
+            Chat.of("user2", "message3", ChatRoom.from(noticeId)));
 
-        chatService.createIfNotExist(new ChatRoomCreateRequest(noticeId));
+        List<ChatName> chatNames = Arrays.asList(
+            ChatName.of("말하는 원숭이"),
+            ChatName.of("돌리는 사자"),
+            ChatName.of("만지는 표범")
+        );
+
+        ChatRoom chatRoom = ChatRoom.builder()
+            .noticeId(noticeId)
+            .chats(chats)
+            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .build();
+
+        given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+
+        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(new ChatRoomCreateRequest(noticeId));
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(chatRoomRepository, never()).save(any());
+
+        assertThat(chatRoomResponse).isNotNull();
+        assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
+        List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
+        assertAll(
+            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
+            () -> assertEquals(messageResponses.get(0).getName(), "user0"),
+            () -> assertEquals(messageResponses.get(1).getName(), "user1"),
+            () -> assertEquals(messageResponses.get(2).getName(), "user2")
+        );
     }
 
-    @DisplayName("noticeId에 해당하는 Chatroom이 존재하지 않으면 Chatrrom 생성")
+    @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성")
     @Test
-    void createIfNotExist() {
+    void createIfExist() {
         Long noticeId = 1L;
-        chatService.createIfNotExist(new ChatRoomCreateRequest(noticeId));
+
+        List<Chat> chats = Arrays.asList(
+            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
+            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
+            Chat.of("user2", "message3", ChatRoom.from(noticeId)));
+
+        List<ChatName> chatNames = Arrays.asList(
+            ChatName.of("말하는 원숭이"),
+            ChatName.of("돌리는 사자"),
+            ChatName.of("만지는 표범")
+        );
+
+        ChatRoom chatRoom = ChatRoom.builder()
+            .noticeId(noticeId)
+            .chats(chats)
+            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .build();
+
+        given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+
+        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(new ChatRoomCreateRequest(noticeId));
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
-        verify(chatRoomRepository).save(any(ChatRoom.class));
+
+        assertThat(chatRoomResponse).isNotNull();
+        assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
+        List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
+        assertAll(
+            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
+            () -> assertEquals(messageResponses.get(0).getName(), "user0"),
+            () -> assertEquals(messageResponses.get(1).getName(), "user1"),
+            () -> assertEquals(messageResponses.get(2).getName(), "user2")
+        );
     }
 }

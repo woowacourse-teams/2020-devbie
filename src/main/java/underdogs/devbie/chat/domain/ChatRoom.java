@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,14 +16,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Getter
-@ToString
 public class ChatRoom {
 
     @Id
@@ -35,10 +34,20 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom")
     private List<Chat> chats = new ArrayList<>();
 
+    @Embedded
+    private ChatNames chatNames = new ChatNames();
+
     public static ChatRoom from(Long noticeId) {
         return ChatRoom.builder()
             .noticeId(noticeId)
             .chats(new ArrayList<>())
+            .chatNames(new ChatNames())
             .build();
+    }
+
+    public ChatName fetchNonRedundantName() {
+        ChatName chatName = chatNames.fetchNonRedundantName();
+        chatNames.add(chatName);
+        return chatName;
     }
 }
