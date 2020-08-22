@@ -7,7 +7,7 @@
         :cols="2"
         class="selector-item"
       >
-        <v-card @click="$router.push(`/notices/${notice.id}`)">
+        <v-card @click.stop="$router.push(`/notices/${notice.id}`)">
           <v-img
             :src="notice.image"
             class="white--text align-end"
@@ -27,7 +27,11 @@
             <div>
               {{ notice.jobPosition }}
             </div>
-            <v-btn icon>
+            <v-btn
+              icon
+              @click.stop="onFavorite(notice.id)"
+              :class="{ clicked: isUserNoticeFavorites(notice.id) }"
+            >
               <v-icon>mdi-heart</v-icon>
             </v-btn>
           </v-card-actions>
@@ -41,6 +45,42 @@
 import { mapGetters } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters([
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage",
+      "isUserNoticeFavorites",
+      "fetchedNoticeFavorites"
+    ])
+  },
+
+  watch: {
+    fetchedNoticeType() {
+      this.getNotices();
+    },
+    fetchedJobPosition() {
+      this.getNotices();
+    },
+    fetchedLanguage() {
+      this.getNotices();
+    },
+    isLoggedIn() {
+      this.initFavoriteState();
+    }
+  },
+
+  created() {
+    this.getNotices();
+
+    if (this.isLoggedIn) {
+      this.initFavoriteState();
+    }
+  },
+
   methods: {
     getNotices() {
       const param = {
@@ -58,28 +98,47 @@ export default {
           "공고를 불러오지 못했습니다."
         );
       }
-    }
-  },
-  computed: {
-    ...mapGetters([
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage"
-    ])
-  },
-  created() {
-    this.getNotices();
-  },
-  watch: {
-    fetchedNoticeType() {
-      this.getNotices();
     },
-    fetchedJobPosition() {
-      this.getNotices();
+    onFavorite(noticeId) {
+      if (!this.isLoggedIn) {
+        console.log("you should login");
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인이 필요합니다.");
+        return;
+      }
+      if (this.isUserNoticeFavorites(noticeId)) {
+        try {
+          this.$store.dispatch("DELETE_FAVORITE", noticeId);
+        } catch (error) {
+          console.error("즐겨찾기 삭제 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 삭제에 실패했습니다."
+          );
+        }
+      } else {
+        const param = {
+          objectType: "notice",
+          objectId: noticeId
+        };
+        const queryParam = new URLSearchParams(param).toString();
+        try {
+          this.$store.dispatch("CREATE_FAVORITE", queryParam);
+        } catch (error) {
+          console.error("즐겨찾기 추가 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 추가에 실패했습니다."
+          );
+        }
+      }
+      this.initFavoriteState();
     },
-    fetchedLanguage() {
-      this.getNotices();
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch(
+        "FETCH_MY_NOTICE_FAVORITES",
+        this.fetchedLoginUser.id
+      );
     }
   }
 };
@@ -108,5 +167,9 @@ export default {
 }
 .v-card:hover {
   opacity: 0.6;
+}
+
+.clicked {
+  background-color: pink !important;
 }
 </style>
