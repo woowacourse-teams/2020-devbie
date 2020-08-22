@@ -34,6 +34,7 @@ export default {
 }
 #chats {
   height: 100%;
+  width: 260px;
   overflow: auto;
 }
 </style>

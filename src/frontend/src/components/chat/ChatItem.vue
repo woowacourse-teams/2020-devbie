@@ -54,9 +54,10 @@ export default {
 }
 
 #message_box {
-  display: inline-block;
   background-color: #e0e0e0;
-  max-width: 80%;
+  width: max-content;
+  max-width: 85%;
+  word-wrap: break-word;
   border-radius: 4px;
   font-size: 12px;
 }
