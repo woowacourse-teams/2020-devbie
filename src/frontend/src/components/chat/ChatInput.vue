@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column">
     <div>
-      익명의 이름
+      {{ fetchedNickName }}
     </div>
     <div>
       <v-text-field
@@ -18,16 +18,21 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
       chatMessage: ""
     };
   },
+  computed: {
+    ...mapGetters(["fetchedNickName"])
+  },
   methods: {
     submit() {
       this.$store.dispatch("SEND", {
-        name: "유안",
+        name: this.fetchedNickName,
         message: this.chatMessage
       });
       this.chatMessage = "";

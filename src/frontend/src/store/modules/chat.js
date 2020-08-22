@@ -7,6 +7,7 @@ export default {
     stompClient: {},
     noticeId: "",
     drawer: false,
+    name: "",
     chats: []
   },
   mutations: {
@@ -34,6 +35,9 @@ export default {
     },
     SET_DRAWER(state, value) {
       state.drawer = value;
+    },
+    SET_NAME(state, name) {
+      state.name = name;
     },
     SET_CHATS(state, chats) {
       state.chats = chats;
@@ -63,12 +67,16 @@ export default {
     },
     async FETCH_CHATS({ commit }, noticeId) {
       const { data } = await getAction("/api/chats?noticeId=" + noticeId);
+      commit("SET_NAME", data.nickName);
       commit("SET_CHATS", data.messageResponses.messageResponses);
     }
   },
   getters: {
     drawer(state) {
       return state.drawer;
+    },
+    fetchedNickName(state) {
+      return state.name;
     },
     fetchedChats(state) {
       return state.chats;
