@@ -50,4 +50,8 @@ public class ChatRoom {
         chatNames.add(chatName);
         return chatName;
     }
+
+    public void deleteChatName(ChatName chatName) {
+        chatNames.delete(chatName);
+    }
 }

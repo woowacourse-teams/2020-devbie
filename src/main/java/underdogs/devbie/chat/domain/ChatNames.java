@@ -1,6 +1,5 @@
 package underdogs.devbie.chat.domain;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,5 +37,9 @@ public class ChatNames {
 
     public void add(ChatName chatName) {
         chatNames.add(chatName);
+    }
+
+    public void delete(ChatName chatName) {
+        chatNames.remove(chatName);
     }
 }

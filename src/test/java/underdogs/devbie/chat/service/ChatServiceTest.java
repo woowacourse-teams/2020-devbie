@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -154,5 +155,32 @@ class ChatServiceTest {
             () -> assertEquals(messageResponses.get(1).getName(), "user1"),
             () -> assertEquals(messageResponses.get(2).getName(), "user2")
         );
+    }
+
+    @DisplayName("NoticeId와 NickName으로 해당하는 채팅방 NickName 삭제하기")
+    @Test
+    void deleteNickNameByNoticeId() {
+        String nickName = "만지는 원숭이";
+        Long noticeId = 1L;
+        ChatName chatName = ChatName.of(nickName);
+
+        List<ChatName> chatNames = Collections.singletonList(chatName);
+
+        ChatRoom chatRoom = ChatRoom.builder()
+            .noticeId(noticeId)
+            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .build();
+
+        ChatRoom chatRoomResult = ChatRoom.builder()
+            .noticeId(noticeId)
+            .build();
+
+        given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
+        given(chatRoomRepository.save(any(ChatRoom.class))).willReturn(chatRoomResult);
+
+        chatService.deleteNickName(nickName, noticeId);
+
+        verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(chatRoomRepository).save(eq(chatRoom));
     }
 }
