@@ -29,6 +29,9 @@ export default {
       state.stompClient.disconnect();
     },
     SEND(state, { name, message }) {
+      if (message.length === 1) {
+        return;
+      }
       const request = {
         noticeId: state.noticeId,
         name: name,
