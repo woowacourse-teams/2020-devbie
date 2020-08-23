@@ -86,7 +86,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
             }),
             dynamicTest("채용공고 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&page=1&size=10",
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&page=1",
                     NoticeResponses.class);
 
                 assertThat(noticeResponses.getNoticeResponses())
@@ -94,7 +94,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .contains(NoticeType.JOB);
             }),
             dynamicTest("채용공고와 포지션 별 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&page=1&size=10",
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&page=1",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();
@@ -111,7 +111,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("채용공고와 포지션과 언어별 게시글 전체를 조회한다.", () -> {
                 NoticeResponses noticeResponses = get(
-                    "/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP&page=1&size=10",
+                    "/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP&page=1",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();
@@ -127,6 +127,23 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(response)
                         .extracting(NoticeResponse::getLanguages)
                         .anyMatch(language -> language.contains(Language.CPP.getText()))
+                );
+
+            }),
+            dynamicTest("채용공고 중 키워드로 검색한다.", () -> {
+                NoticeResponses noticeResponses = get(
+                    "/api/notices?noticeType=JOB&keyword=bossdog",
+                    NoticeResponses.class);
+
+                List<NoticeResponse> response = noticeResponses.getNoticeResponses();
+                assertAll(
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getNoticeType)
+                        .contains(NoticeType.JOB),
+
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getName)
+                        .contains("bossdog")
                 );
 
             }),

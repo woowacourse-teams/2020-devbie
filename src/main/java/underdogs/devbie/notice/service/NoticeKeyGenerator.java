@@ -35,6 +35,9 @@ public class NoticeKeyGenerator implements KeyGenerator {
         if (Objects.nonNull(noticeReadRequest.getLanguage())) {
             params.add(noticeReadRequest.getLanguage().toString());
         }
+        if (Objects.nonNull(noticeReadRequest.getKeyword())) {
+            params.add(noticeReadRequest.getKeyword());
+        }
         params.add(String.valueOf(pageNumber));
         return params;
     }

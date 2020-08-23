@@ -23,5 +23,6 @@ public class NoticeReadRequest {
     private NoticeType noticeType;
     private JobPosition jobPosition;
     private Language language;
+    private String keyword;
 
 }

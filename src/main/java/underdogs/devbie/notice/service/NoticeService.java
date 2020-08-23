@@ -67,6 +67,7 @@ public class NoticeService {
             noticeReadRequest.getNoticeType(),
             noticeReadRequest.getJobPosition(),
             noticeReadRequest.getLanguage(),
+            noticeReadRequest.getKeyword(),
             pageable
         );
         return NoticeResponses.listFrom(noticePage.getContent(), noticePage.getTotalPages());
