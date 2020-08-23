@@ -1,5 +1,6 @@
 package underdogs.devbie.notice.controller;
 
+import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -35,6 +36,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -42,6 +44,8 @@ import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
+import underdogs.devbie.notice.vo.JobPositionPair;
+import underdogs.devbie.notice.vo.LanguagePair;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
@@ -80,8 +84,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10 13:00")
-            .endDate("2020-10-20 14:00")
+            .startDate("2020-10-10T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -93,8 +97,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-20 13:00")
-            .endDate("2020-10-20 14:00")
+            .startDate("2020-10-20T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
         ;
     }
@@ -221,8 +225,8 @@ public class NoticeControllerTest extends MvcTest {
             () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
             () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND),
-            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getName(),
-                Language.JAVASCRIPT.getName())
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getText(),
+                Language.JAVASCRIPT.getText())
         );
     }
 
@@ -261,6 +265,37 @@ public class NoticeControllerTest extends MvcTest {
             () -> assertThat(noticeDetailResponse1.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(noticeDetailResponse1.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
             () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!")
+        );
+    }
+
+    @DisplayName("사용자 요청을 통해 모든 프로그래밍 언어 조회")
+    @Test
+    void findLanguages() throws Exception {
+        given(noticeService.findFilters())
+            .willReturn(FilterResponses.get());
+
+        MvcResult mvcResult = getAction("/api/notices/filters")
+            .andExpect(status().isOk())
+            .andReturn();
+
+        FilterResponses actual = objectMapper.readValue(
+            mvcResult.getResponse().getContentAsString(),
+            FilterResponses.class
+        );
+
+        List<LanguagePair> expectLanguages = Arrays.stream(Language.values())
+            .map(LanguagePair::from)
+            .collect(toList());
+        List<JobPositionPair> expectJobPositions = Arrays.stream(JobPosition.values())
+            .map(JobPositionPair::from)
+            .collect(toList());
+
+        assertAll(
+            () -> assertThat(actual.getLanguages())
+                .containsAll(expectLanguages),
+
+            () -> assertThat(actual.getJobPositions())
+                .containsAll(expectJobPositions)
         );
     }
 

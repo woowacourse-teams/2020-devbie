@@ -72,8 +72,8 @@ public class NoticeServiceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10 14:00")
-            .endDate("2020-10-10 15:00")
+            .startDate("2020-10-10T14:00")
+            .endDate("2020-10-10T15:00")
             .build();
 
         Long noticeId = noticeService.save(noticeRequest);
@@ -94,8 +94,8 @@ public class NoticeServiceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-20 13:00")
-            .endDate("2020-10-20 14:00")
+            .startDate("2020-10-20T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
 
         given(noticeRepository.findById(anyLong())).willReturn(Optional.of(request.toEntity(2L)));
@@ -144,8 +144,8 @@ public class NoticeServiceTest {
             () -> assertThat(noticeResponses.get(0).getId()).isEqualTo(1L),
             () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
             () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
-            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getName(),
-                Language.JAVASCRIPT.getName()),
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getText(),
+                Language.JAVASCRIPT.getText()),
             () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND)
         );
     }
@@ -176,7 +176,7 @@ public class NoticeServiceTest {
             () -> assertThat(noticeDetailResponse.getCompany().getSalary()).isEqualTo(50_000_000),
             () -> assertThat(noticeDetailResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getLanguages()).contains(
-                Language.JAVA.getName(), Language.JAVASCRIPT.getName()),
+                Language.JAVA.getText(), Language.JAVASCRIPT.getText()),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getContent()).isEqualTo("We are hiring!"),
             () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
         );

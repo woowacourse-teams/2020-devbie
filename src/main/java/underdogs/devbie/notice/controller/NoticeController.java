@@ -27,6 +27,7 @@ import underdogs.devbie.aws.S3Service;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.ImageUploadRequest;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -107,5 +108,12 @@ public class NoticeController {
     public ResponseEntity<NoticeDetailResponse> read(@PathVariable Long id) {
         NoticeDetailResponse response = noticeService.read(id);
         return ResponseEntity.ok(response);
+    }
+
+    @NoValidate
+    @GetMapping("/filters")
+    public ResponseEntity<FilterResponses> findLanguages() {
+        FilterResponses filterResponse = noticeService.findFilters();
+        return ResponseEntity.ok(filterResponse);
     }
 }

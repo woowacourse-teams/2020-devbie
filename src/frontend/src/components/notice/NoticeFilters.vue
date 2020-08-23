@@ -5,9 +5,9 @@
       class="filters"
       v-model="selectedPosition"
       v-on:change="changeJobPosition"
-      item-text="name"
-      item-value="value"
-      :items="position"
+      item-text="text"
+      item-value="key"
+      :items="fetchedJobPositions"
       hide-details
       label="직군"
       menu-props="auto"
@@ -17,9 +17,9 @@
       class="filters"
       v-model="selectedLanguage"
       v-on:change="changeLanguage"
-      item-text="name"
-      item-value="value"
-      :items="languages"
+      item-text="text"
+      item-value="key"
+      :items="fetchedLanguages"
       menu-props="auto"
       label="언어"
       hide-details
@@ -29,24 +29,20 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
       selectedPosition: "",
-      selectedLanguage: "",
-      position: [
-        { name: "무관", value: "" },
-        { name: "프론트엔드", value: "FRONTEND" },
-        { name: "백엔드", value: "BACKEND" }
-      ],
-      languages: [
-        { name: "무관", value: "" },
-        { name: "C", value: "C" },
-        { name: "C++", value: "CPP" },
-        { name: "JAVA", value: "JAVA" },
-        { name: "Python", value: "PYTHON" }
-      ]
+      selectedLanguage: ""
     };
+  },
+  created() {
+    this.$store.dispatch("FETCH_FILTERS");
+  },
+  computed: {
+    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
   },
   methods: {
     changeJobPosition() {
@@ -58,7 +54,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .filter-box {
   display: flex;
