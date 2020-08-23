@@ -44,15 +44,8 @@ export default {
   display: flex;
   flex-direction: column;
 }
-#chat_info_box {
-  flex-basis: 60px;
-}
 #chat_list_box {
-  flex-basis: 500px;
   flex-grow: 1;
   position: relative;
-}
-#chat_input_box {
-  flex-basis: 120px;
 }
 </style>
