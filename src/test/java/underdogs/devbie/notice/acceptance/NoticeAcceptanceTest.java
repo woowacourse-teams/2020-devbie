@@ -22,7 +22,6 @@ import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
-import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -70,9 +69,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
     Stream<DynamicTest> notice() {
         return Stream.of(
             dynamicTest("공고 게시글을 생성한다.", () -> {
-                NoticeCreateRequest noticeCreateRequest = createNotice();
-
-                post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
+                createNotice("언더독스 채용");
             }),
             dynamicTest("채용공고 게시글 전체를 조회한다.", () -> {
                 NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB", NoticeResponses.class);

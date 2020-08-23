@@ -44,7 +44,7 @@ class NoticeFavoriteServiceTest {
     void findFavoriteNotices() {
         List<Long> noticeIds = Arrays.asList(1L, 2L, 3L);
         given(noticeFavoriteRepository.findAllByUserId(1L)).willReturn(noticeIds);
-        noticeFavoriteService.findFavoriteNotices(1L);
+        noticeFavoriteService.findFavorites(1L);
         verify(noticeService).findAllByIds(noticeIds);
     }
 

@@ -13,13 +13,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
-import underdogs.devbie.favorite.service.NoticeFavoriteService;
+import underdogs.devbie.favorite.service.QuestionFavoriteService;
 import underdogs.devbie.user.domain.User;
 
-@WebMvcTest(NoticeFavoriteController.class)
-class NoticeFavoriteControllerTest extends MvcTest {
+@WebMvcTest(QuestionFavoriteController.class)
+class QuestionFavoriteControllerTest extends MvcTest {
 
-    private static String URL = "/api/favorite-notice?objectType=notice";
+    private static String URL = "/api/favorite-question?objectType=question";
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
@@ -28,11 +28,11 @@ class NoticeFavoriteControllerTest extends MvcTest {
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @MockBean
-    private NoticeFavoriteService noticeFavoriteService;
+    private QuestionFavoriteService questionFavoriteService;
 
-    @DisplayName("공고 즐겨 찾기 추가")
+    @DisplayName("질문 즐겨 찾기 추가")
     @Test
-    public void createFavorite() throws Exception {
+    void createFavorite() throws Exception {
         User user = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
@@ -44,10 +44,9 @@ class NoticeFavoriteControllerTest extends MvcTest {
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         postAction(URL + "&objectId=" + 1L).andExpect(status().isCreated());
-
     }
 
-    @DisplayName("공고 즐겨 찾기 삭제")
+    @DisplayName("질문 즐겨 찾기 삭제")
     @Test
     public void deleteFavorite() throws Exception {
         User user = User.builder()
@@ -63,4 +62,5 @@ class NoticeFavoriteControllerTest extends MvcTest {
         deleteAction(URL + "&objectId=" + 1L, "")
             .andExpect(status().isNoContent());
     }
+
 }
