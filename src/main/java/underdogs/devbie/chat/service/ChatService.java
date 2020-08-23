@@ -61,9 +61,9 @@ public class ChatService {
             .orElseGet(() -> chatRoomRepository.save(ChatRoom.from(noticeId)));
     }
 
+    @Transactional
     public void deleteNickName(String nickName, Long noticeId) {
         ChatRoom chatRoom = getChatRoom(noticeId);
         chatRoom.deleteChatName(ChatName.of(nickName));
-        chatRoomRepository.save(chatRoom);
     }
 }
