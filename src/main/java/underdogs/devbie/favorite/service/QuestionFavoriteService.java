@@ -8,28 +8,28 @@ import org.springframework.stereotype.Service;
 import underdogs.devbie.exception.BadRequestException;
 import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.favorite.domain.Favorite;
-import underdogs.devbie.favorite.domain.NoticeFavorite;
-import underdogs.devbie.favorite.domain.NoticeFavoriteRepository;
-import underdogs.devbie.notice.dto.NoticeResponses;
-import underdogs.devbie.notice.service.NoticeService;
+import underdogs.devbie.favorite.domain.QuestionFavorite;
+import underdogs.devbie.favorite.domain.QuestionFavoriteRepository;
+import underdogs.devbie.question.dto.QuestionResponses;
+import underdogs.devbie.question.service.QuestionService;
 import underdogs.devbie.user.service.UserService;
 
 @Service
-public class NoticeFavoriteService extends FavoriteService {
+public class QuestionFavoriteService extends FavoriteService {
 
-    private NoticeService noticeService;
+    private QuestionService questionService;
 
-    public NoticeFavoriteService(NoticeFavoriteRepository noticeFavoriteRepository, UserService userService,
-        NoticeService noticeService) {
-        this.favoriteRepository = noticeFavoriteRepository;
+    public QuestionFavoriteService(QuestionFavoriteRepository questionFavoriteRepository, UserService userService,
+        QuestionService questionService) {
+        this.favoriteRepository = questionFavoriteRepository;
         this.userService = userService;
-        this.noticeService = noticeService;
+        this.questionService = questionService;
     }
 
     @Override
-    public NoticeResponses findFavorites(Long userId) {
-        List<Long> noticeIds = favoriteRepository.findAllByUserId(userId);
-        return noticeService.findAllByIds(noticeIds);
+    public QuestionResponses findFavorites(Long userId) {
+        List<Long> questionIds = favoriteRepository.findAllByUserId(userId);
+        return questionService.findAllByIds(questionIds);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class NoticeFavoriteService extends FavoriteService {
         if (optionalFavorite.isPresent()) {
             throw new BadRequestException("이미 즐겨찾기 추가된 항목입니다.");
         }
-        favoriteRepository.save(NoticeFavorite.of(objectId, userId));
+        favoriteRepository.save(QuestionFavorite.of(objectId, userId));
     }
 
     @Override
@@ -47,6 +47,5 @@ public class NoticeFavoriteService extends FavoriteService {
         Favorite favorite = optionalFavorite.orElseThrow(() -> new NotExistException("Favorite"));
 
         favoriteRepository.delete(favorite);
-
     }
 }

@@ -12,5 +12,4 @@ public class NoticeFavoriteController extends FavoriteController {
     public NoticeFavoriteController(NoticeFavoriteService noticeFavoriteService) {
         this.favoriteService = noticeFavoriteService;
     }
-
 }

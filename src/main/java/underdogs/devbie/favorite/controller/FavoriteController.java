@@ -27,7 +27,7 @@ public abstract class FavoriteController {
         @LoginUser User user
     ) {
         validateUser(userId, user);
-        return ResponseEntity.ok(favoriteService.findFavoriteNotices(userId));
+        return ResponseEntity.ok(favoriteService.findFavorites(userId));
     }
 
     private void validateUser(Long userId, User user) {

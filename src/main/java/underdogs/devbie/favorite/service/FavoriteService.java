@@ -14,7 +14,7 @@ public abstract class FavoriteService<T extends Favorite> {
     protected FavoriteRepository favoriteRepository;
     protected UserService userService;
 
-    public abstract Object findFavoriteNotices(Long userId);
+    public abstract Object findFavorites(Long userId);
 
     @Transactional
     public abstract void createFavorite(Long objectId, Long userId);
