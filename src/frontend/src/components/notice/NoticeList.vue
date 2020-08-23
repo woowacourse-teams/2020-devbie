@@ -27,13 +27,10 @@
             <div>
               {{ notice.jobPosition }}
             </div>
-            <v-btn
-              icon
-              @click.stop="onFavorite(notice.id)"
-              :class="{ clicked: isUserNoticeFavorites(notice.id) }"
-            >
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            <favorite-control
+              :targetObjectId="notice.id"
+              :isUserFavorite="isUserNoticeFavorites(notice.id)"
+            ></favorite-control>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -43,8 +40,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
+  components: { FavoriteControl },
+
   computed: {
     ...mapGetters([
       "isLoggedIn",
@@ -167,9 +167,5 @@ export default {
 }
 .v-card:hover {
   opacity: 0.6;
-}
-
-.clicked {
-  background-color: pink;
 }
 </style>
