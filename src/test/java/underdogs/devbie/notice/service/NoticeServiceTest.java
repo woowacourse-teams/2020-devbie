@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,9 +46,12 @@ public class NoticeServiceTest {
     @Mock
     private NoticeRepository noticeRepository;
 
+    @Autowired
+    private NoticeKeyGenerator noticeKeyGenerator;
+
     @BeforeEach
     void setUp() {
-        noticeService = new NoticeService(noticeRepository);
+        noticeService = new NoticeService(noticeRepository, noticeKeyGenerator);
     }
 
     @DisplayName("게시글 저장")
@@ -77,8 +81,8 @@ public class NoticeServiceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10 14:00")
-            .endDate("2020-10-10 15:00")
+            .startDate("2020-10-10T14:00")
+            .endDate("2020-10-10T15:00")
             .build();
 
         Long noticeId = noticeService.save(noticeRequest);
@@ -99,8 +103,8 @@ public class NoticeServiceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf("2020-10-20 13:00"))
-            .endDate(String.valueOf("2020-10-20 14:00"))
+            .startDate("2020-10-20T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
 
         given(noticeRepository.findById(anyLong())).willReturn(Optional.of(request.toEntity(2L)));

@@ -1,10 +1,10 @@
 package underdogs.devbie.auth.exception;
 
-public class InvalidAuthenticationException extends RuntimeException {
+import underdogs.devbie.exception.ForbiddenException;
 
-    private static final String INVALID_TOKEN_MESSAGE = "유효하지 않은 토큰입니다.";
+public class InvalidAuthenticationException extends ForbiddenException {
 
-    public InvalidAuthenticationException() {
-        super(INVALID_TOKEN_MESSAGE);
+    public InvalidAuthenticationException(String reason) {
+        super(reason);
     }
 }

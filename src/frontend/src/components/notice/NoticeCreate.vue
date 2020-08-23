@@ -65,7 +65,7 @@
         label="회사설명"
         :rules="rules.text"
       ></v-textarea>
-      <v-btn color="success" class="mr-4 submit" @click="validate">
+      <v-btn color="success" class="mr-4 submit" @click="submit">
         작성하기
       </v-btn>
     </v-form>
@@ -74,7 +74,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser } from "../../utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
@@ -107,8 +106,7 @@ export default {
 
   created() {
     this.checkAdmin();
-    this.$store.dispatch("FETCH_LANGUAGES");
-    this.$store.dispatch("FETCH_JOB_POSITIONS");
+    this.$store.dispatch("FETCH_FILTERS");
   },
 
   methods: {
@@ -136,13 +134,10 @@ export default {
         console.error(e);
       }
     },
-    async validate() {
+    async submit() {
       if (!this.$refs.form.validate()) {
         return;
       }
-
-      this.request.startDate = dateParser(this.request.startDate);
-      this.request.endDate = dateParser(this.request.endDate);
 
       try {
         await this.$store.dispatch("CREATE_NOTICE", this.request);

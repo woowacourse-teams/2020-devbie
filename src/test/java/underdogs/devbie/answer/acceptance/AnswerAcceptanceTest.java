@@ -46,6 +46,7 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
     private static final String CHANGED_CONTENT = "Changed Content";
     private static final long QUESTION_ID = 1L;
     private static final String ACCEPTANCE_TEST_CONTENT = "ACCEPTANCE_TEST_CONTENT";
+    private static final long ANSWER_ID = 1L;
 
     @DisplayName("면접 답변 인수테스트")
     @TestFactory
@@ -55,18 +56,6 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
                 AnswerCreateRequest request = AnswerCreateRequest.of(QUESTION_ID, ACCEPTANCE_TEST_CONTENT);
                 post("/api/answers", OBJECT_MAPPER.writeValueAsString(request));
             }),
-            dynamicTest("전체 답변 조회", () -> {
-                AnswerResponses answerResponses = get("/api/answers", AnswerResponses.class);
-
-                assertNotNull(answerResponses);
-                assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
-                AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
-                assertAll(
-                    () -> assertEquals(answerResponse.getId(), 1L),
-                    () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
-                    () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
-                );
-            }),
             dynamicTest("질문 id로 답변 조회", () -> {
                 AnswerResponses answerResponses = get(String.format("/api/answers?questionId=%d", QUESTION_ID),
                     AnswerResponses.class);
@@ -75,52 +64,35 @@ public class AnswerAcceptanceTest extends AcceptanceTest {
                 assertThat(answerResponses.getAnswerResponses()).isNotEmpty();
                 AnswerResponse answerResponse = answerResponses.getAnswerResponses().get(0);
                 assertAll(
-                    () -> assertEquals(answerResponse.getId(), 1L),
+                    () -> assertEquals(answerResponse.getId(), ANSWER_ID),
                     () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
                     () -> assertEquals(answerResponse.getContent(), ACCEPTANCE_TEST_CONTENT)
                 );
             }),
             dynamicTest("답변 수정", () -> {
-                AnswerResponse firstAnswer = fetchFirstAnswer();
-                Long answerId = firstAnswer.getId();
-
                 AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.from(CHANGED_CONTENT);
 
-                patch(String.format("/api/answers/%d", answerId),
+                patch(String.format("/api/answers/%d", ANSWER_ID),
                     OBJECT_MAPPER.writeValueAsString(answerUpdateRequest));
-                AnswerResponse answerResponse = get(String.format("/api/answers/%d", answerId), AnswerResponse.class);
+                AnswerResponse answerResponse = get(String.format("/api/answers/%d", ANSWER_ID), AnswerResponse.class);
                 assertAll(
-                    () -> assertEquals(answerResponse.getId(), answerId),
+                    () -> assertEquals(answerResponse.getId(), ANSWER_ID),
                     () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
                     () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
                 );
             }),
             dynamicTest("수정한 답변 조회", () -> {
-                AnswerResponse firstAnswer = fetchFirstAnswer();
-                Long answerId = firstAnswer.getId();
-
-                AnswerResponse answerResponse = get(String.format("/api/answers/%d", answerId), AnswerResponse.class);
+                AnswerResponse answerResponse = get(String.format("/api/answers/%d", ANSWER_ID), AnswerResponse.class);
 
                 assertAll(
-                    () -> assertEquals(answerResponse.getId(), 1L),
+                    () -> assertEquals(answerResponse.getId(), ANSWER_ID),
                     () -> assertEquals(answerResponse.getQuestionId(), QUESTION_ID),
                     () -> assertEquals(answerResponse.getContent(), CHANGED_CONTENT)
                 );
             }),
             dynamicTest("답변 삭제", () -> {
-                AnswerResponse firstAnswer = fetchFirstAnswer();
-                Long answerId = firstAnswer.getId();
-
-                delete(String.format("/api/answers/%d", answerId));
-
-                AnswerResponses answers = get("/api/answers", AnswerResponses.class);
-                assertThat(answers.getAnswerResponses()).hasSize(0);
+                delete(String.format("/api/answers/%d", ANSWER_ID));
             })
         );
-    }
-
-    private AnswerResponse fetchFirstAnswer() {
-        AnswerResponses answerResponses = get("/api/answers", AnswerResponses.class);
-        return answerResponses.getAnswerResponses().get(0);
     }
 }

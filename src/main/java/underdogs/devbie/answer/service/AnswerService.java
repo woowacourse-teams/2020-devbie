@@ -1,5 +1,8 @@
 package underdogs.devbie.answer.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +18,14 @@ import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.exception.AnswerNotExistedException;
 import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
 import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.service.UserService;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AnswerService {
 
+    private final UserService userService;
     private final AnswerRepository answerRepository;
 
     @Transactional
@@ -31,7 +36,12 @@ public class AnswerService {
 
     public AnswerResponses readAll() {
         Answers answers = Answers.from(answerRepository.findAll());
-        return AnswerResponses.from(answers);
+
+        List<User> users = answers.getAnswers().stream()
+            .map(answer -> userService.findById(answer.getUserId()))
+            .collect(Collectors.toList());
+
+        return AnswerResponses.of(answers, users);
     }
 
     @Transactional
@@ -60,7 +70,9 @@ public class AnswerService {
     }
 
     public AnswerResponse read(Long id) {
-        return AnswerResponse.from(readOne(id));
+        Answer answer = readOne(id);
+        User author = userService.findById(answer.getUserId());
+        return AnswerResponse.of(answer, author);
     }
 
     @Transactional
@@ -73,7 +85,12 @@ public class AnswerService {
     }
 
     public AnswerResponses readByQuestionId(Long questionId) {
-        Answers answers = Answers.from(answerRepository.findByQuestionId(questionId));
-        return AnswerResponses.from(answers);
+        Answers answers = Answers.from(answerRepository.findByQuestionIdOrderByRecommendationCount(questionId));
+
+        List<User> users = answers.getAnswers().stream()
+            .map(answer -> userService.findById(answer.getUserId()))
+            .collect(Collectors.toList());
+
+        return AnswerResponses.of(answers, users);
     }
 }

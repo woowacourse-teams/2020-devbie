@@ -111,7 +111,7 @@ class QuestionControllerTest extends MvcTest {
     @Test
     void read() throws Exception {
         QuestionResponse response = QuestionResponse.builder()
-            .questionId(1L)
+            .id(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
             .hashtags(Lists.newArrayList(
@@ -121,7 +121,7 @@ class QuestionControllerTest extends MvcTest {
 
         given(questionService.read(anyLong(), anyBoolean())).willReturn(response);
 
-        MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId() + "?visit=true")
+        MvcResult mvcResult = getAction("/api/questions/" + response.getId() + "?visit=true")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
@@ -144,7 +144,7 @@ class QuestionControllerTest extends MvcTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
-
+        
         willDoNothing().given(questionService).update(anyLong(), anyLong(), any(QuestionUpdateRequest.class));
 
         patchAction("/api/questions/1", inputJson, TEST_TOKEN)

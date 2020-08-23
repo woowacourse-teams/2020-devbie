@@ -55,92 +55,58 @@ export default {
         return notice;
       });
     },
-    SET_LANGUAGES(state, data) {
-      const languages = [{ key: "", text: "무관" }];
-      state.languages = languages.concat(data.map(res => res.pair));
-    },
-    SET_JOB_POSITIONS(state, data) {
-      const jobPositions = [{ key: "", text: "무관" }];
-      state.jobPositions = jobPositions.concat(data.map(res => res.pair));
-    },
     SET_PAGING(state, lastPage) {
       state.page = state.page + 1;
       state.lastPage = lastPage;
+    },
+    SET_FILTERS(state, data) {
+      const languages = [{ key: "", text: "무관" }];
+      state.languages = languages.concat(data.languages.map(res => res.pair));
+
+      const jobPositions = [{ key: "", text: "무관" }];
+      state.jobPositions = jobPositions.concat(
+        data.jobPositions.map(res => res.pair)
+      );
     }
   },
   actions: {
     async FETCH_NOTICES({ commit }, queryUrl) {
-      try {
-        const { data } = await getAction(`/api/notices?` + queryUrl);
-        commit("UPDATE_NOTICES", data);
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(`/api/notices?` + queryUrl);
+      commit("UPDATE_NOTICES", data);
+      return data;
     },
     async FETCH_NOTICE({ commit }, noticeId) {
-      try {
-        const { data } = await getAction(`/api/notices/${noticeId}`);
-        commit("SET_NOTICE", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(`/api/notices/${noticeId}`);
+      commit("SET_NOTICE", data);
     },
     async DELETE_NOTICE({ commit }, noticeId) {
-      try {
-        await deleteAction(`/api/notices/${noticeId}`);
-        commit("DELETE_NOTICE", Number(noticeId));
-      } catch (error) {
-        console.log(error);
-      }
+      await deleteAction(`/api/notices/${noticeId}`);
+      commit("DELETE_NOTICE", Number(noticeId));
     },
     async EDIT_NOTICE({ commit }, { id, params }) {
-      try {
-        await patchAction(`/api/notices/${id}`, params);
-        commit("UPDATE_NOTICE", id, params);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async FETCH_LANGUAGES({ commit }) {
-      try {
-        const { data } = await getAction(`/api/notices/languages`);
-        commit("SET_LANGUAGES", data.languages);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async FETCH_JOB_POSITIONS({ commit }) {
-      try {
-        const { data } = await getAction(`/api/notices/job-positions`);
-        commit("SET_JOB_POSITIONS", data.jobPositions);
-      } catch (error) {
-        console.log(error);
-      }
+      await patchAction(`/api/notices/${id}`, params);
+      commit("UPDATE_NOTICE", id, params);
     },
     async CREATE_NOTICE({ commit }, noticeRequest) {
-      try {
-        const response = await postAction(`/api/notices`, noticeRequest);
-        const id = response["headers"].location.split("/")[3];
-        commit("SET_NOTICE_ID", id);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await postAction(`/api/notices`, noticeRequest);
+      const id = response["headers"].location.split("/")[3];
+      commit("SET_NOTICE_ID", id);
+    },
+    async FETCH_FILTERS({ commit }) {
+      const { data } = await getAction(`/api/notices/filters`);
+      commit("SET_FILTERS", data);
     },
     // eslint-disable-next-line no-unused-vars
     async UPLOAD_NOTICE_IMAGE({ commit }, payload) {
-      try {
-        const response = await postAction(
-          `/api/notices/image`,
-          payload,
-          `content-type: multipart/form-data`
-        );
-        return response["headers"].location;
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await postAction(
+        `/api/notices/image`,
+        payload,
+        `content-type: multipart/form-data`
+      );
+      return response["headers"].location;
     }
   },
+
   getters: {
     fetchedNotices(state) {
       return state.notices;
@@ -160,17 +126,17 @@ export default {
     fetchedNewCreatedNoticeId(state) {
       return state.noticeId;
     },
-    fetchedLanguages(state) {
-      return state.languages;
-    },
-    fetchedJobPositions(state) {
-      return state.jobPositions;
-    },
     fetchedPage(state) {
       return state.page;
     },
     fetchedLastPage(state) {
       return state.lastPage;
+    },
+    fetchedLanguages(state) {
+      return state.languages;
+    },
+    fetchedJobPositions(state) {
+      return state.jobPositions;
     }
   }
 };

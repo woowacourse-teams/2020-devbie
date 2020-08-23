@@ -61,7 +61,6 @@
         v-model="request.description"
         name="input-7-4"
         label="회사설명"
-        value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
         :rules="rules.text"
       ></v-textarea>
       <v-btn color="success" class="mr-4 submit" @click="submit">
@@ -73,7 +72,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { dateParser, languageTranslator } from "@/utils/noticeUtil";
+import { languageTranslator } from "@/utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
@@ -95,13 +94,22 @@ export default {
 
   async created() {
     await this.checkAdmin();
-    await this.$store.dispatch("FETCH_LANGUAGES");
-    await this.$store.dispatch("FETCH_JOB_POSITIONS");
+    await this.$store.dispatch("FETCH_FILTERS");
 
     this.id = this.$route.params.id;
-    await this.$store.dispatch("FETCH_NOTICE", this.id);
+    try {
+      await this.$store.dispatch("FETCH_NOTICE", this.id);
+    } catch (error) {
+      console.log("공고 불러오기 실패 " + error.response.data.message);
+      return this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고 불러오기 실패했습니다. "
+      );
+    }
 
-    this.request = await this.parameterInitialize();
+    this.request = {
+      ...(await this.parameterInitialize())
+    };
   },
 
   methods: {
@@ -130,9 +138,6 @@ export default {
       }
     },
     async submit() {
-      this.request.startDate = dateParser(this.request.startDate);
-      this.request.endDate = dateParser(this.request.endDate);
-
       try {
         await this.$store.dispatch("EDIT_NOTICE", {
           id: this.id,
@@ -149,16 +154,14 @@ export default {
         name: this.fetchedNotice.company.name,
         jobPosition: this.fetchedNotice.jobPosition,
         noticeType: this.fetchedNotice.noticeType,
-        startDate: dateParser(
+        startDate:
           this.fetchedNotice.duration === null
             ? ""
-            : this.fetchedNotice.duration.startDate
-        ),
-        endDate: dateParser(
+            : this.fetchedNotice.duration.startDate,
+        endDate:
           this.fetchedNotice.duration === null
             ? ""
-            : this.fetchedNotice.duration.endDate
-        ),
+            : this.fetchedNotice.duration.endDate,
         description: this.fetchedNotice.noticeDescription.content,
         languages: this.fetchedNotice.noticeDescription.languages.map(
           language => languageTranslator(language)
@@ -175,7 +178,7 @@ export default {
 .container {
   display: flex;
   width: 500px;
-  justify-content: center !important;
+  justify-content: center;
   align-items: center;
 }
 .notice-form {

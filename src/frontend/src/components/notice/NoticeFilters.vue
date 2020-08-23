@@ -44,8 +44,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch("FETCH_LANGUAGES");
-    this.$store.dispatch("FETCH_JOB_POSITIONS");
+    this.$store.dispatch("FETCH_FILTERS");
   },
 
   methods: {
@@ -58,6 +57,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .filter-box {
   display: flex;

@@ -12,6 +12,7 @@ import lombok.Getter;
 import reactor.core.publisher.Mono;
 import underdogs.devbie.auth.dto.AccessTokenRequest;
 import underdogs.devbie.auth.dto.AccessTokenResponse;
+import underdogs.devbie.auth.exception.AccessTokenLoadException;
 import underdogs.devbie.auth.dto.UserInfoDto;
 
 @Getter
@@ -49,7 +50,7 @@ public class GithubClient {
 
     private void validateResponse(ClientResponse response) {
         if (!response.statusCode().is2xxSuccessful()) {
-            throw new RuntimeException("access token을 가져오는데 실패했습니다." + " response status code" + response.statusCode());
+            throw new AccessTokenLoadException();
         }
     }
 

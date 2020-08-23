@@ -1,6 +1,6 @@
 package underdogs.devbie.answer.dto;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -18,7 +18,7 @@ public class AnswerCreateRequest {
     @NotNull(message = "Question ID가 존재하지 않습니다.")
     private Long questionId;
 
-    @NotEmpty(message = "본문이 비어있습니다.")
+    @NotBlank(message = "본문이 비어있습니다.")
     private String content;
 
     public static AnswerCreateRequest of(Long questionId, String content) {

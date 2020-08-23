@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import io.jsonwebtoken.Claims;
 import underdogs.devbie.auth.dto.UserTokenDto;
-import underdogs.devbie.auth.exception.InvalidAuthenticationException;
+import underdogs.devbie.auth.exception.AccessTokenLoadException;
 import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
@@ -59,8 +59,8 @@ class JwtTokenProviderTest {
         String invalidToken = "token";
 
         assertThatThrownBy(() -> jwtTokenProvider.extractValidSubject(invalidToken))
-            .isInstanceOf(InvalidAuthenticationException.class)
-            .hasMessage("유효하지 않은 토큰입니다.");
+            .isInstanceOf(AccessTokenLoadException.class)
+            .hasMessage("요청자의 신분을 확인하지 못하였습니다. 원인 : 토큰을 Load하지 못하였습니다.");
     }
 
     @DisplayName("jwt 토큰 복호화 - 유효하지 않은 빈 토큰")
@@ -69,7 +69,7 @@ class JwtTokenProviderTest {
         String invalidToken = "";
 
         assertThatThrownBy(() -> jwtTokenProvider.extractValidSubject(invalidToken))
-            .isInstanceOf(InvalidAuthenticationException.class)
-            .hasMessage("유효하지 않은 토큰입니다.");
+            .isInstanceOf(AccessTokenLoadException.class)
+            .hasMessage("요청자의 신분을 확인하지 못하였습니다. 원인 : 토큰을 Load하지 못하였습니다.");
     }
 }

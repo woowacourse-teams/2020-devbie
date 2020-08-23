@@ -1,6 +1,7 @@
 package underdogs.devbie.notice.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
@@ -29,6 +30,10 @@ public class Duration {
     }
 
     private void validateParameters(LocalDateTime startDate, LocalDateTime endDate) {
+        if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
+            return;
+        }
+
         if (startDate.isAfter(endDate)) {
             throw new InvalidDurationException();
         }

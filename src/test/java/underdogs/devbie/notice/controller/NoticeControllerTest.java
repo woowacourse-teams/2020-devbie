@@ -37,6 +37,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -46,9 +47,7 @@ import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 import underdogs.devbie.notice.vo.JobPositionPair;
-import underdogs.devbie.notice.vo.JobPositionsResponse;
 import underdogs.devbie.notice.vo.LanguagePair;
-import underdogs.devbie.notice.vo.LanguagesResponse;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
@@ -87,8 +86,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-10T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -100,8 +99,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-20T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
         ;
     }
@@ -151,7 +150,8 @@ public class NoticeControllerTest extends MvcTest {
     void update() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
 
-        doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
+        given(noticeService.update(anyLong(), any(NoticeUpdateRequest.class)))
+            .willReturn(NoticeDetailResponse.from(noticeUpdateRequest.toEntity(1L)));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().isNoContent())
@@ -212,7 +212,7 @@ public class NoticeControllerTest extends MvcTest {
             .build());
 
         given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
-            .willReturn(NoticeResponses.listFrom(notices, noticePage.getTotalPages()));
+            .willReturn(NoticeResponses.listFrom(notices, 1000));
 
         MvcResult mvcResult = getAction("/api/notices?noticeType=JOB&page=1&size=10")
             .andExpect(status().isOk())
@@ -270,50 +270,35 @@ public class NoticeControllerTest extends MvcTest {
         );
     }
 
-    @DisplayName("사용자 요청을 통해 모든 프로그래밍 언어 조회")
+    @DisplayName("사용자 요청을 통해 모든 필터정보 조회")
     @Test
     void findLanguages() throws Exception {
-        given(noticeService.findLanguages())
-            .willReturn(LanguagesResponse.get());
+        given(noticeService.findFilters())
+            .willReturn(FilterResponses.get());
 
-        MvcResult mvcResult = getAction("/api/notices/languages")
+        MvcResult mvcResult = getAction("/api/notices/filters")
             .andExpect(status().isOk())
             .andReturn();
 
-        LanguagesResponse languagesResponse = objectMapper.readValue(
+        FilterResponses actual = objectMapper.readValue(
             mvcResult.getResponse().getContentAsString(),
-            LanguagesResponse.class
+            FilterResponses.class
         );
 
-        List<LanguagePair> languagePairs = Arrays.stream(Language.values())
+        List<LanguagePair> expectLanguages = Arrays.stream(Language.values())
             .map(LanguagePair::from)
             .collect(toList());
-
-        assertThat(languagesResponse.getLanguages())
-            .containsAll(languagePairs);
-    }
-
-    @DisplayName("사용자 요청을 통해 모든 채용포지션 조회")
-    @Test
-    void findJobPosition() throws Exception {
-        given(noticeService.findJobPositions())
-            .willReturn(JobPositionsResponse.get());
-
-        MvcResult mvcResult = getAction("/api/notices/job-positions")
-            .andExpect(status().isOk())
-            .andReturn();
-
-        JobPositionsResponse jobPositionsResponse = objectMapper.readValue(
-            mvcResult.getResponse().getContentAsString(),
-            JobPositionsResponse.class
-        );
-
-        List<JobPositionPair> jobPositionPairs = Arrays.stream(JobPosition.values())
+        List<JobPositionPair> expectJobPositions = Arrays.stream(JobPosition.values())
             .map(JobPositionPair::from)
             .collect(toList());
 
-        assertThat(jobPositionsResponse.getJobPositions())
-            .containsAll(jobPositionPairs);
+        assertAll(
+            () -> assertThat(actual.getLanguages())
+                .containsAll(expectLanguages),
+
+            () -> assertThat(actual.getJobPositions())
+                .containsAll(expectJobPositions)
+        );
     }
 
     private void validateNoticeCreateRequest() throws Exception {
@@ -321,14 +306,12 @@ public class NoticeControllerTest extends MvcTest {
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
 
         postAction("/api/notices", inputJson, TEST_TOKEN)
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isMethodNotAllowed())
             .andDo(print());
     }
 
     private void validateUpdateRequest() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
-
-        willDoNothing().given(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().is4xxClientError())

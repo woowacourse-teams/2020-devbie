@@ -10,6 +10,7 @@ import underdogs.devbie.auth.dto.UserInfoDto;
 
 public class UserTest {
 
+    public static final String TEST_NAME = "test_name";
     public static final String TEST_USER_EMAIL = "underdogs@devbie.link";
     public static final String TEST_OAUTH_ID = "TEST_OAUTH_ID";
     public static final String TEST_GITHUB_ID = "underdogs";

@@ -2,10 +2,8 @@
   <div class="question-detail">
     <div class="inner">
       <div class="question-header">
-        <div class="question-title">
+        <div class="left-container">
           <h1>Q. {{ fetchedQuestion.title }}</h1>
-        </div>
-        <div class="question-header-bottom">
           <div class="hashtags">
             <span
               v-for="hashtag in fetchedQuestion.hashtags"
@@ -15,142 +13,67 @@
               >#{{ hashtag.tagName }}
             </span>
           </div>
+        </div>
+        <div class="right-container">
           <div class="question-info">
             <p class="infos">
               <i class="fas fa-user-edit"></i>
-              {{ fetchedQuestion.userId }}
+              {{ fetchedQuestion.author }}
             </p>
             <p class="infos">
               <i class="fas fa-eye"></i>
               {{ fetchedQuestion.visits }}
             </p>
-            <p class="infos">
-              <i
-                :class="{
-                  'recommendation-clicked': isUserRecommendation('RECOMMENDED')
-                }"
-                class="far fa-thumbs-up recommendation"
-                @click="
-                  onQuestionRecommendation('NON_RECOMMENDED', 'RECOMMENDED')
-                "
-              ></i>
-              {{ fetchedQuestion.recommendedCount }}
-            </p>
-            <p class="infos">
-              <i
-                :class="{
-                  'recommendation-clicked': isUserRecommendation(
-                    'NON_RECOMMENDED'
-                  )
-                }"
-                class="far fa-thumbs-down recommendation"
-                @click="
-                  onQuestionRecommendation('RECOMMENDED', 'NON_RECOMMENDED')
-                "
-              ></i>
-              {{ fetchedQuestion.nonRecommendedCount }}
-            </p>
           </div>
+          <recommendation-control
+            :targetObject="fetchedQuestion"
+            :isQuestion="true"
+          ></recommendation-control>
         </div>
       </div>
-      <div class="question-content">
-        <div v-html="content"></div>
-      </div>
+      <markdown-content
+        class="question-content"
+        :content="content"
+      ></markdown-content>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import MarkdownContent from "./MarkdownContent";
+import RecommendationControl from "./RecommendationControl";
 
 export default {
+  components: {
+    MarkdownContent,
+    RecommendationControl
+  },
+
+  props: ["loginUser"],
+
   data() {
     return {
-      loginUser: {},
-      questionId: this.$route.params.id,
-      userRecommended: "",
       content: ""
     };
   },
+
   computed: {
-    ...mapGetters([
-      "fetchedLoginUser",
-      "fetchedQuestion",
-      "fetchedMyQuestionRecommendation"
-    ])
+    ...mapGetters(["fetchedQuestion"])
   },
+
+  created() {
+    this.updateCurrentQuestion();
+  },
+
   methods: {
-    async onQuestionRecommendation(priorType, newType) {
-      if (!this.loginUser.id) {
-        console.log("you should login");
-        return;
-      }
-      if (this.isCreateOrUpdateRecommendation(priorType)) {
-        await this.$store.dispatch("ON_QUESTION_RECOMMENDATION", {
-          questionId: this.questionId,
-          recommendationType: newType
-        });
-      } else {
-        await this.$store.dispatch(
-          "DELETE_QUESTION_RECOMMENDATION",
-          this.questionId
-        );
-      }
-    },
-    async fetchMyQuestionRecommendation(questionId, userId) {
-      await this.$store.dispatch("FETCH_MY_QUESTION_RECOMMENDATION", {
-        questionId,
-        userId
-      });
-      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-    },
-    isCreateOrUpdateRecommendation(priorType) {
-      return (
-        this.userRecommended === "NOT_EXIST" ||
-        this.userRecommended === priorType
+    async updateCurrentQuestion() {
+      await this.$store.dispatch(
+        "FETCH_QUESTION_WITHOUT_VISITS",
+        this.$route.params.id
       );
-    },
-    isUserRecommendation(recommendationType) {
-      return (
-        this.fetchedMyQuestionRecommendation &&
-        this.userRecommended === recommendationType
-      );
+      this.content = this.fetchedQuestion.content;
     }
-  },
-  watch: {
-    fetchedLoginUser() {
-      this.loginUser = this.fetchedLoginUser;
-      if (!this.fetchedLoginUser.id) {
-        this.userRecommended = "NOT_EXIST";
-        return;
-      }
-      this.fetchMyQuestionRecommendation(
-        this.questionId,
-        this.fetchedLoginUser.id
-      );
-    },
-    fetchedMyQuestionRecommendation() {
-      this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
-      this.$store.dispatch(
-        "UPDATE_QUESTION_RECOMMENDATION_COUNT",
-        this.questionId
-      );
-    },
-    fetchedQuestion() {
-      this.content = this.fetchedQuestion.content.split("\n").join("<br />");
-    }
-  },
-  async created() {
-    this.loginUser = this.fetchedLoginUser;
-    await this.$store.dispatch("FETCH_QUESTION", this.questionId);
-    this.content = this.fetchedQuestion.content.split("\n").join("<br />");
-    if (this.fetchedLoginUser.id) {
-      await this.fetchMyQuestionRecommendation(
-        this.questionId,
-        this.fetchedLoginUser.id
-      );
-    }
-    await this.$emit("fetchUserId", this.fetchedQuestion.userId);
   }
 };
 </script>
@@ -163,51 +86,46 @@ export default {
   margin-left: 20px;
 }
 
-.question-title {
-  margin-bottom: 12px;
-}
-
 .question-header {
+  display: flex;
+  justify-content: space-between;
   padding: 18px;
   border-bottom: solid 1px #e8e8e8;
 }
 
-.question-header-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.left-container h1 {
+  margin-bottom: 12px;
+}
+
+.right-container {
+  min-width: 190px;
+  margin-top: 7px;
 }
 
 .hashtag {
-  margin: 0 9px;
+  margin: 3px 9px;
   color: #0086b3;
 }
 
 .hashtag:hover {
   cursor: pointer;
   font-weight: bold;
-  color: #445588;
+  color: #fc8c84;
   text-decoration: underline;
 }
 
 .question-info {
   min-width: 180px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-bottom: 6px;
 }
 
 .question-info .infos {
-  font-size: 16px;
+  font-size: 17px;
   margin-right: 15px;
   margin-bottom: 0;
-}
-
-.recommendation:hover {
-  cursor: pointer;
-}
-
-.recommendation-clicked {
-  color: #7ec699;
+  color: #6d819c;
 }
 
 .question-info .infos:last-child {
@@ -222,8 +140,8 @@ export default {
 .inner {
   width: 95%;
   box-sizing: border-box;
-  padding: 10px 0 40px 0;
+  padding: 10px 0 30px 0;
   border-bottom: solid 1px #e8e8e8;
-  height: 400px;
+  min-height: 400px;
 }
 </style>
