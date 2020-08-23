@@ -3,6 +3,7 @@ package underdogs.devbie.notice.dto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,6 +18,7 @@ import underdogs.devbie.notice.domain.NoticeType;
 @Builder
 @Getter
 @ToString
+@EqualsAndHashCode
 public class NoticeDetailResponse {
 
     private Long id;
