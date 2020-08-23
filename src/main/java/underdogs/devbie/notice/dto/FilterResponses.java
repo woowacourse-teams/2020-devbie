@@ -21,15 +21,15 @@ public class FilterResponses {
     private static final FilterResponses filterResponses;
 
     static {
-        List<LanguagePair> collect = Arrays.stream(Language.values())
+        List<LanguagePair> languages = Arrays.stream(Language.values())
             .map(LanguagePair::from)
             .collect(Collectors.toList());
 
-        List<JobPositionPair> collect1 = Arrays.stream(JobPosition.values())
+        List<JobPositionPair> jobPositions = Arrays.stream(JobPosition.values())
             .map(JobPositionPair::from)
             .collect(Collectors.toList());
 
-        filterResponses = new FilterResponses(collect, collect1);
+        filterResponses = new FilterResponses(languages, jobPositions);
     }
 
     private List<LanguagePair> languages;
