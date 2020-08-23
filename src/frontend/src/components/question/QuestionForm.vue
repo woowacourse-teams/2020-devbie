@@ -1,6 +1,6 @@
 <template>
-  <div class="question-form">
-    <div class="inner">
+  <div class="inner">
+    <v-form ref="form" v-model="valid" lazy-validation class="question-form">
       <v-text-field
         class="input-box"
         label="질문 제목"
@@ -37,11 +37,11 @@
           </v-btn>
         </form-button>
       </div>
-    </div>
+    </v-form>
   </div>
 </template>
 <script>
-import HashtagBox from "./HashtagBox";
+import HashtagBox from "../hashtag/HashtagBox";
 import FormButton from "./FormButton";
 import { mapGetters } from "vuex";
 
@@ -55,6 +55,7 @@ export default {
 
   data() {
     return {
+      valid: true,
       questionId: this.$route.params.id,
       title: "",
       content: "",
@@ -88,6 +89,10 @@ export default {
     },
 
     async onCreateQuestion() {
+      if (!this.$refs.form.validate()) {
+        return;
+      }
+
       try {
         await this.$store.dispatch("CREATE_QUESTION", this.payload);
         await this.$router.push(
@@ -97,19 +102,22 @@ export default {
         console.log(error);
         switch (error.response.status) {
           case 401: {
-            this.$store.dispatch(
+            await this.$store.dispatch(
               "UPDATE_SNACKBAR_TEXT",
               "로그인 후 사용할 수 있습니다."
             );
             break;
           }
           case 405: {
-            this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "항목을 채워주세요.");
+            await this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "항목을 채워주세요."
+            );
             break;
           }
           default: {
             console.log("에러입니다" + error);
-            this.$store.dispatch(
+            await this.$store.dispatch(
               "UPDATE_SNACKBAR_TEXT",
               "요청에 실패했습니다."
             );
@@ -141,10 +149,6 @@ export default {
 .content-title {
   font-size: 12.5px;
   margin: 12px 0;
-}
-.question-form {
-  display: flex;
-  justify-content: center;
 }
 
 .inner {
