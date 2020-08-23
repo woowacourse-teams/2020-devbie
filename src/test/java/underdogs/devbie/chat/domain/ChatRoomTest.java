@@ -2,7 +2,6 @@ package underdogs.devbie.chat.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +26,7 @@ class ChatRoomTest {
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
-            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .chatNames(ChatNames.from(new HashSet<>(chatNames)))
             .build();
 
         Set<ChatName> existChatNames = new HashSet<>();
@@ -50,7 +49,7 @@ class ChatRoomTest {
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
-            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .chatNames(ChatNames.from(new HashSet<>(chatNames)))
             .build();
 
         chatRoom.deleteChatName(deleteChatName);

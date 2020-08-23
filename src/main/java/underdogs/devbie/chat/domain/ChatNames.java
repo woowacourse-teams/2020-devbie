@@ -1,7 +1,8 @@
 package underdogs.devbie.chat.domain;
 
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
@@ -25,9 +26,9 @@ public class ChatNames {
         name = "chat_name",
         joinColumns = @JoinColumn(name = "chatroom_id")
     )
-    private List<ChatName> chatNames = new LinkedList<>();
+    private Set<ChatName> chatNames = new HashSet<>();
 
-    public static ChatNames from(List<ChatName> chatNames) {
+    public static ChatNames from(Set<ChatName> chatNames) {
         return new ChatNames(chatNames);
     }
 

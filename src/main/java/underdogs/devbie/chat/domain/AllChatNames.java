@@ -1,15 +1,14 @@
 package underdogs.devbie.chat.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AllChatNames {
 
-    private static final List<ChatName> names = createAllChatNames();
+    private static final Set<ChatName> names = createAllChatNames();
 
-    public static List<ChatName> createAllChatNames() {
-        List<ChatName> chatNames = new ArrayList<>();
+    private static Set<ChatName> createAllChatNames() {
+        Set<ChatName> chatNames = new HashSet<>();
 
         for (Verb verb : Verb.values()) {
             for (Noun noun : Noun.values()) {
@@ -20,15 +19,14 @@ public class AllChatNames {
         return chatNames;
     }
 
-    public static ChatName fetchNonRedundantName(List<ChatName> existNameInChatRoom) {
-        List<ChatName> chatNames = new ArrayList<>();
+    public static ChatName fetchNonRedundantName(Set<ChatName> existNameInChatRoom) {
+        Set<ChatName> chatNames = new HashSet<>();
 
         for (ChatName chatName : names) {
             chatNames.add(ChatName.of(chatName.getChatName()));
         }
 
         chatNames.removeAll(existNameInChatRoom);
-        Collections.shuffle(chatNames);
-        return chatNames.get(0);
+        return chatNames.iterator().next();
     }
 }

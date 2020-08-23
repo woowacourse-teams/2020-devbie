@@ -4,11 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,15 +56,15 @@ class ChatServiceTest {
             Chat.of("user0", "message1", ChatRoom.from(noticeId)),
             Chat.of("user1", "message2", ChatRoom.from(noticeId)),
             Chat.of("user2", "message3", ChatRoom.from(noticeId)));
-        List<ChatName> chatNames = Arrays.asList(
+        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
             ChatName.of("말하는 원숭이"),
             ChatName.of("돌리는 사자"),
             ChatName.of("만지는 표범")
-        );
+        ));
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .chatNames(ChatNames.from(chatNames))
             .build();
         MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
             , "말하는 원숭이", "메세지");
@@ -88,16 +89,16 @@ class ChatServiceTest {
             Chat.of("user1", "message2", ChatRoom.from(noticeId)),
             Chat.of("user2", "message3", ChatRoom.from(noticeId)));
 
-        List<ChatName> chatNames = Arrays.asList(
+        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
             ChatName.of("말하는 원숭이"),
             ChatName.of("돌리는 사자"),
             ChatName.of("만지는 표범")
-        );
+        ));
 
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .chatNames(ChatNames.from(chatNames))
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
@@ -128,16 +129,16 @@ class ChatServiceTest {
             Chat.of("user1", "message2", ChatRoom.from(noticeId)),
             Chat.of("user2", "message3", ChatRoom.from(noticeId)));
 
-        List<ChatName> chatNames = Arrays.asList(
+        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
             ChatName.of("말하는 원숭이"),
             ChatName.of("돌리는 사자"),
             ChatName.of("만지는 표범")
-        );
+        ));
 
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .chatNames(ChatNames.from(chatNames))
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
@@ -168,7 +169,7 @@ class ChatServiceTest {
 
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
-            .chatNames(ChatNames.from(new ArrayList(chatNames)))
+            .chatNames(ChatNames.from(new HashSet<>(chatNames)))
             .build();
 
         ChatRoom chatRoomResult = ChatRoom.builder()
@@ -176,11 +177,9 @@ class ChatServiceTest {
             .build();
 
         given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
-        given(chatRoomRepository.save(any(ChatRoom.class))).willReturn(chatRoomResult);
 
         chatService.deleteNickName(nickName, noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
-        verify(chatRoomRepository).save(eq(chatRoom));
     }
 }
