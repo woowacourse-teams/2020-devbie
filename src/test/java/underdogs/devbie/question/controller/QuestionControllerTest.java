@@ -30,7 +30,6 @@ import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
-import underdogs.devbie.question.domain.SearchScope;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -184,9 +183,9 @@ class QuestionControllerTest extends MvcTest {
 
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));
 
-        given(questionService.searchQuestionBy(anyString(), SearchScope.TITLE)).willReturn(responses);
+        given(questionService.searchQuestionBy(anyString(), any())).willReturn(responses);
 
-        MvcResult mvcResult = getAction("/api/questions?keyword=스택")
+        MvcResult mvcResult = getAction("/api/questions?searchBy=스택&scope=TITLE")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
