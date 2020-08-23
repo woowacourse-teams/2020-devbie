@@ -25,11 +25,11 @@ public enum Language {
     PHP("PHP"),
     SWIFT("SWIFT");
 
-    private String name;
+    private String text;
 
     public static Language from(String input) {
         return Arrays.stream(values())
-            .filter(language -> language.name.equals(input))
+            .filter(language -> language.text.equals(input))
             .findFirst()
             .orElseThrow(NoSuchLanguageException::new);
     }

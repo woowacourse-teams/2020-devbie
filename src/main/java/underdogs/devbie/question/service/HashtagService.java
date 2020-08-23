@@ -2,6 +2,9 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,7 @@ public class HashtagService {
         return HashtagResponses.from(hashtags);
     }
 
+    @Cacheable(value = "HashtagResponse")
     public HashtagResponse read(Long id) {
         Hashtag hashtag = readOne(id);
         return HashtagResponse.from(hashtag);
@@ -53,12 +57,15 @@ public class HashtagService {
     }
 
     @Transactional
-    public void update(Long id, HashtagUpdateRequest request) {
+    @CachePut(value = "HashtagResponse", key = "#id")
+    public HashtagResponse update(Long id, HashtagUpdateRequest request) {
         Hashtag hashtag = readOne(id);
         hashtag.update(request.toEntity());
+        return HashtagResponse.from(hashtag);
     }
 
     @Transactional
+    @CacheEvict(value = "HashtagResponse", key = "#id")
     public void delete(Long id) {
         hashtagRepository.deleteById(id);
     }

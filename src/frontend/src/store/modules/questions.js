@@ -26,14 +26,10 @@ export default {
       commit("SET_QUESTIONS", data);
     },
     async FETCH_QUESTION({ commit }, questionId) {
-      try {
-        const { data } = await getAction(
-          `/api/questions/${questionId}?visit=true`
-        );
-        commit("SET_QUESTION", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction(
+        `/api/questions/${questionId}?visit=true`
+      );
+      commit("SET_QUESTION", data);
     },
     async CREATE_QUESTION({ commit }, request) {
       const response = await postAction("/api/questions", request);
@@ -55,7 +51,7 @@ export default {
       const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
       commit("SET_QUESTIONS", data);
     },
-    async UPDATE_QUESTION_RECOMMENDATION_COUNT({ commit }, questionId) {
+    async FETCH_QUESTION_WITHOUT_VISITS({ commit }, questionId) {
       const { data } = await getAction(
         `/api/questions/${questionId}?visit=false`
       );

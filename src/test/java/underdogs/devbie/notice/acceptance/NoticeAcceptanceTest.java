@@ -79,8 +79,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.BACKEND)
                     .image("/static/image/underdogs")
                     .description("We are hiring!")
-                    .startDate("2020-10-10 13:00")
-                    .endDate("2020-10-10 14:00")
+                    .startDate("2020-10-10T13:00")
+                    .endDate("2020-10-10T14:00")
                     .build();
 
                 post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
@@ -124,7 +124,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                     () -> assertThat(response)
                         .extracting(NoticeResponse::getLanguages)
-                        .anyMatch(language -> language.contains(Language.CPP.getName()))
+                        .anyMatch(language -> language.contains(Language.CPP.getText()))
                 );
 
             }),
@@ -139,8 +139,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate("2020-10-21 13:00")
-                    .endDate("2020-10-21 14:00")
+                    .startDate("2020-10-21T13:00")
+                    .endDate("2020-10-21T14:00")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
@@ -156,8 +156,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
                     () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
                     () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
-                    () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getName(),
-                        Language.JAVASCRIPT.getName(), Language.CPP.getName())
+                    () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getText(),
+                        Language.JAVASCRIPT.getText(), Language.CPP.getText())
                 );
             }),
             dynamicTest("공고 게시글을 삭제한다.", () -> {

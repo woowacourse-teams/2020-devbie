@@ -127,8 +127,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser"]),
-    ...mapGetters(["fetchedNotice"])
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
   }
 };
 </script>
