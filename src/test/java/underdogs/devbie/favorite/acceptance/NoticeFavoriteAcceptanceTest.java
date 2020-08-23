@@ -10,11 +10,10 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import underdogs.devbie.acceptance.AcceptanceTest;
-import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 
-public class FavoriteAcceptanceTest extends AcceptanceTest {
+public class NoticeFavoriteAcceptanceTest extends AcceptanceTest {
 
     public static final String NOTICE_FAVORITE_URI = "/api/favorite-notice?objectType=notice";
 
@@ -23,10 +22,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     Stream<DynamicTest> manageFavorite() {
         return Stream.of(
             dynamicTest("공고 생성", () -> {
-                NoticeCreateRequest noticeCreateRequest = createNotice();
-                post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
-                post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
-                post("/api/notices", objectMapper.writeValueAsString(noticeCreateRequest));
+                createNotice("언더독스 채용");
+                createNotice("보스독스 채용");
+                createNotice("독스독스 채용");
             }),
             dynamicTest("1번 공고 즐겨찾기 추가", () -> {
                 addFavorite(1L);

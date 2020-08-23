@@ -97,10 +97,10 @@ public abstract class AcceptanceTest {
         return questions.getQuestions().get(0);
     }
 
-    protected NoticeCreateRequest createNotice() {
-        return NoticeCreateRequest.builder()
+    protected void createNotice(String title) throws JsonProcessingException {
+        NoticeCreateRequest createRequest = NoticeCreateRequest.builder()
             .name("underdogs")
-            .title("언더독스 채용")
+            .title(title)
             .noticeType(NoticeType.JOB)
             .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
@@ -110,6 +110,8 @@ public abstract class AcceptanceTest {
             .startDate("2020-10-10 13:00")
             .endDate("2020-10-10 14:00")
             .build();
+        String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
+        post("/api/notices", inputJsonForCreate);
     }
 
     protected <T> void post(String path) {
