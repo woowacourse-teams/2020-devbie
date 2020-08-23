@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
+import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
 @ExtendWith(MockitoExtension.class)
@@ -179,6 +181,46 @@ public class NoticeServiceTest {
                 Language.JAVA.getName(), Language.JAVASCRIPT.getName()),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getContent()).isEqualTo("We are hiring!"),
             () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
+        );
+    }
+
+    @DisplayName("공고 아이디로 공고 조회")
+    @Test
+    void findAllByIds() {
+        Set<Language> languages = Stream.of(Language.JAVA, Language.JAVASCRIPT)
+            .collect(Collectors.toSet());
+
+        Notice notice1 = Notice.builder()
+            .id(1L)
+            .title("언더독스 채용")
+            .noticeType(NoticeType.JOB)
+            .company(new Company("underdogs", 50_000_000))
+            .jobPosition(JobPosition.BACKEND)
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .image("/static/image/underdogs")
+            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .build();
+
+        Notice notice2 = Notice.builder()
+            .id(2L)
+            .title("보스독스 채용")
+            .noticeType(NoticeType.JOB)
+            .company(new Company("bossdogs", 50_000_000))
+            .jobPosition(JobPosition.FRONTEND)
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .image("/static/image/underdogs")
+            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .build();
+
+        List<Notice> notices = Lists.newArrayList(notice1, notice2);
+
+        given(noticeRepository.findAllById(anyList())).willReturn(notices);
+
+        NoticeResponses responses = noticeService.findAllByIds(Lists.newArrayList(1L, 2L));
+
+        assertAll(
+            () -> assertThat(responses.getNoticeResponses().get(0).getTitle()).isEqualTo("언더독스 채용"),
+            () -> assertThat(responses.getNoticeResponses().get(1).getTitle()).isEqualTo("보스독스 채용")
         );
     }
 }
