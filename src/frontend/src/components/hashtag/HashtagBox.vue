@@ -47,11 +47,14 @@ export default {
       items: [],
       rules: [
         v =>
-          !v
-            .toString()
-            .split(",")
-            .map(value => value.trim())
-            .includes("") || "해시태그는 공백일 수 없습니다."
+          !(
+            v.toString().length !== 0 &&
+            v
+              .toString()
+              .split(",")
+              .map(value => value.trim())
+              .includes("")
+          ) || "해시태그는 공백일 수 없습니다."
       ]
     };
   },

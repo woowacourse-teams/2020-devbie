@@ -128,6 +128,10 @@ export default {
     },
 
     async onUpdateQuestion() {
+      if (!this.$refs.form.validate()) {
+        return;
+      }
+
       await this.$store.dispatch("UPDATE_QUESTION", {
         questionId: this.questionId,
         ...this.payload
@@ -155,8 +159,9 @@ export default {
 }
 
 .inner {
-  min-width: 80%;
+  max-width: 50%;
   padding: 25px;
+  margin: 0 auto;
 }
 
 .input-box {
