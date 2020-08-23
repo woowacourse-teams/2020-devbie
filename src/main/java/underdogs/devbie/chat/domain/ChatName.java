@@ -8,17 +8,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode
-@Embeddable
 public class ChatName {
 
     private String chatName;
 
-    public static ChatName of(Verb verb, Noun noun) {
-        return new ChatName(String.format("%s %s", verb.name(), noun.name()));
+    public static ChatName of(Adjective adjective, Noun noun) {
+        return new ChatName(String.format("%s %s", adjective.name(), noun.name()));
     }
 
     public static ChatName of(String name) {

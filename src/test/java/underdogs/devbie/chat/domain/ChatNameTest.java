@@ -9,7 +9,7 @@ class ChatNameTest {
 
     @Test
     void ofByEnum() {
-        ChatName chatName = ChatName.of(Verb.돌리는, Noun.원숭이);
+        ChatName chatName = ChatName.of(Adjective.돌리는, Noun.원숭이);
 
         assertAll(
             () -> assertThat(chatName).isNotNull(),

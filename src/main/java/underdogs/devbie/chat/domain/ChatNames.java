@@ -1,7 +1,6 @@
 package underdogs.devbie.chat.domain;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -33,7 +32,7 @@ public class ChatNames {
     }
 
     public ChatName fetchNonRedundantName() {
-        return AllChatNames.fetchNonRedundantName(chatNames);
+        return ChatNameFactory.createNonOverlappingName(chatNames);
     }
 
     public void add(ChatName chatName) {
