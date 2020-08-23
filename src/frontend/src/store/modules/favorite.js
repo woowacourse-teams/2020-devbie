@@ -19,17 +19,22 @@ export default {
     }
   },
   actions: {
-    async FETCH_MY_NOTICE_FAVORITES({ commit }, userId) {
-      console.log(1111111111);
-      const { data } = await getAction(`/api/favorite-notice?userId=${userId}`);
-      commit("SET_NOTICE_FAVORITES", data["noticeResponses"]);
+    async FETCH_MY_FAVORITES({ commit }, { object, userId }) {
+      const { data } = await getAction(
+        `/api/favorite-${object}?userId=${userId}`
+      );
+      if (object === "notice") {
+        commit("SET_NOTICE_FAVORITES", data["noticeResponses"]);
+      } else {
+        commit("SET_QUESTION_FAVORITES", data["questions"]);
+      }
     },
-    async CREATE_FAVORITE({ commit }, queryUrl) {
-      await postAction(`/api/favorite-notice?` + queryUrl);
+    async CREATE_FAVORITE({ commit }, { queryParam, object }) {
+      await postAction(`/api/favorite-${object}?` + queryParam);
       commit;
     },
-    async DELETE_FAVORITE({ commit }, objectId) {
-      await deleteAction(`/api/favorite-notice?objectId=${objectId}`);
+    async DELETE_FAVORITE({ commit }, { objectId, object }) {
+      await deleteAction(`/api/favorite-${object}?objectId=${objectId}`);
       commit;
     }
   },
@@ -37,8 +42,17 @@ export default {
     fetchedNoticeFavorites(state) {
       return state.myNoticeFavorites;
     },
+    fetchedQuestionFavorites(state) {
+      console.log(state.myQuestionFavorites);
+      return state.myQuestionFavorites;
+    },
     isUserNoticeFavorites: state => noticeId => {
       return state.myNoticeFavorites.some(favorite => favorite.id === noticeId);
+    },
+    isUserQuestionFavorites: state => questionId => {
+      return state.myQuestionFavorites.some(
+        favorite => favorite.id === questionId
+      );
     },
     fetchedFavoriteType(state) {
       return state.favoriteType;

@@ -30,6 +30,7 @@
             <favorite-control
               :targetObjectId="notice.id"
               :isUserFavorite="isUserNoticeFavorites(notice.id)"
+              :isQuestion="false"
             ></favorite-control>
           </v-card-actions>
         </v-card>
@@ -135,10 +136,10 @@ export default {
     },
     async initFavoriteState() {
       await this.$store.dispatch("FETCH_LOGIN_USER");
-      await this.$store.dispatch(
-        "FETCH_MY_NOTICE_FAVORITES",
-        this.fetchedLoginUser.id
-      );
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "notice"
+      });
     }
   }
 };

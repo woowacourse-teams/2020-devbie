@@ -30,6 +30,7 @@
             <favorite-control
               :targetObjectId="notice.id"
               :isUserFavorite="isUserNoticeFavorites(notice.id)"
+              :isQuestion="false"
             ></favorite-control>
           </v-card-actions>
         </v-card>

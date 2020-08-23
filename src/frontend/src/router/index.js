@@ -15,6 +15,7 @@ import AdminMainView from "../views/admin/AdminMainView";
 import NoticeCreateView from "../views/notice/NoticeCreateView";
 import NoticeEditView from "../views/notice/NoticeEditView";
 import NoticeFavoriteView from "../views/favorite/NoticeFavoriteView";
+import QuestionFavoriteView from "../views/favorite/QuestionFavoriteView";
 
 Vue.use(VueRouter);
 
@@ -110,6 +111,11 @@ export const router = new VueRouter({
       path: "/favorites/notice",
       name: "notice-favorites",
       component: NoticeFavoriteView
+    },
+    {
+      path: "/favorites/question",
+      name: "notice-questions",
+      component: QuestionFavoriteView
     }
   ]
 });
