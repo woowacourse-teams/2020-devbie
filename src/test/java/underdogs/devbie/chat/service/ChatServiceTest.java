@@ -25,7 +25,6 @@ import underdogs.devbie.chat.domain.ChatNames;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
-import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -57,9 +56,9 @@ class ChatServiceTest {
             Chat.of("user1", "message2", ChatRoom.from(noticeId)),
             Chat.of("user2", "message3", ChatRoom.from(noticeId)));
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("말하는 원숭이"),
-            ChatName.of("돌리는 사자"),
-            ChatName.of("만지는 표범")
+            ChatName.from("말하는 원숭이"),
+            ChatName.from("돌리는 사자"),
+            ChatName.from("만지는 표범")
         ));
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
@@ -90,9 +89,9 @@ class ChatServiceTest {
             Chat.of("user2", "message3", ChatRoom.from(noticeId)));
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("말하는 원숭이"),
-            ChatName.of("돌리는 사자"),
-            ChatName.of("만지는 표범")
+            ChatName.from("말하는 원숭이"),
+            ChatName.from("돌리는 사자"),
+            ChatName.from("만지는 표범")
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -130,9 +129,9 @@ class ChatServiceTest {
             Chat.of("user2", "message3", ChatRoom.from(noticeId)));
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("말하는 원숭이"),
-            ChatName.of("돌리는 사자"),
-            ChatName.of("만지는 표범")
+            ChatName.from("말하는 원숭이"),
+            ChatName.from("돌리는 사자"),
+            ChatName.from("만지는 표범")
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -163,7 +162,7 @@ class ChatServiceTest {
     void deleteNickNameByNoticeId() {
         String nickName = "만지는 원숭이";
         Long noticeId = 1L;
-        ChatName chatName = ChatName.of(nickName);
+        ChatName chatName = ChatName.from(nickName);
 
         List<ChatName> chatNames = Collections.singletonList(chatName);
 

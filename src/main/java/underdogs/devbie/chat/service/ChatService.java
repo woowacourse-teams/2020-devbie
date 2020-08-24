@@ -63,6 +63,6 @@ public class ChatService {
     @Transactional
     public void deleteNickName(String nickName, Long noticeId) {
         ChatRoom chatRoom = getChatRoom(noticeId);
-        chatRoom.deleteChatName(ChatName.of(nickName));
+        chatRoom.deleteChatName(ChatName.from(nickName));
     }
 }

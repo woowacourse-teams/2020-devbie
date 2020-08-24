@@ -21,7 +21,7 @@ public class ChatName {
         return new ChatName(String.format("%s %s", adjective.name(), noun.name()));
     }
 
-    public static ChatName of(String name) {
+    public static ChatName from(String name) {
         return new ChatName(name);
     }
 }

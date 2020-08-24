@@ -16,6 +16,6 @@ public class MessageResponse {
     private String message;
 
     public static MessageResponse from(Chat chat) {
-        return new MessageResponse(chat.getId(), chat.getName(), chat.getMessage());
+        return new MessageResponse(chat.getId(), chat.getName().getChatName(), chat.getMessage().getMessage());
     }
 }

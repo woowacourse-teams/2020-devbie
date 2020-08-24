@@ -23,7 +23,7 @@ public class ChatNameFactory {
         Set<ChatName> chatNames = new HashSet<>();
 
         for (ChatName chatName : names) {
-            chatNames.add(ChatName.of(chatName.getChatName()));
+            chatNames.add(ChatName.from(chatName.getChatName()));
         }
 
         chatNames.removeAll(existNameInChatRoom);

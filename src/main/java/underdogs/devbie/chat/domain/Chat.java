@@ -24,9 +24,9 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private ChatName name;
 
-    private String message;
+    private ChatMessage message;
 
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
@@ -34,8 +34,8 @@ public class Chat {
 
     public static Chat of(String name, String message, ChatRoom chatRoom) {
         return Chat.builder()
-            .name(name)
-            .message(message)
+            .name(ChatName.from(name))
+            .message(ChatMessage.from(message))
             .chatRoom(chatRoom)
             .build();
     }

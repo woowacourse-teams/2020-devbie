@@ -19,7 +19,7 @@ class ChatNameTest {
 
     @Test
     void ofByString() {
-        ChatName chatName = ChatName.of("돌리는 원숭이");
+        ChatName chatName = ChatName.from("돌리는 원숭이");
 
         assertAll(
             () -> assertThat(chatName).isNotNull(),

@@ -19,10 +19,10 @@ class ChatRoomTest {
     @Test
     void fetchNonRedundantName() {
         List<ChatName> chatNames = Arrays.asList(
-            ChatName.of("이름1"),
-            ChatName.of("이름2"),
-            ChatName.of("이름3"),
-            ChatName.of("이름4")
+            ChatName.from("이름1"),
+            ChatName.from("이름2"),
+            ChatName.from("이름3"),
+            ChatName.from("이름4")
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
@@ -40,12 +40,12 @@ class ChatRoomTest {
 
     @Test
     void deleteChatName() {
-        ChatName deleteChatName = ChatName.of("이름1");
+        ChatName deleteChatName = ChatName.from("이름1");
         List<ChatName> chatNames = Arrays.asList(
             deleteChatName,
-            ChatName.of("이름2"),
-            ChatName.of("이름3"),
-            ChatName.of("이름4")
+            ChatName.from("이름2"),
+            ChatName.from("이름3"),
+            ChatName.from("이름4")
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
