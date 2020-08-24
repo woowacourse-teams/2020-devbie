@@ -22,6 +22,7 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRoom;
+import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.service.ChatService;
@@ -64,7 +65,8 @@ class ChatControllerTest extends MvcTest {
                 Chat.of("user0", "message1", ChatRoom.from(noticeId)),
                 Chat.of("user1", "message2", ChatRoom.from(noticeId)),
                 Chat.of("user2", "message3", ChatRoom.from(noticeId))),
-            "홍길동");
+            "홍길동"
+            , TitleColor.AMBER.getColor());
 
         given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
 
@@ -83,7 +85,8 @@ class ChatControllerTest extends MvcTest {
             () -> assertEquals(resultResponse.getNickName(), "홍길동"),
             () -> assertEquals(messageResponses.get(0).getName(), "user0"),
             () -> assertEquals(messageResponses.get(1).getName(), "user1"),
-            () -> assertEquals(messageResponses.get(2).getName(), "user2")
+            () -> assertEquals(messageResponses.get(2).getName(), "user2"),
+            () -> assertEquals(resultResponse.getTitleColor(), TitleColor.AMBER.getColor())
         );
     }
 

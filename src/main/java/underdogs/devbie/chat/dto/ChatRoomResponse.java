@@ -17,7 +17,9 @@ public class ChatRoomResponse {
 
     private String nickName;
 
-    public static ChatRoomResponse of(List<Chat> chats, String nickName) {
-        return new ChatRoomResponse(MessageResponses.from(chats), nickName);
+    private String titleColor;
+
+    public static ChatRoomResponse of(List<Chat> chats, String nickName, String titleColor) {
+        return new ChatRoomResponse(MessageResponses.from(chats), nickName, titleColor);
     }
 }
