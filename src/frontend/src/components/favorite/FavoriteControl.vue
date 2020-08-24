@@ -1,11 +1,8 @@
 <template>
   <div>
-    <v-btn
-      icon
-      @click.stop="onFavorite(targetObjectId)"
-      :class="{ clicked: isUserFavorite }"
-    >
-      <v-icon>mdi-heart</v-icon>
+    <v-btn icon @click.stop="onFavorite(targetObjectId)">
+      <v-icon color="red" v-if="isUserFavorite">mdi-heart</v-icon>
+      <v-icon v-else>mdi-heart</v-icon>
     </v-btn>
   </div>
 </template>
@@ -27,6 +24,7 @@ export default {
   },
 
   created() {
+    console.log("FavoriteControl : " + this.isLoggedIn);
     if (this.isLoggedIn) {
       this.initFavoriteState();
     }
@@ -84,8 +82,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.clicked {
-  background-color: pink;
-}
-</style>
+<style scoped></style>
