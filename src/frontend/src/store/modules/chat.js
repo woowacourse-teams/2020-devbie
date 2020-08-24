@@ -27,6 +27,18 @@ export default {
         });
       });
     },
+    CONNECT_LATEST(state) {
+      if (state.noticeId) {
+        const socket = new SockJS("/chat");
+        state.stompClient = Stomp.over(socket);
+        state.stompClient.connect({}, function(frame) {
+          console.log("frame: " + frame);
+          state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
+            state.chats.push(JSON.parse(tick.body));
+          });
+        });
+      }
+    },
     DISCONNECT(state) {
       state.stompClient.disconnect();
     },
@@ -49,14 +61,6 @@ export default {
     },
     SET_CHATS(state, chats) {
       state.chats = chats;
-    },
-    ADD_CHAT(state, chat) {
-      const newChat = {
-        id: chat.id,
-        name: chat.name,
-        message: chat.message
-      };
-      state.chats.add(newChat);
     }
   },
   actions: {
@@ -70,6 +74,14 @@ export default {
       const { data } = await getAction("/api/chats?noticeId=" + notice.id);
       commit("SET_NAME", data.nickName);
       commit("SET_CHATS", data.messageResponses.messageResponses);
+    },
+    OPEN_LATEST({ commit, state }) {
+      if (state.noticeId) {
+        commit("SET_DRAWER", true);
+        commit("CONNECT_LATEST");
+      } else {
+        alert("최근에 들어간 채팅방이 없습니다");
+      }
     },
     CLOSE_DRAWER({ commit }) {
       commit("DISCONNECT");

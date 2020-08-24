@@ -9,6 +9,9 @@
       <footer-bar></footer-bar>
     </div>
     <chat-drawer v-if="drawer"></chat-drawer>
+    <button id="drawer_btn" v-else @click="openDrawer">
+      채팅방 열기
+    </button>
   </v-app>
 </template>
 
@@ -37,6 +40,10 @@ export default {
     logout() {
       localStorage.removeItem("devbieToken");
       this.$store.commit("DELETE_LOGIN_USER");
+    },
+    openDrawer() {
+      console.log("aa");
+      this.$store.dispatch("OPEN_LATEST");
     }
   },
   computed: {
@@ -77,5 +84,18 @@ a {
 
 .main_box {
   width: calc(100vw - 260px);
+}
+
+#drawer_btn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 120px;
+  height: 40px;
+  color: white;
+  text-align: center;
+  background-color: #00b8d4;
+  padding: 10px;
+  border-radius: 4px;
 }
 </style>
