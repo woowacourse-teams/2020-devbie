@@ -59,6 +59,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
 }
 
 .filters {

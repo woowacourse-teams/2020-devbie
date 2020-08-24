@@ -4,6 +4,7 @@
       <notice-type></notice-type>
       <notice-filters></notice-filters>
       <v-text-field class="search-bar"></v-text-field>
+      <i class="fas fa-search"></i>
     </div>
     <notice-list></notice-list>
   </div>

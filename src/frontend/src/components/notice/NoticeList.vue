@@ -1,39 +1,40 @@
 <template>
-  <div>
-    <v-row dense>
-      <v-col
-        v-for="notice in fetchedNotices"
-        :key="notice.id"
-        :cols="2"
-        class="selector-item"
-      >
-        <v-card @click="$router.push(`/notices/${notice.id}`)">
-          <v-img
-            :src="notice.image"
-            class="white--text align-end"
-            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="200px"
-          >
-            <v-card-title
-              class="card-title"
-              v-text="`${notice.name} - ${notice.title}`"
-            ></v-card-title>
-          </v-img>
+  <div class="flex-box">
+    <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
+      <v-card class="v-card">
+        <v-img
+          @click="$router.push(`/notices/${notice.id}`)"
+          :src="notice.image"
+          class="white--text align-end card-image"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+          height="200px"
+        >
+          <v-card-title
+            class="card-title"
+            v-text="`${notice.name}`"
+          ></v-card-title>
+        </v-img>
 
-          <v-card-actions class="notice-info">
-            <div>
-              {{ notice.languages.join(", ") }}
+        <v-card-actions class="notice-info">
+          <v-col cols="12">
+            <div
+              align="left"
+              class="big-font notice-title"
+              style="font-weight: bold"
+            >
+              {{ notice.title }}
             </div>
-            <div>
-              {{ notice.jobPosition }}
+            <div class="medium-font">
+              언어 : {{ notice.languages.join(", ") }}
             </div>
-            <v-btn icon>
+            <div class="medium-font">포지션 : {{ notice.jobPosition }}</div>
+            <v-btn icon class="heart-icon">
               <v-icon>mdi-heart</v-icon>
             </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+          </v-col>
+        </v-card-actions>
+      </v-card>
+    </div>
   </div>
 </template>
 
@@ -86,27 +87,49 @@ export default {
 </script>
 
 <style scoped>
-.selector-item {
+.big-font {
+  font-size: 17px;
+}
+.medium-font {
+  font-size: 13px;
+}
+.flex-box {
+  2display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  width: 22%;
   margin: 0 30px 50px 0;
 }
 
 .card-title {
   justify-content: center;
 }
-
-.notice-info {
-  display: flex;
-  justify-content: space-between;
+.card-image {
+  width: 100%;
 }
-
-.notice-info :first-child {
-  margin-left: 10px;
-}
-
-.notice-info :last-child {
-  margin-right: 10px;
-}
-.v-card:hover {
+.card-image:hover {
   opacity: 0.6;
+}
+.card-title {
+  color: white;
+  max-height: 40px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.card-title {
+  flex-wrap: nowrap;
+}
+
+.notice-title {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.heart-icon {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
 }
 </style>
