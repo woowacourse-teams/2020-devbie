@@ -66,7 +66,8 @@ class ChatControllerTest extends MvcTest {
                 Chat.of("user1", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
                 Chat.of("user2", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
             "홍길동"
-            , TitleColor.AMBER.getColor());
+            , TitleColor.AMBER.getColor()
+            , 3);
 
         given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
 

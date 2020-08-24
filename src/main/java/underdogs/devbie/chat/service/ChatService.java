@@ -54,7 +54,8 @@ public class ChatService {
 
         ChatName name = chatRoom.fetchNonRedundantName();
 
-        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(), name.getColor().getColor());
+        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(), name.getColor().getColor(),
+            chatRoom.getChatNames().size());
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {

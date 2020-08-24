@@ -44,4 +44,11 @@ class ChatNamesTest {
 
         assertThat(chatNames.getChatNames()).hasSize(0);
     }
+
+    @Test
+    void size() {
+        ChatName chatName = ChatName.of("이름", TitleColor.AMBER);
+        ChatNames chatNames = ChatNames.from(new HashSet<>(Collections.singletonList(chatName)));
+        assertThat(chatNames.size()).isEqualTo(1);
+    }
 }

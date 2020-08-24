@@ -42,4 +42,8 @@ public class ChatNames {
     public void delete(String chatName) {
         chatNames.removeIf(name -> chatName.equals(name.getChatName()));
     }
+
+    public int size() {
+        return chatNames.size();
+    }
 }
