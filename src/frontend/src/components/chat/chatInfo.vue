@@ -1,22 +1,16 @@
 <template>
-  <div>
-    <v-row style="flex-wrap: nowrap;">
-      <v-col cols="7" class="flex-grow-1">
-        <p style="text-align: center">
-          {{ fetchedChatTitle }}
-        </p>
-      </v-col>
-      <v-col cols="3">
-        <p>
-          30명
-        </p>
-      </v-col>
-      <v-col cols="2" class="flex-shrink-1">
-        <v-btn smallv absolute right icon @click="closeChatDrawer"
-          ><i class="fas fa-times"></i
-        ></v-btn>
-      </v-col>
-    </v-row>
+  <div id="default_box">
+    <div id="title_box">
+      {{ fetchedChatTitle }}
+    </div>
+    <div id="count_box">
+      10명
+    </div>
+    <div id="button_box">
+      <v-btn large icon @click="closeChatDrawer"
+        ><i class="fas fa-times"
+      /></v-btn>
+    </div>
   </div>
 </template>
 
@@ -35,4 +29,20 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#default_box {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+#title_box {
+  flex-basis: 180px;
+}
+#count_box {
+  flex-basis: 60px;
+}
+#button_box {
+  flex-basis: 40px;
+}
+</style>
