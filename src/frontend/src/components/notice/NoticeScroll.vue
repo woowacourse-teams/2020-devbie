@@ -3,19 +3,14 @@
     <div>
       <v-card elevation="16" max-width="400" class="mx-auto">
         <v-card-title class="white--text blue darken-4">
-          전체 공고
-
-          <v-spacer></v-spacer>
-
-          <v-btn
-            @click="$router.push(`/notices`)"
-            color="white"
-            class="text--primary"
-            fab
-            small
-          >
-            <v-icon>mdi-format-list-bulleted</v-icon>
+          <v-btn icon @click="$router.push(`/notices`)" class="back-button">
+            <v-icon color="white" large>
+              mdi-arrow-left-bold-circle-outline
+            </v-icon>
           </v-btn>
+          <div class="card-title">
+            전체공고
+          </div>
         </v-card-title>
         <v-divider></v-divider>
 
@@ -27,16 +22,16 @@
         >
           <template v-slot="{ item }">
             <v-list-item :key="item.id">
-              <v-list-item-action>
-                <v-btn fab small depressed color="primary">
-                  {{ item.id }}
-                </v-btn>
-              </v-list-item-action>
-
+              <v-list-item-avatar>
+                <v-img :src="item.image" height="50" max-width="50"></v-img>
+              </v-list-item-avatar>
               <v-list-item-content @click="$router.push(`/notices/${item.id}`)">
-                <v-list-item-title>
-                  {{ item.name }} 채용 공고 {{ item.title }}
+                <v-list-item-title style="font-weight: bold">
+                  {{ item.name }}
                 </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ item.title }}
+                </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <v-divider></v-divider>
@@ -88,10 +83,16 @@ export default {
 </script>
 
 <style scoped>
+.card-title {
+  margin: auto;
+}
+.back-button {
+  position: absolute;
+}
 .notice-list {
   width: 400px;
   flex-basis: auto;
-  margin-right: 200px;
+  margin: 50px 100px 100px 0px;
 }
 .v-list-item:hover {
   opacity: 0.7;
