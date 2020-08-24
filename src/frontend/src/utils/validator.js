@@ -21,6 +21,19 @@ const validator = {
       v => !!v || "항목을 선택해주세요.",
       v => v.length !== 0 || "1개이상 선택해주세요."
     ]
+  },
+  hashtag: {
+    input: [
+      v =>
+        !(
+          v.toString().length !== 0 &&
+          v
+            .toString()
+            .split(",")
+            .map(value => value.trim())
+            .includes("")
+        ) || "해시태그는 공백일 수 없습니다."
+    ]
   }
 };
 

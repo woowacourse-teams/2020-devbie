@@ -10,7 +10,7 @@
       chips
       clearable
       clear-icon="fas fa-trash"
-      :rules="rules"
+      :rules="rules.input"
     >
       <template v-slot:selection="data">
         <v-chip
@@ -36,6 +36,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import validator from "../../utils/validator";
 
 export default {
   props: ["existHashtags"],
@@ -45,17 +46,7 @@ export default {
       search: "",
       allHashtags: [],
       items: [],
-      rules: [
-        v =>
-          !(
-            v.toString().length !== 0 &&
-            v
-              .toString()
-              .split(",")
-              .map(value => value.trim())
-              .includes("")
-          ) || "해시태그는 공백일 수 없습니다."
-      ]
+      rules: { ...validator.hashtag }
     };
   },
 
@@ -83,32 +74,11 @@ export default {
   },
 
   methods: {
-    required(value) {
-      if (value.toString().trim() === "") {
-        return "Required.";
-      }
-      return !!value || "Required.";
-    },
-
     changeToLowerCase(value) {
       return value
         .toString()
         .trim()
         .toLowerCase();
-    },
-
-    addHashtag(event) {
-      const item = event.target.value.trim().toLowerCase();
-      if (item === "") {
-        console.log("태그 공백일 수 없습니다.");
-        return;
-      }
-      if (this.items.includes(item)) {
-        event.target.value = "";
-        return;
-      }
-      this.items.push(item);
-      event.target.value = "";
     }
   }
 };
