@@ -9,7 +9,11 @@
       >
         <v-card @click="$router.push(`/notices/${notice.id}`)">
           <v-img
-            :src="notice.image"
+            :src="
+              notice.image !== ''
+                ? notice.image
+                : 'https://cdn.vuetifyjs.com/images/cards/house.jpg'
+            "
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"

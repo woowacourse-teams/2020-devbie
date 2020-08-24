@@ -34,4 +34,7 @@ export default {
 .search-bar .input {
   padding: 0;
 }
+.search-bar {
+  width: 200px;
+}
 </style>

@@ -19,21 +19,21 @@ INSERT INTO notice(name, salary, image, job_position, title, notice_type, conten
 INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji11', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
 INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji12', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
 INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji13', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji14', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji15', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji16', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji17', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji18', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji19', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji20', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji21', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji22', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji23', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji24', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji25', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji26', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji27', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
-INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji28', 6000, 'test', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji14', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji15', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji16', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji17', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji18', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji19', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji20', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji21', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji22', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji23', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji24', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji25', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji26', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji27', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
+INSERT INTO notice(name, salary, image, job_position, title, notice_type, content) VALUES('yeji28', 6000, '', 'BACKEND', 'title', 'JOB','hi!');
 
 
 INSERT INTO language(notice_id, languages) values (1, 'CPP');
