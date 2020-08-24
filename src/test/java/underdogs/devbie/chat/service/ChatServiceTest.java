@@ -25,6 +25,7 @@ import underdogs.devbie.chat.domain.ChatNames;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -51,25 +52,30 @@ class ChatServiceTest {
     @Test
     void sendMessage() {
         Long noticeId = 1L;
+
         List<Chat> chats = Arrays.asList(
-            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
-            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
-            Chat.of("user2", "message3", ChatRoom.from(noticeId)));
+            Chat.of("말하는 원숭이", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("돌리는 사자", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("만지는 표범", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
+
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.from("말하는 원숭이"),
-            ChatName.from("돌리는 사자"),
-            ChatName.from("만지는 표범")
+            ChatName.of("말하는 원숭이", TitleColor.AMBER),
+            ChatName.of("돌리는 사자", TitleColor.BAROSSA),
+            ChatName.of("만지는 표범", TitleColor.DARK_ORCHID)
         ));
+
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
             .chatNames(ChatNames.from(chatNames))
             .build();
+
         MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
-            , "말하는 원숭이", "메세지");
+            , "말하는 원숭이", "메세지", TitleColor.AMBER.getColor());
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
-        given(chatRepository.save(any(Chat.class))).willReturn(Chat.of("말하는 원숭이", "메세지", chatRoom));
+        given(chatRepository.save(any(Chat.class))).willReturn(
+            Chat.of("말하는 원숭이", TitleColor.AMBER, "메세지", chatRoom));
         doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(MessageResponse.class));
 
         chatService.sendMessage(messageSendRequest);
@@ -84,14 +90,14 @@ class ChatServiceTest {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
-            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
-            Chat.of("user2", "message3", ChatRoom.from(noticeId)));
+            Chat.of("말하는 원숭이", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("돌리는 사자", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("만지는 표범", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.from("말하는 원숭이"),
-            ChatName.from("돌리는 사자"),
-            ChatName.from("만지는 표범")
+            ChatName.of("말하는 원숭이", TitleColor.AMBER),
+            ChatName.of("돌리는 사자", TitleColor.BAROSSA),
+            ChatName.of("만지는 표범", TitleColor.DARK_ORCHID)
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -112,9 +118,10 @@ class ChatServiceTest {
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
             () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
-            () -> assertEquals(messageResponses.get(0).getName(), "user0"),
-            () -> assertEquals(messageResponses.get(1).getName(), "user1"),
-            () -> assertEquals(messageResponses.get(2).getName(), "user2")
+            () -> assertEquals(messageResponses.get(0).getName(), "말하는 원숭이"),
+            () -> assertEquals(messageResponses.get(1).getName(), "돌리는 사자"),
+            () -> assertEquals(messageResponses.get(2).getName(), "만지는 표범"),
+            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank()
         );
     }
 
@@ -124,14 +131,14 @@ class ChatServiceTest {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("user0", "message1", ChatRoom.from(noticeId)),
-            Chat.of("user1", "message2", ChatRoom.from(noticeId)),
-            Chat.of("user2", "message3", ChatRoom.from(noticeId)));
+            Chat.of("말하는 원숭이", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("돌리는 사자", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("만지는 표범", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.from("말하는 원숭이"),
-            ChatName.from("돌리는 사자"),
-            ChatName.from("만지는 표범")
+            ChatName.of("말하는 원숭이", TitleColor.AMBER),
+            ChatName.of("돌리는 사자", TitleColor.BAROSSA),
+            ChatName.of("만지는 표범", TitleColor.DARK_ORCHID)
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -151,9 +158,10 @@ class ChatServiceTest {
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
             () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
-            () -> assertEquals(messageResponses.get(0).getName(), "user0"),
-            () -> assertEquals(messageResponses.get(1).getName(), "user1"),
-            () -> assertEquals(messageResponses.get(2).getName(), "user2")
+            () -> assertEquals(messageResponses.get(0).getName(), "말하는 원숭이"),
+            () -> assertEquals(messageResponses.get(1).getName(), "돌리는 사자"),
+            () -> assertEquals(messageResponses.get(2).getName(), "만지는 표범"),
+            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank()
         );
     }
 
@@ -162,17 +170,13 @@ class ChatServiceTest {
     void deleteNickNameByNoticeId() {
         String nickName = "만지는 원숭이";
         Long noticeId = 1L;
-        ChatName chatName = ChatName.from(nickName);
+        ChatName chatName = ChatName.of(nickName, TitleColor.AMBER);
 
         List<ChatName> chatNames = Collections.singletonList(chatName);
 
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chatNames(ChatNames.from(new HashSet<>(chatNames)))
-            .build();
-
-        ChatRoom chatRoomResult = ChatRoom.builder()
-            .noticeId(noticeId)
             .build();
 
         given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));

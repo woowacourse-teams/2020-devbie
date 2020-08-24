@@ -8,6 +8,6 @@ class ChatTest {
 
     @Test
     void of() {
-        assertThat(Chat.of("이름", "메세지", ChatRoom.from(1L))).isInstanceOf(Chat.class);
+        assertThat(Chat.of("이름", TitleColor.AMBER, "메세지", ChatRoom.from(1L))).isInstanceOf(Chat.class);
     }
 }

@@ -32,9 +32,9 @@ public class Chat {
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
-    public static Chat of(String name, String message, ChatRoom chatRoom) {
+    public static Chat of(String name, TitleColor titleColor, String message, ChatRoom chatRoom) {
         return Chat.builder()
-            .name(ChatName.from(name))
+            .name(ChatName.of(name, titleColor))
             .message(ChatMessage.from(message))
             .chatRoom(chatRoom)
             .build();

@@ -39,7 +39,7 @@ public class ChatNames {
         chatNames.add(chatName);
     }
 
-    public void delete(ChatName chatName) {
-        chatNames.remove(chatName);
+    public void delete(String chatName) {
+        chatNames.removeIf(name -> chatName.equals(name.getChatName()));
     }
 }

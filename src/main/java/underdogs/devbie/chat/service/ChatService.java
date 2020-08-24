@@ -10,6 +10,7 @@ import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -42,7 +43,8 @@ public class ChatService {
     }
 
     private Chat saveChat(MessageSendRequest messageSendRequest, ChatRoom chatRoom) {
-        Chat chat = Chat.of(messageSendRequest.getName(), messageSendRequest.getMessage(), chatRoom);
+        Chat chat = Chat.of(messageSendRequest.getName(), TitleColor.from(messageSendRequest.getTitleColor()),
+            messageSendRequest.getMessage(), chatRoom);
         return chatRepository.save(chat);
     }
 
@@ -52,7 +54,7 @@ public class ChatService {
 
         ChatName name = chatRoom.fetchNonRedundantName();
 
-        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName());
+        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(), name.getColor().getColor());
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
@@ -63,6 +65,6 @@ public class ChatService {
     @Transactional
     public void deleteNickName(String nickName, Long noticeId) {
         ChatRoom chatRoom = getChatRoom(noticeId);
-        chatRoom.deleteChatName(ChatName.from(nickName));
+        chatRoom.deleteChatName(nickName);
     }
 }

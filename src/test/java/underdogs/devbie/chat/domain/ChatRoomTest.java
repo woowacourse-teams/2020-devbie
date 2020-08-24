@@ -19,10 +19,10 @@ class ChatRoomTest {
     @Test
     void fetchNonRedundantName() {
         List<ChatName> chatNames = Arrays.asList(
-            ChatName.from("이름1"),
-            ChatName.from("이름2"),
-            ChatName.from("이름3"),
-            ChatName.from("이름4")
+            ChatName.of("이름1", TitleColor.AMBER),
+            ChatName.of("이름2", TitleColor.BAROSSA),
+            ChatName.of("이름3", TitleColor.DARK_ORCHID),
+            ChatName.of("이름4", TitleColor.DART_CYAN)
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
@@ -40,19 +40,19 @@ class ChatRoomTest {
 
     @Test
     void deleteChatName() {
-        ChatName deleteChatName = ChatName.from("이름1");
+        ChatName deleteChatName = ChatName.of("이름1", TitleColor.AMBER);
         List<ChatName> chatNames = Arrays.asList(
             deleteChatName,
-            ChatName.from("이름2"),
-            ChatName.from("이름3"),
-            ChatName.from("이름4")
+            ChatName.of("이름2", TitleColor.DART_CYAN),
+            ChatName.of("이름3", TitleColor.DARK_ORCHID),
+            ChatName.of("이름4", TitleColor.DODGER_BLUE)
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
             .chatNames(ChatNames.from(new HashSet<>(chatNames)))
             .build();
 
-        chatRoom.deleteChatName(deleteChatName);
+        chatRoom.deleteChatName(deleteChatName.getChatName());
 
         assertThat(chatRoom.getChatNames().getChatNames().contains(deleteChatName)).isFalse();
     }

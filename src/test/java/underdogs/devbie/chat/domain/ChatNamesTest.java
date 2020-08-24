@@ -31,16 +31,16 @@ class ChatNamesTest {
     @Test
     void add() {
         ChatNames chatNames = ChatNames.from(new HashSet<>());
-        chatNames.add(ChatName.from("이름1"));
+        chatNames.add(ChatName.of("이름1", TitleColor.AMBER));
 
         assertThat(chatNames.getChatNames()).hasSize(1);
     }
 
     @Test
     void delete() {
-        ChatName chatName = ChatName.from("이름");
+        ChatName chatName = ChatName.of("이름", TitleColor.AMBER);
         ChatNames chatNames = ChatNames.from(new HashSet<>(Collections.singletonList(chatName)));
-        chatNames.delete(chatName);
+        chatNames.delete(chatName.getChatName());
 
         assertThat(chatNames.getChatNames()).hasSize(0);
     }

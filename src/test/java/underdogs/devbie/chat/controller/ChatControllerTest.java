@@ -62,9 +62,9 @@ class ChatControllerTest extends MvcTest {
         Long noticeId = 1L;
         ChatRoomResponse chatRoomResponse = ChatRoomResponse.of(
             Arrays.asList(
-                Chat.of("user0", "message1", ChatRoom.from(noticeId)),
-                Chat.of("user1", "message2", ChatRoom.from(noticeId)),
-                Chat.of("user2", "message3", ChatRoom.from(noticeId))),
+                Chat.of("user0", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+                Chat.of("user1", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+                Chat.of("user2", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
             "홍길동"
             , TitleColor.AMBER.getColor());
 

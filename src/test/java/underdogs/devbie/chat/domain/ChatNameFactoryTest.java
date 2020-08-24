@@ -12,7 +12,7 @@ class ChatNameFactoryTest {
     @Test
     void fetchNonRedundantName() {
         Set<ChatName> chatNames = new HashSet<>();
-        chatNames.add(ChatName.of(Adjective.돌리는, Noun.원숭이));
+        chatNames.add(ChatName.of(Adjective.돌리는, Noun.원숭이, TitleColor.AMBER));
         ChatName actual = ChatNameFactory.createNonOverlappingName(chatNames);
 
         assertThat(actual).isNotNull();

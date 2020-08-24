@@ -13,4 +13,5 @@ public class MessageSendRequest {
     private Long noticeId;
     private String name;
     private String message;
+    private String titleColor;
 }
