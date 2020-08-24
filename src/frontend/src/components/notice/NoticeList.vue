@@ -10,7 +10,7 @@
           height="200px"
         >
           <v-card-title
-            class="card-title"
+            class="card-title-text"
             v-text="`${notice.name}`"
           ></v-card-title>
         </v-img>
@@ -106,7 +106,7 @@ export default {
   margin: 0 30px 50px 0;
 }
 
-.card-title {
+.card-title-text {
   justify-content: center;
 }
 .card-image {
@@ -115,13 +115,13 @@ export default {
 .card-image:hover {
   opacity: 0.6;
 }
-.card-title {
+.card-title-text {
   color: white;
   max-height: 40px;
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-.card-title {
+.card-title-text {
   flex-wrap: nowrap;
 }
 

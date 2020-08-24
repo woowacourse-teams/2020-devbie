@@ -1,11 +1,12 @@
 <template>
   <div class="notice-detail">
+    <v-divider></v-divider>
     <div class="inner">
       <div class="notice-detail-main">
         <div class="notice-header">
           <div class="notice-title">
-            <h1>
-              {{ fetchedNotice.id }}. [ {{ fetchedNotice.noticeType }} ] -
+            <h1 class="big-font">
+              [ {{ fetchedNotice.noticeType }} ]
               {{ fetchedNotice.title }}
             </h1>
           </div>
@@ -18,19 +19,20 @@
                     : fetchedNotice.image
                 "
                 class="white--text align-end"
-                max-width="300px"
+                width="300px"
+                height="200px"
               >
               </v-img>
             </div>
             <div class="notice-buttons">
-              <v-btn id="apply-btn" depressed large color="primary"
+              <v-btn id="apply-btn" depressed large color="#DAEBEA"
                 >지원하기</v-btn
               >
               <v-btn
                 id="chatting-btn"
                 depressed
                 large
-                color="primary"
+                color="#DAEBEA"
                 @click="openChatDrawer"
                 >채팅방</v-btn
               >
@@ -63,7 +65,7 @@
             </p>
             <p class="infos">
               <i class="fas fa-won-sign"></i>
-              연봉: {{ fetchedNotice.company.salary }}
+              연봉: {{ fetchedNotice.company.salary }} 만원
             </p>
             <p class="infos">
               <i class="fas fa-calendar-alt"></i>
@@ -74,8 +76,8 @@
               포지션: {{ fetchedNotice.jobPosition }}
             </p>
             <p class="infos">
-              <i class="fas fa-burn"></i>
-              프로그래밍 언어: {{ fetchedNotice.noticeDescription.languages }}
+              <i class="fas fa-burn"></i>언어:
+              {{ fetchedNotice.noticeDescription.languages.join(", ") }}
             </p>
             <p class="infos">
               {{ fetchedNotice.noticeDescription.content }}
@@ -134,8 +136,8 @@ export default {
 
 <style scoped>
 .notice-detail {
+  margin-top: 50px;
   align-items: center;
-  margin-left: 20px;
 }
 
 .inner {
@@ -184,7 +186,7 @@ export default {
 }
 
 .notice-content {
-  padding: 30px 50px;
+  padding: 30px 15px;
 }
 
 .notice-buttons {
@@ -210,5 +212,15 @@ export default {
   width: 100px;
   padding: 10px;
   margin: 3px 3px;
+}
+
+.fas {
+  width: 15px;
+  height: 15px;
+  padding-right: 20px;
+}
+
+.big-font {
+  font-size: 20px;
 }
 </style>

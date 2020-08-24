@@ -2,13 +2,13 @@
   <div class="notice-list">
     <div>
       <v-card elevation="16" max-width="400" class="mx-auto">
-        <v-card-title class="white--text blue darken-4">
+        <v-card-title class="darken-4 card-title">
           <v-btn icon @click="$router.push(`/notices`)" class="back-button">
-            <v-icon color="white" large>
+            <v-icon large>
               mdi-arrow-left-bold-circle-outline
             </v-icon>
           </v-btn>
-          <div class="card-title">
+          <div class="card-title-text">
             전체공고
           </div>
         </v-card-title>
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-.card-title {
+.card-title-text {
   margin: auto;
 }
 .back-button {
@@ -96,5 +96,9 @@ export default {
 }
 .v-list-item:hover {
   opacity: 0.7;
+}
+.card-title {
+  background-color: #daebea;
+  font-weight: bold;
 }
 </style>
