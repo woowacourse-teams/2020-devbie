@@ -38,8 +38,13 @@ export default {
 }
 #title_box {
   flex-basis: 180px;
+  font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 #count_box {
+  padding-left: 14px;
   flex-basis: 60px;
 }
 #button_box {
