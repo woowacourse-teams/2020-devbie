@@ -19,34 +19,19 @@ public final class CustomPageRequest {
 
     private static final int FIRST_PAGE = 1;
     private static final int DEFAULT_SIZE = 10;
-    private static final int MAX_SIZE = 50;
 
     private Integer page;
-
-    private Integer size;
-
-    private Sort.Direction direction;
 
     public void setPage(Integer page) {
         this.page = Math.max(page, 1);
     }
 
-    public void setSize(Integer size) {
-        this.size = size > MAX_SIZE ? DEFAULT_SIZE : size;
-    }
-
     public PageRequest toPageRequest() {
         setDefaultValue();
-        return PageRequest.of(page - 1, size, Sort.by(direction, "createdDate"));
+        return PageRequest.of(page - 1, DEFAULT_SIZE, Sort.by(Sort.Direction.DESC, "createdDate"));
     }
 
     private void setDefaultValue() {
-        if (Objects.isNull(direction)) {
-            this.direction = Sort.Direction.DESC;
-        }
-        if (Objects.isNull(size)) {
-            this.size = DEFAULT_SIZE;
-        }
         if (Objects.isNull(page)) {
             this.page = FIRST_PAGE;
         }

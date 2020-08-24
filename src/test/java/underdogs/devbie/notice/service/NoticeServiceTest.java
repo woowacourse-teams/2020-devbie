@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
@@ -137,7 +136,7 @@ public class NoticeServiceTest {
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
 
-        CustomPageRequest customPageRequest = new CustomPageRequest(10, 10, Sort.Direction.DESC);
+        CustomPageRequest customPageRequest = new CustomPageRequest(1);
         NoticeReadRequest noticeReadRequest = NoticeReadRequest.builder()
             .noticeType(NoticeType.JOB)
             .jobPosition(JobPosition.BACKEND)
