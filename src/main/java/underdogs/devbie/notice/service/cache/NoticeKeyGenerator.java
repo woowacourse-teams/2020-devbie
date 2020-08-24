@@ -1,4 +1,4 @@
-package underdogs.devbie.notice.service;
+package underdogs.devbie.notice.service.cache;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -27,13 +27,13 @@ public class NoticeKeyGenerator implements KeyGenerator {
     private List<String> createParams(NoticeReadRequest noticeReadRequest, int pageNumber) {
         List<String> params = new ArrayList<>();
         if (Objects.nonNull(noticeReadRequest.getNoticeType())) {
-            params.add(noticeReadRequest.getNoticeType().toString());
+            params.add(noticeReadRequest.getNoticeType().name());
         }
         if (Objects.nonNull(noticeReadRequest.getJobPosition())) {
-            params.add(noticeReadRequest.getJobPosition().toString());
+            params.add(noticeReadRequest.getJobPosition().name());
         }
         if (Objects.nonNull(noticeReadRequest.getLanguage())) {
-            params.add(noticeReadRequest.getLanguage().toString());
+            params.add(noticeReadRequest.getLanguage().name());
         }
         if (Objects.nonNull(noticeReadRequest.getKeyword())) {
             params.add(noticeReadRequest.getKeyword());
