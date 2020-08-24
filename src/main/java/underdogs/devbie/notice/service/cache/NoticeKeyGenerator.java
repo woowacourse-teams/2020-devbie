@@ -1,15 +1,13 @@
 package underdogs.devbie.notice.service.cache;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import underdogs.devbie.notice.dto.NoticeReadRequest;
+import underdogs.devbie.notice.vo.NoticeCacheVo;
 
 @Component
 public class NoticeKeyGenerator implements KeyGenerator {
@@ -19,26 +17,8 @@ public class NoticeKeyGenerator implements KeyGenerator {
         NoticeReadRequest noticeReadRequest = (NoticeReadRequest)params[0];
         PageRequest pageRequest = (PageRequest)params[1];
 
-        List<String> keyParams = createParams(noticeReadRequest, pageRequest.getPageNumber());
+        NoticeCacheVo noticeCacheVo = new NoticeCacheVo(noticeReadRequest, pageRequest.getPageNumber());
 
-        return String.join(".", keyParams);
-    }
-
-    private List<String> createParams(NoticeReadRequest noticeReadRequest, int pageNumber) {
-        List<String> params = new ArrayList<>();
-        if (Objects.nonNull(noticeReadRequest.getNoticeType())) {
-            params.add(noticeReadRequest.getNoticeType().name());
-        }
-        if (Objects.nonNull(noticeReadRequest.getJobPosition())) {
-            params.add(noticeReadRequest.getJobPosition().name());
-        }
-        if (Objects.nonNull(noticeReadRequest.getLanguage())) {
-            params.add(noticeReadRequest.getLanguage().name());
-        }
-        if (Objects.nonNull(noticeReadRequest.getKeyword())) {
-            params.add(noticeReadRequest.getKeyword());
-        }
-        params.add(String.valueOf(pageNumber));
-        return params;
+        return noticeCacheVo.hashCode();
     }
 }
