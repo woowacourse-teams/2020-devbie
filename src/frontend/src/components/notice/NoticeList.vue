@@ -94,8 +94,11 @@ export default {
   font-size: 13px;
 }
 .flex-box {
-  2display: flex;
+  display: flex;
   flex-wrap: wrap;
+}
+.item:last-child {
+  margin-right: auto;
 }
 
 .item {
