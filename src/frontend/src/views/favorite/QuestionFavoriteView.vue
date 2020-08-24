@@ -1,7 +1,7 @@
 <template>
   <div class="notice-fovorite-list" style="margin: 50px 150px 50px 150px">
     <div class="filters">
-      <favorite-type></favorite-type>
+      <favorite-type :isQuestionFavorite="true"></favorite-type>
     </div>
     <div class="interview">
       <div class="inner">

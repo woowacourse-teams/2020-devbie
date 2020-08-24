@@ -3,8 +3,7 @@ import { deleteAction, getAction, postAction } from "../../api";
 export default {
   state: {
     myNoticeFavorites: [],
-    myQuestionFavorites: [],
-    favoriteType: "NOTICE_FAVORITE"
+    myQuestionFavorites: []
   },
 
   mutations: {
@@ -13,9 +12,6 @@ export default {
     },
     SET_QUESTION_FAVORITES(state, data) {
       state.myQuestionFavorites = data;
-    },
-    SET_FAVORITE_TYPE(state, data) {
-      state.favoriteType = data;
     }
   },
   actions: {
@@ -29,13 +25,14 @@ export default {
         commit("SET_QUESTION_FAVORITES", data["questions"]);
       }
     },
+
+    // eslint-disable-next-line no-unused-vars
     async CREATE_FAVORITE({ commit }, { queryParam, object }) {
       await postAction(`/api/favorite-${object}?` + queryParam);
-      commit;
     },
+    // eslint-disable-next-line no-unused-vars
     async DELETE_FAVORITE({ commit }, { objectId, object }) {
       await deleteAction(`/api/favorite-${object}?objectId=${objectId}`);
-      commit;
     }
   },
   getters: {
@@ -43,7 +40,6 @@ export default {
       return state.myNoticeFavorites;
     },
     fetchedQuestionFavorites(state) {
-      console.log(state.myQuestionFavorites);
       return state.myQuestionFavorites;
     },
     isUserNoticeFavorites: state => noticeId => {
@@ -53,9 +49,6 @@ export default {
       return state.myQuestionFavorites.some(
         favorite => favorite.id === questionId
       );
-    },
-    fetchedFavoriteType(state) {
-      return state.favoriteType;
     }
   }
 };

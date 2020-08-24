@@ -3,7 +3,7 @@
     <v-btn
       name="NOTICE_FAVORITE"
       class="select-btn"
-      :class="{ 'button-active': isNoticeFavorite() }"
+      :class="{ 'button-active': isNoticeFavorite }"
       @click="changeFavoriteType"
     >
       공고
@@ -11,7 +11,7 @@
     <v-btn
       name="QUESTION_FAVORITE"
       class="select-btn"
-      :class="{ 'button-active': isQuestionFavorite() }"
+      :class="{ 'button-active': isQuestionFavorite }"
       @click="changeFavoriteType"
       >면접 질문</v-btn
     >
@@ -19,28 +19,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
+  props: ["isNoticeFavorite", "isQuestionFavorite"],
+
   methods: {
     async changeFavoriteType(event) {
       const favoriteType = event.currentTarget.name;
-      await this.$store.commit("SET_FAVORITE_TYPE", favoriteType);
       if (favoriteType === "NOTICE_FAVORITE") {
         await this.$router.push("/favorites/notice");
       } else {
         await this.$router.push("/favorites/question");
       }
-    },
-    isNoticeFavorite() {
-      return this.fetchedFavoriteType === "NOTICE_FAVORITE";
-    },
-    isQuestionFavorite() {
-      return this.fetchedFavoriteType === "QUESTION_FAVORITE";
     }
-  },
-  computed: {
-    ...mapGetters(["fetchedFavoriteType"])
   }
 };
 </script>

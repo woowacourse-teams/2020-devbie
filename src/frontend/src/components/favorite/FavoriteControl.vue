@@ -17,19 +17,6 @@ export default {
     ...mapGetters(["isLoggedIn", "fetchedLoginUser"])
   },
 
-  watch: {
-    isLoggedIn() {
-      this.initFavoriteState();
-    }
-  },
-
-  created() {
-    console.log("FavoriteControl : " + this.isLoggedIn);
-    if (this.isLoggedIn) {
-      this.initFavoriteState();
-    }
-  },
-
   methods: {
     onFavorite(objectId) {
       if (!this.isLoggedIn) {
@@ -71,6 +58,7 @@ export default {
       }
       this.initFavoriteState();
     },
+
     async initFavoriteState() {
       await this.$store.dispatch("FETCH_LOGIN_USER");
       await this.$store.dispatch("FETCH_MY_FAVORITES", {

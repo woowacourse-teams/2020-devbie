@@ -33,11 +33,34 @@ export default {
   components: { FavoriteControl },
 
   computed: {
-    ...mapGetters(["fetchedQuestionFavorites", "isUserQuestionFavorites"])
+    ...mapGetters([
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "fetchedQuestionFavorites",
+      "isUserQuestionFavorites"
+    ])
+  },
+
+  watch: {
+    isLoggedIn() {
+      this.initFavoriteState();
+    }
   },
 
   created() {
-    this.$store.dispatch("FETCH_QUESTIONS", "CREATED_DATE");
+    if (this.isLoggedIn) {
+      this.initFavoriteState();
+    }
+  },
+
+  methods: {
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "question"
+      });
+    }
   }
 };
 </script>
