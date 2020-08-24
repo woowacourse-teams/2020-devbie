@@ -103,7 +103,7 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
 
-        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(new ChatRoomCreateRequest(noticeId));
+        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRoomRepository, never()).save(any());
@@ -143,7 +143,7 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
 
-        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(new ChatRoomCreateRequest(noticeId));
+        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
 

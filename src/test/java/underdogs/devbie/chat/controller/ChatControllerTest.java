@@ -22,7 +22,6 @@ import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatRoom;
-import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.service.ChatService;
@@ -60,7 +59,6 @@ class ChatControllerTest extends MvcTest {
     @Test
     void createChatRoom() throws Exception {
         Long noticeId = 1L;
-        ChatRoomCreateRequest chatRoomCreateRequest = new ChatRoomCreateRequest(noticeId);
         ChatRoomResponse chatRoomResponse = ChatRoomResponse.of(
             Arrays.asList(
                 Chat.of("user0", "message1", ChatRoom.from(noticeId)),
@@ -70,7 +68,7 @@ class ChatControllerTest extends MvcTest {
 
         given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
 
-        MvcResult mvcResult = patchAction("/api/chatrooms", objectMapper.writeValueAsString(chatRoomCreateRequest))
+        MvcResult mvcResult = patchAction(String.format("/api/chatrooms?noticeId=%s", noticeId), "")
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn();

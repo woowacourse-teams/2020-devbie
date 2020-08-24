@@ -29,8 +29,8 @@ public class ChatController {
 
     @NoValidate
     @PatchMapping("/api/chatrooms")
-    public ResponseEntity<ChatRoomResponse> createIfNotExist(@RequestBody ChatRoomCreateRequest chatRoomCreateRequest) {
-        return ResponseEntity.ok().body(chatService.createIfNotExist(chatRoomCreateRequest));
+    public ResponseEntity<ChatRoomResponse> createIfNotExist(@RequestParam("noticeId") Long noticeId) {
+        return ResponseEntity.ok().body(chatService.createIfNotExist(noticeId));
     }
 
     @NoValidate

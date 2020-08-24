@@ -10,7 +10,6 @@ import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
-import underdogs.devbie.chat.dto.ChatRoomCreateRequest;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -48,8 +47,8 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoomResponse createIfNotExist(ChatRoomCreateRequest chatRoomCreateRequest) {
-        ChatRoom chatRoom = getOrCreateChatRoom(chatRoomCreateRequest.getNoticeId());
+    public ChatRoomResponse createIfNotExist(Long noticeId) {
+        ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
         ChatName name = chatRoom.fetchNonRedundantName();
 
