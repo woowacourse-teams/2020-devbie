@@ -26,7 +26,6 @@ import underdogs.devbie.notice.expception.NoticeNotFoundException;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
-    private final NoticeKeyGenerator noticeKeyGenerator;
 
     @Transactional
     public Long save(NoticeCreateRequest request) {

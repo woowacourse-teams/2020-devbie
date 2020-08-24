@@ -56,22 +56,10 @@ export default {
         return notice;
       });
     },
-    SET_LANGUAGES(state, data) {
-      const languages = [{ key: "", text: "무관" }];
-      state.languages = languages.concat(data.map(res => res.pair));
-    },
-    SET_JOB_POSITIONS(state, data) {
-      const jobPositions = [{ key: "", text: "무관" }];
-      state.jobPositions = jobPositions.concat(data.map(res => res.pair));
-    },
     SET_KEYWORD(state, data) {
       state.notices = [];
       state.page = 1;
       state.keyword = data;
-    },
-    SET_PAGING(state, lastPage) {
-      state.page = state.page + 1;
-      state.lastPage = lastPage;
     },
     SET_FILTERS(state, data) {
       const languages = [{ key: "", text: "무관" }];

@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -47,12 +46,9 @@ public class NoticeServiceTest {
     @Mock
     private NoticeRepository noticeRepository;
 
-    @Autowired
-    private NoticeKeyGenerator noticeKeyGenerator;
-
     @BeforeEach
     void setUp() {
-        noticeService = new NoticeService(noticeRepository, noticeKeyGenerator);
+        noticeService = new NoticeService(noticeRepository);
     }
 
     @DisplayName("게시글 저장")
