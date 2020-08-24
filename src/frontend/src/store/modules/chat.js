@@ -2,6 +2,17 @@ import { getAction } from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
+function connectStomp(state) {
+  const socket = new SockJS("/chat");
+  state.stompClient = Stomp.over(socket);
+  state.stompClient.connect({}, function(frame) {
+    console.log("frame: " + frame);
+    state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
+      state.chats.push(JSON.parse(tick.body));
+    });
+  });
+}
+
 export default {
   state: {
     stompClient: null,
@@ -18,25 +29,11 @@ export default {
       }
       state.noticeId = notice.id;
       state.chatTitle = notice.company.name + " - " + notice.title;
-      const socket = new SockJS("/chat");
-      state.stompClient = Stomp.over(socket);
-      state.stompClient.connect({}, function(frame) {
-        console.log("frame: " + frame);
-        state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
-          state.chats.push(JSON.parse(tick.body));
-        });
-      });
+      connectStomp(state);
     },
     CONNECT_LATEST(state) {
       if (state.noticeId) {
-        const socket = new SockJS("/chat");
-        state.stompClient = Stomp.over(socket);
-        state.stompClient.connect({}, function(frame) {
-          console.log("frame: " + frame);
-          state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
-            state.chats.push(JSON.parse(tick.body));
-          });
-        });
+        connectStomp(state);
       }
     },
     DISCONNECT(state) {
