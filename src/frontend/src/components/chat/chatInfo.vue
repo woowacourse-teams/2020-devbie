@@ -3,7 +3,7 @@
     <v-row style="flex-wrap: nowrap;">
       <v-col cols="7" class="flex-grow-1">
         <p style="text-align: center">
-          {{ fetchedNoticeTitle }}
+          {{ fetchedChatTitle }}
         </p>
       </v-col>
       <v-col cols="3">
@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["fetchedNoticeTitle"])
+    ...mapGetters(["fetchedChatTitle"])
   }
 };
 </script>

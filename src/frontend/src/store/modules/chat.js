@@ -6,7 +6,7 @@ export default {
   state: {
     stompClient: null,
     noticeId: "",
-    noticeTitle: "",
+    chatTitle: "",
     drawer: false,
     name: "",
     chats: []
@@ -17,7 +17,7 @@ export default {
         state.stompClient.disconnect();
       }
       state.noticeId = notice.id;
-      state.noticeTitle = notice.title;
+      state.chatTitle = notice.company.name + " - " + notice.title;
       const socket = new SockJS("/chat");
       state.stompClient = Stomp.over(socket);
       state.stompClient.connect({}, function(frame) {
@@ -86,8 +86,8 @@ export default {
     fetchedChats(state) {
       return state.chats;
     },
-    fetchedNoticeTitle(state) {
-      return state.noticeTitle;
+    fetchedChatTitle(state) {
+      return state.chatTitle;
     }
   }
 };
