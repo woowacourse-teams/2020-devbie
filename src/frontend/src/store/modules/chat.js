@@ -6,21 +6,23 @@ export default {
   state: {
     stompClient: null,
     noticeId: "",
+    noticeTitle: "",
     drawer: false,
     name: "",
     chats: []
   },
   mutations: {
-    CONNECT(state, noticeId) {
+    CONNECT(state, notice) {
       if (state.stompClient) {
         state.stompClient.disconnect();
       }
-      state.noticeId = noticeId;
+      state.noticeId = notice.id;
+      state.noticeTitle = notice.title;
       const socket = new SockJS("/chat");
       state.stompClient = Stomp.over(socket);
       state.stompClient.connect({}, function(frame) {
         console.log("frame: " + frame);
-        state.stompClient.subscribe("/channel/" + noticeId, tick => {
+        state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
           state.chats.push(JSON.parse(tick.body));
         });
       });
@@ -58,23 +60,20 @@ export default {
     }
   },
   actions: {
-    CONNECT({ commit }, noticeId) {
-      commit("CONNECT", noticeId);
-    },
     SEND({ commit }, data) {
       commit("SEND", data);
     },
-    OPEN_DRAWER({ commit }) {
+    async OPEN_DRAWER({ commit }, notice) {
       commit("SET_DRAWER", true);
+      commit("CONNECT", notice);
+
+      const { data } = await getAction("/api/chats?noticeId=" + notice.id);
+      commit("SET_NAME", data.nickName);
+      commit("SET_CHATS", data.messageResponses.messageResponses);
     },
     CLOSE_DRAWER({ commit }) {
       commit("DISCONNECT");
       commit("SET_DRAWER", false);
-    },
-    async FETCH_CHATS({ commit }, noticeId) {
-      const { data } = await getAction("/api/chats?noticeId=" + noticeId);
-      commit("SET_NAME", data.nickName);
-      commit("SET_CHATS", data.messageResponses.messageResponses);
     }
   },
   getters: {
@@ -86,6 +85,9 @@ export default {
     },
     fetchedChats(state) {
       return state.chats;
+    },
+    fetchedNoticeTitle(state) {
+      return state.noticeTitle;
     }
   }
 };

@@ -3,7 +3,7 @@
     <v-row style="flex-wrap: nowrap;">
       <v-col cols="7" class="flex-grow-1">
         <p style="text-align: center">
-          제목은이쁘게
+          {{ fetchedNoticeTitle }}
         </p>
       </v-col>
       <v-col cols="3">
@@ -21,11 +21,16 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   methods: {
     closeChatDrawer() {
       this.$store.dispatch("CLOSE_DRAWER");
     }
+  },
+  computed: {
+    ...mapGetters(["fetchedNoticeTitle"])
   }
 };
 </script>

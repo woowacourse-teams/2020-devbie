@@ -109,9 +109,7 @@ export default {
       router.push(`/notices/edit/${this.$route.params.id}`);
     },
     openChatDrawer() {
-      this.$store.dispatch("OPEN_DRAWER");
-      this.$store.dispatch("CONNECT", this.fetchedNotice.id);
-      this.$store.dispatch("FETCH_CHATS", this.fetchedNotice.id);
+      this.$store.dispatch("OPEN_DRAWER", this.fetchedNotice);
     }
   },
   created() {
