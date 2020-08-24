@@ -5,20 +5,13 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query("select q from Question q where q.title.title like %:keyword%")
-    List<Question> findByTitleLike(@Param("keyword") String keyword);
-
-    @Query("select q from Question q where q.content.content like %:keyword%")
-    List<Question> findByContentLike(@Param("keyword") String keyword);
-
-    @Query("select q from Question q where q.title.title like %:keyword% "
-        + "or q.content.content like %:keyword%")
-    List<Question> findByBothLike(@Param("keyword") String keyword);
-
     @Query("select q from Question q")
     List<Question> findAllOrderBy(Sort sort);
+
+    @Query("select q from Question q where lower(q.title.title) like lower(concat('%', :title, '%')) "
+        + "or lower(q.content.content) like lower(concat('%', :content, '%'))")
+    List<Question> findByBothLike(String title, String content);
 }

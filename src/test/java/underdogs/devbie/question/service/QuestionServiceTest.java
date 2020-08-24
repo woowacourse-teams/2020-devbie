@@ -29,7 +29,6 @@ import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
-import underdogs.devbie.question.domain.SearchScope;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
@@ -216,9 +215,9 @@ public class QuestionServiceTest {
 
         List<Question> questions = Lists.newArrayList(question1, question2);
 
-        given(questionRepository.findByTitleLike(anyString())).willReturn(questions);
+        given(questionRepository.findByBothLike(anyString(), anyString())).willReturn(questions);
 
-        QuestionResponses responses = questionService.searchQuestionBy("스택", SearchScope.TITLE);
+        QuestionResponses responses = questionService.searchQuestionBy("스택", "스택");
 
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),

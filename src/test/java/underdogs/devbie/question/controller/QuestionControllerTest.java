@@ -185,7 +185,7 @@ class QuestionControllerTest extends MvcTest {
 
         given(questionService.searchQuestionBy(anyString(), any())).willReturn(responses);
 
-        MvcResult mvcResult = getAction("/api/questions?searchBy=스택&scope=TITLE")
+        MvcResult mvcResult = getAction("/api/questions?title=스택&content=")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();

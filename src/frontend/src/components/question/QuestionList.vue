@@ -44,13 +44,20 @@ export default {
     return {
       hashtag: this.$route.query.hashtag,
       orderBy: this.$route.query.orderBy || "CREATED_DATE",
-      searchBy: this.$route.query.searchBy,
-      scope: this.$route.query.scope
+      title: this.$route.query.title,
+      content: this.$route.query.content
     };
   },
 
   computed: {
-    ...mapGetters(["fetchedQuestions"])
+    ...mapGetters(["fetchedQuestions"]),
+
+    searchBy() {
+      if (this.title === "") {
+        return this.content;
+      }
+      return this.title;
+    }
   },
 
   created() {
@@ -61,10 +68,10 @@ export default {
     if (this.orderBy) {
       this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
     }
-    if (this.searchBy && this.scope) {
+    if (this.title || this.content) {
       this.$store.dispatch("SEARCH_QUESTIONS", {
-        keyword: this.searchBy,
-        scope: this.scope
+        title: this.title,
+        content: this.content
       });
     }
   }

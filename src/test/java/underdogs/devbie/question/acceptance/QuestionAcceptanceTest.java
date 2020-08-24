@@ -71,7 +71,7 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 );
             }),
             dynamicTest("특정 질문 검색", () -> {
-                QuestionResponses searchedQuestions = get("/api/questions?searchBy=" + SEARCH_KEYWORD + "&scope=TITLE",
+                QuestionResponses searchedQuestions = get("/api/questions?title=" + SEARCH_KEYWORD + "&content=" + SEARCH_KEYWORD,
                     QuestionResponses.class);
 
                 assertAll(

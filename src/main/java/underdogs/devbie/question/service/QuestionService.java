@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionRepository;
-import underdogs.devbie.question.domain.SearchScope;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
@@ -86,14 +85,9 @@ public class QuestionService {
         questionRepository.deleteById(questionId);
     }
 
-    public QuestionResponses searchQuestionBy(String keyword, SearchScope scope) {
-        if (scope.isTitle()) {
-            return QuestionResponses.from(questionRepository.findByTitleLike(keyword));
-        }
-        if (scope.isContent()) {
-            return QuestionResponses.from(questionRepository.findByContentLike(keyword));
-        }
-        return QuestionResponses.from(questionRepository.findByBothLike(keyword));
+    public QuestionResponses searchQuestionBy(String title, String content) {
+        System.out.println(">>>>" + questionRepository.findByBothLike(title, content));
+        return QuestionResponses.from(questionRepository.findByBothLike(title, content));
     }
 
     public QuestionResponses searchByHashtag(String hashtag) {

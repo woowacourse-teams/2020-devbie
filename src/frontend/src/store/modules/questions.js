@@ -4,7 +4,8 @@ export default {
   state: {
     questions: [],
     question: [],
-    questionId: []
+    questionId: [],
+    searchScope: []
   },
   mutations: {
     SET_QUESTIONS(state, data) {
@@ -18,6 +19,9 @@ export default {
     },
     CLEAR_HASHTAGS(state) {
       state.question.hashtags = [];
+    },
+    SET_SEARCH_SCOPE(state, data) {
+      state.searchScope = [data];
     }
   },
   actions: {
@@ -57,9 +61,11 @@ export default {
       );
       commit("SET_QUESTION", data);
     },
-    async SEARCH_QUESTIONS({ commit }, { keyword, scope }) {
+    async SEARCH_QUESTIONS({ commit }, { title, content }) {
       const { data } = await getAction(
-        `/api/questions?searchBy=${keyword}&scope=${scope}`
+        `/api/questions?title=${title === "" ? null : title}&content=${
+          content === "" ? null : content
+        }`
       );
       commit("SET_QUESTIONS", data);
     }
@@ -73,6 +79,9 @@ export default {
     },
     fetchedQuestionId(state) {
       return state.questionId;
+    },
+    fetchedSearchScope(state) {
+      return state.searchScope;
     }
   }
 };

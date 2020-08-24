@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: ["searchBy"],
 
@@ -36,35 +38,49 @@ export default {
         { name: "내용", value: "CONTENT" },
         { name: "제목 + 내용", value: "BOTH" }
       ],
-      selectedScope: this.$route.query.scope
-        ? this.getCurrentScope(this.$route.query.scope)
-        : {
-            name: "제목",
-            value: "TITLE"
-          },
+      selectedScope: {
+        name: "제목",
+        value: "TITLE"
+      },
       keyword: ""
     };
   },
 
+  computed: {
+    ...mapGetters(["fetchedSearchScope"]),
+
+    title() {
+      if (this.selectedScope.value !== "CONTENT") {
+        return this.keyword;
+      }
+      return "";
+    },
+
+    content() {
+      if (this.selectedScope.value !== "TITLE") {
+        return this.keyword;
+      }
+      return "";
+    }
+  },
+
   created() {
     this.keyword = this.searchBy;
+    this.selectedScope =
+      this.fetchedSearchScope.length === 0
+        ? {
+            name: "제목",
+            value: "TITLE"
+          }
+        : this.fetchedSearchScope && this.fetchedSearchScope[0];
   },
 
   methods: {
     searchByInput() {
       this.$router.push(
-        `/questions?searchBy=${this.keyword}&scope=${this.selectedScope.value}`
+        `/questions?title=${this.title}&content=${this.content}`
       );
-    },
-
-    getCurrentScope(scope) {
-      if (scope === "TITLE") {
-        return { name: "제목", value: "TITLE" };
-      } else if (scope === "CONTENT") {
-        return { name: "내용", value: "CONTENT" };
-      } else {
-        return { name: "제목 + 내용", value: "BOTH" };
-      }
+      this.$store.commit("SET_SEARCH_SCOPE", this.selectedScope);
     }
   }
 };
@@ -82,14 +98,5 @@ export default {
   display: flex;
   justify-content: center;
   align-items: baseline;
-}
-.icon {
-  font-size: 25px;
-  margin-left: 5px;
-}
-
-.icon:hover {
-  cursor: pointer;
-  color: #87bdd6;
 }
 </style>

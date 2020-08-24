@@ -50,8 +50,8 @@ export const router = new VueRouter({
       props: route => ({
         hashtag: route.query.hashtag,
         orderBy: route.query.orderBy,
-        searchBy: route.query.searchBy,
-        scope: route.query.scope
+        title: route.query.title,
+        content: route.query.content
       })
     },
     {
