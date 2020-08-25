@@ -9,7 +9,6 @@ import snackBar from "./modules/snackBar";
 import hashtags from "./modules/hashtags";
 import chat from "./modules/chat";
 import favorite from "./modules/favorite";
-// import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -25,6 +24,4 @@ export const store = new Vuex.Store({
     chat,
     favorite
   }
-
-  // plugins: [createPersistedState()]
 });
