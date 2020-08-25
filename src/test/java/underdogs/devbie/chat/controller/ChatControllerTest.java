@@ -69,7 +69,7 @@ class ChatControllerTest extends MvcTest {
             , TitleColor.AMBER.getColor()
             , 3);
 
-        given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
+        given(chatService.connect(any())).willReturn(chatRoomResponse);
 
         MvcResult mvcResult = patchAction(String.format("/api/chatrooms?noticeId=%s", noticeId), "")
             .andDo(print())

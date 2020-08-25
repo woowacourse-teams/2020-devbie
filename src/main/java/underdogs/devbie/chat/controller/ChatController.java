@@ -27,8 +27,8 @@ public class ChatController {
 
     @NoValidate
     @PatchMapping("/api/chatrooms")
-    public ResponseEntity<ChatRoomResponse> createIfNotExist(@RequestParam("noticeId") Long noticeId) {
-        return ResponseEntity.ok().body(chatService.createIfNotExist(noticeId));
+    public ResponseEntity<ChatRoomResponse> connect(@RequestParam("noticeId") Long noticeId) {
+        return ResponseEntity.ok().body(chatService.connect(noticeId));
     }
 
     @NoValidate

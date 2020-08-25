@@ -12,6 +12,7 @@ import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
 import underdogs.devbie.chat.domain.StompMethodType;
 import underdogs.devbie.chat.domain.TitleColor;
+import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -52,13 +53,22 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoomResponse createIfNotExist(Long noticeId) {
+    public ChatRoomResponse connect(Long noticeId) {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
         ChatName name = chatRoom.fetchNonRedundantName();
 
-        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(), name.getColor().getColor(),
+        sendConnectMessage(noticeId, name);
+
+        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(),
+            name.getColor().getColor(),
             chatRoom.getChatNames().size());
+    }
+
+    private void sendConnectMessage(Long noticeId, ChatName name) {
+        ChatNameResponse chatNameResponse = ChatNameResponse.from(name);
+        simpMessagingTemplate.convertAndSend(PUBLISH_URL + noticeId,
+            StompMessageResponse.of(StompMethodType.QUIT, chatNameResponse));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
