@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class ChatNameResponse {
+public class ChatNameResponse implements StompMessageResponseData {
 
     private String name;
     private String color;

@@ -9,7 +9,7 @@ import underdogs.devbie.chat.domain.Chat;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class MessageResponse {
+public class MessageResponse implements StompMessageResponseData {
 
     private Long id;
     private String name;
@@ -17,6 +17,7 @@ public class MessageResponse {
     private String message;
 
     public static MessageResponse from(Chat chat) {
-        return new MessageResponse(chat.getId(), chat.getName().getChatName(), chat.getName().getColor().getColor(), chat.getMessage().getMessage());
+        return new MessageResponse(chat.getId(), chat.getName().getChatName(), chat.getName().getColor().getColor(),
+            chat.getMessage().getMessage());
     }
 }
