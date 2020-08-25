@@ -64,9 +64,7 @@ class ChatControllerTest extends MvcTest {
             Arrays.asList(
                 Chat.of("user0", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
                 Chat.of("user1", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-                Chat.of("user2", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
-            "홍길동"
-            , TitleColor.AMBER.getColor()
+                Chat.of("user2", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)))
             , 3);
 
         given(chatService.connect(any())).willReturn(chatRoomResponse);
@@ -83,12 +81,10 @@ class ChatControllerTest extends MvcTest {
         assertThat(resultResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = resultResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(resultResponse.getNickName(), "홍길동"),
             () -> assertEquals(messageResponses.get(0).getName(), "user0"),
             () -> assertEquals(messageResponses.get(1).getName(), "user1"),
-            () -> assertEquals(messageResponses.get(2).getName(), "user2"),
-            () -> assertEquals(resultResponse.getTitleColor(), TitleColor.AMBER.getColor())
-        );
+            () -> assertEquals(messageResponses.get(2).getName(), "user2")
+            );
     }
 
     @DisplayName("Connection 종료 시 NoticeId로 채팅방 찾은 뒤 NickName 삭제 기능")

@@ -60,9 +60,7 @@ public class ChatService {
 
         sendChatName(noticeId, name, StompMethodType.ENTER);
 
-        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(),
-            name.getColor().getColor(),
-            chatRoom.getChatNames().size());
+        return ChatRoomResponse.of(chatRoom.getChats(), chatRoom.getChatNames().size());
     }
 
     private void sendChatName(Long noticeId, ChatName name, StompMethodType stompMethodType) {
