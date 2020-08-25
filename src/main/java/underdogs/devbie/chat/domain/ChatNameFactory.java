@@ -20,17 +20,17 @@ public class ChatNameFactory {
         return chatNames;
     }
 
-    public static ChatName createNonOverlappingName(Set<ChatName> existNameInChatRoom) {
+    public static ChatName createNonOverlappingName(ChatNames existNameInChatRoom) {
         Set<ChatName> chatNames = new HashSet<>();
         for (ChatName chatName : names) {
             chatNames.add(ChatName.of(chatName.getChatName(), null));
         }
 
-        chatNames.removeAll(existNameInChatRoom);
+        chatNames.removeAll(existNameInChatRoom.getChatNames());
 
         ChatName nonOverlappingName = chatNames.iterator().next();
 
-        TitleColor nonOverlappingColor = createNonOverlappingColor(existNameInChatRoom);
+        TitleColor nonOverlappingColor = createNonOverlappingColor(existNameInChatRoom.getChatNames());
 
         nonOverlappingName.setColor(nonOverlappingColor);
 

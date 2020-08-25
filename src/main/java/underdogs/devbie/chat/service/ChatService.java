@@ -56,7 +56,7 @@ public class ChatService {
     public ChatRoomResponse connect(Long noticeId) {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
-        ChatName name = chatRoom.fetchNonRedundantName();
+        ChatName name = chatRoom.addNewName();
 
         sendChatName(noticeId, name, StompMethodType.ENTER);
 

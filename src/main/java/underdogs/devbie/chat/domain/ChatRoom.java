@@ -45,8 +45,8 @@ public class ChatRoom {
             .build();
     }
 
-    public ChatName fetchNonRedundantName() {
-        ChatName chatName = chatNames.fetchNonRedundantName();
+    public ChatName addNewName() {
+        ChatName chatName = ChatNameFactory.createNonOverlappingName(chatNames);
         chatNames.add(chatName);
         return chatName;
     }

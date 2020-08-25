@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,19 +12,6 @@ class ChatNamesTest {
     @Test
     void from() {
         assertThat(ChatNames.from(Collections.EMPTY_SET)).isInstanceOf(ChatNames.class);
-    }
-
-    @Test
-    void fetchNonRedundantName() {
-        ChatNames chatNames = ChatNames.from(new HashSet<>());
-        Set<ChatName> existChatNames = new HashSet<>();
-
-        for (int i = 0; i < 9; i++) {
-            ChatName chatName = chatNames.fetchNonRedundantName();
-            assertThat(existChatNames.contains(chatName)).isFalse();
-            existChatNames.add(chatName);
-            chatNames.add(chatName);
-        }
     }
 
     @Test

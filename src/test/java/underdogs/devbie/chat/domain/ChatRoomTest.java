@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ChatRoomTest {
@@ -16,8 +17,9 @@ class ChatRoomTest {
         assertThat(ChatRoom.from(1L)).isInstanceOf(ChatRoom.class);
     }
 
+    @DisplayName("중복되지 않은 ChatName 반환")
     @Test
-    void fetchNonRedundantName() {
+    void addNewName() {
         List<ChatName> chatNames = Arrays.asList(
             ChatName.of("이름1", TitleColor.AMBER),
             ChatName.of("이름2", TitleColor.BAROSSA),
@@ -32,12 +34,13 @@ class ChatRoomTest {
         Set<ChatName> existChatNames = new HashSet<>();
 
         for (int i = 0; i < chatNames.size(); i++) {
-            ChatName chatName = chatRoom.fetchNonRedundantName();
+            ChatName chatName = chatRoom.addNewName();
             assertThat(existChatNames.contains(chatName)).isFalse();
             existChatNames.add(chatName);
         }
     }
 
+    @DisplayName("ChatName 삭제")
     @Test
     void deleteChatName() {
         ChatName deleteChatName = ChatName.of("이름1", TitleColor.AMBER);

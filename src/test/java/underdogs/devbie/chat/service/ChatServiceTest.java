@@ -88,7 +88,7 @@ class ChatServiceTest {
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성 하지 않음")
     @Test
-    void noCreateIfExist() {
+    void connectWhenChatRoomDoesNotExist() {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
@@ -129,7 +129,7 @@ class ChatServiceTest {
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성")
     @Test
-    void createIfExist() {
+    void connectWhenChatRoomExist() {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
@@ -169,7 +169,7 @@ class ChatServiceTest {
 
     @DisplayName("NoticeId와 NickName으로 해당하는 채팅방 NickName 삭제하기")
     @Test
-    void deleteNickNameByNoticeId() {
+    void disconnect() {
         String nickName = "만지는 원숭이";
         Long noticeId = 1L;
         ChatName chatName = ChatName.of(nickName, TitleColor.AMBER);
