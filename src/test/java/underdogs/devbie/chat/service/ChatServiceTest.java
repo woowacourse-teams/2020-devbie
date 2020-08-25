@@ -29,6 +29,7 @@ import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
+import underdogs.devbie.chat.dto.StompMessageResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
@@ -76,12 +77,13 @@ class ChatServiceTest {
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
         given(chatRepository.save(any(Chat.class))).willReturn(
             Chat.of("말하는 원숭이", TitleColor.AMBER, "메세지", chatRoom));
-        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(MessageResponse.class));
+        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(StompMessageResponse.class));
 
         chatService.sendMessage(messageSendRequest);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRepository).save(any());
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
     }
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성 하지 않음")

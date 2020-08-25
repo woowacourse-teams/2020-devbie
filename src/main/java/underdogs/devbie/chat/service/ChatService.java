@@ -10,10 +10,12 @@ import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.domain.StompMethodType;
 import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
+import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.exception.NotExistException;
 
 @Service
@@ -33,8 +35,9 @@ public class ChatService {
 
         Chat savedChat = saveChat(messageSendRequest, chatRoom);
 
+        MessageResponse messageResponse = MessageResponse.from(savedChat);
         simpMessagingTemplate.convertAndSend(PUBLISH_URL + messageSendRequest.getNoticeId(),
-            MessageResponse.from(savedChat));
+            StompMessageResponse.of(StompMethodType.TALK, messageResponse));
     }
 
     private ChatRoom getChatRoom(Long noticeId) {
