@@ -69,7 +69,7 @@ class ChatControllerTest extends MvcTest {
             , TitleColor.AMBER.getColor()
             , 3);
 
-        given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
+        given(chatService.connect(any())).willReturn(chatRoomResponse);
 
         MvcResult mvcResult = patchAction(String.format("/api/chatrooms?noticeId=%s", noticeId), "")
             .andDo(print())
@@ -97,7 +97,7 @@ class ChatControllerTest extends MvcTest {
         String nickName = "만지는 원숭이";
         Long noticeId = 1L;
 
-        doNothing().when(chatService).deleteNickName(anyString(), anyLong());
+        doNothing().when(chatService).disconnect(anyString(), anyLong());
 
         deleteAction(String.format("/api/chatrooms/%s?noticeId=%s", nickName, noticeId))
             .andDo(print())

@@ -8,7 +8,14 @@ function connectStomp(state) {
   state.stompClient.connect({}, function(frame) {
     console.log("frame: " + frame);
     state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
-      state.chats.push(JSON.parse(tick.body));
+      const data = JSON.parse(tick.body);
+      if (data.stompMethodType === "ENTER") {
+        state.userCount = state.userCount + 1;
+      } else if (data.stompMethodType === "QUIT") {
+        state.userCount = state.userCount - 1;
+      } else if (data.stompMethodType === "TALK") {
+        state.chats.push(data.data);
+      }
     });
   });
 }

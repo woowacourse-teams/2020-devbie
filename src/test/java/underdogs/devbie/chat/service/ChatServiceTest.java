@@ -29,6 +29,7 @@ import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
+import underdogs.devbie.chat.dto.StompMessageResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
@@ -76,12 +77,13 @@ class ChatServiceTest {
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
         given(chatRepository.save(any(Chat.class))).willReturn(
             Chat.of("말하는 원숭이", TitleColor.AMBER, "메세지", chatRoom));
-        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(MessageResponse.class));
+        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(StompMessageResponse.class));
 
         chatService.sendMessage(messageSendRequest);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRepository).save(any());
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
     }
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성 하지 않음")
@@ -108,10 +110,11 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
 
-        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRoomRepository, never()).save(any());
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
@@ -150,9 +153,10 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
 
-        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
@@ -183,8 +187,9 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
 
-        chatService.deleteNickName(nickName, noticeId);
+        chatService.disconnect(nickName, noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(simpMessagingTemplate).convertAndSend(anyString(), any(StompMessageResponse.class));
     }
 }
