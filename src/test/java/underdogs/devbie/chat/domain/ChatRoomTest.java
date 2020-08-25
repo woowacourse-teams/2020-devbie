@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ChatRoomTest {
@@ -16,13 +17,14 @@ class ChatRoomTest {
         assertThat(ChatRoom.from(1L)).isInstanceOf(ChatRoom.class);
     }
 
+    @DisplayName("중복되지 않은 ChatName 반환")
     @Test
-    void fetchNonRedundantName() {
+    void addNewName() {
         List<ChatName> chatNames = Arrays.asList(
-            ChatName.of("이름1", TitleColor.AMBER),
-            ChatName.of("이름2", TitleColor.BAROSSA),
-            ChatName.of("이름3", TitleColor.DARK_ORCHID),
-            ChatName.of("이름4", TitleColor.DART_CYAN)
+            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
+            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID),
+            ChatName.of("발그레한 코끼리", TitleColor.DART_CYAN)
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
@@ -32,20 +34,21 @@ class ChatRoomTest {
         Set<ChatName> existChatNames = new HashSet<>();
 
         for (int i = 0; i < chatNames.size(); i++) {
-            ChatName chatName = chatRoom.fetchNonRedundantName();
+            ChatName chatName = chatRoom.addNewName();
             assertThat(existChatNames.contains(chatName)).isFalse();
             existChatNames.add(chatName);
         }
     }
 
+    @DisplayName("ChatName 삭제")
     @Test
     void deleteChatName() {
-        ChatName deleteChatName = ChatName.of("이름1", TitleColor.AMBER);
+        ChatName deleteChatName = ChatName.of("하늘하늘한 곰", TitleColor.AMBER);
         List<ChatName> chatNames = Arrays.asList(
             deleteChatName,
-            ChatName.of("이름2", TitleColor.DART_CYAN),
-            ChatName.of("이름3", TitleColor.DARK_ORCHID),
-            ChatName.of("이름4", TitleColor.DODGER_BLUE)
+            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID),
+            ChatName.of("발그레한 코끼리", TitleColor.DART_CYAN)
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)

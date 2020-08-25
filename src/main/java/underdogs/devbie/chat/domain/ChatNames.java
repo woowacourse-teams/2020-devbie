@@ -1,5 +1,6 @@
 package underdogs.devbie.chat.domain;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,10 +32,6 @@ public class ChatNames {
         return new ChatNames(chatNames);
     }
 
-    public ChatName fetchNonRedundantName() {
-        return ChatNameFactory.createNonOverlappingName(chatNames);
-    }
-
     public void add(ChatName chatName) {
         chatNames.add(chatName);
     }
@@ -54,5 +51,9 @@ public class ChatNames {
 
     public int size() {
         return chatNames.size();
+    }
+
+    public Set<ChatName> getChatNames() {
+        return Collections.unmodifiableSet(chatNames);
     }
 }

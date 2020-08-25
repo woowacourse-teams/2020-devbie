@@ -12,25 +12,25 @@ public class ChatNameFactory {
         Set<ChatName> chatNames = new HashSet<>();
 
         for (Adjective adjective : Adjective.values()) {
-            for (Noun noun : Noun.values()) {
-                chatNames.add(ChatName.of(adjective, noun, null));
+            for (Animal animal : Animal.values()) {
+                chatNames.add(ChatName.of(adjective, animal, null));
             }
         }
 
         return chatNames;
     }
 
-    public static ChatName createNonOverlappingName(Set<ChatName> existNameInChatRoom) {
+    public static ChatName createNonOverlappingName(ChatNames existNameInChatRoom) {
         Set<ChatName> chatNames = new HashSet<>();
         for (ChatName chatName : names) {
             chatNames.add(ChatName.of(chatName.getChatName(), null));
         }
 
-        chatNames.removeAll(existNameInChatRoom);
+        chatNames.removeAll(existNameInChatRoom.getChatNames());
 
         ChatName nonOverlappingName = chatNames.iterator().next();
 
-        TitleColor nonOverlappingColor = createNonOverlappingColor(existNameInChatRoom);
+        TitleColor nonOverlappingColor = createNonOverlappingColor(existNameInChatRoom.getChatNames());
 
         nonOverlappingName.setColor(nonOverlappingColor);
 

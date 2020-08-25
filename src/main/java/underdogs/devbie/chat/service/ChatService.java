@@ -11,11 +11,14 @@ import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
 import underdogs.devbie.chat.domain.StompMethodType;
+import underdogs.devbie.chat.domain.StompMethodType;
 import underdogs.devbie.chat.domain.TitleColor;
+import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
+import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.exception.NotExistException;
 
@@ -56,7 +59,7 @@ public class ChatService {
     public ChatRoomResponse connect(Long noticeId) {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
-        ChatName name = chatRoom.fetchNonRedundantName();
+        ChatName name = chatRoom.addNewName();
 
         sendChatName(noticeId, name, StompMethodType.ENTER);
 
