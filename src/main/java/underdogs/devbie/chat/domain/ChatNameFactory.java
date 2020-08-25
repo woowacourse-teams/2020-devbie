@@ -12,8 +12,8 @@ public class ChatNameFactory {
         Set<ChatName> chatNames = new HashSet<>();
 
         for (Adjective adjective : Adjective.values()) {
-            for (Noun noun : Noun.values()) {
-                chatNames.add(ChatName.of(adjective, noun, null));
+            for (Animal animal : Animal.values()) {
+                chatNames.add(ChatName.of(adjective, animal, null));
             }
         }
 

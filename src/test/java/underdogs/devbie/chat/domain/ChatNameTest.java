@@ -9,22 +9,22 @@ class ChatNameTest {
 
     @Test
     void ofByEnum() {
-        ChatName chatName = ChatName.of(Adjective.돌리는, Noun.원숭이, TitleColor.AMBER);
+        ChatName chatName = ChatName.of(Adjective.하늘하늘한, Animal.곰, TitleColor.AMBER);
 
         assertAll(
             () -> assertThat(chatName).isNotNull(),
-            () -> assertEquals(chatName.getChatName(), "돌리는 원숭이"),
+            () -> assertEquals(chatName.getChatName(), "하늘하늘한 곰"),
             () -> assertEquals(chatName.getColor(), TitleColor.AMBER)
         );
     }
 
     @Test
     void ofByString() {
-        ChatName chatName = ChatName.of("돌리는 원숭이", TitleColor.AMBER);
+        ChatName chatName = ChatName.of("하늘하늘한 곰", TitleColor.AMBER);
 
         assertAll(
             () -> assertThat(chatName).isNotNull(),
-            () -> assertEquals(chatName.getChatName(), "돌리는 원숭이"),
+            () -> assertEquals(chatName.getChatName(), "하늘하늘한 곰"),
             () -> assertEquals(chatName.getColor(), TitleColor.AMBER)
         );
     }

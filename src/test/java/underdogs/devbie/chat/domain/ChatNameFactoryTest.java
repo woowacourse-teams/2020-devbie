@@ -14,10 +14,10 @@ class ChatNameFactoryTest {
     @Test
     void createNonOverlappingName() {
         Set<ChatName> chatNames = new HashSet<>();
-        chatNames.add(ChatName.of(Adjective.돌리는, Noun.원숭이, TitleColor.AMBER));
+        chatNames.add(ChatName.of(Adjective.깜찍한, Animal.강아지, TitleColor.AMBER));
         ChatName actual = ChatNameFactory.createNonOverlappingName(ChatNames.from(chatNames));
 
         assertThat(actual).isNotNull();
-        assertThat(actual.getChatName()).isNotEqualTo("돌리는 원숭이");
+        assertThat(actual.getChatName()).isNotEqualTo("깜찍한 강아지");
     }
 }
