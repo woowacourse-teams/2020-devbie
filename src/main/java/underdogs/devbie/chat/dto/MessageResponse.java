@@ -13,9 +13,10 @@ public class MessageResponse {
 
     private Long id;
     private String name;
+    private String titleColor;
     private String message;
 
     public static MessageResponse from(Chat chat) {
-        return new MessageResponse(chat.getId(), chat.getName().getChatName(), chat.getMessage().getMessage());
+        return new MessageResponse(chat.getId(), chat.getName().getChatName(), chat.getName().getColor().getColor(), chat.getMessage().getMessage());
     }
 }
