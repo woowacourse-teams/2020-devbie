@@ -1,16 +1,22 @@
 <template>
   <v-app id="app">
-    <navigation-bar @logout="logout"></navigation-bar>
-    <transition name="fade" mode="out-in">
-      <router-view :key="$route.fullPath" class="content"></router-view>
-    </transition>
-    <snack-bar></snack-bar>
-    <chat-drawer></chat-drawer>
-    <footer-bar></footer-bar>
+    <div :class="{ main_box: this.drawer }">
+      <navigation-bar @logout="logout"></navigation-bar>
+      <transition name="fade" mode="out-in">
+        <router-view :key="$route.fullPath" class="content"></router-view>
+      </transition>
+      <snack-bar></snack-bar>
+      <footer-bar></footer-bar>
+    </div>
+    <chat-drawer v-if="drawer"></chat-drawer>
+    <button id="drawer_btn" v-else @click="openDrawer">
+      채팅방 열기
+    </button>
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import NavigationBar from "./components/NavagationBar.vue";
 import FooterBar from "./components/FooterBar.vue";
 import SnackBar from "./components/SnackBar";
@@ -34,7 +40,14 @@ export default {
     logout() {
       localStorage.removeItem("devbieToken");
       this.$store.commit("DELETE_LOGIN_USER");
+    },
+    openDrawer() {
+      console.log("aa");
+      this.$store.dispatch("OPEN_LATEST");
     }
+  },
+  computed: {
+    ...mapGetters(["drawer"])
   },
   components: {
     ChatDrawer,
@@ -67,5 +80,22 @@ a {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.main_box {
+  width: calc(100vw - 260px);
+}
+
+#drawer_btn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 120px;
+  height: 40px;
+  color: white;
+  text-align: center;
+  background-color: #00b8d4;
+  padding: 10px;
+  border-radius: 4px;
 }
 </style>

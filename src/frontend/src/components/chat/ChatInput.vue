@@ -1,33 +1,38 @@
 <template>
-  <div style="height:100%" class="d-flex flex-column">
-    <div>
-      익명의 이름
+  <div id="default_box">
+    <div id="name_box">
+      {{ fetchedNickName }}
     </div>
-    <div>
-      <v-text-field
-        label="Solo"
+    <div id="input_box">
+      <v-textarea
         placeholder="욕설은 삼가해주세요"
-        solo
-        background-color="grey"
-        height="100px"
+        background-color="#e0e0e0"
+        rows="3"
+        row-height="12"
         v-on:keyup.enter="submit"
         v-model="chatMessage"
-      ></v-text-field>
+      >
+      </v-textarea>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
       chatMessage: ""
     };
   },
+  computed: {
+    ...mapGetters(["fetchedNickName"])
+  },
   methods: {
     submit() {
       this.$store.dispatch("SEND", {
-        name: "유안",
+        name: this.fetchedNickName,
         message: this.chatMessage
       });
       this.chatMessage = "";
@@ -36,4 +41,14 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#default_box {
+  margin: 3px;
+}
+#name_box {
+  margin: 3px;
+}
+#input_box {
+  margin: 5px 3px 3px;
+}
+</style>
