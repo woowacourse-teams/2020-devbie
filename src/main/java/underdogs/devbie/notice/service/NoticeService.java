@@ -80,6 +80,6 @@ public class NoticeService {
 
     public NoticeResponses findAllByIds(List<Long> noticeIds) {
         List<Notice> notices = noticeRepository.findAllById(noticeIds);
-        return NoticeResponses.listFrom(notices, 1);
+        return NoticeResponses.listFrom(notices, 1000);
     }
 }
