@@ -1,14 +1,15 @@
 package underdogs.devbie.chat.domain;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ChatNameFactory {
 
     private static final Set<ChatName> names = createAllChatNames();
+    private static final Set<TitleColor> colors = new HashSet<>(Arrays.asList(TitleColor.values()));
 
     private static Set<ChatName> createAllChatNames() {
         Set<ChatName> chatNames = new HashSet<>();
@@ -23,40 +24,35 @@ public class ChatNameFactory {
     }
 
     public static ChatName createNonOverlappingName(ChatNames existNameInChatRoom) {
+        Set<ChatName> chatNames = removeExistNameInChatRoom(existNameInChatRoom);
+
+        ChatName nonOverlappingName = extractRandom(chatNames);
+
+        nonOverlappingName.setColor(extractRandom(colors));
+
+        return nonOverlappingName;
+    }
+
+    private static Set<ChatName> removeExistNameInChatRoom(ChatNames existNameInChatRoom) {
         Set<ChatName> chatNames = new HashSet<>();
         for (ChatName chatName : names) {
             chatNames.add(ChatName.of(chatName.getChatName(), null));
         }
 
         chatNames.removeAll(existNameInChatRoom.getChatNames());
-
-        ChatName nonOverlappingName = extractNonOverlappingName(chatNames);
-
-        TitleColor nonOverlappingColor = createNonOverlappingColor(existNameInChatRoom.getChatNames());
-
-        nonOverlappingName.setColor(nonOverlappingColor);
-
-        return nonOverlappingName;
+        return chatNames;
     }
 
-    private static TitleColor createNonOverlappingColor(Set<ChatName> existNameInChatRoom) {
-        Set<TitleColor> existColorInChatRoom = existNameInChatRoom.stream()
-            .map(ChatName::getColor)
-            .collect(Collectors.toSet());
-
-        return TitleColorFactory.createNonOverlappingColor(existColorInChatRoom);
-    }
-
-    private static ChatName extractNonOverlappingName(Set<ChatName> chatNames) {
-        int size = chatNames.size();
+    private static <T> T extractRandom(Set<T> set) {
+        int size = set.size();
         if (size == 0) {
             throw new IndexOutOfBoundsException("컬렉션의 크기가 0입니다.");
         }
-        int item = new Random().nextInt(size);
+        int randomIndex = new Random().nextInt(size);
         int i = 0;
-        for (ChatName chatName : chatNames) {
-            if (i == item) {
-                return chatName;
+        for (T item : set) {
+            if (i == randomIndex) {
+                return item;
             }
             i++;
         }
