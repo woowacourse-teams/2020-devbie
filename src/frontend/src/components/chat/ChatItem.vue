@@ -1,9 +1,7 @@
 <template>
   <div id="chat_box">
     <div id="nickName_box" v-bind:style="{ color: color }">{{ chat.name }}</div>
-    <div id="message_box">
-      {{ chat.message }}
-    </div>
+    <div id="message_box">{{ chat.message }}</div>
   </div>
 </template>
 
@@ -11,26 +9,11 @@
 export default {
   data() {
     return {
-      colors: [
-        "#F44336",
-        "#E91E63",
-        "#9C27B0",
-        "#673AB7",
-        "#3F51B5",
-        "#2196F3",
-        "#009688",
-        "#4CAF50",
-        "#FFC107",
-        "#FF9800",
-        "#4D2F40",
-        "#795548",
-        "#9E9E9E"
-      ],
       color: ""
     };
   },
   created() {
-    this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+    this.color = this.chat.titleColor;
   },
   props: {
     chat: {

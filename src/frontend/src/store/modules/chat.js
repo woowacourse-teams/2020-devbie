@@ -1,4 +1,4 @@
-import { getAction } from "../../api";
+import { patchAction } from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
@@ -20,6 +20,7 @@ export default {
     chatTitle: "",
     drawer: false,
     name: "",
+    color: "",
     chats: []
   },
   mutations: {
@@ -46,6 +47,7 @@ export default {
       const request = {
         noticeId: state.noticeId,
         name: name,
+        titleColor: state.color,
         message: message
       };
       state.stompClient.send("/send/message", JSON.stringify(request), {});
@@ -58,6 +60,9 @@ export default {
     },
     SET_CHATS(state, chats) {
       state.chats = chats;
+    },
+    SET_COLOR(state, color) {
+      state.color = color;
     }
   },
   actions: {
@@ -68,9 +73,12 @@ export default {
       commit("SET_DRAWER", true);
       commit("CONNECT", notice);
 
-      const { data } = await getAction("/api/chats?noticeId=" + notice.id);
+      const { data } = await patchAction(
+        "/api/chatrooms?noticeId=" + notice.id
+      );
       commit("SET_NAME", data.nickName);
       commit("SET_CHATS", data.messageResponses.messageResponses);
+      commit("SET_COLOR", data.titleColor);
     },
     OPEN_LATEST({ commit, state }) {
       if (state.noticeId) {
