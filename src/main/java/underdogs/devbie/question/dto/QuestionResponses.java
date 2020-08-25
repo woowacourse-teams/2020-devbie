@@ -1,6 +1,5 @@
 package underdogs.devbie.question.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,11 +16,18 @@ import underdogs.devbie.question.domain.Question;
 @ToString
 public class QuestionResponses {
 
-    private List<QuestionResponse> questions = new ArrayList<>();
+    private List<QuestionResponse> questions;
+    private int lastPage;
+
+    public static QuestionResponses of(List<Question> questions, int lastPage) {
+        return new QuestionResponses(questions.stream()
+            .map(QuestionResponse::from)
+            .collect(Collectors.toList()), lastPage);
+    }
 
     public static QuestionResponses from(List<Question> questions) {
         return new QuestionResponses(questions.stream()
             .map(QuestionResponse::from)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList()), 0);
     }
 }

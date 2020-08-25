@@ -91,9 +91,9 @@ class QuestionControllerTest extends MvcTest {
             .content(QuestionContent.from(TEST_QUESTION_CONTENT))
             .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
-        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
+        QuestionResponses responses = QuestionResponses.of(Lists.newArrayList(question));
 
-        given(questionService.readAllOrderBy(OrderBy.CREATED_DATE)).willReturn(responses);
+        given(questionService.readAll(OrderBy.CREATED_DATE)).willReturn(responses);
 
         MvcResult mvcResult = getAction("/api/questions?orderBy=CREATED_DATE")
             .andExpect(status().isOk())
@@ -181,7 +181,7 @@ class QuestionControllerTest extends MvcTest {
             .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
-        QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));
+        QuestionResponses responses = QuestionResponses.of(Lists.newArrayList(question1, question2));
 
         given(questionService.searchQuestionBy(anyString(), any())).willReturn(responses);
 

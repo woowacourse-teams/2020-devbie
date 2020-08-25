@@ -20,8 +20,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionPageRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -49,10 +49,10 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping
-    public ResponseEntity<QuestionResponses> readAllOrderBy(
-        @RequestParam(value = "orderBy", required = false) OrderBy condition
+    public ResponseEntity<QuestionResponses> readAll(
+        @Valid QuestionPageRequest questionPageRequest
     ) {
-        QuestionResponses responses = questionService.readAllOrderBy(condition);
+        QuestionResponses responses = questionService.readAll(questionPageRequest.toPageRequest());
         return ResponseEntity
             .ok(responses);
     }

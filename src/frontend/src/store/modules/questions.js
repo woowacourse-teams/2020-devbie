@@ -5,11 +5,15 @@ export default {
     questions: [],
     question: [],
     questionId: [],
-    searchScope: []
+    searchScope: [],
+    questionPage: 1,
+    questionLastPage: 1000
   },
   mutations: {
     SET_QUESTIONS(state, data) {
-      state.questions = data;
+      state.questionPage = state.questionPage + 1;
+      state.questionLastPage = data["lastPage"];
+      state.questions = state.questions.concat(data["questions"]);
     },
     SET_QUESTION(state, data) {
       state.question = data;
@@ -25,8 +29,8 @@ export default {
     }
   },
   actions: {
-    async FETCH_QUESTIONS({ commit }, orderBy) {
-      const { data } = await getAction(`/api/questions?orderBy=${orderBy}`);
+    async FETCH_QUESTIONS({ commit }, queryUrl) {
+      const { data } = await getAction(`/api/questions?` + queryUrl);
       commit("SET_QUESTIONS", data);
     },
     async FETCH_QUESTION({ commit }, questionId) {
@@ -82,6 +86,12 @@ export default {
     },
     fetchedSearchScope(state) {
       return state.searchScope;
+    },
+    fetchedQuestionPage(state) {
+      return state.questionPage;
+    },
+    fetchedQuestionLastPage(state) {
+      return state.questionLastPage;
     }
   }
 };

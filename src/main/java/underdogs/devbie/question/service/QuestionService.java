@@ -2,12 +2,12 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
@@ -35,10 +35,9 @@ public class QuestionService {
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAllOrderBy(OrderBy condition) {
-        Sort sort = Sort.by(condition.getDirection(), condition.getPropertyName());
-        List<Question> questions = questionRepository.findAllOrderBy(sort);
-        return QuestionResponses.from(questions);
+    public QuestionResponses readAll(Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllBy(pageable);
+        return QuestionResponses.of(questions.getContent(), questions.getTotalPages());
     }
 
     @Transactional
@@ -86,7 +85,6 @@ public class QuestionService {
     }
 
     public QuestionResponses searchQuestionBy(String title, String content) {
-        System.out.println(">>>>" + questionRepository.findByBothLike(title, content));
         return QuestionResponses.from(questionRepository.findByBothLike(title, content));
     }
 

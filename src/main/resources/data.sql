@@ -48,6 +48,17 @@ INSERT INTO language(notice_id, languages) values (8, 'CPP');
 
 INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (1, 100, '가비지 컬렉션이란 무엇인가','GC를 어느정도 까지 알아야할까요?', 100);
 INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (2, 54, 'PUT과 PATCH의 차이','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 30);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (3, 100, 'Rest API','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 43);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (4, 54, 'HTTP vs HTTPS','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 111);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (5, 100, '싱글톤 패턴 예시','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 12);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (6, 54, '무한 스크롤','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 54);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (7, 100, '코로나 싫어요','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 66);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (8, 54, 'this is question','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 17);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (9, 100, 'JVM 작동원리','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 31);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (10, 54, 'websocket에 대해 알아야할까요','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 29);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (11, 100, 'Querydsl은 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 99);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (12, 100, 'h2방언','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 500);
+INSERT INTO question (question_id, user_id, title, content, visit_count) VALUES (13, 54, '도커가 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 211);
 
 INSERT INTO answer (answer_id, user_id, question_id, content) VALUES (1, 100, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');
 INSERT INTO answer (answer_id, user_id, question_id, content) VALUES (2, 54, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');

@@ -5,10 +5,10 @@
       >" 태그로 검색한 결과입니다.
     </div>
     <search-bar v-else :searchBy="searchBy"></search-bar>
-    <ul class="question-list">
+    <ul v-scroll="onScroll" class="question-list">
       <li
-        v-for="question in fetchedQuestions.questions"
-        v-bind:key="question.id"
+        v-for="question in fetchedQuestions"
+        :key="question.id"
         class="question"
       >
         <div class="count-infos">
@@ -29,6 +29,16 @@
         </div>
       </li>
     </ul>
+    <v-progress-circular
+      v-if="isBottom"
+      :size="50"
+      color="primary"
+      indeterminate
+      class="loading-progress"
+    ></v-progress-circular>
+    <template v-if="isEndPage()">
+      모든 질문을 조회하셨습니다.
+    </template>
   </div>
 </template>
 
@@ -42,6 +52,7 @@ export default {
 
   data() {
     return {
+      isBottom: false,
       hashtag: this.$route.query.hashtag,
       orderBy: this.$route.query.orderBy || "CREATED_DATE",
       title: this.$route.query.title,
@@ -50,7 +61,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedQuestions"]),
+    ...mapGetters([
+      "fetchedQuestions",
+      "fetchedQuestionPage",
+      "fetchedQuestionLastPage"
+    ]),
 
     searchBy() {
       if (this.title === "") {
@@ -66,13 +81,52 @@ export default {
       return;
     }
     if (this.orderBy) {
-      this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
+      this.addQuestions();
     }
     if (this.title || this.content) {
       this.$store.dispatch("SEARCH_QUESTIONS", {
         title: this.title,
         content: this.content
       });
+    }
+  },
+
+  methods: {
+    async onScroll({ target }) {
+      const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
+      let clientCurrentHeight = scrollTop + clientHeight;
+      let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
+      const currentState = clientCurrentHeight > componentHeight;
+
+      if (
+        this.isBottom !== currentState &&
+        this.fetchedQuestionPage <= this.fetchedQuestionLastPage
+      ) {
+        this.isBottom = true;
+        await this.addQuestions();
+        this.isBottom = false;
+      }
+    },
+
+    isEndPage() {
+      return this.fetchedQuestionPage > this.fetchedQuestionLastPage;
+    },
+
+    async addQuestions() {
+      const param = {
+        page: this.fetchedQuestionPage,
+        orderBy: this.orderBy
+      };
+      const queryParam = new URLSearchParams(param).toString();
+      try {
+        await this.$store.dispatch("FETCH_QUESTIONS", queryParam);
+      } catch (error) {
+        console.log("질문 리스트 불러오기 실패" + error.response.data.message);
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "질문을 불러오지 못했습니다."
+        );
+      }
     }
   }
 };
@@ -146,5 +200,10 @@ export default {
 .hashtag-header span {
   color: #fc8c84;
   font-size: 26px;
+}
+
+.loading-progress {
+  text-align: center;
+  left: 50%;
 }
 </style>

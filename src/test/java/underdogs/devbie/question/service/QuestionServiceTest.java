@@ -107,9 +107,9 @@ public class QuestionServiceTest {
     @Test
     void readAll() {
         List<Question> questions = Lists.newArrayList(question);
-        given(questionRepository.findAllOrderBy(any(Sort.class))).willReturn(questions);
+        given(questionRepository.findAllBy(any(Sort.class))).willReturn(questions);
 
-        QuestionResponses responses = questionService.readAllOrderBy(OrderBy.CREATED_DATE);
+        QuestionResponses responses = questionService.readAll(OrderBy.CREATED_DATE);
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
