@@ -9,12 +9,13 @@ import underdogs.devbie.chat.domain.StompMethodType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class StompMessageResponse<T> {
+public class StompMessageResponse<T extends StompMessageResponseData> {
 
     private StompMethodType stompMethodType;
     private T data;
 
-    public static <T> StompMessageResponse of(StompMethodType stompMethodType, T data) {
+    public static <T extends StompMessageResponseData> StompMessageResponse of(StompMethodType stompMethodType,
+        T data) {
         return new StompMessageResponse(stompMethodType, data);
     }
 }
