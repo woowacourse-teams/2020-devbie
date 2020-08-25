@@ -26,6 +26,10 @@ export default {
     },
     SET_SEARCH_SCOPE(state, data) {
       state.searchScope = [data];
+    },
+    INIT_QUESTIONS(state) {
+      state.questions = [];
+      state.questionPage = 1;
     }
   },
   actions: {

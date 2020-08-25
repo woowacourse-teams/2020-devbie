@@ -36,9 +36,6 @@
       indeterminate
       class="loading-progress"
     ></v-progress-circular>
-    <template v-if="isEndPage()">
-      모든 질문을 조회하셨습니다.
-    </template>
   </div>
 </template>
 
@@ -54,7 +51,6 @@ export default {
     return {
       isBottom: false,
       hashtag: this.$route.query.hashtag,
-      orderBy: this.$route.query.orderBy || "CREATED_DATE",
       title: this.$route.query.title,
       content: this.$route.query.content
     };
@@ -75,20 +71,22 @@ export default {
     }
   },
 
+  beforeCreate() {
+    this.$store.commit("INIT_QUESTIONS");
+  },
+
   created() {
-    if (this.hashtag) {
-      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
-      return;
-    }
-    if (this.orderBy) {
-      this.addQuestions();
-    }
-    if (this.title || this.content) {
-      this.$store.dispatch("SEARCH_QUESTIONS", {
-        title: this.title,
-        content: this.content
-      });
-    }
+    this.addQuestions();
+    // if (this.hashtag) {
+    //   this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
+    //   return;
+    // }
+    // if (this.title || this.content) {
+    //   this.$store.dispatch("SEARCH_QUESTIONS", {
+    //     title: this.title,
+    //     content: this.content
+    //   });
+    // }
   },
 
   methods: {
@@ -115,7 +113,7 @@ export default {
     async addQuestions() {
       const param = {
         page: this.fetchedQuestionPage,
-        orderBy: this.orderBy
+        orderBy: this.$route.query.orderBy || "CREATED_DATE"
       };
       const queryParam = new URLSearchParams(param).toString();
       try {
@@ -205,5 +203,11 @@ export default {
 .loading-progress {
   text-align: center;
   left: 50%;
+}
+
+.finish-scroll {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
 }
 </style>

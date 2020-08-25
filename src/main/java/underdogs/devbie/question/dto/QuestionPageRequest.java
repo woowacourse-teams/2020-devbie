@@ -30,7 +30,7 @@ public final class QuestionPageRequest {
 
     public PageRequest toPageRequest() {
         setDefaultValue();
-        return PageRequest.of(page - 1, DEFAULT_SIZE, Sort.by(orderBy.getDirection(), orderBy.getPropertyName()));
+        return PageRequest.of(page - 1, DEFAULT_SIZE, Sort.by(orderBy.getDirection(), orderBy.getPropertyName(), "createdDate"));
     }
 
     private void setDefaultValue() {

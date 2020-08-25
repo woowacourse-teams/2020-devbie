@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.querydsl.core.QueryResults;
@@ -17,6 +18,7 @@ import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
 
+@Repository
 public class QuestionRepositoryImpl extends QuerydslRepositorySupport implements QuestionRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
