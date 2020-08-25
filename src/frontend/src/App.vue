@@ -3,7 +3,7 @@
     <div :class="{ main_box: this.drawer }">
       <navigation-bar @logout="logout"></navigation-bar>
       <transition name="fade" mode="out-in">
-        <router-view :key="$route.fullPath" class="content"></router-view>
+        <router-view class="content"></router-view>
       </transition>
       <snack-bar></snack-bar>
       <footer-bar></footer-bar>

@@ -126,7 +126,8 @@ export default {
   margin: 50px 100px 100px 0px;
 }
 .v-list-item:hover {
-  opacity: 0.7;
+  opacity: 0.6;
+  cursor: pointer;
 }
 .card-title {
   background-color: #daebea;
