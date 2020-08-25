@@ -4,7 +4,6 @@
       <notice-type></notice-type>
       <notice-filters></notice-filters>
       <notice-search></notice-search>
-      <i class="fas fa-search"></i>
     </div>
     <notice-list></notice-list>
   </div>

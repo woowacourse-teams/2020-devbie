@@ -1,6 +1,8 @@
 <template>
   <div>
     <v-text-field
+      append-icon="fas fa-search"
+      style="display: inline-block"
       class="search-bar"
       v-model="keyword"
       @keyup.enter="onSearch"
