@@ -56,7 +56,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isBottom: false
+      isBottom: false,
+      isReady: true
     };
   },
 
@@ -84,6 +85,9 @@ export default {
     },
     fetchedKeyword() {
       this.addNotices();
+    },
+    fetchedPage() {
+      this.isReady = true;
     }
   },
 
@@ -96,6 +100,10 @@ export default {
 
   methods: {
     async onScroll({ target }) {
+      if (!this.isReady) {
+        return;
+      }
+
       const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
       let clientCurrentHeight = scrollTop + clientHeight;
       let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
@@ -115,6 +123,8 @@ export default {
     },
 
     async addNotices() {
+      this.isReady = false;
+
       const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
@@ -123,6 +133,7 @@ export default {
         keyword: this.fetchedKeyword
       };
       const queryParam = new URLSearchParams(param).toString();
+
       try {
         this.$store.dispatch("FETCH_NOTICES", queryParam);
       } catch (error) {

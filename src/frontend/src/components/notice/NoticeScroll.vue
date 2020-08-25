@@ -19,7 +19,7 @@
           class="scroll-content"
           @scroll="onScroll"
         >
-          <template v-for="item in items">
+          <template v-for="item in fetchedNotices">
             <v-list-item :key="item.id">
               <v-list-item-avatar>
                 <v-img :src="item.image" height="50" max-width="50"></v-img>
@@ -33,10 +33,12 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-            <v-divider :key="item.id"></v-divider>
+            <v-divider :key="`divider` + item.id"></v-divider>
           </template>
         </div>
       </v-card>
+      <h1>{{ isReady }}</h1>
+      <h1>{{ fetchedPage }}</h1>
     </div>
   </div>
 </template>
@@ -47,8 +49,15 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isBottom: false
+      isBottom: false,
+      isReady: true
     };
+  },
+
+  watch: {
+    fetchedPage() {
+      this.isReady = true;
+    }
   },
 
   computed: {
@@ -60,35 +69,22 @@ export default {
       "fetchedKeyword",
       "fetchedPage",
       "fetchedLastPage"
-    ]),
-    items() {
-      return this.fetchedNotices;
-    }
+    ])
   },
 
-  created() {
-    if (this.fetchedNotices.length !== 0) {
+  async created() {
+    if (this.fetchedNotices.length > 0) {
       return;
     }
-    const param = {
-      noticeType: this.fetchedNoticeType,
-      jobPosition: this.fetchedJobPosition,
-      language: this.fetchedLanguage
-    };
-    const queryParam = new URLSearchParams(param).toString();
-    try {
-      this.$store.dispatch("FETCH_NOTICES", queryParam);
-    } catch (error) {
-      console.log("공고 리스트 불러오기 실패 : " + error.response.data.message);
-      this.$store.dispatch(
-        "UPDATE_SNACKBAR_TEXT",
-        "공고를 불러오지 못했습니다."
-      );
-    }
+    await this.addNotices();
   },
 
   methods: {
     async onScroll({ target }) {
+      if (!this.isReady) {
+        return;
+      }
+
       if (
         target.scrollTop + target.clientHeight >= target.scrollHeight &&
         this.fetchedPage <= this.fetchedLastPage
@@ -99,6 +95,8 @@ export default {
       }
     },
     async addNotices() {
+      this.isReady = false;
+
       const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
@@ -107,7 +105,18 @@ export default {
         keyword: this.fetchedKeyword
       };
       const queryParam = new URLSearchParams(param).toString();
-      await this.$store.dispatch("FETCH_NOTICES", queryParam);
+
+      try {
+        await this.$store.dispatch("FETCH_NOTICES", queryParam);
+      } catch (error) {
+        console.log(
+          "공고 리스트 불러오기 실패 : " + error.response.data.message
+        );
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "공고를 불러오지 못했습니다."
+        );
+      }
     }
   }
 };
