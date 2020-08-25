@@ -1,5 +1,6 @@
 package underdogs.devbie.notice.controller;
 
+import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,13 +37,17 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
+import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
+import underdogs.devbie.notice.vo.JobPositionPair;
+import underdogs.devbie.notice.vo.LanguagePair;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {
@@ -80,8 +86,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-10T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -93,8 +99,8 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate(String.valueOf(LocalDateTime.now()))
-            .endDate(String.valueOf(LocalDateTime.now()))
+            .startDate("2020-10-20T13:00")
+            .endDate("2020-10-20T14:00")
             .build();
         ;
     }
@@ -144,7 +150,8 @@ public class NoticeControllerTest extends MvcTest {
     void update() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
 
-        doNothing().when(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
+        given(noticeService.update(anyLong(), any(NoticeUpdateRequest.class)))
+            .willReturn(NoticeDetailResponse.from(noticeUpdateRequest.toEntity(1L)));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().isNoContent())
@@ -204,10 +211,10 @@ public class NoticeControllerTest extends MvcTest {
                 , "hi"))
             .build());
 
-        given(noticeService.filteredRead(any(NoticeType.class), any(), any()))
-            .willReturn(NoticeResponses.listFrom(notices));
+        given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
+            .willReturn(NoticeResponses.listFrom(notices, 1000));
 
-        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB")
+        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB&page=1")
             .andExpect(status().isOk())
             .andReturn();
 
@@ -220,8 +227,8 @@ public class NoticeControllerTest extends MvcTest {
             () -> assertThat(noticeResponses.get(0).getName()).isEqualTo("underdogs"),
             () -> assertThat(noticeResponses.get(0).getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeResponses.get(0).getJobPosition()).isEqualTo(JobPosition.BACKEND),
-            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getName(),
-                Language.JAVASCRIPT.getName())
+            () -> assertThat(noticeResponses.get(0).getLanguages()).contains(Language.JAVA.getText(),
+                Language.JAVASCRIPT.getText())
         );
     }
 
@@ -263,6 +270,37 @@ public class NoticeControllerTest extends MvcTest {
         );
     }
 
+    @DisplayName("사용자 요청을 통해 모든 필터정보 조회")
+    @Test
+    void findLanguages() throws Exception {
+        given(noticeService.findFilters())
+            .willReturn(FilterResponses.get());
+
+        MvcResult mvcResult = getAction("/api/notices/filters")
+            .andExpect(status().isOk())
+            .andReturn();
+
+        FilterResponses actual = objectMapper.readValue(
+            mvcResult.getResponse().getContentAsString(),
+            FilterResponses.class
+        );
+
+        List<LanguagePair> expectLanguages = Arrays.stream(Language.values())
+            .map(LanguagePair::from)
+            .collect(toList());
+        List<JobPositionPair> expectJobPositions = Arrays.stream(JobPosition.values())
+            .map(JobPositionPair::from)
+            .collect(toList());
+
+        assertAll(
+            () -> assertThat(actual.getLanguages())
+                .containsAll(expectLanguages),
+
+            () -> assertThat(actual.getJobPositions())
+                .containsAll(expectJobPositions)
+        );
+    }
+
     private void validateNoticeCreateRequest() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeCreateRequest);
         given(noticeService.save(any(NoticeCreateRequest.class))).willReturn(1L);
@@ -274,8 +312,6 @@ public class NoticeControllerTest extends MvcTest {
 
     private void validateUpdateRequest() throws Exception {
         String inputJson = objectMapper.writeValueAsString(noticeUpdateRequest);
-
-        willDoNothing().given(noticeService).update(anyLong(), any(NoticeUpdateRequest.class));
 
         patchAction("/api/notices/1", inputJson, TEST_TOKEN)
             .andExpect(status().is4xxClientError())

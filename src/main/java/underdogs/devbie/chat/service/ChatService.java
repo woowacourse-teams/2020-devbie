@@ -6,12 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.chat.domain.Chat;
+import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
+import underdogs.devbie.exception.NotExistException;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,7 +29,7 @@ public class ChatService {
 
     @Transactional
     public void sendMessage(MessageSendRequest messageSendRequest) {
-        ChatRoom chatRoom = getOrCreateChatRoom(messageSendRequest.getNoticeId());
+        ChatRoom chatRoom = getChatRoom(messageSendRequest.getNoticeId());
 
         Chat savedChat = saveChat(messageSendRequest, chatRoom);
 
@@ -34,19 +37,35 @@ public class ChatService {
             MessageResponse.from(savedChat));
     }
 
+    private ChatRoom getChatRoom(Long noticeId) {
+        return chatRoomRepository.findByNoticeId(noticeId)
+            .orElseThrow(() -> new NotExistException(String.format("noticeId = %s 를 가진 채팅방이 존재하지 않습니다.", noticeId)));
+    }
+
+    private Chat saveChat(MessageSendRequest messageSendRequest, ChatRoom chatRoom) {
+        Chat chat = Chat.of(messageSendRequest.getName(), TitleColor.from(messageSendRequest.getTitleColor()),
+            messageSendRequest.getMessage(), chatRoom);
+        return chatRepository.save(chat);
+    }
+
+    @Transactional
+    public ChatRoomResponse createIfNotExist(Long noticeId) {
+        ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
+
+        ChatName name = chatRoom.fetchNonRedundantName();
+
+        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(), name.getColor().getColor(),
+            chatRoom.getChatNames().size());
+    }
+
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
         return chatRoomRepository.findByNoticeId(noticeId)
             .orElseGet(() -> chatRoomRepository.save(ChatRoom.from(noticeId)));
     }
 
-    private Chat saveChat(MessageSendRequest messageSendRequest, ChatRoom chatRoom) {
-        Chat chat = Chat.of(messageSendRequest.getName(), messageSendRequest.getMessage(), chatRoom);
-        return chatRepository.save(chat);
-    }
-
-    public ChatRoomResponse fetchChatRoom(Long noticeId) {
-        ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
-
-        return ChatRoomResponse.of(chatRoom.getChats(), "홍길동");
+    @Transactional
+    public void deleteNickName(String nickName, Long noticeId) {
+        ChatRoom chatRoom = getChatRoom(noticeId);
+        chatRoom.deleteChatName(nickName);
     }
 }

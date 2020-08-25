@@ -21,8 +21,9 @@ import underdogs.devbie.notice.domain.Notice;
 public class NoticeResponses {
 
     private List<NoticeResponse> noticeResponses;
+    private int lastPage;
 
-    public static NoticeResponses listFrom(List<Notice> notices) {
+    public static NoticeResponses listFrom(List<Notice> notices, int lastPage) {
         List<NoticeResponse> response = notices.stream()
             .map(notice -> NoticeResponse.builder()
                 .id(notice.getId())
@@ -35,14 +36,14 @@ public class NoticeResponses {
                 .build())
             .collect(Collectors.toList());
 
-        return new NoticeResponses(response);
+        return new NoticeResponses(response, lastPage);
     }
 
     private static Set<String> collectLanguageName(Notice notice) {
         return notice.getNoticeDescription()
             .getLanguages()
             .stream()
-            .map(Language::getName)
+            .map(Language::getText)
             .collect(Collectors.toSet());
     }
 }

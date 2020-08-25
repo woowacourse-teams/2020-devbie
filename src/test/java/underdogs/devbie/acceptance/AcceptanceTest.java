@@ -108,8 +108,8 @@ public abstract class AcceptanceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10 13:00")
-            .endDate("2020-10-10 14:00")
+            .startDate("2020-10-10T13:00")
+            .endDate("2020-10-10T14:00")
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
         post("/api/notices", inputJsonForCreate);

@@ -72,14 +72,15 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                 createNotice("언더독스 채용");
             }),
             dynamicTest("채용공고 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB", NoticeResponses.class);
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&page=1",
+                    NoticeResponses.class);
 
                 assertThat(noticeResponses.getNoticeResponses())
                     .extracting(NoticeResponse::getNoticeType)
                     .contains(NoticeType.JOB);
             }),
             dynamicTest("채용공고와 포지션 별 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND",
+                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&page=1",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();
@@ -95,7 +96,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
             }),
             dynamicTest("채용공고와 포지션과 언어별 게시글 전체를 조회한다.", () -> {
-                NoticeResponses noticeResponses = get("/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP",
+                NoticeResponses noticeResponses = get(
+                    "/api/notices?noticeType=JOB&jobPosition=BACKEND&language=CPP&page=1",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();
@@ -110,7 +112,24 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                     () -> assertThat(response)
                         .extracting(NoticeResponse::getLanguages)
-                        .anyMatch(language -> language.contains(Language.CPP.getName()))
+                        .anyMatch(language -> language.contains(Language.CPP.getText()))
+                );
+
+            }),
+            dynamicTest("채용공고 중 키워드로 검색한다.", () -> {
+                NoticeResponses noticeResponses = get(
+                    "/api/notices?noticeType=JOB&keyword=bossdog",
+                    NoticeResponses.class);
+
+                List<NoticeResponse> response = noticeResponses.getNoticeResponses();
+                assertAll(
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getNoticeType)
+                        .contains(NoticeType.JOB),
+
+                    () -> assertThat(response)
+                        .extracting(NoticeResponse::getName)
+                        .contains("bossdog")
                 );
 
             }),
@@ -125,8 +144,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate("2020-10-21 13:00")
-                    .endDate("2020-10-21 14:00")
+                    .startDate("2020-10-21T13:00")
+                    .endDate("2020-10-21T14:00")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
@@ -142,8 +161,8 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
                     () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
                     () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
-                    () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getName(),
-                        Language.JAVASCRIPT.getName(), Language.CPP.getName())
+                    () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getText(),
+                        Language.JAVASCRIPT.getText(), Language.CPP.getText())
                 );
             }),
             dynamicTest("공고 게시글을 삭제한다.", () -> {

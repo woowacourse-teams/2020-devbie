@@ -97,23 +97,10 @@ export default {
       stompClient: {}
     };
   },
-  methods: {
-    isAdmin() {
-      return this.fetchedLoginUser.roleType === "ADMIN";
-    },
-    async onDeleteNotice() {
-      await this.$store.dispatch("DELETE_NOTICE", this.$route.params.id);
-      await router.go(0); // 새로고침
-    },
-    onEditNotice() {
-      router.push(`/notices/edit/${this.$route.params.id}`);
-    },
-    openChatDrawer() {
-      this.$store.dispatch("OPEN_DRAWER");
-      this.$store.dispatch("CONNECT", this.fetchedNotice.id);
-      this.$store.dispatch("FETCH_CHATS", this.fetchedNotice.id);
-    }
+  computed: {
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
   },
+
   created() {
     const noticeId = this.$route.params.id;
     try {
@@ -126,9 +113,21 @@ export default {
       );
     }
   },
-  computed: {
-    ...mapGetters(["fetchedLoginUser"]),
-    ...mapGetters(["fetchedNotice"])
+
+  methods: {
+    isAdmin() {
+      return this.fetchedLoginUser.roleType === "ADMIN";
+    },
+    async onDeleteNotice() {
+      await this.$store.dispatch("DELETE_NOTICE", this.$route.params.id);
+      await router.go(0); // 새로고침
+    },
+    onEditNotice() {
+      router.push(`/notices/edit/${this.$route.params.id}`);
+    },
+    openChatDrawer() {
+      this.$store.dispatch("OPEN_DRAWER", this.fetchedNotice);
+    }
   }
 };
 </script>

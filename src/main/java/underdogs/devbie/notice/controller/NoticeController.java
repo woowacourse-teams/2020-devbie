@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,12 +23,12 @@ import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.aws.S3Service;
-import underdogs.devbie.notice.domain.JobPosition;
-import underdogs.devbie.notice.domain.Language;
-import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.CustomPageRequest;
+import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.ImageUploadRequest;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
+import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
@@ -94,11 +93,10 @@ public class NoticeController {
     @NoValidate
     @GetMapping
     public ResponseEntity<NoticeResponses> readAll(
-        @RequestParam NoticeType noticeType,
-        @RequestParam(required = false) JobPosition jobPosition,
-        @RequestParam(required = false) Language language
+        @Valid NoticeReadRequest noticeReadRequest,
+        @Valid CustomPageRequest customPageRequest
     ) {
-        NoticeResponses responses = noticeService.filteredRead(noticeType, jobPosition, language);
+        NoticeResponses responses = noticeService.filteredRead(noticeReadRequest, customPageRequest.toPageRequest());
         return ResponseEntity.ok(responses);
     }
 
@@ -107,5 +105,12 @@ public class NoticeController {
     public ResponseEntity<NoticeDetailResponse> read(@PathVariable Long id) {
         NoticeDetailResponse response = noticeService.read(id);
         return ResponseEntity.ok(response);
+    }
+
+    @NoValidate
+    @GetMapping("/filters")
+    public ResponseEntity<FilterResponses> findLanguages() {
+        FilterResponses filterResponse = noticeService.findFilters();
+        return ResponseEntity.ok(filterResponse);
     }
 }
