@@ -1,50 +1,52 @@
 <template>
-  <div class="flex-box" v-scroll="onScroll">
-    <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
-      <v-card class="v-card">
-        <v-img
-          @click="$router.push(`/notices/${notice.id}`)"
-          :src="notice.image"
-          class="white--text align-end card-image"
-          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-          height="200px"
-        >
-          <v-card-title
-            class="card-title-text"
-            v-text="`${notice.name}`"
-          ></v-card-title>
-        </v-img>
+  <div>
+    <v-row dense v-scroll="onScroll">
+      <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
+        <v-card class="v-card">
+          <v-img
+            @click="$router.push(`/notices/${notice.id}`)"
+            :src="notice.image"
+            class="white--text align-end card-image"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+            height="200px"
+          >
+            <v-card-title
+              class="card-title-text"
+              v-text="`${notice.name}`"
+            ></v-card-title>
+          </v-img>
 
-        <v-card-actions class="notice-info">
-          <v-col cols="12">
-            <div
-              align="left"
-              class="big-font notice-title"
-              style="font-weight: bold"
-            >
-              {{ notice.title }}
-            </div>
-            <div class="medium-font">
-              언어 : {{ notice.languages.join(", ") }}
-            </div>
-            <div class="medium-font">포지션 : {{ notice.jobPosition }}</div>
-            <v-btn icon class="heart-icon">
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
-          </v-col>
-        </v-card-actions>
-      </v-card>
-    </div>
-    <v-progress-circular
-      v-if="isBottom"
-      :size="50"
-      color="primary"
-      indeterminate
-      class="loading-progress"
-    ></v-progress-circular>
-    <div v-if="isEndPage()" style="flex-basis: 100% ">
-      모든 공고를 조회하셨습니다.
-    </div>
+          <v-card-actions class="notice-info">
+            <v-col cols="12">
+              <div
+                align="left"
+                class="big-font notice-title"
+                style="font-weight: bold"
+              >
+                {{ notice.title }}
+              </div>
+              <div class="medium-font">
+                언어 : {{ notice.languages.join(", ") }}
+              </div>
+              <div class="medium-font">포지션 : {{ notice.jobPosition }}</div>
+              <v-btn icon class="heart-icon">
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+            </v-col>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <v-progress-circular
+        v-if="isBottom"
+        :size="50"
+        color="primary"
+        indeterminate
+        class="loading-progress last-item"
+      ></v-progress-circular>
+      <div v-if="isEndPage()" class="last-item">
+        모든 공고를 조회하셨습니다.
+      </div>
+    </v-row>
   </div>
 </template>
 
@@ -85,11 +87,11 @@ export default {
     }
   },
 
-  created() {
+  async created() {
     if (this.fetchedNotices.length > 0) {
       return;
     }
-    this.addNotices();
+    await this.addNotices();
   },
 
   methods: {
@@ -98,7 +100,6 @@ export default {
       let clientCurrentHeight = scrollTop + clientHeight;
       let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
       const currentState = clientCurrentHeight > componentHeight;
-
       if (
         this.isBottom !== currentState &&
         this.fetchedPage <= this.fetchedLastPage
@@ -189,5 +190,8 @@ export default {
 .loading-progress {
   text-align: center;
   left: 50%;
+}
+.last-item {
+  flex-basis: 100%;
 }
 </style>
