@@ -3,9 +3,7 @@
     <div id="title_box">
       {{ fetchedChatTitle }}
     </div>
-    <div id="count_box">
-      10명
-    </div>
+    <div id="count_box">{{ fetchedUserCount }}명</div>
     <div id="button_box">
       <v-btn large icon @click="closeChatDrawer"
         ><i class="fas fa-times"
@@ -24,7 +22,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["fetchedChatTitle"])
+    ...mapGetters(["fetchedChatTitle", "fetchedUserCount"])
   }
 };
 </script>

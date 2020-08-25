@@ -21,7 +21,8 @@ export default {
     drawer: false,
     name: "",
     color: "",
-    chats: []
+    chats: [],
+    userCount: ""
   },
   mutations: {
     CONNECT(state, notice) {
@@ -63,6 +64,9 @@ export default {
     },
     SET_COLOR(state, color) {
       state.color = color;
+    },
+    SET_USER_COUNT(state, userCount) {
+      state.userCount = userCount;
     }
   },
   actions: {
@@ -79,6 +83,7 @@ export default {
       commit("SET_NAME", data.nickName);
       commit("SET_CHATS", data.messageResponses.messageResponses);
       commit("SET_COLOR", data.titleColor);
+      commit("SET_USER_COUNT", data.headCount);
     },
     OPEN_LATEST({ commit, state }) {
       if (state.noticeId) {
@@ -105,6 +110,9 @@ export default {
     },
     fetchedChatTitle(state) {
       return state.chatTitle;
+    },
+    fetchedUserCount(state) {
+      return state.userCount;
     }
   }
 };
