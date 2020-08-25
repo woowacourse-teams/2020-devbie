@@ -97,6 +97,23 @@ export default {
       stompClient: {}
     };
   },
+  computed: {
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
+  },
+
+  created() {
+    const noticeId = this.$route.params.id;
+    try {
+      this.$store.dispatch("FETCH_NOTICE", noticeId);
+    } catch (error) {
+      console.log("공고 불러오기 실패 " + error.response.data.message);
+      this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고를 불러오지 못했습니다."
+      );
+    }
+  },
+
   methods: {
     isAdmin() {
       return this.fetchedLoginUser.roleType === "ADMIN";
@@ -113,21 +130,6 @@ export default {
       this.$store.dispatch("CONNECT", this.fetchedNotice.id);
       this.$store.dispatch("FETCH_CHATS", this.fetchedNotice.id);
     }
-  },
-  created() {
-    const noticeId = this.$route.params.id;
-    try {
-      this.$store.dispatch("FETCH_NOTICE", noticeId);
-    } catch (error) {
-      console.log("공고 불러오기 실패 " + error.response.data.message);
-      this.$store.dispatch(
-        "UPDATE_SNACKBAR_TEXT",
-        "공고를 불러오지 못했습니다."
-      );
-    }
-  },
-  computed: {
-    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
   }
 };
 </script>

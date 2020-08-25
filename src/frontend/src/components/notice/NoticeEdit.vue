@@ -76,6 +76,22 @@ import { languageTranslator } from "@/utils/noticeUtil";
 import validator from "../../utils/validator";
 
 export default {
+  data() {
+    return {
+      rules: { ...validator.notice },
+      id: "",
+      noticeTypeItems: [
+        { text: "채용", key: "JOB" },
+        { text: "교육", key: "EDUCATION" }
+      ],
+      request: {}
+    };
+  },
+
+  computed: {
+    ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
+  },
+
   async created() {
     await this.checkAdmin();
     await this.$store.dispatch("FETCH_FILTERS");
@@ -93,20 +109,6 @@ export default {
 
     this.request = {
       ...(await this.parameterInitialize())
-    };
-  },
-  computed: {
-    ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
-  },
-  data() {
-    return {
-      rules: { ...validator.notice },
-      id: "",
-      noticeTypeItems: [
-        { text: "채용", key: "JOB" },
-        { text: "교육", key: "EDUCATION" }
-      ],
-      request: {}
     };
   },
 

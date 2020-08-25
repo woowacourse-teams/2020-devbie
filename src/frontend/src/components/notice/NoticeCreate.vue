@@ -77,13 +77,6 @@ import { mapGetters } from "vuex";
 import validator from "../../utils/validator";
 
 export default {
-  created() {
-    this.checkAdmin();
-    this.$store.dispatch("FETCH_FILTERS");
-  },
-  computed: {
-    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
-  },
   data() {
     return {
       rules: { ...validator.notice },
@@ -106,6 +99,16 @@ export default {
       }
     };
   },
+
+  computed: {
+    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
+  },
+
+  created() {
+    this.checkAdmin();
+    this.$store.dispatch("FETCH_FILTERS");
+  },
+
   methods: {
     async checkAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
