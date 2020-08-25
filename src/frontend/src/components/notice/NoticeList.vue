@@ -144,11 +144,6 @@ export default {
 .medium-font {
   font-size: 13px;
 }
-.flex-box {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-}
 .item:last-child {
   margin-right: auto;
 }
