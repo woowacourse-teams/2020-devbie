@@ -25,7 +25,7 @@ public class NoticeDescriptionResponse {
     public static NoticeDescriptionResponse from(NoticeDescription noticeDescription) {
         Set<String> languages = noticeDescription.getLanguages()
             .stream()
-            .map(Language::getName)
+            .map(Language::getText)
             .collect(Collectors.toSet());
 
         return new NoticeDescriptionResponse(languages, noticeDescription.getContent());

@@ -4,7 +4,6 @@
     <div class="question-box">
       <question-detail
         :loginUser="fetchedLoginUser"
-        :fetchedQuestion="fetchedQuestion"
         class="detail-items"
       ></question-detail>
       <answer-list

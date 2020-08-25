@@ -1,7 +1,6 @@
 package underdogs.devbie.notice.dto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.validation.constraints.Min;
@@ -57,20 +56,31 @@ public class NoticeUpdateRequest {
     private String image;
 
     public Notice toEntity(Long id) {
-        LocalDateTime startLocalDate = LocalDateTime.parse(startDate,
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        LocalDateTime endLocalDate = LocalDateTime.parse(endDate,
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        Duration duration = createDuration();
 
         return Notice.builder()
             .id(id)
             .title(title)
             .noticeType(noticeType)
             .company(new Company(name, salary))
-            .duration(new Duration(startLocalDate, endLocalDate))
+            .duration(duration)
             .jobPosition(jobPosition)
             .noticeDescription(new NoticeDescription(languages, description))
             .image(image)
             .build();
+    }
+
+    private Duration createDuration() {
+        LocalDateTime startLocalDate = null;
+        LocalDateTime endLocalDate = null;
+
+        if (!startDate.isEmpty()) {
+            startLocalDate = LocalDateTime.parse(startDate);
+        }
+        if (!endDate.isEmpty()) {
+            endLocalDate = LocalDateTime.parse(endDate);
+        }
+
+        return new Duration(startLocalDate, endLocalDate);
     }
 }

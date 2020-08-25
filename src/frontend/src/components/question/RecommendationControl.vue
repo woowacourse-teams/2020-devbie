@@ -54,7 +54,7 @@ export default {
     fetchedMyQuestionRecommendation() {
       if (this.isQuestion) {
         this.$store.dispatch(
-          "UPDATE_QUESTION_RECOMMENDATION_COUNT",
+          "FETCH_QUESTION_WITHOUT_VISITS",
           this.targetObject.id
         );
         this.userRecommended = this.fetchedMyQuestionRecommendation.recommendationType;
