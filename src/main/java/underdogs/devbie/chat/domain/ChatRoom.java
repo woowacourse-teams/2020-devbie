@@ -51,7 +51,7 @@ public class ChatRoom {
         return chatName;
     }
 
-    public void deleteChatName(String chatName) {
-        chatNames.delete(chatName);
+    public ChatName deleteChatName(String chatName) {
+        return chatNames.delete(chatName);
     }
 }

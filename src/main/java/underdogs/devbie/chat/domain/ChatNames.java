@@ -39,8 +39,17 @@ public class ChatNames {
         chatNames.add(chatName);
     }
 
-    public void delete(String chatName) {
-        chatNames.removeIf(name -> chatName.equals(name.getChatName()));
+    public ChatName delete(String chatName) {
+        ChatName target = findByChatName(chatName);
+        chatNames.remove(target);
+        return target;
+    }
+
+    private ChatName findByChatName(String chatName) {
+        return chatNames.stream()
+            .filter(name -> chatName.equals(name.getChatName()))
+            .findFirst()
+            .orElseThrow(RuntimeException::new);
     }
 
     public int size() {

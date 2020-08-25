@@ -58,15 +58,15 @@ public class ChatService {
 
         ChatName name = chatRoom.fetchNonRedundantName();
 
-        sendStompMessage(noticeId, name.getChatName(), StompMethodType.ENTER);
+        sendStompMessage(noticeId, name, StompMethodType.ENTER);
 
         return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(),
             name.getColor().getColor(),
             chatRoom.getChatNames().size());
     }
 
-    private void sendStompMessage(Long noticeId, String name, StompMethodType stompMethodType) {
-        ChatNameResponse chatNameResponse = ChatNameResponse.from(name);
+    private void sendStompMessage(Long noticeId, ChatName name, StompMethodType stompMethodType) {
+        ChatNameResponse chatNameResponse = ChatNameResponse.of(name.getChatName(), name.getColor().getColor());
         simpMessagingTemplate.convertAndSend(PUBLISH_URL + noticeId,
             StompMessageResponse.of(stompMethodType, chatNameResponse));
     }
@@ -78,12 +78,12 @@ public class ChatService {
 
     @Transactional
     public void disconnect(String nickName, Long noticeId) {
-        deleteChatName(nickName, noticeId);
-        sendStompMessage(noticeId, nickName, StompMethodType.QUIT);
+        ChatName chatName = deleteChatName(nickName, noticeId);
+        sendStompMessage(noticeId, chatName, StompMethodType.QUIT);
     }
 
-    private void deleteChatName(String nickName, Long noticeId) {
+    private ChatName deleteChatName(String nickName, Long noticeId) {
         ChatRoom chatRoom = getChatRoom(noticeId);
-        chatRoom.deleteChatName(nickName);
+        return chatRoom.deleteChatName(nickName);
     }
 }

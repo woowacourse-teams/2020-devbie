@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 public class ChatNameResponse {
 
     private String name;
+    private String color;
 
-    public static ChatNameResponse from(String chatName) {
-        return new ChatNameResponse(chatName);
+    public static ChatNameResponse of(String chatName, String color) {
+        return new ChatNameResponse(chatName, color);
     }
 }
