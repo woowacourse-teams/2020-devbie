@@ -1,5 +1,6 @@
 <template>
-  <div class="flex-box">
+  <div class="flex-box" v-scroll="onScroll">
+    <!--    <v-row dense>-->
     <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
       <v-card class="v-card">
         <v-img
@@ -35,6 +36,17 @@
         </v-card-actions>
       </v-card>
     </div>
+    <v-progress-circular
+      v-if="isBottom"
+      :size="50"
+      color="primary"
+      indeterminate
+      class="loading-progress"
+    ></v-progress-circular>
+    <template v-if="isEndPage()">
+      모든 공고를 조회하셨습니다.
+    </template>
+    <!--    </v-row>-->
   </div>
 </template>
 
@@ -42,12 +54,74 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      isBottom: false
+    };
+  },
+
+  computed: {
+    ...mapGetters([
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage",
+      "fetchedKeyword",
+      "fetchedPage",
+      "fetchedLastPage"
+    ])
+  },
+
+  watch: {
+    fetchedNoticeType() {
+      this.addNotices();
+    },
+    fetchedJobPosition() {
+      this.addNotices();
+    },
+    fetchedLanguage() {
+      this.addNotices();
+    },
+    fetchedKeyword() {
+      this.addNotices();
+    }
+  },
+
+  created() {
+    if (this.fetchedNotices.length > 0) {
+      return;
+    }
+    this.addNotices();
+  },
+
   methods: {
-    getNotices() {
+    async onScroll({ target }) {
+      const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
+      let clientCurrentHeight = scrollTop + clientHeight;
+      let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
+      const currentState = clientCurrentHeight > componentHeight;
+
+      if (
+        this.isBottom !== currentState &&
+        this.fetchedPage <= this.fetchedLastPage
+      ) {
+        this.isBottom = true;
+        await this.addNotices();
+        this.isBottom = false;
+      }
+    },
+
+    isEndPage() {
+      return this.fetchedPage > this.fetchedLastPage;
+    },
+
+    async addNotices() {
       const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
-        language: this.fetchedLanguage
+        language: this.fetchedLanguage,
+        page: this.fetchedPage,
+        keyword: this.fetchedKeyword
       };
       const queryParam = new URLSearchParams(param).toString();
       try {
@@ -59,28 +133,6 @@ export default {
           "공고를 불러오지 못했습니다."
         );
       }
-    }
-  },
-  computed: {
-    ...mapGetters([
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage"
-    ])
-  },
-  created() {
-    this.getNotices();
-  },
-  watch: {
-    fetchedNoticeType() {
-      this.getNotices();
-    },
-    fetchedJobPosition() {
-      this.getNotices();
-    },
-    fetchedLanguage() {
-      this.getNotices();
     }
   }
 };
@@ -134,5 +186,9 @@ export default {
   position: absolute;
   right: 15px;
   bottom: 15px;
+}
+.loading-progress {
+  text-align: center;
+  left: 50%;
 }
 </style>

@@ -20,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,7 @@ import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
+import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
@@ -209,10 +211,10 @@ public class NoticeControllerTest extends MvcTest {
                 , "hi"))
             .build());
 
-        given(noticeService.filteredRead(any(NoticeType.class), any(), any()))
-            .willReturn(NoticeResponses.listFrom(notices));
+        given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
+            .willReturn(NoticeResponses.listFrom(notices, 1000));
 
-        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB")
+        MvcResult mvcResult = getAction("/api/notices?noticeType=JOB&page=1")
             .andExpect(status().isOk())
             .andReturn();
 
@@ -268,7 +270,7 @@ public class NoticeControllerTest extends MvcTest {
         );
     }
 
-    @DisplayName("사용자 요청을 통해 모든 프로그래밍 언어 조회")
+    @DisplayName("사용자 요청을 통해 모든 필터정보 조회")
     @Test
     void findLanguages() throws Exception {
         given(noticeService.findFilters())
