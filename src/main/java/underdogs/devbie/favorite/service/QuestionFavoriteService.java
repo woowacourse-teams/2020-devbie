@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import underdogs.devbie.exception.BadRequestException;
-import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.favorite.domain.Favorite;
 import underdogs.devbie.favorite.domain.QuestionFavorite;
 import underdogs.devbie.favorite.domain.QuestionFavoriteRepository;
@@ -39,13 +38,5 @@ public class QuestionFavoriteService extends FavoriteService {
             throw new BadRequestException("이미 즐겨찾기 추가된 항목입니다.");
         }
         favoriteRepository.save(QuestionFavorite.of(objectId, userId));
-    }
-
-    @Override
-    public void deleteFavorite(Long objectId, Long userId) {
-        Optional<Favorite> optionalFavorite = favoriteRepository.findByObjectAndUserId(objectId, userId);
-        Favorite favorite = optionalFavorite.orElseThrow(() -> new NotExistException("Favorite"));
-
-        favoriteRepository.delete(favorite);
     }
 }
