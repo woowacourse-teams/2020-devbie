@@ -187,8 +187,9 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
 
-        chatService.deleteNickName(nickName, noticeId);
+        chatService.disconnect(nickName, noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(simpMessagingTemplate).convertAndSend(anyString(), any(StompMessageResponse.class));
     }
 }

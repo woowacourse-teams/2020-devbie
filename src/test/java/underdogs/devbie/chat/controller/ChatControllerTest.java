@@ -97,7 +97,7 @@ class ChatControllerTest extends MvcTest {
         String nickName = "만지는 원숭이";
         Long noticeId = 1L;
 
-        doNothing().when(chatService).deleteNickName(anyString(), anyLong());
+        doNothing().when(chatService).disconnect(anyString(), anyLong());
 
         deleteAction(String.format("/api/chatrooms/%s?noticeId=%s", nickName, noticeId))
             .andDo(print())

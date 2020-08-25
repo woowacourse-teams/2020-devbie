@@ -33,9 +33,9 @@ public class ChatController {
 
     @NoValidate
     @DeleteMapping("/api/chatrooms/{nickName}")
-    public ResponseEntity<Void> deleteNickName(@PathVariable(name = "nickName") String nickName,
+    public ResponseEntity<Void> disconnect(@PathVariable(name = "nickName") String nickName,
         @RequestParam(value = "noticeId") Long noticeId) {
-        chatService.deleteNickName(nickName, noticeId);
+        chatService.disconnect(nickName, noticeId);
         return ResponseEntity.noContent().build();
     }
 }
