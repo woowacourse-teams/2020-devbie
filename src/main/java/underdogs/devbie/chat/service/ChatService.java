@@ -68,7 +68,7 @@ public class ChatService {
     private void sendConnectMessage(Long noticeId, ChatName name) {
         ChatNameResponse chatNameResponse = ChatNameResponse.from(name);
         simpMessagingTemplate.convertAndSend(PUBLISH_URL + noticeId,
-            StompMessageResponse.of(StompMethodType.QUIT, chatNameResponse));
+            StompMessageResponse.of(StompMethodType.ENTER, chatNameResponse));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {

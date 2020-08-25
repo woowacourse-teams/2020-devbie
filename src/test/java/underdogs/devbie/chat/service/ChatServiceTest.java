@@ -114,6 +114,7 @@ class ChatServiceTest {
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRoomRepository, never()).save(any());
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
@@ -155,6 +156,7 @@ class ChatServiceTest {
         ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
