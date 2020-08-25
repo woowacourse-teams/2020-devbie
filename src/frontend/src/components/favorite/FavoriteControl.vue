@@ -1,8 +1,11 @@
 <template>
   <div>
-    <v-btn icon @click.stop="onFavorite(targetObjectId)">
-      <v-icon color="red" v-if="isUserFavorite">mdi-heart</v-icon>
-      <v-icon v-else>mdi-heart</v-icon>
+    <v-btn
+      icon
+      v-bind:color="isUserFavorite ? 'pink' : 'disabled'"
+      @click.stop="onFavorite(targetObjectId)"
+    >
+      <v-icon>mdi-heart</v-icon>
     </v-btn>
   </div>
 </template>
