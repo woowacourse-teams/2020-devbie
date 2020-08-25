@@ -13,10 +13,8 @@ function connectStomp(state) {
   });
 }
 
-async function disconnect(state) {
-  await deleteAction(
-    "/api/chatrooms/" + state.name + "?noticeId=" + state.noticeId
-  );
+function disconnect(state) {
+  deleteAction("/api/chatrooms/" + state.name + "?noticeId=" + state.noticeId);
   state.stompClient.disconnect();
 }
 
@@ -32,9 +30,9 @@ export default {
     userCount: ""
   },
   mutations: {
-    async CONNECT(state, notice) {
+    CONNECT(state, notice) {
       if (state.stompClient) {
-        await disconnect(state);
+        disconnect(state);
       }
       state.noticeId = notice.id;
       state.chatTitle = notice.company.name + " - " + notice.title;
@@ -45,8 +43,8 @@ export default {
         connectStomp(state);
       }
     },
-    async DISCONNECT(state) {
-      await disconnect(state);
+    DISCONNECT(state) {
+      disconnect(state);
     },
     SEND(state, { name, message }) {
       if (message.length === 1) {
