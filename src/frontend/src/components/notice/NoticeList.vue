@@ -7,7 +7,7 @@
         :cols="2"
         class="selector-item"
       >
-        <v-card @click="$router.push(`/notices/${notice.id}`)">
+        <v-card @click.stop="$router.push(`/notices/${notice.id}`)">
           <v-img
             :src="
               notice.image !== ''
@@ -31,9 +31,11 @@
             <div>
               {{ notice.jobPosition }}
             </div>
-            <v-btn icon>
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            <favorite-control
+              :targetObjectId="notice.id"
+              :isUserFavorite="isUserNoticeFavorites(notice.id)"
+              :isQuestion="false"
+            ></favorite-control>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -53,8 +55,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
+  components: { FavoriteControl },
+
   data() {
     return {
       isBottom: false
@@ -69,7 +74,11 @@ export default {
       "fetchedLanguage",
       "fetchedKeyword",
       "fetchedPage",
-      "fetchedLastPage"
+      "fetchedLastPage",
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "isUserNoticeFavorites",
+      "fetchedNoticeFavorites"
     ])
   },
 
@@ -85,6 +94,9 @@ export default {
     },
     fetchedKeyword() {
       this.addNotices();
+    },
+    isLoggedIn() {
+      this.initFavoriteState();
     }
   },
 
@@ -93,6 +105,10 @@ export default {
       return;
     }
     this.addNotices();
+
+    if (this.isLoggedIn) {
+      this.initFavoriteState();
+    }
   },
 
   methods: {
@@ -134,6 +150,49 @@ export default {
           "공고를 불러오지 못했습니다."
         );
       }
+    },
+
+    onFavorite(noticeId) {
+      if (!this.isLoggedIn) {
+        console.log("you should login");
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인이 필요합니다.");
+        return;
+      }
+      if (this.isUserNoticeFavorites(noticeId)) {
+        try {
+          this.$store.dispatch("DELETE_FAVORITE", noticeId);
+        } catch (error) {
+          console.error("즐겨찾기 삭제 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 삭제에 실패했습니다."
+          );
+        }
+      } else {
+        const param = {
+          objectType: "notice",
+          objectId: noticeId
+        };
+        const queryParam = new URLSearchParams(param).toString();
+        try {
+          this.$store.dispatch("CREATE_FAVORITE", queryParam);
+        } catch (error) {
+          console.error("즐겨찾기 추가 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 추가에 실패했습니다."
+          );
+        }
+      }
+      this.initFavoriteState();
+    },
+
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "notice"
+      });
     }
   }
 };

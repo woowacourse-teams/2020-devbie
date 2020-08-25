@@ -95,4 +95,9 @@ public class QuestionService {
         List<Question> questions = questionRepository.findAllById(questionIds);
         return QuestionResponses.from(questions);
     }
+
+    public QuestionResponses findAllByIds(List<Long> questionIds) {
+        List<Question> questions = questionRepository.findAllById(questionIds);
+        return QuestionResponses.from(questions);
+    }
 }

@@ -31,6 +31,9 @@
             <v-list-item @click="$router.push('/mypage')">
               마이페이지
             </v-list-item>
+            <v-list-item @click="$router.push('/favorites/notice')">
+              즐겨찾기
+            </v-list-item>
             <v-list-item @click="logout"> 로그아웃 </v-list-item>
           </v-list>
         </v-menu>
