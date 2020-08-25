@@ -1,4 +1,4 @@
-import { patchAction } from "../../api";
+import { patchAction, deleteAction } from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
@@ -13,6 +13,13 @@ function connectStomp(state) {
   });
 }
 
+async function disconnect(state) {
+  await deleteAction(
+    "/api/chatrooms/" + state.name + "?noticeId=" + state.noticeId
+  );
+  state.stompClient.disconnect();
+}
+
 export default {
   state: {
     stompClient: null,
@@ -25,9 +32,9 @@ export default {
     userCount: ""
   },
   mutations: {
-    CONNECT(state, notice) {
+    async CONNECT(state, notice) {
       if (state.stompClient) {
-        state.stompClient.disconnect();
+        await disconnect(state);
       }
       state.noticeId = notice.id;
       state.chatTitle = notice.company.name + " - " + notice.title;
@@ -38,8 +45,8 @@ export default {
         connectStomp(state);
       }
     },
-    DISCONNECT(state) {
-      state.stompClient.disconnect();
+    async DISCONNECT(state) {
+      await disconnect(state);
     },
     SEND(state, { name, message }) {
       if (message.length === 1) {
