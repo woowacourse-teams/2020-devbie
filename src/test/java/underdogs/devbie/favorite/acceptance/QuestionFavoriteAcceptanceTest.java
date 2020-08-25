@@ -16,36 +16,40 @@ import underdogs.devbie.question.dto.QuestionResponses;
 public class QuestionFavoriteAcceptanceTest extends AcceptanceTest {
 
     public static final String QUESTION_FAVORITE_URI = "/api/favorite-question?objectType=question";
+    private Long question1Id;
+    private Long question2Id;
+    private Long question3Id;
 
-    @DisplayName("즐겨찾기 인수 테스트")
+    @DisplayName("질문 즐겨찾기 인수 테스트")
     @TestFactory
     Stream<DynamicTest> manageFavorite() {
+
         return Stream.of(
             dynamicTest("질문 생성", () -> {
-                createQuestion("질문1");
-                createQuestion("질문2");
-                createQuestion("질문3");
+                question1Id = createQuestion("질문1");
+                question2Id = createQuestion("질문2");
+                question3Id = createQuestion("질문3");
             }),
             dynamicTest("1번 질문 즐겨찾기 추가", () -> {
-                addFavorite(1L);
+                addFavorite(question1Id);
             }),
             dynamicTest("1번 질문 즐겨찾기 확인", () -> {
                 QuestionResponses questionResponses = searchFavorite(userId);
                 assertThat(questionResponses.getQuestions().get(0))
                     .extracting(QuestionResponse::getId)
-                    .isEqualTo(1L);
+                    .isEqualTo(question1Id);
             }),
             dynamicTest("1번 질문 즐겨찾기 취소", () -> {
-                deleteFavorite(1L);
+                deleteFavorite(question1Id);
 
                 QuestionResponses questionResponses = searchFavorite(userId);
                 assertThat(questionResponses.getQuestions().size())
                     .isEqualTo(0);
             }),
             dynamicTest("여러 질문 즐겨찾기 추가", () -> {
-                addFavorite(1L);
-                addFavorite(2L);
-                addFavorite(3L);
+                addFavorite(question1Id);
+                addFavorite(question2Id);
+                addFavorite(question3Id);
             }),
             dynamicTest("유저가 추가한 즐겨찾기 갯수 확인", () -> {
                 QuestionResponses questionResponses = searchFavorite(userId);

@@ -82,14 +82,15 @@ public abstract class AcceptanceTest {
         delete("/api/users/" + userId);
     }
 
-    protected void createQuestion(String title) throws JsonProcessingException {
+    protected Long createQuestion(String title) throws JsonProcessingException {
         QuestionCreateRequest createRequest = QuestionCreateRequest.builder()
             .title(title)
             .content(TEST_QUESTION_CONTENT)
             .hashtags(Sets.newSet("java", "network"))
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
-        post("/api/questions", inputJsonForCreate);
+        String id = post("/api/questions", inputJsonForCreate);
+        return Long.parseLong(id);
     }
 
     protected QuestionResponse fetchFirstQuestion() {
@@ -128,9 +129,9 @@ public abstract class AcceptanceTest {
         // @formatter:on
     }
 
-    protected <T> void post(String path, String inputJson) {
+    protected <T> String post(String path, String inputJson) {
         // @formatter:off
-        given().
+        String[] locations = given().
             auth().oauth2(bearerToken).
             body(inputJson).
             contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -139,7 +140,9 @@ public abstract class AcceptanceTest {
             post(path).
         then().
             log().all().
-            statusCode(HttpStatus.CREATED.value());
+            statusCode(HttpStatus.CREATED.value()).
+            extract().header("location").split("/");
+        return locations[locations.length -1];
         // @formatter:on
     }
 
