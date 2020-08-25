@@ -1,6 +1,5 @@
 <template>
   <div class="flex-box" v-scroll="onScroll">
-    <!--    <v-row dense>-->
     <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
       <v-card class="v-card">
         <v-img
@@ -43,10 +42,9 @@
       indeterminate
       class="loading-progress"
     ></v-progress-circular>
-    <template v-if="isEndPage()">
+    <div v-if="isEndPage()" style="flex-basis: 100% ">
       모든 공고를 조회하셨습니다.
-    </template>
-    <!--    </v-row>-->
+    </div>
   </div>
 </template>
 
@@ -148,6 +146,7 @@ export default {
 .flex-box {
   display: flex;
   flex-wrap: wrap;
+  justify-content: start;
 }
 .item:last-child {
   margin-right: auto;
