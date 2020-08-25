@@ -24,18 +24,18 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private ChatName name;
 
-    private String message;
+    private ChatMessage message;
 
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
-    public static Chat of(String name, String message, ChatRoom chatRoom) {
+    public static Chat of(String name, TitleColor titleColor, String message, ChatRoom chatRoom) {
         return Chat.builder()
-            .name(name)
-            .message(message)
+            .name(ChatName.of(name, titleColor))
+            .message(ChatMessage.from(message))
             .chatRoom(chatRoom)
             .build();
     }

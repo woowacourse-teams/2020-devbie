@@ -1,8 +1,10 @@
 package underdogs.devbie.notice.domain;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface NoticeRepositoryCustom {
 
-    List<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition, Language language);
+    Page<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition,
+        Language language, String keyword, Pageable pageable);
 }

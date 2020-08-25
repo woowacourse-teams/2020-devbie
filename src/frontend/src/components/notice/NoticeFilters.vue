@@ -38,12 +38,15 @@ export default {
       selectedLanguage: ""
     };
   },
-  created() {
-    this.$store.dispatch("FETCH_FILTERS");
-  },
+
   computed: {
     ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
   },
+
+  created() {
+    this.$store.dispatch("FETCH_FILTERS");
+  },
+
   methods: {
     changeJobPosition() {
       this.$store.commit("SET_JOB_POSITION", this.selectedPosition);
@@ -54,6 +57,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .filter-box {
   display: flex;

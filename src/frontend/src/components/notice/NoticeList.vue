@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row dense>
+    <v-row dense v-scroll="onScroll">
       <v-col
         v-for="notice in fetchedNotices"
         :key="notice.id"
@@ -9,7 +9,11 @@
       >
         <v-card @click="$router.push(`/notices/${notice.id}`)">
           <v-img
-            :src="notice.image"
+            :src="
+              notice.image !== ''
+                ? notice.image
+                : 'https://cdn.vuetifyjs.com/images/cards/house.jpg'
+            "
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
@@ -34,6 +38,16 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-progress-circular
+      v-if="isBottom"
+      :size="50"
+      color="primary"
+      indeterminate
+      class="loading-progress"
+    ></v-progress-circular>
+    <template v-if="isEndPage()">
+      모든 공고를 조회하셨습니다.
+    </template>
   </div>
 </template>
 
@@ -41,12 +55,74 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      isBottom: false
+    };
+  },
+
+  computed: {
+    ...mapGetters([
+      "fetchedNotices",
+      "fetchedNoticeType",
+      "fetchedJobPosition",
+      "fetchedLanguage",
+      "fetchedKeyword",
+      "fetchedPage",
+      "fetchedLastPage"
+    ])
+  },
+
+  watch: {
+    fetchedNoticeType() {
+      this.addNotices();
+    },
+    fetchedJobPosition() {
+      this.addNotices();
+    },
+    fetchedLanguage() {
+      this.addNotices();
+    },
+    fetchedKeyword() {
+      this.addNotices();
+    }
+  },
+
+  created() {
+    if (this.fetchedNotices.length > 0) {
+      return;
+    }
+    this.addNotices();
+  },
+
   methods: {
-    getNotices() {
+    async onScroll({ target }) {
+      const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
+      let clientCurrentHeight = scrollTop + clientHeight;
+      let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
+      const currentState = clientCurrentHeight > componentHeight;
+
+      if (
+        this.isBottom !== currentState &&
+        this.fetchedPage <= this.fetchedLastPage
+      ) {
+        this.isBottom = true;
+        await this.addNotices();
+        this.isBottom = false;
+      }
+    },
+
+    isEndPage() {
+      return this.fetchedPage > this.fetchedLastPage;
+    },
+
+    async addNotices() {
       const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
-        language: this.fetchedLanguage
+        language: this.fetchedLanguage,
+        page: this.fetchedPage,
+        keyword: this.fetchedKeyword
       };
       const queryParam = new URLSearchParams(param).toString();
       try {
@@ -58,28 +134,6 @@ export default {
           "공고를 불러오지 못했습니다."
         );
       }
-    }
-  },
-  computed: {
-    ...mapGetters([
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage"
-    ])
-  },
-  created() {
-    this.getNotices();
-  },
-  watch: {
-    fetchedNoticeType() {
-      this.getNotices();
-    },
-    fetchedJobPosition() {
-      this.getNotices();
-    },
-    fetchedLanguage() {
-      this.getNotices();
     }
   }
 };
@@ -108,5 +162,9 @@ export default {
 }
 .v-card:hover {
   opacity: 0.6;
+}
+.loading-progress {
+  text-align: center;
+  left: 50%;
 }
 </style>

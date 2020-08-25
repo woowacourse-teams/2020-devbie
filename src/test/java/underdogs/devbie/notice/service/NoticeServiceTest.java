@@ -12,12 +12,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
@@ -27,8 +30,10 @@ import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.CustomPageRequest;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
+import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 
@@ -131,12 +136,22 @@ public class NoticeServiceTest {
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
 
-        given(noticeRepository.findAllBy(any(NoticeType.class), any(JobPosition.class), any(Language.class)))
-            .willReturn(Arrays.asList(expected));
+        CustomPageRequest customPageRequest = new CustomPageRequest(1);
+        NoticeReadRequest noticeReadRequest = NoticeReadRequest.builder()
+            .noticeType(NoticeType.JOB)
+            .jobPosition(JobPosition.BACKEND)
+            .language(Language.JAVA)
+            .keyword(Strings.EMPTY)
+            .build();
 
-        List<NoticeResponse> noticeResponses = noticeService
-            .filteredRead(NoticeType.JOB, JobPosition.BACKEND, Language.JAVA)
-            .getNoticeResponses();
+        given(noticeRepository.findAllBy(any(NoticeType.class), any(JobPosition.class), any(Language.class),
+            any(String.class), any(Pageable.class)))
+            .willReturn(new PageImpl<>(Arrays.asList(expected)));
+
+        List<NoticeResponse> noticeResponses = noticeService.filteredRead(
+            noticeReadRequest,
+            customPageRequest.toPageRequest()
+        ).getNoticeResponses();
 
         assertAll(
             () -> assertThat(noticeResponses).isNotEmpty(),
