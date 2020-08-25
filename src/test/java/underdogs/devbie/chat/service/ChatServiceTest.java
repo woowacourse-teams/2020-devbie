@@ -121,9 +121,11 @@ class ChatServiceTest {
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
+            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
+            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
@@ -162,9 +164,11 @@ class ChatServiceTest {
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
+            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
+            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
