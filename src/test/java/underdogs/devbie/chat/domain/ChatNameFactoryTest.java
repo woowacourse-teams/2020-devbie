@@ -20,4 +20,12 @@ class ChatNameFactoryTest {
         assertThat(actual).isNotNull();
         assertThat(actual.getChatName()).isNotEqualTo("깜찍한 강아지");
     }
+
+    @DisplayName("존재하는 모든 ChatName이 존재할 때")
+    @Test
+    void createNonOverlappingNameWhenExistAllChatName() {
+        Set<ChatName> chatNames = ChatNameFactory.getNames();
+        assertThatThrownBy(() -> ChatNameFactory.createNonOverlappingName(ChatNames.from(chatNames)))
+            .isInstanceOf(IndexOutOfBoundsException.class);
+    }
 }
