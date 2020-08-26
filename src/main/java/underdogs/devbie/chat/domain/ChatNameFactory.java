@@ -3,7 +3,6 @@ package underdogs.devbie.chat.domain;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class ChatNameFactory {
@@ -44,16 +43,12 @@ public class ChatNameFactory {
     }
 
     private static <T> T extractRandom(Set<T> set) {
-        if (set.size() == 0) {
-            throw new IndexOutOfBoundsException("컬렉션의 크기가 0입니다.");
-        }
-
-        int randomIndex = new Random().nextInt(set.size());
+        int randomNumber = (int)(Math.random() * set.size());
 
         return set.stream()
-            .skip(randomIndex)
+            .skip(randomNumber)
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("도출할 수 없는 결과입니다."));
+            .orElseThrow(() -> new IndexOutOfBoundsException("Collection 이 비어있습니다."));
     }
 
     public static Set<ChatName> getNames() {
