@@ -219,7 +219,6 @@ public class QuestionServiceTest {
             .build();
 
         Page<Question> questions = new PageImpl<>(Lists.newArrayList(question1, question2));
-
         given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
 
         QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("스택").content("").build();
