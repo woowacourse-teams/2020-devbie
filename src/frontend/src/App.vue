@@ -42,7 +42,6 @@ export default {
       this.$store.commit("DELETE_LOGIN_USER");
     },
     openDrawer() {
-      console.log("aa");
       this.$store.dispatch("OPEN_LATEST");
     }
   },
