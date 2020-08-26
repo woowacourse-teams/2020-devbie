@@ -138,11 +138,13 @@ export default {
 .notice-detail {
   margin-top: 50px;
   align-items: center;
+  width: 40%;
+  min-width: 200px;
 }
 
 .inner {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   width: 90%;
   box-sizing: border-box;
   padding: 10px 0 40px 0;
