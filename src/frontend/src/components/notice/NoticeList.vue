@@ -1,63 +1,69 @@
 <template>
   <div>
     <v-row dense v-scroll="onScroll">
-      <v-col
-        v-for="notice in fetchedNotices"
-        :key="notice.id"
-        :cols="2"
-        class="selector-item"
-      >
-        <v-card @click="$router.push(`/notices/${notice.id}`)">
+      <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
+        <v-card class="v-card">
           <v-img
-            :src="
-              notice.image !== ''
-                ? notice.image
-                : 'https://cdn.vuetifyjs.com/images/cards/house.jpg'
-            "
-            class="white--text align-end"
+            @click="$router.push(`/notices/${notice.id}`)"
+            :src="notice.image"
+            class="white--text align-end card-image"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
           >
             <v-card-title
-              class="card-title"
-              v-text="`${notice.name} - ${notice.title}`"
+              class="card-title-text"
+              v-text="`${notice.name}`"
             ></v-card-title>
           </v-img>
 
           <v-card-actions class="notice-info">
-            <div>
-              {{ notice.languages.join(", ") }}
-            </div>
-            <div>
-              {{ notice.jobPosition }}
-            </div>
-            <v-btn icon>
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            <v-col cols="12">
+              <div
+                align="left"
+                class="big-font notice-title"
+                style="font-weight: bold"
+              >
+                {{ notice.title }}
+              </div>
+              <div class="medium-font">
+                언어 : {{ notice.languages.join(", ") }}
+              </div>
+              <div class="medium-font">포지션 : {{ notice.jobPosition }}</div>
+              <favorite-control
+                class="heart-icon"
+                :targetObjectId="notice.id"
+                :isUserFavorite="isUserNoticeFavorites(notice.id)"
+                :isQuestion="false"
+              ></favorite-control>
+            </v-col>
           </v-card-actions>
         </v-card>
-      </v-col>
+      </div>
+      <v-progress-circular
+        v-if="isBottom"
+        :size="50"
+        color="primary"
+        indeterminate
+        class="loading-progress last-item"
+      ></v-progress-circular>
+      <div v-if="isEndPage()" class="last-item">
+        모든 공고를 조회하셨습니다.
+      </div>
     </v-row>
-    <v-progress-circular
-      v-if="isBottom"
-      :size="50"
-      color="primary"
-      indeterminate
-      class="loading-progress"
-    ></v-progress-circular>
-    <template v-if="isEndPage()">
-      모든 공고를 조회하셨습니다.
-    </template>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
+  components: { FavoriteControl },
+
   data() {
     return {
-      isBottom: false
+      isBottom: false,
+      isReady: true
     };
   },
 
@@ -69,7 +75,11 @@ export default {
       "fetchedLanguage",
       "fetchedKeyword",
       "fetchedPage",
-      "fetchedLastPage"
+      "fetchedLastPage",
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "isUserNoticeFavorites",
+      "fetchedNoticeFavorites"
     ])
   },
 
@@ -85,18 +95,33 @@ export default {
     },
     fetchedKeyword() {
       this.addNotices();
+    },
+    isLoggedIn() {
+      this.initFavoriteState();
+    },
+    fetchedPage() {
+      this.isReady = true;
     }
   },
 
-  created() {
+  async created() {
+    if (this.isLoggedIn) {
+      await this.initFavoriteState();
+    }
+
     if (this.fetchedNotices.length > 0) {
       return;
     }
-    this.addNotices();
+
+    await this.addNotices();
   },
 
   methods: {
     async onScroll({ target }) {
+      if (!this.isReady) {
+        return;
+      }
+
       const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
       let clientCurrentHeight = scrollTop + clientHeight;
       let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
@@ -117,6 +142,8 @@ export default {
     },
 
     async addNotices() {
+      this.isReady = false;
+
       const param = {
         noticeType: this.fetchedNoticeType,
         jobPosition: this.fetchedJobPosition,
@@ -125,6 +152,7 @@ export default {
         keyword: this.fetchedKeyword
       };
       const queryParam = new URLSearchParams(param).toString();
+
       try {
         this.$store.dispatch("FETCH_NOTICES", queryParam);
       } catch (error) {
@@ -134,37 +162,104 @@ export default {
           "공고를 불러오지 못했습니다."
         );
       }
+    },
+
+    onFavorite(noticeId) {
+      if (!this.isLoggedIn) {
+        console.log("you should login");
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인이 필요합니다.");
+        return;
+      }
+      if (this.isUserNoticeFavorites(noticeId)) {
+        try {
+          this.$store.dispatch("DELETE_FAVORITE", noticeId);
+        } catch (error) {
+          console.error("즐겨찾기 삭제 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 삭제에 실패했습니다."
+          );
+        }
+      } else {
+        const param = {
+          objectType: "notice",
+          objectId: noticeId
+        };
+        const queryParam = new URLSearchParams(param).toString();
+        try {
+          this.$store.dispatch("CREATE_FAVORITE", queryParam);
+        } catch (error) {
+          console.error("즐겨찾기 추가 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 추가에 실패했습니다."
+          );
+        }
+      }
+      this.initFavoriteState();
+    },
+
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "notice"
+      });
     }
   }
 };
 </script>
 
 <style scoped>
-.selector-item {
+.big-font {
+  font-size: 17px;
+}
+.medium-font {
+  font-size: 13px;
+}
+.item:last-child {
+  margin-right: auto;
+}
+
+.item {
+  width: 22%;
   margin: 0 30px 50px 0;
 }
 
-.card-title {
+.card-title-text {
   justify-content: center;
 }
-
-.notice-info {
-  display: flex;
-  justify-content: space-between;
+.card-image {
+  width: 100%;
 }
-
-.notice-info :first-child {
-  margin-left: 10px;
-}
-
-.notice-info :last-child {
-  margin-right: 10px;
-}
-.v-card:hover {
+.card-image:hover {
   opacity: 0.6;
+}
+.card-title-text {
+  color: white;
+  max-height: 40px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.card-title-text {
+  flex-wrap: nowrap;
+}
+
+.notice-title {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.heart-icon {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
 }
 .loading-progress {
   text-align: center;
   left: 50%;
+}
+.last-item {
+  flex-basis: 100%;
 }
 </style>

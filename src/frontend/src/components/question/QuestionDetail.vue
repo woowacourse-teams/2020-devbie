@@ -3,7 +3,13 @@
     <div class="inner">
       <div class="question-header">
         <div class="left-container">
-          <h1>Q. {{ fetchedQuestion.title }}</h1>
+          <h1 class="title">Q. {{ fetchedQuestion.title }}</h1>
+          <favorite-control
+            class="favorite"
+            :targetObjectId="fetchedQuestion.id"
+            :isUserFavorite="isUserQuestionFavorites(fetchedQuestion.id)"
+            :isQuestion="true"
+          ></favorite-control>
           <div class="hashtags">
             <span
               v-for="hashtag in fetchedQuestion.hashtags"
@@ -43,9 +49,11 @@
 import { mapGetters } from "vuex";
 import MarkdownContent from "./MarkdownContent";
 import RecommendationControl from "./RecommendationControl";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
   components: {
+    FavoriteControl,
     MarkdownContent,
     RecommendationControl
   },
@@ -59,7 +67,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedQuestion"])
+    ...mapGetters(["fetchedQuestion", "isUserQuestionFavorites"])
   },
 
   created() {
@@ -143,5 +151,13 @@ export default {
   padding: 10px 0 30px 0;
   border-bottom: solid 1px #e8e8e8;
   min-height: 400px;
+}
+
+.title {
+  display: inline;
+}
+
+.favorite {
+  display: inline;
 }
 </style>

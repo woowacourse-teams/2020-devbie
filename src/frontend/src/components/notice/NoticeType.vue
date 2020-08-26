@@ -1,6 +1,7 @@
 <template>
   <div class="select-box">
     <v-btn
+      large
       name="JOB"
       class="select-btn"
       :class="{ 'button-active': isJob() }"
@@ -8,6 +9,7 @@
       >채용</v-btn
     >
     <v-btn
+      large
       name="EDUCATION"
       class="select-btn"
       :class="{ 'button-active': isEducation() }"
@@ -51,7 +53,10 @@ export default {
 
 .select-btn {
   margin-right: 15px;
+  font-size: 16px;
+  width: 95px;
   padding: 5px;
+  color: #35495e !important;
 }
 
 .select-btn:hover {
@@ -59,6 +64,6 @@ export default {
 }
 
 .button-active {
-  background-color: rgb(135, 189, 214) !important;
+  background-color: rgb(218, 235, 234) !important;
 }
 </style>

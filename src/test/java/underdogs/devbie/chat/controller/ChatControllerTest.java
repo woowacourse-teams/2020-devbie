@@ -62,14 +62,15 @@ class ChatControllerTest extends MvcTest {
         Long noticeId = 1L;
         ChatRoomResponse chatRoomResponse = ChatRoomResponse.of(
             Arrays.asList(
-                Chat.of("user0", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-                Chat.of("user1", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-                Chat.of("user2", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
-            "홍길동"
-            , TitleColor.AMBER.getColor()
-            , 3);
+                Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+                Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+                Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
+            "우아한 돌고래",
+            TitleColor.AMBER.getColor(),
+            3
+        );
 
-        given(chatService.createIfNotExist(any())).willReturn(chatRoomResponse);
+        given(chatService.connect(any())).willReturn(chatRoomResponse);
 
         MvcResult mvcResult = patchAction(String.format("/api/chatrooms?noticeId=%s", noticeId), "")
             .andDo(print())
@@ -83,10 +84,10 @@ class ChatControllerTest extends MvcTest {
         assertThat(resultResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = resultResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(resultResponse.getNickName(), "홍길동"),
-            () -> assertEquals(messageResponses.get(0).getName(), "user0"),
-            () -> assertEquals(messageResponses.get(1).getName(), "user1"),
-            () -> assertEquals(messageResponses.get(2).getName(), "user2"),
+            () -> assertEquals(resultResponse.getNickName(), "우아한 돌고래"),
+            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
+            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
             () -> assertEquals(resultResponse.getTitleColor(), TitleColor.AMBER.getColor())
         );
     }
@@ -94,10 +95,10 @@ class ChatControllerTest extends MvcTest {
     @DisplayName("Connection 종료 시 NoticeId로 채팅방 찾은 뒤 NickName 삭제 기능")
     @Test
     void deleteNickName() throws Exception {
-        String nickName = "만지는 원숭이";
+        String nickName = "어슴프레한 너구리";
         Long noticeId = 1L;
 
-        doNothing().when(chatService).deleteNickName(anyString(), anyLong());
+        doNothing().when(chatService).disconnect(anyString(), anyLong());
 
         deleteAction(String.format("/api/chatrooms/%s?noticeId=%s", nickName, noticeId))
             .andDo(print())

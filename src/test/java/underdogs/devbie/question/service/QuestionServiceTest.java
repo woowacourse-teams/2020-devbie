@@ -84,8 +84,14 @@ public class QuestionServiceTest {
             .build();
 
         questionHashtags = Sets.newSet(
-            QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(1L).tagName(TagName.from("java")).build()).build(),
-            QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(2L).tagName(TagName.from("network")).build()).build()
+            QuestionHashtag.builder()
+                .question(question)
+                .hashtag(Hashtag.builder().id(1L).tagName(TagName.from("java")).build())
+                .build(),
+            QuestionHashtag.builder()
+                .question(question)
+                .hashtag(Hashtag.builder().id(2L).tagName(TagName.from("network")).build())
+                .build()
         );
 
         question.setHashtags(QuestionHashtags.from(questionHashtags));
@@ -250,6 +256,35 @@ public class QuestionServiceTest {
             () -> assertThat(responses.getQuestions().get(0).getId()).isEqualTo(100L),
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
             () -> assertThat(responses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+        );
+    }
+
+    @DisplayName("질문 아이디로 질문 목록 조회")
+    @Test
+    void findAllByIds() {
+        Question question1 = Question.builder()
+            .userId(1L)
+            .title(QuestionTitle.from("스택과 큐의 차이"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
+            .build();
+
+        Question question2 = Question.builder()
+            .userId(2L)
+            .title(QuestionTitle.from("오버스택플로우"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
+            .build();
+
+        List<Question> questions = Lists.newArrayList(question1, question2);
+
+        given(questionRepository.findAllById(anyList())).willReturn(questions);
+
+        QuestionResponses responses = questionService.findAllByIds(Lists.newArrayList(1L, 2L));
+
+        assertAll(
+            () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
+            () -> assertThat(responses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
         );
     }
 }

@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import QuestionListView from "../views/question/QuestionListView";
 import QuestionDetailView from "../views/question/QuestionDetailView";
-import MainPage from "../views/MainPage";
 import NoticeListView from "../views/notice/NoticeListView";
 import LoginPage from "../views/LoginPage";
 import QuestionCreateView from "../views/question/QuestionCreateView";
@@ -14,6 +13,8 @@ import NoticeCreateView from "../views/notice/NoticeCreateView";
 import NoticeEditView from "../views/notice/NoticeEditView";
 import HashtagsView from "../views/hashtags/HashtagsView";
 import MyPageView from "../views/user/MyPageView";
+import NoticeFavoriteView from "../views/favorite/NoticeFavoriteView";
+import QuestionFavoriteView from "../views/favorite/QuestionFavoriteView";
 
 Vue.use(VueRouter);
 
@@ -31,7 +32,7 @@ export const router = new VueRouter({
     {
       path: "/",
       name: "main",
-      component: MainPage
+      component: NoticeListView
     },
     {
       path: "/login",
@@ -73,10 +74,12 @@ export const router = new VueRouter({
       path: "/notices",
       name: "notice-detail",
       component: NoticeDetailView,
+      props: route => ({
+        id: route.params.id
+      }),
       children: [
         {
           path: ":id(\\d+)",
-          params: true,
           name: "notice-content",
           component: NoticeDetail
         }
@@ -106,6 +109,16 @@ export const router = new VueRouter({
       path: "/admin",
       name: "admin",
       component: AdminMainView
+    },
+    {
+      path: "/favorites/notice",
+      name: "notice-favorites",
+      component: NoticeFavoriteView
+    },
+    {
+      path: "/favorites/question",
+      name: "notice-questions",
+      component: QuestionFavoriteView
     }
   ]
 });

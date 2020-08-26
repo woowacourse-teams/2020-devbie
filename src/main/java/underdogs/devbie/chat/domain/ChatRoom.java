@@ -45,13 +45,13 @@ public class ChatRoom {
             .build();
     }
 
-    public ChatName fetchNonRedundantName() {
-        ChatName chatName = chatNames.fetchNonRedundantName();
+    public ChatName addNewName() {
+        ChatName chatName = ChatNameFactory.createNonOverlappingName(chatNames);
         chatNames.add(chatName);
         return chatName;
     }
 
-    public void deleteChatName(String chatName) {
-        chatNames.delete(chatName);
+    public ChatName deleteChatName(String chatName) {
+        return chatNames.delete(chatName);
     }
 }

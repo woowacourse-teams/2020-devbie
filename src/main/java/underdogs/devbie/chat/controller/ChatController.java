@@ -27,15 +27,15 @@ public class ChatController {
 
     @NoValidate
     @PatchMapping("/api/chatrooms")
-    public ResponseEntity<ChatRoomResponse> createIfNotExist(@RequestParam("noticeId") Long noticeId) {
-        return ResponseEntity.ok().body(chatService.createIfNotExist(noticeId));
+    public ResponseEntity<ChatRoomResponse> connect(@RequestParam("noticeId") Long noticeId) {
+        return ResponseEntity.ok().body(chatService.connect(noticeId));
     }
 
     @NoValidate
     @DeleteMapping("/api/chatrooms/{nickName}")
-    public ResponseEntity<Void> deleteNickName(@PathVariable(name = "nickName") String nickName,
+    public ResponseEntity<Void> disconnect(@PathVariable(name = "nickName") String nickName,
         @RequestParam(value = "noticeId") Long noticeId) {
-        chatService.deleteNickName(nickName, noticeId);
+        chatService.disconnect(nickName, noticeId);
         return ResponseEntity.noContent().build();
     }
 }

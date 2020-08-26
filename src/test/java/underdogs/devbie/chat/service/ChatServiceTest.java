@@ -29,6 +29,7 @@ import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
+import underdogs.devbie.chat.dto.StompMessageResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
@@ -54,14 +55,14 @@ class ChatServiceTest {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("말하는 원숭이", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-            Chat.of("돌리는 사자", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-            Chat.of("만지는 표범", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
+            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("말하는 원숭이", TitleColor.AMBER),
-            ChatName.of("돌리는 사자", TitleColor.BAROSSA),
-            ChatName.of("만지는 표범", TitleColor.DARK_ORCHID)
+            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
+            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID)
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -71,33 +72,35 @@ class ChatServiceTest {
             .build();
 
         MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
-            , "말하는 원숭이", "메세지", TitleColor.AMBER.getColor());
+            , "하늘하늘한 곰", "메세지", TitleColor.AMBER.getColor());
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
         given(chatRepository.save(any(Chat.class))).willReturn(
-            Chat.of("말하는 원숭이", TitleColor.AMBER, "메세지", chatRoom));
-        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(MessageResponse.class));
+            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "메세지", chatRoom));
+        doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(StompMessageResponse.class));
 
         chatService.sendMessage(messageSendRequest);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRepository).save(any());
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
     }
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성 하지 않음")
     @Test
-    void noCreateIfExist() {
+    void connectWhenChatRoomDoesNotExist() {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("말하는 원숭이", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-            Chat.of("돌리는 사자", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-            Chat.of("만지는 표범", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
+            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
+        );
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("말하는 원숭이", TitleColor.AMBER),
-            ChatName.of("돌리는 사자", TitleColor.BAROSSA),
-            ChatName.of("만지는 표범", TitleColor.DARK_ORCHID)
+            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
+            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID)
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -108,19 +111,20 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
 
-        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRoomRepository, never()).save(any());
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
             () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
-            () -> assertEquals(messageResponses.get(0).getName(), "말하는 원숭이"),
-            () -> assertEquals(messageResponses.get(1).getName(), "돌리는 사자"),
-            () -> assertEquals(messageResponses.get(2).getName(), "만지는 표범"),
+            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
+            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
             () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
@@ -128,18 +132,19 @@ class ChatServiceTest {
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성")
     @Test
-    void createIfExist() {
+    void connectWhenChatRoomExist() {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("말하는 원숭이", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-            Chat.of("돌리는 사자", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-            Chat.of("만지는 표범", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
+            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
+        );
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("말하는 원숭이", TitleColor.AMBER),
-            ChatName.of("돌리는 사자", TitleColor.BAROSSA),
-            ChatName.of("만지는 표범", TitleColor.DARK_ORCHID)
+            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
+            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID)
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -150,18 +155,19 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
 
-        ChatRoomResponse chatRoomResponse = chatService.createIfNotExist(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
             () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
-            () -> assertEquals(messageResponses.get(0).getName(), "말하는 원숭이"),
-            () -> assertEquals(messageResponses.get(1).getName(), "돌리는 사자"),
-            () -> assertEquals(messageResponses.get(2).getName(), "만지는 표범"),
+            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
+            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
             () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
@@ -169,8 +175,8 @@ class ChatServiceTest {
 
     @DisplayName("NoticeId와 NickName으로 해당하는 채팅방 NickName 삭제하기")
     @Test
-    void deleteNickNameByNoticeId() {
-        String nickName = "만지는 원숭이";
+    void disconnect() {
+        String nickName = "하늘하늘한 곰";
         Long noticeId = 1L;
         ChatName chatName = ChatName.of(nickName, TitleColor.AMBER);
 
@@ -183,8 +189,9 @@ class ChatServiceTest {
 
         given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
 
-        chatService.deleteNickName(nickName, noticeId);
+        chatService.disconnect(nickName, noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
+        verify(simpMessagingTemplate).convertAndSend(anyString(), any(StompMessageResponse.class));
     }
 }

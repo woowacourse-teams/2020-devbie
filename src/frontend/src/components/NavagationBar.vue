@@ -1,10 +1,11 @@
 <template>
   <div class="navigation-bar">
     <v-app-bar color="#9FD0D4" name="navigation">
-      <v-app-bar-nav-icon @click="$router.push('/')" id="logo"
-        >icon
-      </v-app-bar-nav-icon>
-      <v-toolbar-title id="home-title">Devbie</v-toolbar-title>
+      <v-toolbar-title id="home-box"
+        ><v-btn @click="$router.push('/')" text x-large
+          ><p id="home-title">Devbie</p></v-btn
+        ></v-toolbar-title
+      >
       <v-spacer></v-spacer>
       <v-btn @click="$router.push('/admin')" v-if="isAdmin()" text x-large
         ><p class="navigation-menu">관리자</p></v-btn
@@ -30,6 +31,9 @@
           <v-list>
             <v-list-item @click="$router.push('/mypage')">
               마이페이지
+            </v-list-item>
+            <v-list-item @click="$router.push('/favorites/notice')">
+              즐겨찾기
             </v-list-item>
             <v-list-item @click="logout"> 로그아웃 </v-list-item>
           </v-list>
@@ -78,20 +82,19 @@ export default {
 </script>
 
 <style scoped>
-.navigation-menu {
-  font-family: "Do Hyeon", sans-serif;
-}
-
-#logo {
+#home-box {
   margin-left: 50px;
 }
 
 #home-title {
   font-size: 28px;
   color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
 .navigation-menu {
+  font-family: "Do Hyeon", sans-serif;
   font-size: 24px;
   color: #f4f4f4;
   margin: 0;

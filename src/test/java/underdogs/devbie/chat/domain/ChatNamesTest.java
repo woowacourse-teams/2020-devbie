@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,29 +15,16 @@ class ChatNamesTest {
     }
 
     @Test
-    void fetchNonRedundantName() {
-        ChatNames chatNames = ChatNames.from(new HashSet<>());
-        Set<ChatName> existChatNames = new HashSet<>();
-
-        for (int i = 0; i < 9; i++) {
-            ChatName chatName = chatNames.fetchNonRedundantName();
-            assertThat(existChatNames.contains(chatName)).isFalse();
-            existChatNames.add(chatName);
-            chatNames.add(chatName);
-        }
-    }
-
-    @Test
     void add() {
         ChatNames chatNames = ChatNames.from(new HashSet<>());
-        chatNames.add(ChatName.of("이름1", TitleColor.AMBER));
+        chatNames.add(ChatName.of("하늘하늘한 곰", TitleColor.AMBER));
 
         assertThat(chatNames.getChatNames()).hasSize(1);
     }
 
     @Test
     void delete() {
-        ChatName chatName = ChatName.of("이름", TitleColor.AMBER);
+        ChatName chatName = ChatName.of("하늘하늘한 곰", TitleColor.AMBER);
         ChatNames chatNames = ChatNames.from(new HashSet<>(Collections.singletonList(chatName)));
         chatNames.delete(chatName.getChatName());
 
@@ -47,7 +33,7 @@ class ChatNamesTest {
 
     @Test
     void size() {
-        ChatName chatName = ChatName.of("이름", TitleColor.AMBER);
+        ChatName chatName = ChatName.of("하늘하늘한 곰", TitleColor.AMBER);
         ChatNames chatNames = ChatNames.from(new HashSet<>(Collections.singletonList(chatName)));
         assertThat(chatNames.size()).isEqualTo(1);
     }

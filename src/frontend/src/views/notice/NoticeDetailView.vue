@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <notice-scroll id="notice-scroll"></notice-scroll>
-    <router-view></router-view>
+    <router-view :key="id"></router-view>
   </div>
 </template>
 
@@ -9,6 +9,8 @@
 import NoticeScroll from "../../components/notice/NoticeScroll";
 
 export default {
+  props: ["id"],
+
   components: {
     NoticeScroll
   }
