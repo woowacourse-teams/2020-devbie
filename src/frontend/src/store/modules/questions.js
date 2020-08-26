@@ -30,10 +30,6 @@ export default {
     },
     SET_KEYWORD(state, data) {
       state.questionKeyword = data;
-    },
-    INIT_QUESTIONS(state) {
-      state.questions = [];
-      state.questionPage = 1;
     }
   },
   actions: {

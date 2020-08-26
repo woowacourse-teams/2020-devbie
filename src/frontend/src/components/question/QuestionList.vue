@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       isBottom: false,
+      isReady: true,
       hashtag: this.$route.query.hashtag
     };
   },
@@ -68,20 +69,31 @@ export default {
     ])
   },
 
-  beforeCreate() {
-    this.$store.commit("INIT_QUESTIONS");
+  watch: {
+    fetchedQuestionPage() {
+      this.isReady = true;
+    }
   },
 
-  created() {
+  async created() {
     if (this.hashtag) {
-      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
+      await this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
       return;
     }
-    this.addQuestions();
+
+    if (this.fetchedQuestions.length > 0) {
+      return;
+    }
+
+    await this.addQuestions();
   },
 
   methods: {
     async onScroll({ target }) {
+      if (!this.isReady) {
+        return;
+      }
+
       const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
       let clientCurrentHeight = scrollTop + clientHeight;
       let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
@@ -102,6 +114,8 @@ export default {
     },
 
     async addQuestions() {
+      this.isReady = false;
+
       const param = {
         page: this.fetchedQuestionPage,
         orderBy: this.$route.query.orderBy || "CREATED_DATE",
