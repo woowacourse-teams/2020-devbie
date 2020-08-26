@@ -67,7 +67,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedQuestion", "isUserQuestionFavorites", "isLoggedIn"])
+    ...mapGetters([
+      "fetchedQuestion",
+      "isUserQuestionFavorites",
+      "isLoggedIn",
+      "fetchedLoginUser"
+    ])
+  },
+
+  watch: {
+    isLoggedIn() {
+      this.initFavoriteState();
+    }
   },
 
   created() {
@@ -87,6 +98,13 @@ export default {
         this.$route.params.id
       );
       this.content = this.fetchedQuestion.content;
+    },
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "question"
+      });
     }
   }
 };
