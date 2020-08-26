@@ -26,6 +26,11 @@
         <p @click="$router.push(`/questions/${question.id}`)" class="title">
           Q. {{ question.title }}
         </p>
+        <favorite-control
+          :targetObjectId="question.id"
+          :isUserFavorite="isUserQuestionFavorites(question.id)"
+          :isQuestion="true"
+        ></favorite-control>
         <div
           class="hashtags"
           v-for="hashtag in question.hashtags"
@@ -48,11 +53,11 @@
 <script>
 import { mapGetters } from "vuex";
 import SearchBar from "./SearchBar";
-export default {
-  components: {
-    SearchBar
-  },
+import FavoriteControl from "../favorite/FavoriteControl";
 
+export default {
+  components: { SearchBar, FavoriteControl },
+  
   props: ["orderBy", "title", "content", "hashtag"],
 
   data() {
@@ -67,12 +72,20 @@ export default {
       "fetchedQuestions",
       "fetchedQuestionPage",
       "fetchedQuestionLastPage"
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "fetchedQuestionFavorites",
+      "isUserQuestionFavorites"
     ])
   },
 
   watch: {
     fetchedQuestionPage() {
       this.isReady = true;
+    },
+    
+    isLoggedIn() {
+      this.initFavoriteState();
     }
   },
 
@@ -81,6 +94,12 @@ export default {
       return;
     }
     await this.addQuestions();
+  },
+  
+  mounted() {
+    if (!this.isLoggedIn) {
+      this.$store.commit("DELETE_QUESTION_FAVORITES");
+    }
   },
 
   methods: {
@@ -127,6 +146,18 @@ export default {
           "질문을 불러오지 못했습니다."
         );
       }
+
+      if (this.isLoggedIn) {
+        this.initFavoriteState();
+      }
+    },
+  
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "question"
+      });
     }
   }
 };

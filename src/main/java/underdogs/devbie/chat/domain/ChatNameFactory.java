@@ -1,12 +1,14 @@
 package underdogs.devbie.chat.domain;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ChatNameFactory {
 
     private static final Set<ChatName> names = createAllChatNames();
+    private static final Set<TitleColor> colors = new HashSet<>(Arrays.asList(TitleColor.values()));
 
     private static Set<ChatName> createAllChatNames() {
         Set<ChatName> chatNames = new HashSet<>();
@@ -21,27 +23,35 @@ public class ChatNameFactory {
     }
 
     public static ChatName createNonOverlappingName(ChatNames existNameInChatRoom) {
+        Set<ChatName> chatNames = removeExistNameInChatRoom(existNameInChatRoom);
+
+        ChatName nonOverlappingName = extractRandom(chatNames);
+
+        nonOverlappingName.setColor(extractRandom(colors));
+
+        return nonOverlappingName;
+    }
+
+    private static Set<ChatName> removeExistNameInChatRoom(ChatNames existNameInChatRoom) {
         Set<ChatName> chatNames = new HashSet<>();
         for (ChatName chatName : names) {
             chatNames.add(ChatName.of(chatName.getChatName(), null));
         }
 
         chatNames.removeAll(existNameInChatRoom.getChatNames());
-
-        ChatName nonOverlappingName = chatNames.iterator().next();
-
-        TitleColor nonOverlappingColor = createNonOverlappingColor(existNameInChatRoom.getChatNames());
-
-        nonOverlappingName.setColor(nonOverlappingColor);
-
-        return nonOverlappingName;
+        return chatNames;
     }
 
-    private static TitleColor createNonOverlappingColor(Set<ChatName> existNameInChatRoom) {
-        Set<TitleColor> existColorInChatRoom = existNameInChatRoom.stream()
-            .map(ChatName::getColor)
-            .collect(Collectors.toSet());
+    private static <T> T extractRandom(Set<T> set) {
+        int randomNumber = (int)(Math.random() * set.size());
 
-        return TitleColorFactory.createNonOverlappingColor(existColorInChatRoom);
+        return set.stream()
+            .skip(randomNumber)
+            .findFirst()
+            .orElseThrow(() -> new IndexOutOfBoundsException("Collection 이 비어있습니다."));
+    }
+
+    public static Set<ChatName> getNames() {
+        return Collections.unmodifiableSet(names);
     }
 }

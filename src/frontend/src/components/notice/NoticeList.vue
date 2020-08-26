@@ -116,6 +116,12 @@ export default {
     await this.addNotices();
   },
 
+  mounted() {
+    if (!this.isLoggedIn) {
+      this.$store.commit("DELETE_NOTICE_FAVORITES");
+    }
+  },
+
   methods: {
     async onScroll({ target }) {
       if (!this.isReady) {
@@ -220,15 +226,11 @@ export default {
 .item:last-child {
   margin-right: auto;
 }
-
 .item {
   width: 22%;
   margin: 0 30px 50px 0;
 }
 
-.card-title-text {
-  justify-content: center;
-}
 .card-image {
   width: 100%;
 }
@@ -236,12 +238,10 @@ export default {
   opacity: 0.6;
 }
 .card-title-text {
+  justify-content: center;
   color: white;
   max-height: 40px;
   background-color: rgba(0, 0, 0, 0.6);
-}
-
-.card-title-text {
   flex-wrap: nowrap;
 }
 

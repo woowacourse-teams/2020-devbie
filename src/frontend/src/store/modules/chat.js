@@ -1,12 +1,12 @@
-import { patchAction, deleteAction } from "../../api";
+import { deleteAction, patchAction } from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
 function connectStomp(state) {
   const socket = new SockJS("/chat");
   state.stompClient = Stomp.over(socket);
-  state.stompClient.connect({}, function(frame) {
-    console.log("frame: " + frame);
+  state.stompClient.debug = () => {};
+  state.stompClient.connect({}, function() {
     state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
       const data = JSON.parse(tick.body);
       if (data.stompMethodType === "ENTER") {
@@ -23,6 +23,7 @@ function connectStomp(state) {
 function disconnect(state) {
   deleteAction("/api/chatrooms/" + state.name + "?noticeId=" + state.noticeId);
   state.stompClient.disconnect();
+  state.stompClient = null;
 }
 
 export default {
@@ -102,7 +103,10 @@ export default {
         commit("SET_DRAWER", true);
         commit("CONNECT_LATEST");
       } else {
-        alert("최근에 들어간 채팅방이 없습니다");
+        this.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "최근에 들어간 채팅방이 없습니다"
+        );
       }
     },
     CLOSE_DRAWER({ commit }) {

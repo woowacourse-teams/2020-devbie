@@ -37,8 +37,6 @@
           </template>
         </div>
       </v-card>
-      <h1>{{ isReady }}</h1>
-      <h1>{{ fetchedPage }}</h1>
     </div>
   </div>
 </template>
@@ -130,7 +128,8 @@ export default {
   position: absolute;
 }
 .notice-list {
-  width: 400px;
+  min-width: 100px;
+  width: 30%;
   flex-basis: auto;
   margin: 50px 100px 100px 0px;
 }
