@@ -8,7 +8,8 @@ export default {
     searchScope: [],
     questionPage: 1,
     questionLastPage: 1000,
-    questionKeyword: ""
+    questionKeyword: "",
+    questionByHashtag: []
   },
   mutations: {
     SET_QUESTIONS(state, data) {
@@ -30,6 +31,11 @@ export default {
     },
     SET_KEYWORD(state, data) {
       state.questionKeyword = data;
+    },
+    INIT_QUESTIONS(state) {
+      state.questions = [];
+      state.questionPage = 1;
+      state.questionLastPage = 1000;
     }
   },
   actions: {
