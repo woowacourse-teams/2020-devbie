@@ -13,11 +13,7 @@
           <div class="notice-body">
             <div class="notice-img">
               <v-img
-                :src="
-                  fetchedNotice.image === null
-                    ? 'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
-                    : fetchedNotice.image
-                "
+                :src="fetchedNotice.image"
                 class="white--text align-end"
                 width="300px"
                 height="200px"
@@ -69,18 +65,18 @@
             </p>
             <p class="infos">
               <i class="fas fa-calendar-alt"></i>
-              지원기간: {{ fetchedNotice.duration }}
+              지원기간: {{ setDuration }}
             </p>
             <p class="infos">
               <i class="fas fa-keyboard"></i>
               포지션: {{ fetchedNotice.jobPosition }}
             </p>
+            <p class="infos"><i class="fas fa-burn"></i>언어:</p>
             <p class="infos">
-              <i class="fas fa-burn"></i>언어:
-              {{ fetchedNotice.noticeDescription.languages.join(", ") }}
-            </p>
-            <p class="infos">
-              {{ fetchedNotice.noticeDescription.content }}
+              <template v-for="(line, index) in content">
+                {{ line }}
+                <br :key="index" />
+              </template>
             </p>
           </div>
         </div>
@@ -100,7 +96,30 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser", "fetchedNotice"])
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"]),
+
+    content() {
+      return this.fetchedNotice.noticeDescription.content.split("\n");
+    },
+
+    setDuration() {
+      if (this.fetchedNotice.duration === null) {
+        return "상시모집";
+      }
+
+      const startDate = new Date(
+        this.fetchedNotice.duration.startDate
+      ).toLocaleDateString();
+      const endDate = new Date(
+        this.fetchedNotice.duration.endDate
+      ).toLocaleDateString();
+
+      return (
+        (this.fetchedNotice.duration.startDate === null ? "" : startDate) +
+        " ~ " +
+        (this.fetchedNotice.duration.endDate === null ? "모집시" : endDate)
+      );
+    }
   },
 
   created() {

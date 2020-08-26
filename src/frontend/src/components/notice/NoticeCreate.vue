@@ -139,6 +139,11 @@ export default {
         return;
       }
 
+      this.request.image =
+        this.request.image === ""
+          ? "https://cdn.vuetifyjs.com/images/cards/plane.jpg"
+          : this.request.image;
+
       try {
         await this.$store.dispatch("CREATE_NOTICE", this.request);
         const id = await this.$store.getters.fetchedNewCreatedNoticeId;
