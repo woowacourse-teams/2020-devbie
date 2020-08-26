@@ -44,19 +44,16 @@ public class ChatNameFactory {
     }
 
     private static <T> T extractRandom(Set<T> set) {
-        int size = set.size();
-        if (size == 0) {
+        if (set.size() == 0) {
             throw new IndexOutOfBoundsException("컬렉션의 크기가 0입니다.");
         }
-        int randomIndex = new Random().nextInt(size);
-        int i = 0;
-        for (T item : set) {
-            if (i == randomIndex) {
-                return item;
-            }
-            i++;
-        }
-        throw new IllegalArgumentException("도출될 수 없는 결과입니다.");
+
+        int randomIndex = new Random().nextInt(set.size());
+
+        return set.stream()
+            .skip(randomIndex)
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("도출할 수 없는 결과입니다."));
     }
 
     public static Set<ChatName> getNames() {
