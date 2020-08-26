@@ -7,7 +7,6 @@ import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -219,11 +218,13 @@ public class QuestionServiceTest {
             .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
-        List<Question> questions = Lists.newArrayList(question1, question2);
+        Page<Question> questions = new PageImpl<>(Lists.newArrayList(question1, question2));
 
-        given(questionRepository.findByBothLike(anyString(), anyString())).willReturn(questions);
+        given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
 
-        QuestionResponses responses = questionService.searchQuestionBy("스택", "스택");
+        QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("스택").content("").build();
+        QuestionPageRequest questionPageRequest = new QuestionPageRequest(1, OrderBy.CREATED_DATE);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
 
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),

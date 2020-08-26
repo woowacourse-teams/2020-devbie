@@ -87,7 +87,7 @@ public abstract class AcceptanceTest {
     }
 
     protected QuestionResponse fetchFirstQuestion() {
-        QuestionResponses questions = get("/api/questions?orderBy=CREATED_DATE", QuestionResponses.class);
+        QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=", QuestionResponses.class);
         return questions.getQuestions().get(0);
     }
 
