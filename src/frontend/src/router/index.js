@@ -73,10 +73,12 @@ export const router = new VueRouter({
       path: "/notices",
       name: "notice-detail",
       component: NoticeDetailView,
+      props: route => ({
+        id: route.params.id
+      }),
       children: [
         {
           path: ":id(\\d+)",
-          params: true,
           name: "notice-content",
           component: NoticeDetail
         }
