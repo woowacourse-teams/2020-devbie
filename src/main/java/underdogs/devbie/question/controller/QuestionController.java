@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,9 @@ import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionPageRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -49,20 +51,11 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping
-    public ResponseEntity<QuestionResponses> readAllOrderBy(
-        @RequestParam(value = "orderBy", required = false) OrderBy condition
+    public ResponseEntity<QuestionResponses> readAll(
+        @ModelAttribute QuestionReadRequest questionReadRequest,
+        @ModelAttribute QuestionPageRequest questionPageRequest
     ) {
-        QuestionResponses responses = questionService.readAllOrderBy(condition);
-        return ResponseEntity
-            .ok(responses);
-    }
-
-    @NoValidate
-    @GetMapping(params = "keyword")
-    public ResponseEntity<QuestionResponses> searchByTitle(
-        @RequestParam("keyword") String keyword
-    ) {
-        QuestionResponses responses = questionService.searchByTitle(keyword);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
         return ResponseEntity
             .ok(responses);
     }

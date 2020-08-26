@@ -2,15 +2,16 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -35,10 +36,12 @@ public class QuestionService {
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAllOrderBy(OrderBy condition) {
-        Sort sort = Sort.by(condition.getDirection(), condition.getPropertyName());
-        List<Question> questions = questionRepository.findAllOrderBy(sort);
-        return QuestionResponses.from(questions);
+    public QuestionResponses readAll(QuestionReadRequest questionReadRequest, Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllBy(
+            questionReadRequest.getTitle(),
+            questionReadRequest.getContent(),
+            pageable);
+        return QuestionResponses.of(questions.getContent(), questions.getTotalPages());
     }
 
     @Transactional
@@ -83,11 +86,6 @@ public class QuestionService {
         validateQuestionAuthor(userId, question);
 
         questionRepository.deleteById(questionId);
-    }
-
-    public QuestionResponses searchByTitle(String keyword) {
-        List<Question> questions = questionRepository.findByTitleLike(keyword);
-        return QuestionResponses.from(questions);
     }
 
     public QuestionResponses searchByHashtag(String hashtag) {

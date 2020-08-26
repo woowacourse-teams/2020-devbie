@@ -1,10 +1,12 @@
 <template>
   <div class="filters">
-    <router-link class="condition" :to="`/questions`">전체 질문</router-link>
-    <router-link class="condition" :to="`/questions?orderBy=VISITS`"
-      >인기 질문</router-link
+    <router-link class="condition" to="/questions?orderBy=CREATED_DATE"
+      >전체 질문</router-link
     >
-    <router-link class="condition" :to="`/questions?orderBy=RECOMMENDATIONS`"
+    <router-link class="condition" to="/questions?orderBy=VISITS"
+      >인기 질문
+    </router-link>
+    <router-link class="condition" to="/questions?orderBy=RECOMMENDATIONS"
       >추천 질문</router-link
     >
   </div>

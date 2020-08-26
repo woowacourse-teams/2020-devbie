@@ -4,11 +4,20 @@ export default {
   state: {
     questions: [],
     question: [],
-    questionId: []
+    questionId: [],
+    searchScope: [],
+    questionPage: 1,
+    questionLastPage: 1000,
+    questionKeyword: "",
+    questionByHashtag: []
   },
   mutations: {
     SET_QUESTIONS(state, data) {
-      state.questions = data;
+      state.questionPage = state.questionPage + 1;
+      state.questionLastPage = data["lastPage"];
+      state.questions = state.questions.concat(data["questions"]);
+
+      console.log(state.questions);
     },
     SET_QUESTION(state, data) {
       state.question = data;
@@ -18,11 +27,22 @@ export default {
     },
     CLEAR_HASHTAGS(state) {
       state.question.hashtags = [];
+    },
+    SET_SEARCH_SCOPE(state, data) {
+      state.searchScope = [data];
+    },
+    SET_KEYWORD(state, data) {
+      state.questionKeyword = data;
+    },
+    INIT_QUESTIONS(state) {
+      state.questions = [];
+      state.questionPage = 1;
+      state.questionLastPage = 1000;
     }
   },
   actions: {
-    async FETCH_QUESTIONS({ commit }, orderBy) {
-      const { data } = await getAction(`/api/questions?orderBy=${orderBy}`);
+    async FETCH_QUESTIONS({ commit }, queryUrl) {
+      const { data } = await getAction(`/api/questions?` + queryUrl);
       commit("SET_QUESTIONS", data);
     },
     async FETCH_QUESTION({ commit }, questionId) {
@@ -50,6 +70,7 @@ export default {
     async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
       const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
       commit("SET_QUESTIONS", data);
+      console.log(data);
     },
     async FETCH_QUESTION_WITHOUT_VISITS({ commit }, questionId) {
       const { data } = await getAction(
@@ -67,6 +88,18 @@ export default {
     },
     fetchedQuestionId(state) {
       return state.questionId;
+    },
+    fetchedSearchScope(state) {
+      return state.searchScope;
+    },
+    fetchedQuestionPage(state) {
+      return state.questionPage;
+    },
+    fetchedQuestionLastPage(state) {
+      return state.questionLastPage;
+    },
+    fetchedQuestionKeyword(state) {
+      return state.questionKeyword;
     }
   }
 };

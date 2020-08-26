@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum OrderBy {
-    CREATED_DATE("createdDate", Direction.ASC),
+    CREATED_DATE("createdDate", Direction.DESC),
     VISITS("visits.visitCount", Direction.DESC),
     RECOMMENDATIONS("recommendationCount.recommendedCount", Direction.DESC);
 

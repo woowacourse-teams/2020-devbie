@@ -26,7 +26,7 @@
           rounded
           color="#E8E8E8"
           class="hashtag button"
-          v-for="hashtag in fetchedHashtags.hashtags"
+          v-for="hashtag in fetchedHashtags"
           :key="hashtag.id"
           @click="$router.push(`/questions?hashtag=${hashtag.tagName}`)"
           >#{{ hashtag.tagName }}</v-btn
@@ -45,16 +45,19 @@ export default {
       drawer: null
     };
   },
+
   computed: {
     ...mapGetters(["fetchedHashtags"])
   },
+
+  created() {
+    this.$store.dispatch("FETCH_HASHTAGS");
+  },
+
   methods: {
     close() {
       this.drawer = false;
     }
-  },
-  created() {
-    this.$store.dispatch("FETCH_HASHTAGS");
   }
 };
 </script>

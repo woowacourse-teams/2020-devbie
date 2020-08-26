@@ -13,7 +13,7 @@ export default {
     async FETCH_HASHTAGS({ commit }) {
       try {
         const { data } = await getAction(`/api/hashtags`);
-        commit("SET_HASHTAGS", data);
+        commit("SET_HASHTAGS", data.hashtags);
       } catch (error) {
         console.log(error);
       }

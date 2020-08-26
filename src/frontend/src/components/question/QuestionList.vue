@@ -4,10 +4,17 @@
       "<span>{{ hashtag }}</span
       >" 태그로 검색한 결과입니다.
     </div>
-    <ul class="question-list">
+    <search-bar v-else></search-bar>
+    <ul v-scroll="onScroll" class="question-list">
+      <div v-if="fetchedQuestions.length === 0" class="no-result">
+        <i class="fas fa-exclamation"></i>
+        검색 결과가 존재하지 않습니다.
+        <i class="fas fa-exclamation"></i>
+      </div>
       <li
-        v-for="question in fetchedQuestions.questions"
-        v-bind:key="question.id"
+        v-else
+        v-for="question in fetchedQuestions"
+        :key="question.id"
         class="question"
       >
         <div class="count-infos">
@@ -33,26 +40,38 @@
         </div>
       </li>
     </ul>
+    <v-progress-circular
+      v-if="isBottom"
+      :size="50"
+      color="primary"
+      indeterminate
+      class="loading-progress"
+    ></v-progress-circular>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import SearchBar from "./SearchBar";
 import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
-  components: { FavoriteControl },
+  components: { SearchBar, FavoriteControl },
+
+  props: ["orderBy", "title", "content", "hashtag"],
 
   data() {
     return {
-      hashtag: "",
-      orderBy: ""
+      isBottom: false,
+      isReady: true
     };
   },
 
   computed: {
     ...mapGetters([
       "fetchedQuestions",
+      "fetchedQuestionPage",
+      "fetchedQuestionLastPage",
       "isLoggedIn",
       "fetchedLoginUser",
       "fetchedQuestionFavorites",
@@ -61,23 +80,27 @@ export default {
   },
 
   watch: {
+    fetchedQuestionPage() {
+      this.isReady = true;
+    },
+
     isLoggedIn() {
       this.initFavoriteState();
     }
   },
 
-  created() {
-    this.hashtag = this.$route.query.hashtag;
-    this.orderBy = this.$route.query.orderBy || "CREATED_DATE";
-    if (this.hashtag) {
-      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
+  async created() {
+    console.log(this.fetchedQuestions.length);
+    if (this.fetchedQuestions.length > 0) {
       return;
     }
-    this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
 
-    if (this.isLoggedIn) {
-      this.initFavoriteState();
+    if (this.hashtag) {
+      await this.addQuestionByHashtag();
+      return;
     }
+
+    await this.addQuestions();
   },
 
   mounted() {
@@ -87,6 +110,68 @@ export default {
   },
 
   methods: {
+    async onScroll({ target }) {
+      if (!this.isReady) {
+        return;
+      }
+
+      const { scrollTop, clientHeight, scrollHeight } = target.scrollingElement;
+      let clientCurrentHeight = scrollTop + clientHeight;
+      let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
+      const currentState = clientCurrentHeight > componentHeight;
+
+      if (
+        this.isBottom !== currentState &&
+        this.fetchedQuestionPage <= this.fetchedQuestionLastPage
+      ) {
+        this.isBottom = true;
+        await this.addQuestions();
+        this.isBottom = false;
+      }
+    },
+
+    isEndPage() {
+      return this.fetchedQuestionPage > this.fetchedQuestionLastPage;
+    },
+
+    async addQuestions() {
+      this.isReady = false;
+
+      const param = {
+        page: this.fetchedQuestionPage,
+        orderBy: this.orderBy || "CREATED_DATE",
+        title: this.title || "",
+        content: this.content || ""
+      };
+      const queryParam = new URLSearchParams(param).toString();
+      try {
+        await this.$store.dispatch("FETCH_QUESTIONS", queryParam);
+      } catch (error) {
+        console.log("질문 리스트 불러오기 실패" + error.response.data.message);
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "질문을 불러오지 못했습니다."
+        );
+      }
+
+      if (this.isLoggedIn) {
+        await this.initFavoriteState();
+      }
+    },
+
+    async addQuestionByHashtag() {
+      try {
+        await this.$store.commit("INIT_QUESTIONS");
+        await this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
+      } catch (error) {
+        console.log("해시태그로 질문 조회 실패");
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "질문을 불러오지 못했습니다."
+        );
+      }
+    },
+
     async initFavoriteState() {
       await this.$store.dispatch("FETCH_LOGIN_USER");
       await this.$store.dispatch("FETCH_MY_FAVORITES", {
@@ -118,6 +203,7 @@ export default {
 
 .question:last-child {
   border-bottom: solid 2px #87bdd6;
+  margin-bottom: 40px;
 }
 
 .count-infos {
@@ -166,5 +252,16 @@ export default {
 .hashtag-header span {
   color: #fc8c84;
   font-size: 26px;
+}
+
+.no-result {
+  font-family: "Jua", sans-serif;
+  margin-top: 180px;
+  font-size: 25px;
+}
+
+.loading-progress {
+  text-align: center;
+  left: 50%;
 }
 </style>
