@@ -1,6 +1,5 @@
 package underdogs.devbie.question.dto;
 
-import jdk.internal.jline.internal.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +16,6 @@ import lombok.ToString;
 @ToString
 public class QuestionReadRequest {
 
-    @Nullable
     private String title;
-
-    @Nullable
     private String content;
 }
