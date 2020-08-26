@@ -102,7 +102,10 @@ export default {
         commit("SET_DRAWER", true);
         commit("CONNECT_LATEST");
       } else {
-        alert("최근에 들어간 채팅방이 없습니다");
+        this.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "최근에 들어간 채팅방이 없습니다"
+        );
       }
     },
     CLOSE_DRAWER({ commit }) {
