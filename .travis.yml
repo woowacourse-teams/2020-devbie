@@ -7,6 +7,10 @@ branches:
     - master
     - develop
 
+env:
+  global:
+    - NODE_ENV=production
+
 before_install:
   - chmod +x gradlew
 
@@ -15,6 +19,4 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-script:
-  - "export NODE_ENV=production"
-  - "./gradlew clean build"
+script: "./gradlew clean build"
