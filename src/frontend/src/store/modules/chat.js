@@ -1,12 +1,12 @@
-import { patchAction, deleteAction } from "../../api";
+import { deleteAction, patchAction } from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
 function connectStomp(state) {
   const socket = new SockJS("/chat");
   state.stompClient = Stomp.over(socket);
-  state.stompClient.connect({}, function(frame) {
-    console.log("frame: " + frame);
+  state.stompClient.debug = () => {};
+  state.stompClient.connect({}, function() {
     state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
       const data = JSON.parse(tick.body);
       if (data.stompMethodType === "ENTER") {
