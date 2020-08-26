@@ -113,7 +113,7 @@ export default {
 
       const param = {
         page: this.fetchedQuestionPage,
-        orderBy: this.orderBy,
+        orderBy: this.orderBy || "CREATED_DATE",
         title: this.title || "",
         content: this.content || ""
       };
