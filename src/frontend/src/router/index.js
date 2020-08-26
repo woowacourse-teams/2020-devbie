@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import QuestionListView from "../views/question/QuestionListView";
 import QuestionDetailView from "../views/question/QuestionDetailView";
-import MainPage from "../views/MainPage";
 import NoticeListView from "../views/notice/NoticeListView";
 import LoginPage from "../views/LoginPage";
 import QuestionCreateView from "../views/question/QuestionCreateView";
@@ -33,7 +32,7 @@ export const router = new VueRouter({
     {
       path: "/",
       name: "main",
-      component: MainPage
+      component: NoticeListView
     },
     {
       path: "/login",
