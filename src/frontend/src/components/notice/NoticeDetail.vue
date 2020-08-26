@@ -107,17 +107,17 @@ export default {
         return "상시모집";
       }
 
-      const start = new Date(
+      const startDate = new Date(
         this.fetchedNotice.duration.startDate
       ).toLocaleDateString();
-      const end = new Date(
+      const endDate = new Date(
         this.fetchedNotice.duration.endDate
       ).toLocaleDateString();
 
       return (
-        (this.fetchedNotice.duration.startDate === null ? "" : start) +
+        (this.fetchedNotice.duration.startDate === null ? "" : startDate) +
         " ~ " +
-        (this.fetchedNotice.duration.endDate === null ? "모집시" : end)
+        (this.fetchedNotice.duration.endDate === null ? "모집시" : endDate)
       );
     }
   },
