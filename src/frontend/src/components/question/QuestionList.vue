@@ -53,11 +53,12 @@ export default {
     SearchBar
   },
 
+  props: ["orderBy", "title", "content", "hashtag"],
+
   data() {
     return {
       isBottom: false,
-      isReady: true,
-      hashtag: this.$route.query.hashtag
+      isReady: true
     };
   },
 
@@ -76,11 +77,6 @@ export default {
   },
 
   async created() {
-    if (this.hashtag) {
-      await this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
-      return;
-    }
-
     if (this.fetchedQuestions.length > 0) {
       return;
     }
@@ -118,9 +114,9 @@ export default {
 
       const param = {
         page: this.fetchedQuestionPage,
-        orderBy: this.$route.query.orderBy || "CREATED_DATE",
-        title: this.$route.query.title || "",
-        content: this.$route.query.content || ""
+        orderBy: this.orderBy || "CREATED_DATE",
+        title: this.title || "",
+        content: this.content || ""
       };
       const queryParam = new URLSearchParams(param).toString();
       try {
