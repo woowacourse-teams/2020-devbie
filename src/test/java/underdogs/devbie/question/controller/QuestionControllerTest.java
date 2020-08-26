@@ -185,18 +185,15 @@ class QuestionControllerTest extends MvcTest {
 
         given(questionService.readAll(any(QuestionReadRequest.class), any())).willReturn(responses);
 
-        getAction("/api/questions?title=스&content=asd&page=1&orderBy=CREATED_DATE")
-            .andExpect(status().isOk());
+        MvcResult mvcResult = getAction("/api/questions?page=1&orderBy=CREATED_DATE&title=스택&content=")
+            .andExpect(status().isOk())
+            .andReturn();
+        String value = mvcResult.getResponse().getContentAsString();
+        QuestionResponses questionResponses = objectMapper.readValue(value, QuestionResponses.class);
 
-        // MvcResult mvcResult = getAction("/api/questions?page=1&orderBy=CREATED_DATE&title=스택&content=")
-        //     .andExpect(status().isOk())
-        //     .andReturn();
-        // String value = mvcResult.getResponse().getContentAsString();
-        // QuestionResponses questionResponses = objectMapper.readValue(value, QuestionResponses.class);
-        //
-        // assertAll(
-        //     () -> assertThat(questionResponses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
-        //     () -> assertThat(questionResponses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
-        // );
+        assertAll(
+            () -> assertThat(questionResponses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
+            () -> assertThat(questionResponses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
+        );
     }
 }

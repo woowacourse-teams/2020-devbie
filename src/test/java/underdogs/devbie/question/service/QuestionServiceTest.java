@@ -7,6 +7,7 @@ import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -278,7 +279,7 @@ public class QuestionServiceTest {
 
         List<Question> questions = Lists.newArrayList(question1, question2);
 
-        given(questionRepository.findAllById(anyList())).willReturn(questions);
+        given(questionRepository.findAllById(any())).willReturn(questions);
 
         QuestionResponses responses = questionService.findAllByIds(Lists.newArrayList(1L, 2L));
 
