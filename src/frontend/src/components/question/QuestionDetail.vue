@@ -67,11 +67,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedQuestion", "isUserQuestionFavorites"])
+    ...mapGetters(["fetchedQuestion", "isUserQuestionFavorites", "isLoggedIn"])
   },
 
   created() {
     this.updateCurrentQuestion();
+  },
+
+  mounted() {
+    if (!this.isLoggedIn) {
+      this.$store.commit("DELETE_QUESTION_FAVORITES");
+    }
   },
 
   methods: {

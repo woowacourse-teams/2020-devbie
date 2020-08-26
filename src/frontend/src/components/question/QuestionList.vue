@@ -19,6 +19,11 @@
         <p @click="$router.push(`/questions/${question.id}`)" class="title">
           Q. {{ question.title }}
         </p>
+        <favorite-control
+          :targetObjectId="question.id"
+          :isUserFavorite="isUserQuestionFavorites(question.id)"
+          :isQuestion="true"
+        ></favorite-control>
         <div
           class="hashtags"
           v-for="hashtag in question.hashtags"
@@ -33,8 +38,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
+  components: { FavoriteControl },
+
   data() {
     return {
       hashtag: "",
@@ -43,7 +51,19 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedQuestions"])
+    ...mapGetters([
+      "fetchedQuestions",
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "fetchedQuestionFavorites",
+      "isUserQuestionFavorites"
+    ])
+  },
+
+  watch: {
+    isLoggedIn() {
+      this.initFavoriteState();
+    }
   },
 
   created() {
@@ -54,6 +74,26 @@ export default {
       return;
     }
     this.$store.dispatch("FETCH_QUESTIONS", this.orderBy);
+
+    if (this.isLoggedIn) {
+      this.initFavoriteState();
+    }
+  },
+
+  mounted() {
+    if (!this.isLoggedIn) {
+      this.$store.commit("DELETE_QUESTION_FAVORITES");
+    }
+  },
+
+  methods: {
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "question"
+      });
+    }
   }
 };
 </script>

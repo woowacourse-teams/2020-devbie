@@ -12,6 +12,12 @@ export default {
     },
     SET_QUESTION_FAVORITES(state, data) {
       state.myQuestionFavorites = data;
+    },
+    DELETE_NOTICE_FAVORITES(state) {
+      state.myNoticeFavorites = [];
+    },
+    DELETE_QUESTION_FAVORITES(state) {
+      state.myQuestionFavorites = [];
     }
   },
   actions: {
