@@ -2,12 +2,15 @@ package underdogs.devbie.question.domain;
 
 import static underdogs.devbie.question.domain.QQuestion.*;
 
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -36,30 +39,31 @@ public class QuestionRepositoryImpl extends QuerydslRepositorySupport implements
         return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
     }
 
-    private BooleanExpression containKeyword(String title, String content) {
-        if (title.isEmpty() && content.isEmpty()) {
+    private BooleanBuilder containKeyword(String title, String content) {
+        return new BooleanBuilder()
+            .or(containTitle(title))
+            .or(containContent(content));
+    }
+
+    private BooleanExpression containTitle(String title) {
+        if (Objects.isNull(title) || title.trim().isEmpty()) {
             return null;
         }
+        return question
+            .title
+            .title
+            .toLowerCase()
+            .contains(title.toLowerCase());
+    }
 
-        BooleanExpression containTitle = question.isNull();
-        BooleanExpression containContent = question.isNull();
-
-        if (!title.isEmpty()) {
-            containTitle = question
-                .title
-                .title
-                .toLowerCase()
-                .contains(title.toLowerCase());
+    private BooleanExpression containContent(String content) {
+        if (Objects.isNull(content) || content.trim().isEmpty()) {
+            return null;
         }
-
-        if (!content.isEmpty()) {
-            containContent = question
-                .content
-                .content
-                .toLowerCase()
-                .contains(content.toLowerCase());
-        }
-
-        return containTitle.or(containContent);
+        return question
+            .content
+            .content
+            .toLowerCase()
+            .contains(content.toLowerCase());
     }
 }

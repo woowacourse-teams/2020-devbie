@@ -52,8 +52,8 @@ public class QuestionController {
     @NoValidate
     @GetMapping
     public ResponseEntity<QuestionResponses> readAll(
-        @Valid @ModelAttribute QuestionReadRequest questionReadRequest,
-        @Valid @ModelAttribute QuestionPageRequest questionPageRequest
+        @ModelAttribute QuestionReadRequest questionReadRequest,
+        @ModelAttribute QuestionPageRequest questionPageRequest
     ) {
         QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
         return ResponseEntity

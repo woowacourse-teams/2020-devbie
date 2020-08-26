@@ -28,6 +28,6 @@ public class QuestionResponses {
     public static QuestionResponses from(List<Question> questions) {
         return new QuestionResponses(questions.stream()
             .map(QuestionResponse::from)
-            .collect(Collectors.toList()), 0);
+            .collect(Collectors.toList()), 1000);
     }
 }

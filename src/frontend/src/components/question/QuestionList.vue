@@ -80,7 +80,6 @@ export default {
     if (this.fetchedQuestions.length > 0) {
       return;
     }
-
     await this.addQuestions();
   },
 
@@ -114,7 +113,7 @@ export default {
 
       const param = {
         page: this.fetchedQuestionPage,
-        orderBy: this.orderBy || "CREATED_DATE",
+        orderBy: this.orderBy,
         title: this.title || "",
         content: this.content || ""
       };
