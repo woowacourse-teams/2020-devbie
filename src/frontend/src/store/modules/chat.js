@@ -23,6 +23,7 @@ function connectStomp(state) {
 function disconnect(state) {
   deleteAction("/api/chatrooms/" + state.name + "?noticeId=" + state.noticeId);
   state.stompClient.disconnect();
+  state.stompClient = null;
 }
 
 export default {
