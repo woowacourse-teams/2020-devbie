@@ -1,5 +1,7 @@
 package underdogs.devbie.notice.service;
 
+import java.util.List;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -74,5 +76,10 @@ public class NoticeService {
 
     public FilterResponses findFilters() {
         return FilterResponses.get();
+    }
+
+    public NoticeResponses findAllByIds(List<Long> noticeIds) {
+        List<Notice> notices = noticeRepository.findAllById(noticeIds);
+        return NoticeResponses.listFrom(notices, 1000);
     }
 }

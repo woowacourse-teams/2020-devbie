@@ -29,9 +29,12 @@
                 언어 : {{ notice.languages.join(", ") }}
               </div>
               <div class="medium-font">포지션 : {{ notice.jobPosition }}</div>
-              <v-btn icon class="heart-icon">
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
+              <favorite-control
+                class="heart-icon"
+                :targetObjectId="notice.id"
+                :isUserFavorite="isUserNoticeFavorites(notice.id)"
+                :isQuestion="false"
+              ></favorite-control>
             </v-col>
           </v-card-actions>
         </v-card>
@@ -52,8 +55,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
+  components: { FavoriteControl },
+
   data() {
     return {
       isBottom: false,
@@ -69,7 +75,11 @@ export default {
       "fetchedLanguage",
       "fetchedKeyword",
       "fetchedPage",
-      "fetchedLastPage"
+      "fetchedLastPage",
+      "isLoggedIn",
+      "fetchedLoginUser",
+      "isUserNoticeFavorites",
+      "fetchedNoticeFavorites"
     ])
   },
 
@@ -86,15 +96,23 @@ export default {
     fetchedKeyword() {
       this.addNotices();
     },
+    isLoggedIn() {
+      this.initFavoriteState();
+    },
     fetchedPage() {
       this.isReady = true;
     }
   },
 
   async created() {
+    if (this.isLoggedIn) {
+      await this.initFavoriteState();
+    }
+
     if (this.fetchedNotices.length > 0) {
       return;
     }
+
     await this.addNotices();
   },
 
@@ -108,6 +126,7 @@ export default {
       let clientCurrentHeight = scrollTop + clientHeight;
       let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
       const currentState = clientCurrentHeight > componentHeight;
+
       if (
         this.isBottom !== currentState &&
         this.fetchedPage <= this.fetchedLastPage
@@ -143,6 +162,49 @@ export default {
           "공고를 불러오지 못했습니다."
         );
       }
+    },
+
+    onFavorite(noticeId) {
+      if (!this.isLoggedIn) {
+        console.log("you should login");
+        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "로그인이 필요합니다.");
+        return;
+      }
+      if (this.isUserNoticeFavorites(noticeId)) {
+        try {
+          this.$store.dispatch("DELETE_FAVORITE", noticeId);
+        } catch (error) {
+          console.error("즐겨찾기 삭제 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 삭제에 실패했습니다."
+          );
+        }
+      } else {
+        const param = {
+          objectType: "notice",
+          objectId: noticeId
+        };
+        const queryParam = new URLSearchParams(param).toString();
+        try {
+          this.$store.dispatch("CREATE_FAVORITE", queryParam);
+        } catch (error) {
+          console.error("즐겨찾기 추가 실패" + error.response.data.message);
+          this.$store.disabled(
+            "UPDATE_SNACKBAR_TEXT",
+            "즐겨찾기 추가에 실패했습니다."
+          );
+        }
+      }
+      this.initFavoriteState();
+    },
+
+    async initFavoriteState() {
+      await this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch("FETCH_MY_FAVORITES", {
+        userId: this.fetchedLoginUser.id,
+        object: "notice"
+      });
     }
   }
 };

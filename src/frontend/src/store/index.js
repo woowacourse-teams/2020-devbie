@@ -8,6 +8,7 @@ import recommendations from "./modules/recommendations";
 import snackBar from "./modules/snackBar";
 import hashtags from "./modules/hashtags";
 import chat from "./modules/chat";
+import favorite from "./modules/favorite";
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ export const store = new Vuex.Store({
     recommendations,
     snackBar,
     hashtags,
-    chat
+    chat,
+    favorite
   }
 });
