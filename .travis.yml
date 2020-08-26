@@ -7,6 +7,10 @@ branches:
     - master
     - develop
 
+env:
+  global:
+    - NODE_ENV=production
+
 before_install:
   - chmod +x gradlew
 
