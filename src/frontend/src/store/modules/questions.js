@@ -7,7 +7,8 @@ export default {
     questionId: [],
     searchScope: [],
     questionPage: 1,
-    questionLastPage: 1000
+    questionLastPage: 1000,
+    questionKeyword: ""
   },
   mutations: {
     SET_QUESTIONS(state, data) {
@@ -26,6 +27,9 @@ export default {
     },
     SET_SEARCH_SCOPE(state, data) {
       state.searchScope = [data];
+    },
+    SET_KEYWORD(state, data) {
+      state.questionKeyword = data;
     },
     INIT_QUESTIONS(state) {
       state.questions = [];
@@ -68,14 +72,6 @@ export default {
         `/api/questions/${questionId}?visit=false`
       );
       commit("SET_QUESTION", data);
-    },
-    async SEARCH_QUESTIONS({ commit }, { title, content }) {
-      const { data } = await getAction(
-        `/api/questions?title=${title === "" ? null : title}&content=${
-          content === "" ? null : content
-        }`
-      );
-      commit("SET_QUESTIONS", data);
     }
   },
   getters: {
@@ -96,6 +92,9 @@ export default {
     },
     fetchedQuestionLastPage(state) {
       return state.questionLastPage;
+    },
+    fetchedQuestionKeyword(state) {
+      return state.questionKeyword;
     }
   }
 };

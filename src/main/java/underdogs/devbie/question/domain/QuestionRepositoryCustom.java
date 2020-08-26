@@ -5,5 +5,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface QuestionRepositoryCustom {
 
-    Page<Question> findAllBy(Pageable pageable);
+    Page<Question> findAllBy(String title, String content, Pageable pageable);
 }

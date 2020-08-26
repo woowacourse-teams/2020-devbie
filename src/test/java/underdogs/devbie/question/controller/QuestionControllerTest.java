@@ -93,7 +93,7 @@ class QuestionControllerTest extends MvcTest {
             .build();
         QuestionResponses responses = QuestionResponses.of(Lists.newArrayList(question));
 
-        given(questionService.readAll(OrderBy.CREATED_DATE)).willReturn(responses);
+        given(questionService.readAll(questionReadRequest, OrderBy.CREATED_DATE)).willReturn(responses);
 
         MvcResult mvcResult = getAction("/api/questions?orderBy=CREATED_DATE")
             .andExpect(status().isOk())

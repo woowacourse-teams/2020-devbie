@@ -4,9 +4,15 @@
       "<span>{{ hashtag }}</span
       >" 태그로 검색한 결과입니다.
     </div>
-    <search-bar v-else :searchBy="searchBy"></search-bar>
+    <search-bar v-else></search-bar>
     <ul v-scroll="onScroll" class="question-list">
+      <div v-if="fetchedQuestions.length === 0" class="no-result">
+        <i class="fas fa-exclamation"></i>
+        검색 결과가 존재하지 않습니다.
+        <i class="fas fa-exclamation"></i>
+      </div>
       <li
+        v-else
         v-for="question in fetchedQuestions"
         :key="question.id"
         class="question"
@@ -50,9 +56,7 @@ export default {
   data() {
     return {
       isBottom: false,
-      hashtag: this.$route.query.hashtag,
-      title: this.$route.query.title,
-      content: this.$route.query.content
+      hashtag: this.$route.query.hashtag
     };
   },
 
@@ -61,14 +65,7 @@ export default {
       "fetchedQuestions",
       "fetchedQuestionPage",
       "fetchedQuestionLastPage"
-    ]),
-
-    searchBy() {
-      if (this.title === "") {
-        return this.content;
-      }
-      return this.title;
-    }
+    ])
   },
 
   beforeCreate() {
@@ -76,17 +73,11 @@ export default {
   },
 
   created() {
+    if (this.hashtag) {
+      this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
+      return;
+    }
     this.addQuestions();
-    // if (this.hashtag) {
-    //   this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
-    //   return;
-    // }
-    // if (this.title || this.content) {
-    //   this.$store.dispatch("SEARCH_QUESTIONS", {
-    //     title: this.title,
-    //     content: this.content
-    //   });
-    // }
   },
 
   methods: {
@@ -113,7 +104,9 @@ export default {
     async addQuestions() {
       const param = {
         page: this.fetchedQuestionPage,
-        orderBy: this.$route.query.orderBy || "CREATED_DATE"
+        orderBy: this.$route.query.orderBy || "CREATED_DATE",
+        title: this.$route.query.title || "",
+        content: this.$route.query.content || ""
       };
       const queryParam = new URLSearchParams(param).toString();
       try {
@@ -150,6 +143,7 @@ export default {
 
 .question:last-child {
   border-bottom: solid 2px #87bdd6;
+  margin-bottom: 40px;
 }
 
 .count-infos {
@@ -200,14 +194,14 @@ export default {
   font-size: 26px;
 }
 
+.no-result {
+  font-family: "Jua", sans-serif;
+  margin-top: 180px;
+  font-size: 25px;
+}
+
 .loading-progress {
   text-align: center;
   left: 50%;
-}
-
-.finish-scroll {
-  display: flex;
-  justify-content: center;
-  margin: 20px auto;
 }
 </style>

@@ -1,6 +1,5 @@
 package underdogs.devbie.question.domain;
 
-import static underdogs.devbie.notice.domain.QNotice.*;
 import static underdogs.devbie.question.domain.QQuestion.*;
 
 import org.springframework.data.domain.Page;
@@ -8,15 +7,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import underdogs.devbie.notice.domain.JobPosition;
-import underdogs.devbie.notice.domain.Language;
-import underdogs.devbie.notice.domain.NoticeType;
 
 @Repository
 public class QuestionRepositoryImpl extends QuerydslRepositorySupport implements QuestionRepositoryCustom {
@@ -30,56 +25,41 @@ public class QuestionRepositoryImpl extends QuerydslRepositorySupport implements
 
     @Override
     public Page<Question> findAllBy(
-         Pageable pageable
+        String title, String content, Pageable pageable
     ) {
         JPAQuery<Question> limit = jpaQueryFactory
             .selectFrom(question)
+            .where(containKeyword(title, content))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize());
         QueryResults<Question> queryResults = getQuerydsl().applyPagination(pageable, limit).fetchResults();
         return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
     }
 
-    private BooleanExpression equalNoticeType(NoticeType noticeType) {
-        if (StringUtils.isEmpty(noticeType)) {
+    private BooleanExpression containKeyword(String title, String content) {
+        if (title.isEmpty() && content.isEmpty()) {
             return null;
         }
-        return notice
-            .noticeType
-            .eq(noticeType);
-    }
 
-    private BooleanExpression equalJobPosition(JobPosition jobPosition) {
-        if (StringUtils.isEmpty(jobPosition)) {
-            return null;
+        BooleanExpression containTitle = question.isNull();
+        BooleanExpression containContent = question.isNull();
+
+        if (!title.isEmpty()) {
+            containTitle = question
+                .title
+                .title
+                .toLowerCase()
+                .contains(title.toLowerCase());
         }
-        return notice
-            .jobPosition
-            .eq(jobPosition);
-    }
 
-    private BooleanExpression containLanguage(Language language) {
-        if (StringUtils.isEmpty(language)) {
-            return null;
+        if (!content.isEmpty()) {
+            containContent = question
+                .content
+                .content
+                .toLowerCase()
+                .contains(content.toLowerCase());
         }
-        return notice
-            .noticeDescription
-            .languages
-            .contains(language);
-    }
 
-    private BooleanExpression containKeyword(String keyword) {
-        if (StringUtils.isEmpty(keyword) || keyword.isEmpty()) {
-            return null;
-        }
-        BooleanExpression containCompany = notice
-            .company
-            .name
-            .contains(keyword);
-        BooleanExpression containTitle = notice
-            .title
-            .contains(keyword);
-
-        return containTitle.or(containCompany);
+        return containTitle.or(containContent);
     }
 }

@@ -22,6 +22,7 @@ import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionPageRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -50,20 +51,10 @@ public class QuestionController {
     @NoValidate
     @GetMapping
     public ResponseEntity<QuestionResponses> readAll(
+        @Valid QuestionReadRequest questionReadRequest,
         @Valid QuestionPageRequest questionPageRequest
     ) {
-        QuestionResponses responses = questionService.readAll(questionPageRequest.toPageRequest());
-        return ResponseEntity
-            .ok(responses);
-    }
-
-    @NoValidate
-    @GetMapping(params = {"title", "content"})
-    public ResponseEntity<QuestionResponses> searchBy(
-        @RequestParam("title") String title,
-        @RequestParam("content") String content
-    ) {
-        QuestionResponses responses = questionService.searchQuestionBy(title, content);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
         return ResponseEntity
             .ok(responses);
     }

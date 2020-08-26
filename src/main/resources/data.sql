@@ -60,6 +60,35 @@ INSERT INTO question (created_date, question_id, user_id, title, content, visit_
 INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-26 02:35:42', 12, 100, 'h2방언','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 500);
 INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-26 02:35:43', 13, 54, '도커가 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 211);
 
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:31', 14, 100, '가비지 컬렉션이란 무엇인가','GC를 어느정도 까지 알아야할까요?', 100);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:32', 15, 54, 'PUT과 PATCH의 차이','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 30);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:33', 16, 100, 'Rest API','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 43);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:34', 17, 54, 'HTTP vs HTTPS','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 111);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:35', 18, 100, '싱글톤 패턴 예시','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 12);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:36', 19, 54, '무한 스크롤','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 54);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:37', 20, 100, '코로나 싫어요','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 66);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:38', 21, 54, 'this is question','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 17);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:39', 22, 100, 'JVM 작동원리','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 31);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:40', 23, 54, 'websocket에 대해 알아야할까요','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 29);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:41', 24, 100, 'Querydsl은 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 99);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:42', 25, 100, 'h2방언','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 500);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-27 02:35:43', 26, 54, '도커가 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 211);
+
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:31', 27, 100, '가비지 컬렉션이란 무엇인가','GC를 어느정도 까지 알아야할까요?', 100);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:32', 28, 54, 'PUT과 PATCH의 차이','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 30);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:33', 29, 100, 'Rest API','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 43);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:34', 30, 54, 'HTTP vs HTTPS','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 111);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:35', 31, 100, '싱글톤 패턴 예시','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 12);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:36', 32, 54, '무한 스크롤','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 54);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:37', 33, 100, '코로나 싫어요','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 66);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:38', 34, 54, 'this is question','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 17);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:39', 35, 100, 'JVM 작동원리','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 31);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:40', 36, 54, 'websocket에 대해 알아야할까요','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 29);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:41', 37, 100, 'Querydsl은 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 99);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:42', 38, 100, 'h2방언','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 500);
+INSERT INTO question (created_date, question_id, user_id, title, content, visit_count) VALUES ('2020-08-28 02:35:43', 39, 54, '도커가 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 211);
+
+
 INSERT INTO answer (answer_id, user_id, question_id, content) VALUES (1, 100, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');
 INSERT INTO answer (answer_id, user_id, question_id, content) VALUES (2, 54, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');
 INSERT INTO answer (answer_id, user_id, question_id, content) VALUES (3, 100, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');

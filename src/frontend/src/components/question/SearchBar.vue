@@ -29,8 +29,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["searchBy"],
-
   data() {
     return {
       scopes: [
@@ -47,7 +45,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedSearchScope"]),
+    ...mapGetters(["fetchedSearchScope", "fetchedQuestionKeyword"]),
 
     title() {
       if (this.selectedScope.value !== "CONTENT") {
@@ -65,7 +63,7 @@ export default {
   },
 
   created() {
-    this.keyword = this.searchBy;
+    this.keyword = this.fetchedQuestionKeyword;
     this.selectedScope =
       this.fetchedSearchScope.length === 0
         ? {
@@ -81,6 +79,7 @@ export default {
         `/questions?title=${this.title}&content=${this.content}`
       );
       this.$store.commit("SET_SEARCH_SCOPE", this.selectedScope);
+      this.$store.commit("SET_KEYWORD", this.keyword);
     }
   }
 };

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -35,8 +36,11 @@ public class QuestionService {
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAll(Pageable pageable) {
-        Page<Question> questions = questionRepository.findAllBy(pageable);
+    public QuestionResponses readAll(QuestionReadRequest questionReadRequest, Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllBy(
+            questionReadRequest.getTitle(),
+            questionReadRequest.getContent(),
+            pageable);
         return QuestionResponses.of(questions.getContent(), questions.getTotalPages());
     }
 
@@ -82,10 +86,6 @@ public class QuestionService {
         validateQuestionAuthor(userId, question);
 
         questionRepository.deleteById(questionId);
-    }
-
-    public QuestionResponses searchQuestionBy(String title, String content) {
-        return QuestionResponses.from(questionRepository.findByBothLike(title, content));
     }
 
     public QuestionResponses searchByHashtag(String hashtag) {

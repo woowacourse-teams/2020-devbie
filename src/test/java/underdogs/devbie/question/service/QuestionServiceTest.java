@@ -19,7 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.OrderBy;
@@ -32,6 +34,8 @@ import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionPageRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -106,10 +110,12 @@ public class QuestionServiceTest {
     @DisplayName("질문 목록 조회")
     @Test
     void readAll() {
-        List<Question> questions = Lists.newArrayList(question);
-        given(questionRepository.findAllBy(any(Sort.class))).willReturn(questions);
+        Page<Question> questions = new PageImpl<>(Lists.newArrayList(question));
+        given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
 
-        QuestionResponses responses = questionService.readAll(OrderBy.CREATED_DATE);
+        QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("").content("").build();
+        QuestionPageRequest questionPageRequest = new QuestionPageRequest(1, OrderBy.CREATED_DATE);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
