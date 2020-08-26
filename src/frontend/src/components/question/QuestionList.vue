@@ -57,7 +57,7 @@ import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
   components: { SearchBar, FavoriteControl },
-  
+
   props: ["orderBy", "title", "content", "hashtag"],
 
   data() {
@@ -71,7 +71,7 @@ export default {
     ...mapGetters([
       "fetchedQuestions",
       "fetchedQuestionPage",
-      "fetchedQuestionLastPage"
+      "fetchedQuestionLastPage",
       "isLoggedIn",
       "fetchedLoginUser",
       "fetchedQuestionFavorites",
@@ -83,19 +83,26 @@ export default {
     fetchedQuestionPage() {
       this.isReady = true;
     },
-    
+
     isLoggedIn() {
       this.initFavoriteState();
     }
   },
 
   async created() {
+    console.log(this.fetchedQuestions.length);
     if (this.fetchedQuestions.length > 0) {
       return;
     }
+
+    if (this.hashtag) {
+      await this.addQuestionByHashtag();
+      return;
+    }
+
     await this.addQuestions();
   },
-  
+
   mounted() {
     if (!this.isLoggedIn) {
       this.$store.commit("DELETE_QUESTION_FAVORITES");
@@ -148,10 +155,23 @@ export default {
       }
 
       if (this.isLoggedIn) {
-        this.initFavoriteState();
+        await this.initFavoriteState();
       }
     },
-  
+
+    async addQuestionByHashtag() {
+      try {
+        await this.$store.commit("INIT_QUESTIONS");
+        await this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
+      } catch (error) {
+        console.log("해시태그로 질문 조회 실패");
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "질문을 불러오지 못했습니다."
+        );
+      }
+    },
+
     async initFavoriteState() {
       await this.$store.dispatch("FETCH_LOGIN_USER");
       await this.$store.dispatch("FETCH_MY_FAVORITES", {
