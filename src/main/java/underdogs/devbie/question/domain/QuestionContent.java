@@ -1,5 +1,6 @@
 package underdogs.devbie.question.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;
 
@@ -20,6 +21,7 @@ import underdogs.devbie.question.exception.QuestionNotMeetingEssentialsException
 public class QuestionContent {
 
     @Lob
+    @Column(columnDefinition = "CLOB")
     private String content;
 
     public static QuestionContent from(String content) {

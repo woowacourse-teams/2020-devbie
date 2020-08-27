@@ -90,7 +90,6 @@ export default {
   },
 
   async created() {
-    console.log(this.fetchedQuestions.length);
     if (this.fetchedQuestions.length > 0) {
       return;
     }
