@@ -39,21 +39,22 @@ export default {
 
   watch: {
     async hashtag() {
+      await this.$store.commit("INIT_QUESTIONS");
       if (this.hashtag) {
         await this.addQuestionByHashtag();
       }
     },
 
     async orderBy() {
+      await this.$store.commit("INIT_QUESTIONS");
       if (this.orderBy) {
-        await this.$store.commit("INIT_QUESTIONS");
         await this.addQuestions();
       }
     },
 
     async compoundKeyword() {
+      await this.$store.commit("INIT_QUESTIONS");
       if (this.title || this.content) {
-        await this.$store.commit("INIT_QUESTIONS");
         await this.addQuestions();
       }
     }
@@ -81,7 +82,6 @@ export default {
 
     async addQuestionByHashtag() {
       try {
-        await this.$store.commit("INIT_QUESTIONS");
         await this.$store.dispatch("FETCH_QUESTIONS_BY_HASHTAG", this.hashtag);
       } catch (error) {
         console.log("해시태그로 질문 조회 실패");

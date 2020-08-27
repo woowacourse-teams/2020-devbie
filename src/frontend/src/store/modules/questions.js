@@ -16,8 +16,6 @@ export default {
       state.questionPage = state.questionPage + 1;
       state.questionLastPage = data["lastPage"];
       state.questions = state.questions.concat(data["questions"]);
-
-      console.log(state.questions);
     },
     SET_QUESTION(state, data) {
       state.question = data;
@@ -70,7 +68,6 @@ export default {
     async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
       const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);
       commit("SET_QUESTIONS", data);
-      console.log(data);
     },
     async FETCH_QUESTION_WITHOUT_VISITS({ commit }, questionId) {
       const { data } = await getAction(

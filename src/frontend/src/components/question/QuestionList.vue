@@ -94,15 +94,13 @@ export default {
       return;
     }
 
-    if (this.hashtag) {
-      await this.addQuestionByHashtag();
-      return;
-    }
-
     await this.addQuestions();
   },
 
   mounted() {
+    if (this.hashtag) {
+      this.addQuestionByHashtag();
+    }
     if (!this.isLoggedIn) {
       this.$store.commit("DELETE_QUESTION_FAVORITES");
     }

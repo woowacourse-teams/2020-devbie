@@ -90,6 +90,10 @@ export default {
 
     async onCreateQuestion() {
       if (!this.$refs.form.validate()) {
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "해시태그 입력이 올바르지 않습니다."
+        );
         return;
       }
 
@@ -129,14 +133,46 @@ export default {
 
     async onUpdateQuestion() {
       if (!this.$refs.form.validate()) {
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "해시태그 입력이 올바르지 않습니다."
+        );
         return;
       }
 
-      await this.$store.dispatch("UPDATE_QUESTION", {
-        questionId: this.questionId,
-        ...this.payload
-      });
-      await this.$router.push(`/questions/${this.questionId}`);
+      try {
+        await this.$store.dispatch("UPDATE_QUESTION", {
+          questionId: this.questionId,
+          ...this.payload
+        });
+        await this.$router.push(`/questions/${this.questionId}`);
+      } catch (error) {
+        console.log(error);
+        switch (error.response.status) {
+          case 401: {
+            await this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "로그인 후 사용할 수 있습니다."
+            );
+            break;
+          }
+          case 405: {
+            await this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "항목을 채워주세요."
+            );
+            break;
+          }
+          default: {
+            console.log("에러입니다" + error);
+            await this.$store.dispatch(
+              "UPDATE_SNACKBAR_TEXT",
+              "요청에 실패했습니다."
+            );
+            break;
+          }
+        }
+      }
     },
 
     async fetchQuestionInfo() {
