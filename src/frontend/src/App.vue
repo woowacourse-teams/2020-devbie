@@ -36,6 +36,9 @@ export default {
       }
     }
   },
+  created() {
+    window.addEventListener("beforeunload", this.closeDrawer);
+  },
   methods: {
     logout() {
       localStorage.removeItem("devbieToken");
@@ -43,6 +46,9 @@ export default {
     },
     openDrawer() {
       this.$store.dispatch("OPEN_LATEST");
+    },
+    closeDrawer() {
+      this.$store.dispatch("CLOSE_DRAWER");
     }
   },
   computed: {

@@ -16,6 +16,9 @@ export default {
   computed: {
     ...mapGetters(["fetchedChats"])
   },
+  mounted() {
+    this.$refs.chatList.$el.scrollTop = this.$refs.chatList.$el.scrollHeight;
+  },
   watch: {
     fetchedChats() {
       setTimeout(() => {
