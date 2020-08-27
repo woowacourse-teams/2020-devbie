@@ -127,7 +127,6 @@ export default {
           updateContent: this.content
         });
         this.updateEditFlag = !this.updateEditFlag;
-        this.content = this.content.split("\n").join("<br />");
       } catch (error) {
         console.error(error);
         console.error(error.response.data.message);
