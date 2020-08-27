@@ -93,7 +93,7 @@ export default {
 }
 .search-bar {
   max-width: 60%;
-  margin: 35px auto 0 auto;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: baseline;

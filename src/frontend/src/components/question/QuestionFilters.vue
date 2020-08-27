@@ -30,7 +30,6 @@ a:hover {
   justify-content: flex-start;
   align-items: center;
   padding-right: 20px;
-  border-right: solid 1px #e8e8e8;
   height: 90%;
 }
 

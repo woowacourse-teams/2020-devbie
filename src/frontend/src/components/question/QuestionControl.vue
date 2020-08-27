@@ -48,6 +48,6 @@ export default {
 
 .control-btn {
   width: 95px;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 </style>

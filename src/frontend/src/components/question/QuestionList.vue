@@ -1,52 +1,54 @@
 <template>
   <div>
-    <div class="hashtag-header" v-if="hashtag">
-      "<span>{{ hashtag }}</span
-      >" 태그로 검색한 결과입니다.
-    </div>
-    <search-bar v-else></search-bar>
-    <ul v-scroll="onScroll" class="question-list">
-      <div v-if="fetchedQuestions.length === 0" class="no-result">
-        <i class="fas fa-exclamation"></i>
-        검색 결과가 존재하지 않습니다.
-        <i class="fas fa-exclamation"></i>
+    <div class="inner">
+      <div class="hashtag-header" v-if="hashtag">
+        "<span>{{ hashtag }}</span
+        >" 태그로 검색한 결과입니다.
       </div>
-      <li
-        v-else
-        v-for="question in fetchedQuestions"
-        :key="question.id"
-        class="question"
-      >
-        <div class="count-infos">
-          <p class="count visits">조회수 : {{ question.visits }}</p>
-          <p class="count recommendedCount">
-            추천수 : {{ question.recommendedCount }}
-          </p>
+      <search-bar v-else></search-bar>
+      <ul v-scroll="onScroll" class="question-list">
+        <div v-if="fetchedQuestions.length === 0" class="no-result">
+          <i class="fas fa-exclamation"></i>
+          검색 결과가 존재하지 않습니다.
+          <i class="fas fa-exclamation"></i>
         </div>
-        <p @click="$router.push(`/questions/${question.id}`)" class="title">
-          Q. {{ question.title }}
-        </p>
-        <favorite-control
-          :targetObjectId="question.id"
-          :isUserFavorite="isUserQuestionFavorites(question.id)"
-          :isQuestion="true"
-        ></favorite-control>
-        <div
-          class="hashtags"
-          v-for="hashtag in question.hashtags"
-          :key="hashtag.id"
+        <li
+          v-else
+          v-for="question in fetchedQuestions"
+          :key="question.id"
+          class="question"
         >
-          #{{ hashtag.tagName }}
-        </div>
-      </li>
-    </ul>
-    <v-progress-circular
-      v-if="isBottom"
-      :size="50"
-      color="primary"
-      indeterminate
-      class="loading-progress"
-    ></v-progress-circular>
+          <div class="count-infos">
+            <p class="count visits">조회수 : {{ question.visits }}</p>
+            <p class="count recommendedCount">
+              추천수 : {{ question.recommendedCount }}
+            </p>
+          </div>
+          <p @click="$router.push(`/questions/${question.id}`)" class="title">
+            Q. {{ question.title }}
+          </p>
+          <favorite-control
+            :targetObjectId="question.id"
+            :isUserFavorite="isUserQuestionFavorites(question.id)"
+            :isQuestion="true"
+          ></favorite-control>
+          <div
+            class="hashtags"
+            v-for="hashtag in question.hashtags"
+            :key="hashtag.id"
+          >
+            #{{ hashtag.tagName }}
+          </div>
+        </li>
+      </ul>
+      <v-progress-circular
+        v-if="isBottom"
+        :size="50"
+        color="primary"
+        indeterminate
+        class="loading-progress"
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 
@@ -181,6 +183,10 @@ export default {
 </script>
 
 <style scoped>
+.inner {
+  margin: 27px auto;
+  border-left: solid 1px #e8e8e8;
+}
 .question-list {
   list-style: none;
   margin-top: 20px;
@@ -239,7 +245,6 @@ export default {
 }
 
 .hashtag-header {
-  margin-top: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
