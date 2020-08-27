@@ -1,23 +1,35 @@
 <template>
-  <div class="navigation-bar">
+  <div class="navigation-bar" :class="$mq">
     <v-app-bar color="#9FD0D4" name="navigation">
-      <v-toolbar-title id="home-box"
-        ><v-btn @click="$router.push('/')" text x-large
-          ><p id="home-title">Devbie</p></v-btn
+      <v-toolbar-title class="home-box" :class="$mq"
+        ><v-btn
+          @click="$router.push('/')"
+          text
+          x-large
+          class="home-btn"
+          :class="$mq"
+          ><p class="home-title" :class="$mq">Devbie</p></v-btn
         ></v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <v-btn @click="$router.push('/admin')" v-if="isAdmin()" text x-large
-        ><p class="navigation-menu">관리자</p></v-btn
+      <v-btn
+        @click="$router.push('/admin')"
+        v-if="isAdmin()"
+        text
+        class="menu"
+        :class="$mq"
+        ><p class="navigation-menu" :class="$mq">관리자</p></v-btn
       >
-      <v-btn @click="$router.push('/notices')" text x-large
-        ><p class="navigation-menu">공고</p></v-btn
+      <v-btn @click="$router.push('/notices')" text class="menu" :class="$mq"
+        ><p class="navigation-menu" :class="$mq">공고</p></v-btn
       >
       <v-btn
         @click="$router.push('/questions?orderBy=CREATED_DATE')"
         text
         x-large
-        ><p class="navigation-menu">면접 질문</p></v-btn
+        class="menu"
+        :class="$mq"
+        ><p class="navigation-menu" :class="$mq">면접 질문</p></v-btn
       >
       <template v-if="isLoggedIn">
         <v-menu transition="slide-y-transition" offset-y bottom>
@@ -42,8 +54,15 @@
           </v-list>
         </v-menu>
       </template>
-      <v-btn @click="showLoginPage" color="#E8E8E8" id="login-btn" large v-else
-        >Login with Github
+      <v-btn
+        @click="showLoginPage"
+        color="#E8E8E8"
+        class="login-btn"
+        :class="$mq"
+        large
+        v-else
+        ><span class="login-text" :class="$mq">Login with Github</span>
+        <span class="login-text-mobile" :class="$mq">Login</span>
       </v-btn>
     </v-app-bar>
   </div>
@@ -85,15 +104,42 @@ export default {
 </script>
 
 <style scoped>
-#home-box {
+.navigation-bar {
+}
+
+.navigation-bar.mobile {
+  max-width: 100%;
+}
+
+.home-box {
   margin-left: 50px;
 }
 
-#home-title {
+.home-box.mobile {
+  margin-left: 0;
+}
+
+.home-title {
   font-size: 28px;
   color: #f4f4f4;
   margin: 0;
   padding: 0;
+}
+
+.home-title.mobile {
+  font-size: 17px !important;
+}
+
+.home-btn.mobile {
+  padding: 0 !important;
+  margin-left: 0 !important;
+}
+
+.menu {
+}
+
+.menu.mobile {
+  padding: 0 !important;
 }
 
 .navigation-menu {
@@ -104,7 +150,28 @@ export default {
   padding: 0;
 }
 
-#login-btn {
+.navigation-menu.mobile {
+  font-size: 16px;
+  padding: 0;
+}
+
+.login-btn {
   margin-right: 40px;
+}
+
+.login-btn.mobile {
+  margin-right: 0;
+}
+
+.login-text.mobile {
+  display: none;
+}
+
+.login-text-mobile {
+  display: none;
+}
+
+.login-text-mobile.mobile {
+  display: inline;
 }
 </style>

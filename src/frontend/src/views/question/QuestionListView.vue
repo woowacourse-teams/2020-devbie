@@ -1,6 +1,6 @@
 <template>
   <div class="interview">
-    <div class="inner">
+    <div class="inner" :class="$mq">
       <question-filters id="question-filters"></question-filters>
       <question-list
         :orderBy="orderBy"
@@ -107,6 +107,9 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+}
+
+.inner.mobile {
 }
 
 #question-filters {
