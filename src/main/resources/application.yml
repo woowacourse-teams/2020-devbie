@@ -11,4 +11,11 @@ spring:
     url: jdbc:h2:mem:testdb;IFEXISTS=FALSE;
 logging:
   config: classpath:log4j2.yml
-
+cloud:
+  aws:
+    s3:
+      bucket: underdong-devbie-images
+    region:
+      static: ap-northeast-2
+      stack:
+        auto: false
