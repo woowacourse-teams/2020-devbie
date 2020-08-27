@@ -19,12 +19,12 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RecommendationCount {
 
-    @Formula("select count(*) from question_recommendation q "
-        + "where q.question_id = question_id and q.recommendation_type = 'RECOMMENDED'")
+    @Formula(value="(select count(*) from question_recommendation q "
+        + "where q.question_id = question_id and q.recommendation_type = 'RECOMMENDED')")
     private Long recommendedCount;
 
-    @Formula("select count(*) from question_recommendation q "
-        + "where q.question_id = question_id and q.recommendation_type = 'NON_RECOMMENDED'")
+    @Formula(value="(select count(*) from question_recommendation q "
+        + "where q.question_id = question_id and q.recommendation_type = 'NON_RECOMMENDED')")
     private Long nonRecommendedCount;
 
     public static RecommendationCount init() {
