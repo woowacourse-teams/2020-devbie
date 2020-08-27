@@ -116,12 +116,6 @@ export default {
     await this.addNotices();
   },
 
-  mounted() {
-    if (!this.isLoggedIn) {
-      this.$store.commit("DELETE_NOTICE_FAVORITES");
-    }
-  },
-
   methods: {
     async onScroll({ target }) {
       if (!this.isReady) {
@@ -206,6 +200,10 @@ export default {
     },
 
     async initFavoriteState() {
+      if (!this.isLoggedIn) {
+        this.$store.commit("DELETE_NOTICE_FAVORITES");
+        return;
+      }
       await this.$store.dispatch("FETCH_LOGIN_USER");
       await this.$store.dispatch("FETCH_MY_FAVORITES", {
         userId: this.fetchedLoginUser.id,
