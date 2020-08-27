@@ -1,16 +1,17 @@
 <template>
   <v-app id="app">
+    <snack-bar></snack-bar>
     <div :class="{ main_box: this.drawer }">
       <navigation-bar @logout="logout"></navigation-bar>
       <transition name="fade" mode="out-in">
         <router-view class="content"></router-view>
       </transition>
-      <snack-bar></snack-bar>
       <footer-bar></footer-bar>
     </div>
     <chat-drawer v-if="drawer"></chat-drawer>
-    <button id="drawer_btn" v-else @click="openDrawer">
-      채팅방 열기
+    <button class="drawer-btn" :class="$mq" v-else @click="openDrawer">
+      <span class="chat-text" :class="$mq">채팅방 열기</span
+      ><i class="fas fa-comment chat-icon" :class="$mq"></i>
     </button>
   </v-app>
 </template>
@@ -91,7 +92,7 @@ a {
   width: calc(100vw - 260px);
 }
 
-#drawer_btn {
+.drawer-btn {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -102,5 +103,27 @@ a {
   background-color: #00b8d4;
   padding: 10px;
   border-radius: 4px;
+}
+
+.drawer-btn.mobile {
+  position: fixed;
+  bottom: 30px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.chat-text.mobile {
+  display: none;
+}
+
+.chat-icon {
+  display: none;
+}
+
+.chat-icon.mobile {
+  font-size: 21px;
+  display: inline;
 }
 </style>

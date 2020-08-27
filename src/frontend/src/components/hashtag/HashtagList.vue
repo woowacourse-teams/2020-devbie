@@ -2,6 +2,7 @@
   <div class="inner">
     <v-btn
       class="button control-btn hashtag-list"
+      :class="$mq"
       large
       color="#DAEBEA"
       @click.stop="drawer = !drawer"
@@ -83,6 +84,10 @@ export default {
 
 .control-btn {
   width: 95px;
+}
+
+.control-btn.mobile {
+  margin: 0 5px;
 }
 
 .btn:hover {

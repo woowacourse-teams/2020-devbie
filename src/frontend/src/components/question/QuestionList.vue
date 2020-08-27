@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="inner">
+    <div class="inner" :class="$mq">
       <div class="hashtag-header" v-if="hashtag">
         "<span>{{ hashtag }}</span
         >" 태그로 검색한 결과입니다.
       </div>
       <search-bar v-else></search-bar>
-      <ul v-scroll="onScroll" class="question-list">
+      <ul v-scroll="onScroll" class="question-items" :class="$mq">
         <div v-if="fetchedQuestions.length === 0" class="no-result">
           <i class="fas fa-exclamation"></i>
           검색 결과가 존재하지 않습니다.
@@ -17,6 +17,7 @@
           v-for="question in fetchedQuestions"
           :key="question.id"
           class="question"
+          :class="$mq"
         >
           <div class="count-infos">
             <p class="count visits">조회수 : {{ question.visits }}</p>
@@ -24,7 +25,11 @@
               추천수 : {{ question.recommendedCount }}
             </p>
           </div>
-          <p @click="$router.push(`/questions/${question.id}`)" class="title">
+          <p
+            @click="$router.push(`/questions/${question.id}`)"
+            class="question-title"
+            :class="$mq"
+          >
             Q. {{ question.title }}
           </p>
           <favorite-control
@@ -187,12 +192,21 @@ export default {
   margin: 27px auto;
   border-left: solid 1px #e8e8e8;
 }
-.question-list {
+
+.inner.mobile {
+  border-left: none;
+}
+
+.question-items {
   list-style: none;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.question-items.mobile {
+  padding: 0;
 }
 
 .question {
@@ -209,6 +223,11 @@ export default {
   margin-bottom: 40px;
 }
 
+.question.mobile {
+  padding: 0;
+  max-height: 70px;
+}
+
 .count-infos {
   display: flex;
   flex-direction: column;
@@ -221,17 +240,22 @@ export default {
   margin-bottom: 0;
 }
 
-.title {
+.question-title {
   color: #35495e;
   text-decoration: none;
   margin-bottom: 0;
   margin-right: 7px;
 }
 
-.title:hover {
+.question-title:hover {
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline;
+}
+
+.question-title.mobile {
+  font-size: 18px;
+  margin: 0;
 }
 
 .hashtags {

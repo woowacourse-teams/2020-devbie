@@ -1,6 +1,6 @@
 <template>
   <div class="navigation-bar" :class="$mq">
-    <v-app-bar color="#9FD0D4" name="navigation">
+    <v-app-bar color="#9FD0D4" name="navigation" class="inner" :class="$mq">
       <v-toolbar-title class="home-box" :class="$mq"
         ><v-btn
           @click="$router.push('/')"
@@ -12,24 +12,24 @@
         ></v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <v-btn
+      <a
         @click="$router.push('/admin')"
         v-if="isAdmin()"
-        text
-        class="menu"
+        class="menu navigation-menu"
         :class="$mq"
-        ><p class="navigation-menu" :class="$mq">관리자</p></v-btn
+        >관리자</a
       >
-      <v-btn @click="$router.push('/notices')" text class="menu" :class="$mq"
-        ><p class="navigation-menu" :class="$mq">공고</p></v-btn
+      <a
+        @click="$router.push('/notices')"
+        class="menu navigation-menu"
+        :class="$mq"
+        >공고</a
       >
-      <v-btn
+      <a
         @click="$router.push('/questions?orderBy=CREATED_DATE')"
-        text
-        x-large
-        class="menu"
+        class="menu navigation-menu"
         :class="$mq"
-        ><p class="navigation-menu" :class="$mq">면접 질문</p></v-btn
+        >면접 질문</a
       >
       <template v-if="isLoggedIn">
         <v-menu transition="slide-y-transition" offset-y bottom>
@@ -59,7 +59,6 @@
         color="#E8E8E8"
         class="login-btn"
         :class="$mq"
-        large
         v-else
         ><span class="login-text" :class="$mq">Login with Github</span>
         <span class="login-text-mobile" :class="$mq">Login</span>
@@ -104,19 +103,20 @@ export default {
 </script>
 
 <style scoped>
-.navigation-bar {
-}
-
 .navigation-bar.mobile {
   max-width: 100%;
 }
 
 .home-box {
-  margin-left: 50px;
+  margin-left: 20px;
 }
 
 .home-box.mobile {
   margin-left: 0;
+}
+
+.inner.mobile {
+  margin: 0 auto;
 }
 
 .home-title {
@@ -135,32 +135,26 @@ export default {
   margin-left: 0 !important;
 }
 
-.menu {
-}
-
-.menu.mobile {
-  padding: 0 !important;
-}
-
 .navigation-menu {
   font-family: "Do Hyeon", sans-serif;
   font-size: 24px;
   color: #f4f4f4;
   margin: 0;
-  padding: 0;
+  padding: 0 10px;
 }
 
 .navigation-menu.mobile {
   font-size: 16px;
-  padding: 0;
+  padding: 0 10px;
 }
 
 .login-btn {
-  margin-right: 40px;
+  margin: 0 20px;
 }
 
 .login-btn.mobile {
-  margin-right: 0;
+  margin: 0;
+  max-width: 20px !important;
 }
 
 .login-text.mobile {

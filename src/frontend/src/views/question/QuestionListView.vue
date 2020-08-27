@@ -1,14 +1,15 @@
 <template>
   <div class="interview" :class="$mq">
-    <question-filters id="question-filters"></question-filters>
+    <question-filters class="question-filters" :class="$mq"></question-filters>
     <question-list
       :orderBy="orderBy"
       :title="title"
       :content="content"
       :hashtag="hashtag"
-      id="question-list"
+      class="question-list"
+      :class="$mq"
     ></question-list>
-    <question-control id="question-control"></question-control>
+    <question-control class="question-control" :class="$mq"></question-control>
   </div>
 </template>
 
@@ -102,20 +103,38 @@ export default {
   justify-content: space-between;
 }
 
-#question-filters {
+.interview.mobile {
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.question-filters {
   flex-grow: 1;
   min-width: 160px;
 }
 
-#question-list {
+.question-filters.mobile {
+  flex-direction: row;
+}
+
+.question-list {
   flex-grow: 10;
 }
 
-#question-control {
+.question-list.mobile {
+  order: 3;
+}
+
+.question-control {
   flex-grow: 1;
   margin-top: 25px;
   display: flex;
   justify-content: center;
   text-decoration: none;
+}
+
+.question-control.mobile {
+  flex-direction: row;
 }
 </style>

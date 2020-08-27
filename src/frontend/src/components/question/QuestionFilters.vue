@@ -1,12 +1,18 @@
 <template>
-  <div class="filters">
-    <router-link class="condition" to="/questions?orderBy=CREATED_DATE"
+  <div class="filters" :class="$mq">
+    <router-link
+      class="condition"
+      :class="$mq"
+      to="/questions?orderBy=CREATED_DATE"
       >전체 질문</router-link
     >
-    <router-link class="condition" to="/questions?orderBy=VISITS"
+    <router-link class="condition" :class="$mq" to="/questions?orderBy=VISITS"
       >인기 질문
     </router-link>
-    <router-link class="condition" to="/questions?orderBy=RECOMMENDATIONS"
+    <router-link
+      class="condition"
+      :class="$mq"
+      to="/questions?orderBy=RECOMMENDATIONS"
       >추천 질문</router-link
     >
   </div>
@@ -33,11 +39,21 @@ a:hover {
   height: 90%;
 }
 
+.filters.mobile {
+  padding: 0;
+  margin-bottom: 5px;
+}
+
 .condition {
   text-decoration: none;
   color: #cfe1e8;
   font-size: 26px;
   margin-bottom: 10px;
+}
+
+.condition.mobile {
+  margin: 0 7px;
+  font-size: 21px !important;
 }
 
 a.router-link-exact-active {
