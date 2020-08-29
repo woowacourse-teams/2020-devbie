@@ -1,5 +1,5 @@
 <template>
-  <div class="inner">
+  <div class="inner" :class="$mq">
     <v-form ref="form" v-model="valid" lazy-validation class="question-form">
       <v-text-field
         class="input-box"
@@ -198,6 +198,10 @@ export default {
   max-width: 50%;
   padding: 25px;
   margin: 0 auto;
+}
+
+.inner.mobile {
+  min-width: 100%;
 }
 
 .input-box {
