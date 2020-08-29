@@ -1,59 +1,57 @@
 <template>
-  <div>
-    <div class="inner" :class="$mq">
-      <div class="hashtag-header" v-if="hashtag">
-        "<span>{{ hashtag }}</span
-        >" 태그로 검색한 결과입니다.
+  <div class="inner" :class="$mq">
+    <div class="hashtag-header" v-if="hashtag">
+      "<span>{{ hashtag }}</span
+      >" 태그로 검색한 결과입니다.
+    </div>
+    <search-bar v-else></search-bar>
+    <ul v-scroll="onScroll" class="question-items" :class="$mq">
+      <div v-if="fetchedQuestions.length === 0" class="no-result">
+        <i class="fas fa-exclamation"></i>
+        검색 결과가 존재하지 않습니다.
+        <i class="fas fa-exclamation"></i>
       </div>
-      <search-bar v-else></search-bar>
-      <ul v-scroll="onScroll" class="question-items" :class="$mq">
-        <div v-if="fetchedQuestions.length === 0" class="no-result">
-          <i class="fas fa-exclamation"></i>
-          검색 결과가 존재하지 않습니다.
-          <i class="fas fa-exclamation"></i>
+      <li
+        v-else
+        v-for="question in fetchedQuestions"
+        :key="question.id"
+        class="question"
+        :class="$mq"
+      >
+        <div class="count-infos">
+          <p class="count visits">조회수 : {{ question.visits }}</p>
+          <p class="count recommendedCount">
+            추천수 : {{ question.recommendedCount }}
+          </p>
         </div>
-        <li
-          v-else
-          v-for="question in fetchedQuestions"
-          :key="question.id"
-          class="question"
+        <p
+          @click="$router.push(`/questions/${question.id}`)"
+          class="question-title"
           :class="$mq"
         >
-          <div class="count-infos">
-            <p class="count visits">조회수 : {{ question.visits }}</p>
-            <p class="count recommendedCount">
-              추천수 : {{ question.recommendedCount }}
-            </p>
-          </div>
-          <p
-            @click="$router.push(`/questions/${question.id}`)"
-            class="question-title"
-            :class="$mq"
-          >
-            Q. {{ question.title }}
-          </p>
-          <favorite-control
-            :targetObjectId="question.id"
-            :isUserFavorite="isUserQuestionFavorites(question.id)"
-            :isQuestion="true"
-          ></favorite-control>
-          <div
-            class="hashtags"
-            v-for="hashtag in question.hashtags"
-            :key="hashtag.id"
-          >
-            #{{ hashtag.tagName }}
-          </div>
-        </li>
-      </ul>
-      <v-progress-circular
-        v-if="isBottom"
-        :size="50"
-        color="primary"
-        indeterminate
-        class="loading-progress"
-      ></v-progress-circular>
-    </div>
+          Q. {{ question.title }}
+        </p>
+        <favorite-control
+          :targetObjectId="question.id"
+          :isUserFavorite="isUserQuestionFavorites(question.id)"
+          :isQuestion="true"
+        ></favorite-control>
+        <div
+          class="hashtags"
+          v-for="hashtag in question.hashtags"
+          :key="hashtag.id"
+        >
+          #{{ hashtag.tagName }}
+        </div>
+      </li>
+    </ul>
+    <v-progress-circular
+      v-if="isBottom"
+      :size="50"
+      color="primary"
+      indeterminate
+      class="loading-progress"
+    ></v-progress-circular>
   </div>
 </template>
 

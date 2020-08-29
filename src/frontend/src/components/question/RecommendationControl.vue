@@ -1,10 +1,12 @@
 <template>
-  <div class="container">
+  <div class="container" :class="$mq">
     <v-btn
       rounded
+      small
       class="recommendation-btn"
       :class="{
-        clicked: isUserAction('RECOMMENDED')
+        clicked: isUserAction('RECOMMENDED'),
+        $mq
       }"
       @click="onRecommendation('NON_RECOMMENDED', 'RECOMMENDED')"
     >
@@ -13,9 +15,11 @@
     </v-btn>
     <v-btn
       rounded
+      small
       class="recommendation-btn"
       :class="{
-        clicked: isUserAction('NON_RECOMMENDED')
+        clicked: isUserAction('NON_RECOMMENDED'),
+        $mq
       }"
       @click="onRecommendation('RECOMMENDED', 'NON_RECOMMENDED')"
     >
@@ -139,8 +143,17 @@ export default {
   padding: 12px 9px;
 }
 
+.container.mobile {
+  padding: 0;
+}
+
 .recommendation {
-  font-size: 19px;
+  font-size: 17px;
+  padding: 3px;
+}
+
+.recommendation-btn.mobile {
+  margin: 0 4px !important;
 }
 
 .recommendation-btn:hover {
