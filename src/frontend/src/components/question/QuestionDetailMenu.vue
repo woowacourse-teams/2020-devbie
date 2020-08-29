@@ -3,7 +3,7 @@
     <v-btn
       color="#DAEBEA"
       large
-      @click="$router.push(`/questions`)"
+      @click="$router.push(`/questions?orderBy=CREATED_DATE`)"
       class="menu-btn button"
       :class="$mq"
       >돌아가기
