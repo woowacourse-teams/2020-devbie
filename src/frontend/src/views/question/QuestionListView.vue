@@ -1,6 +1,15 @@
 <template>
   <div class="interview" :class="$mq">
-    <question-filters class="question-filters" :class="$mq"></question-filters>
+    <div class="question-menu" :class="$mq">
+      <question-filters
+        class="question-filters"
+        :class="$mq"
+      ></question-filters>
+      <question-control
+        class="question-control"
+        :class="$mq"
+      ></question-control>
+    </div>
     <question-list
       :orderBy="orderBy"
       :title="title"
@@ -9,21 +18,20 @@
       class="question-list"
       :class="$mq"
     ></question-list>
-    <question-control class="question-control" :class="$mq"></question-control>
   </div>
 </template>
 
 <script>
 import QuestionFilters from "../../components/question/QuestionFilters";
-import QuestionList from "../../components/question/QuestionList";
 import QuestionControl from "../../components/question/QuestionControl";
+import QuestionList from "../../components/question/QuestionList";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     QuestionFilters,
-    QuestionList,
-    QuestionControl
+    QuestionControl,
+    QuestionList
   },
 
   props: ["orderBy", "title", "content", "hashtag"],
@@ -96,7 +104,6 @@ export default {
 
 <style scoped>
 .interview {
-  width: 95%;
   margin: 0 auto;
   display: flex;
   align-items: flex-start;
@@ -104,37 +111,36 @@ export default {
 }
 
 .interview.mobile {
-  max-width: 100%;
+  max-width: 95%;
   flex-direction: column;
   align-items: center;
 }
 
-.question-filters {
+.question-menu {
+  max-width: 200px;
   flex-grow: 1;
-  min-width: 160px;
+}
+
+.question-menu.mobile {
+  min-width: 80% !important;
 }
 
 .question-filters.mobile {
   flex-direction: row;
-}
-
-.question-list {
-  flex-grow: 10;
-}
-
-.question-list.mobile {
-  order: 3;
+  justify-content: space-between !important;
 }
 
 .question-control {
-  flex-grow: 1;
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  text-decoration: none;
+  margin-top: 20px;
 }
 
 .question-control.mobile {
   flex-direction: row;
+  margin: 20px auto 0 auto;
+  justify-content: space-between !important;
+}
+
+.question-list {
+  flex-grow: 2;
 }
 </style>

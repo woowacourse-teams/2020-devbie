@@ -108,7 +108,7 @@ a {
 .drawer-btn.mobile {
   position: fixed;
   bottom: 30px;
-  left: 10px;
+  right: 10px;
   width: 50px;
   height: 50px;
   border-radius: 50%;

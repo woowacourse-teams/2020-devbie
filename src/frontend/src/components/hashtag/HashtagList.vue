@@ -8,7 +8,7 @@
       @click.stop="drawer = !drawer"
       >태그 목록
     </v-btn>
-    <v-navigation-drawer right v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list-item class="drawer-title">
         <v-list-item-content>
           <v-list-item-title>태그 목록</v-list-item-title>

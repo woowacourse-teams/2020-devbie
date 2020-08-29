@@ -35,7 +35,6 @@ a:hover {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-right: 20px;
   height: 90%;
 }
 

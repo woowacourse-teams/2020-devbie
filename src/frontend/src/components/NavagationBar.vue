@@ -60,8 +60,7 @@
         class="login-btn"
         :class="$mq"
         v-else
-        ><span class="login-text" :class="$mq">Login with Github</span>
-        <span class="login-text-mobile" :class="$mq">Login</span>
+        ><span class="login-text" :class="$mq">{{ loginText }}</span>
       </v-btn>
     </v-app-bar>
   </div>
@@ -74,7 +73,11 @@ import router from "../router";
 
 export default {
   computed: {
-    ...mapGetters(["fetchedLoginUser", "isLoggedIn"])
+    ...mapGetters(["fetchedLoginUser", "isLoggedIn"]),
+
+    loginText() {
+      return this.$mq === "mobile" ? "Login" : "Login With Github";
+    }
   },
 
   methods: {
@@ -155,17 +158,5 @@ export default {
 .login-btn.mobile {
   margin: 0;
   max-width: 20px !important;
-}
-
-.login-text.mobile {
-  display: none;
-}
-
-.login-text-mobile {
-  display: none;
-}
-
-.login-text-mobile.mobile {
-  display: inline;
 }
 </style>
