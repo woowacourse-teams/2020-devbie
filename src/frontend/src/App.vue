@@ -92,6 +92,9 @@ a {
   width: calc(100vw - 260px);
 }
 
+.main_box {
+}
+
 .drawer-btn {
   position: fixed;
   bottom: 0;
