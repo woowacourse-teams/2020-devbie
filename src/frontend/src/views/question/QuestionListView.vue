@@ -121,6 +121,10 @@ export default {
   flex-grow: 1;
 }
 
+.question-menu.tablet {
+  min-width: 150px;
+}
+
 .question-menu.mobile {
   min-width: 80% !important;
 }

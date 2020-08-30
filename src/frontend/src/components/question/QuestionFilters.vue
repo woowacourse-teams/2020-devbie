@@ -52,7 +52,7 @@ a:hover {
 
 .condition.mobile {
   margin: 0 7px;
-  font-size: 21px !important;
+  font-size: 19px !important;
 }
 
 a.router-link-exact-active {

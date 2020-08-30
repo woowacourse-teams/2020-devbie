@@ -144,7 +144,7 @@ export default {
 }
 
 .container.mobile {
-  padding: 0;
+  padding: 0 10px 0 0;
 }
 
 .recommendation {
@@ -154,6 +154,8 @@ export default {
 
 .recommendation-btn.mobile {
   margin: 0 4px !important;
+  padding: 0 !important;
+  width: 40px !important;
 }
 
 .recommendation-btn:hover {

@@ -97,6 +97,10 @@ export default {
   align-items: baseline;
 }
 
+.search-bar.tablet {
+  max-width: 80%;
+}
+
 .search-bar.mobile {
   max-width: 92%;
 }
@@ -104,6 +108,10 @@ export default {
 .filters {
   max-width: 16%;
   margin-right: 15px;
+}
+
+.filters.tablet {
+  min-width: 30%;
 }
 
 .filters.mobile {

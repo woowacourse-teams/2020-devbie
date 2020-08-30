@@ -58,6 +58,9 @@ export default {
 
 .control-btn.mobile {
   margin: 0 5px;
+  width: 60px !important;
+  height: 40px !important;
+  font-size: 10px !important;
 }
 
 .control-btn.mobile {

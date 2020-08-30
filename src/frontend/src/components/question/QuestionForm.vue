@@ -15,8 +15,8 @@
       ></hashtag-box>
       <div class="control-box">
         <div class="content-title">질문 내용</div>
-        <v-md-editor v-model="content" height="250px"></v-md-editor>
-        <form-button>
+        <v-md-editor v-model="content" height="350px"></v-md-editor>
+        <form-button :editingFlag="editingFlag">
           <v-btn
             v-if="editingFlag"
             large

@@ -18,9 +18,11 @@
         class="question"
         :class="$mq"
       >
-        <div class="count-infos">
-          <p class="count visits">조회수 : {{ question.visits }}</p>
-          <p class="count recommendedCount">
+        <div class="count-infos" :class="$mq">
+          <p class="count visits" :class="$mq">
+            조회수 : {{ question.visits }}
+          </p>
+          <p class="count recommendedCount" :class="$mq">
             추천수 : {{ question.recommendedCount }}
           </p>
         </div>
@@ -232,10 +234,18 @@ export default {
   min-width: 95px;
 }
 
+.count-infos.mobile {
+  min-width: 50px;
+}
+
 .count {
   font-size: 14px;
   margin-right: 17px;
   margin-bottom: 0;
+}
+
+.count.mobile {
+  font-size: 12px;
 }
 
 .question-title {

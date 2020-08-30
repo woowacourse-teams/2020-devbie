@@ -66,6 +66,8 @@ export default {
 
 .menu-btn.mobile {
   margin: 0 5px;
+  width: 70px !important;
+  height: 35px !important;
 }
 
 .author-btn {

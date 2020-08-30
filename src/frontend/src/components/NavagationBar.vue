@@ -27,7 +27,7 @@
       >
       <a
         @click="$router.push('/questions?orderBy=CREATED_DATE')"
-        class="menu navigation-menu"
+        class="menu navigation-menu last"
         :class="$mq"
         >면접 질문</a
       >
@@ -56,11 +56,13 @@
       </template>
       <v-btn
         @click="showLoginPage"
-        color="#E8E8E8"
+        color="#fff"
         class="login-btn"
         :class="$mq"
         v-else
-        ><span class="login-text" :class="$mq">{{ loginText }}</span>
+      >
+        <i class="fab fa-github login-icon" :class="$mq"></i>
+        <span class="login-text" :class="$mq">{{ loginText }}</span>
       </v-btn>
     </v-app-bar>
   </div>
@@ -110,6 +112,15 @@ export default {
   max-width: 100%;
 }
 
+.inner {
+  padding: 0 2%;
+}
+
+.inner.mobile {
+  padding: 0;
+  margin: 0 auto;
+}
+
 .home-box {
   margin-left: 20px;
 }
@@ -118,8 +129,8 @@ export default {
   margin-left: 0;
 }
 
-.inner.mobile {
-  margin: 0 auto;
+.home-btn {
+  padding: 0 !important;
 }
 
 .home-title {
@@ -143,20 +154,37 @@ export default {
   font-size: 24px;
   color: #f4f4f4;
   margin: 0;
-  padding: 0 10px;
+  padding: 4px 15px 0 15px;
+}
+
+.navigation-menu.last {
+  margin-right: 15px;
+}
+
+.navigation-menu.last.mobile {
+  margin-right: 0 !important;
 }
 
 .navigation-menu.mobile {
   font-size: 16px;
-  padding: 0 10px;
+  padding: 4px 12px 0 5px;
 }
 
-.login-btn {
-  margin: 0 20px;
+.login-icon {
+  font-size: 25px;
+  margin-right: 4px;
+}
+
+.login-icon.mobile {
+  font-size: 16px;
+  margin-right: 2px;
 }
 
 .login-btn.mobile {
   margin: 0;
-  max-width: 20px !important;
+  max-width: 80px !important;
+}
+
+.profile {
 }
 </style>

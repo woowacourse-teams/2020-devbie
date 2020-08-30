@@ -191,10 +191,6 @@ export default {
   color: #6d819c;
 }
 
-.question-info.infos.mobile {
-  font-size: 12px !important;
-}
-
 .question-info .infos:last-child {
   margin-right: 5px;
 }
