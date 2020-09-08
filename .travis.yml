@@ -35,6 +35,7 @@ after_success:
   - cd docker
   - ls -a
   - git branch
+  - git checkout master
   - git status
   - git add .
   - git commit -m "updated in travis"
