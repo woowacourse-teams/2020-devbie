@@ -32,9 +32,9 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
-#  - docker build -t kimseonggyu1/devbie:latest .
-#  - docker login -u $DOCKER_USER -p $PASSWORD
-#  - docker push kimseonggyu1/devbie:latest
+  - docker build -t kimseonggyu1/devbie:latest .
+  - docker login -u $DOCKER_USER -p $PASSWORD
+  - docker push kimseonggyu1/devbie:latest
   - cd docker
   - git branch
   - git status
