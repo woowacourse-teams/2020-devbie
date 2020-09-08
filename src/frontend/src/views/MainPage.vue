@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <h2>Hello 우테코2</h2>
+    <h2>Hello 우테코2342</h2>
   </div>
 </template>
 
