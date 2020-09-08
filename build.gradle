@@ -44,7 +44,8 @@ task buildFrontend(type: NpmTask, dependsOn: setUp) {
 }
 
 if ("$System.env.DEVBIE_ENVIRONMENT" == "product"
-        || "$System.env.DEVBIE_ENVIRONMENT" == "develop") {
+        || "$System.env.DEVBIE_ENVIRONMENT" == "develop"
+        || "$System.env.DEVBIE_ENVIRONMENT" == "feature/116-docker") {
     processResources.dependsOn 'buildFrontend'
 }
 
