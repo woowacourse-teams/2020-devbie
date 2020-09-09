@@ -1,32 +1,35 @@
 <template>
   <div class="notice-detail">
+    <v-divider></v-divider>
     <div class="inner">
       <div class="notice-detail-main">
         <div class="notice-header">
           <div class="notice-title">
-            <h1>
-              {{ fetchedNotice.id }}. [ {{ fetchedNotice.noticeType }} ] -
+            <h1 class="big-font">
+              [ {{ fetchedNotice.noticeType }} ]
               {{ fetchedNotice.title }}
             </h1>
           </div>
           <div class="notice-body">
             <div class="notice-img">
               <v-img
-                :src="
-                  fetchedNotice.image === null
-                    ? 'https://images.velog.io/images/sonypark/post/80241b72-4ffe-4223-a775-41c34dd6aed7/woowa-dev.jpeg'
-                    : fetchedNotice.image
-                "
+                :src="fetchedNotice.image"
                 class="white--text align-end"
-                max-width="300px"
+                width="300px"
+                height="200px"
               >
               </v-img>
             </div>
             <div class="notice-buttons">
-              <v-btn id="apply-btn" depressed large color="primary"
+              <v-btn id="apply-btn" depressed large color="#DAEBEA"
                 >지원하기</v-btn
               >
-              <v-btn id="chatting-btn" depressed large color="primary"
+              <v-btn
+                id="chatting-btn"
+                depressed
+                large
+                color="#DAEBEA"
+                @click="openChatDrawer"
                 >채팅방</v-btn
               >
               <v-btn
@@ -58,22 +61,22 @@
             </p>
             <p class="infos">
               <i class="fas fa-won-sign"></i>
-              연봉: {{ fetchedNotice.company.salary }}
+              연봉: {{ fetchedNotice.company.salary }} 만원
             </p>
             <p class="infos">
               <i class="fas fa-calendar-alt"></i>
-              지원기간: {{ fetchedNotice.duration }}
+              지원기간: {{ setDuration }}
             </p>
             <p class="infos">
               <i class="fas fa-keyboard"></i>
               포지션: {{ fetchedNotice.jobPosition }}
             </p>
+            <p class="infos"><i class="fas fa-burn"></i>언어:</p>
             <p class="infos">
-              <i class="fas fa-burn"></i>
-              프로그래밍 언어: {{ fetchedNotice.noticeDescription.languages }}
-            </p>
-            <p class="infos">
-              {{ fetchedNotice.noticeDescription.content }}
+              <template v-for="(line, index) in content">
+                {{ line }}
+                <br :key="index" />
+              </template>
             </p>
           </div>
         </div>
@@ -87,6 +90,51 @@ import { mapGetters } from "vuex";
 import router from "../../router";
 
 export default {
+  data() {
+    return {
+      stompClient: {}
+    };
+  },
+  computed: {
+    ...mapGetters(["fetchedLoginUser", "fetchedNotice"]),
+
+    content() {
+      return this.fetchedNotice.noticeDescription.content.split("\n");
+    },
+
+    setDuration() {
+      if (this.fetchedNotice.duration === null) {
+        return "상시모집";
+      }
+
+      const startDate = new Date(
+        this.fetchedNotice.duration.startDate
+      ).toLocaleDateString();
+      const endDate = new Date(
+        this.fetchedNotice.duration.endDate
+      ).toLocaleDateString();
+
+      return (
+        (this.fetchedNotice.duration.startDate === null ? "" : startDate) +
+        " ~ " +
+        (this.fetchedNotice.duration.endDate === null ? "모집시" : endDate)
+      );
+    }
+  },
+
+  created() {
+    const noticeId = this.$route.params.id;
+    try {
+      this.$store.dispatch("FETCH_NOTICE", noticeId);
+    } catch (error) {
+      console.log("공고 불러오기 실패 " + error.response.data.message);
+      this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "공고를 불러오지 못했습니다."
+      );
+    }
+  },
+
   methods: {
     isAdmin() {
       return this.fetchedLoginUser.roleType === "ADMIN";
@@ -97,28 +145,25 @@ export default {
     },
     onEditNotice() {
       router.push(`/notices/edit/${this.$route.params.id}`);
+    },
+    openChatDrawer() {
+      this.$store.dispatch("OPEN_DRAWER", this.fetchedNotice);
     }
-  },
-  created() {
-    const noticeId = this.$route.params.id;
-    this.$store.dispatch("FETCH_NOTICE", noticeId);
-  },
-  computed: {
-    ...mapGetters(["fetchedLoginUser"]),
-    ...mapGetters(["fetchedNotice"])
   }
 };
 </script>
 
 <style scoped>
 .notice-detail {
+  margin-top: 50px;
   align-items: center;
-  margin-left: 20px;
+  width: 40%;
+  min-width: 200px;
 }
 
 .inner {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   width: 90%;
   box-sizing: border-box;
   padding: 10px 0 40px 0;
@@ -162,7 +207,7 @@ export default {
 }
 
 .notice-content {
-  padding: 30px 50px;
+  padding: 30px 15px;
 }
 
 .notice-buttons {
@@ -188,5 +233,15 @@ export default {
   width: 100px;
   padding: 10px;
   margin: 3px 3px;
+}
+
+.fas {
+  width: 15px;
+  height: 15px;
+  padding-right: 20px;
+}
+
+.big-font {
+  font-size: 20px;
 }
 </style>

@@ -2,10 +2,12 @@ package underdogs.devbie.notice.domain;
 
 import static underdogs.devbie.notice.domain.QNotice.*;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +18,24 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Notice> findAllBy(NoticeType noticeType, JobPosition jobPosition, Language language) {
-        return jpaQueryFactory
+    public Page<Notice> findAllBy(
+        NoticeType noticeType, JobPosition jobPosition,
+        Language language, String keyword, Pageable pageable
+    ) {
+        QueryResults<Notice> queryResults = jpaQueryFactory
             .selectFrom(notice)
+            .leftJoin(notice.noticeDescription.languages)
+            .fetchJoin()
             .where(equalNoticeType(noticeType),
                 equalJobPosition(jobPosition),
-                containLanguage(language))
-            .fetch();
+                containLanguage(language),
+                containKeyword(keyword)
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
+
+        return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
     }
 
     private BooleanExpression equalNoticeType(NoticeType noticeType) {
@@ -51,5 +64,20 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
             .noticeDescription
             .languages
             .contains(language);
+    }
+
+    private BooleanExpression containKeyword(String keyword) {
+        if (StringUtils.isEmpty(keyword) || keyword.isEmpty()) {
+            return null;
+        }
+        BooleanExpression containCompany = notice
+            .company
+            .name
+            .contains(keyword);
+        BooleanExpression containTitle = notice
+            .title
+            .contains(keyword);
+
+        return containTitle.or(containCompany);
     }
 }

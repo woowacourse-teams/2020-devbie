@@ -2,41 +2,36 @@ import { getAction, patchAction } from "../../api";
 
 export default {
   state: {
-    loginUser: {}
+    loginUser: []
   },
   mutations: {
     SET_LOGIN_USER(state, data) {
       state.loginUser = data;
     },
     DELETE_LOGIN_USER(state) {
-      state.loginUser = {};
+      state.loginUser = [];
     }
   },
   actions: {
     async FETCH_LOGIN_USER({ commit }) {
-      try {
-        const { data } = await getAction("/api/users");
-        commit("SET_LOGIN_USER", data);
-      } catch (error) {
-        console.log(error);
-      }
+      const { data } = await getAction("/api/users");
+      commit("SET_LOGIN_USER", data);
+      return data;
     },
-    async UPDATE_USER_INFO({ commit }, payload) {
+    async UPDATE_USER_INFO(state, payload) {
       try {
         await patchAction(`/api/users/me`, payload);
-        commit();
       } catch (error) {
         console.log(error);
       }
     },
-    async UPDATE_USER_IMAGE({ commit }, payload) {
+    async UPDATE_USER_IMAGE(state, payload) {
       try {
         await patchAction(
           `/api/users/me/image`,
           payload,
           `content-type: multipart/form-data`
         );
-        commit();
       } catch (error) {
         console.log(error);
       }

@@ -2,6 +2,8 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,17 +11,21 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.question.exception.QuestionNotExistedException;
+import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.service.UserService;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final UserService userService;
     private final QuestionHashtagService questionHashtagService;
     private final QuestionRepository questionRepository;
 
@@ -30,16 +36,22 @@ public class QuestionService {
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAll() {
-        List<Question> questions = questionRepository.findAll();
-        return QuestionResponses.from(questions);
+    public QuestionResponses readAll(QuestionReadRequest questionReadRequest, Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllBy(
+            questionReadRequest.getTitle(),
+            questionReadRequest.getContent(),
+            pageable);
+        return QuestionResponses.of(questions.getContent(), questions.getTotalPages());
     }
 
     @Transactional
-    public QuestionResponse read(Long id) {
+    public QuestionResponse read(Long id, boolean isVisit) {
         Question question = readOne(id);
-        question.increaseVisits();
-        return QuestionResponse.from(question);
+        if (isVisit) {
+            question.increaseVisits();
+        }
+        User author = userService.findById(question.getUserId());
+        return QuestionResponse.of(question, author);
     }
 
     private Question readOne(Long questionId) {
@@ -76,8 +88,14 @@ public class QuestionService {
         questionRepository.deleteById(questionId);
     }
 
-    public QuestionResponses searchByTitle(String keyword) {
-        List<Question> questions = questionRepository.findByTitleLike(keyword);
+    public QuestionResponses searchByHashtag(String hashtag) {
+        List<Long> questionIds = questionHashtagService.findIdsByHashtagName(hashtag);
+        List<Question> questions = questionRepository.findAllById(questionIds);
+        return QuestionResponses.from(questions);
+    }
+
+    public QuestionResponses findAllByIds(List<Long> questionIds) {
+        List<Question> questions = questionRepository.findAllById(questionIds);
         return QuestionResponses.from(questions);
     }
 }

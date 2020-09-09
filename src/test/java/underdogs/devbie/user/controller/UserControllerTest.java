@@ -64,6 +64,7 @@ class UserControllerTest extends MvcTest {
     @Test
     void saveUserWithoutOAuthId() throws Exception {
         UserCreateRequest request = UserCreateRequest.builder()
+            .name("bsdg")
             .email("atdd@atdd.com")
             .build();
         String inputJson = objectMapper.writeValueAsString(request);

@@ -20,6 +20,6 @@ class DurationTest {
                 LocalDateTime.of(2020, 5, 4, 0, 0)
             ))
             .isInstanceOf(InvalidDurationException.class)
-            .hasMessage("시작일은 종료일 이전이어야 합니다.");
+            .hasMessage("잘못된 요청입니다: 원인 : 시작일은 종료일 이전이어야 합니다.");
     }
 }

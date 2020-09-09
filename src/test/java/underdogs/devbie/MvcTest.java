@@ -78,6 +78,14 @@ public abstract class MvcTest {
                 .contentType(MediaType.APPLICATION_JSON));
     }
 
+    protected ResultActions patchAction(String url, String inputJson) throws Exception {
+        return this.mockMvc
+            .perform(patch(url)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
     protected ResultActions patchAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
             .perform(patch(url)
@@ -91,6 +99,13 @@ public abstract class MvcTest {
         return this.mockMvc
             .perform(delete(url)
                 .header(AUTH_HEADER, bearerToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    protected ResultActions deleteAction(String url) throws Exception {
+        return this.mockMvc
+            .perform(delete(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON));
     }

@@ -31,6 +31,7 @@ import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -92,9 +93,9 @@ class QuestionControllerTest extends MvcTest {
             .build();
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
 
-        given(questionService.readAll()).willReturn(responses);
+        given(questionService.readAll(any(QuestionReadRequest.class), any())).willReturn(responses);
 
-        MvcResult mvcResult = getAction("/api/questions/")
+        MvcResult mvcResult = getAction("/api/questions?title=&content=&page=1&orderBy=CREATED_DATE")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
@@ -110,7 +111,7 @@ class QuestionControllerTest extends MvcTest {
     @Test
     void read() throws Exception {
         QuestionResponse response = QuestionResponse.builder()
-            .questionId(1L)
+            .id(1L)
             .title(TEST_QUESTION_TITLE)
             .content(TEST_QUESTION_CONTENT)
             .hashtags(Lists.newArrayList(
@@ -118,9 +119,9 @@ class QuestionControllerTest extends MvcTest {
                 HashtagResponse.builder().tagName("network").build()))
             .build();
 
-        given(questionService.read(anyLong())).willReturn(response);
+        given(questionService.read(anyLong(), anyBoolean())).willReturn(response);
 
-        MvcResult mvcResult = getAction("/api/questions/" + response.getQuestionId())
+        MvcResult mvcResult = getAction("/api/questions/" + response.getId() + "?visit=true")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();
@@ -143,7 +144,7 @@ class QuestionControllerTest extends MvcTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
-
+        
         willDoNothing().given(questionService).update(anyLong(), anyLong(), any(QuestionUpdateRequest.class));
 
         patchAction("/api/questions/1", inputJson, TEST_TOKEN)
@@ -182,9 +183,9 @@ class QuestionControllerTest extends MvcTest {
 
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));
 
-        given(questionService.searchByTitle(anyString())).willReturn(responses);
+        given(questionService.readAll(any(QuestionReadRequest.class), any())).willReturn(responses);
 
-        MvcResult mvcResult = getAction("/api/questions?keyword=스택")
+        MvcResult mvcResult = getAction("/api/questions?page=1&orderBy=CREATED_DATE&title=스택&content=")
             .andExpect(status().isOk())
             .andReturn();
         String value = mvcResult.getResponse().getContentAsString();

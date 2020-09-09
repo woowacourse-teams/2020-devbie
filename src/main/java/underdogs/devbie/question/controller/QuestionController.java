@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionPageRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -48,26 +51,21 @@ public class QuestionController {
 
     @NoValidate
     @GetMapping
-    public ResponseEntity<QuestionResponses> readAll() {
-        QuestionResponses responses = questionService.readAll();
-        return ResponseEntity
-            .ok(responses);
-    }
-
-    @NoValidate
-    @GetMapping(params = "keyword")
-    public ResponseEntity<QuestionResponses> searchByTitle(
-        @RequestParam("keyword") String keyword
+    public ResponseEntity<QuestionResponses> readAll(
+        @ModelAttribute QuestionReadRequest questionReadRequest,
+        @ModelAttribute QuestionPageRequest questionPageRequest
     ) {
-        QuestionResponses responses = questionService.searchByTitle(keyword);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
         return ResponseEntity
             .ok(responses);
     }
 
     @NoValidate
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionResponse> read(@PathVariable("id") Long id) {
-        QuestionResponse response = questionService.read(id);
+    public ResponseEntity<QuestionResponse> read(
+        @PathVariable("id") Long id,
+        @RequestParam(value = "visit") boolean isVisit) {
+        QuestionResponse response = questionService.read(id, isVisit);
         return ResponseEntity
             .ok(response);
     }
@@ -97,5 +95,15 @@ public class QuestionController {
         return ResponseEntity
             .noContent()
             .build();
+    }
+
+    @NoValidate
+    @GetMapping(params = "hashtag")
+    public ResponseEntity<QuestionResponses> searchByHashtag(
+        @RequestParam("hashtag") String hashtag
+    ) {
+        QuestionResponses responses = questionService.searchByHashtag(hashtag);
+        return ResponseEntity
+            .ok(responses);
     }
 }

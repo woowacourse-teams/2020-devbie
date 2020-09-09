@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import underdogs.devbie.question.exception.QuestionNotMeetingEssentialsException;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +21,9 @@ public class QuestionTitle {
     private String title;
 
     public static QuestionTitle from(String title) {
+        if (title.isEmpty()) {
+            throw new QuestionNotMeetingEssentialsException(title + "이 빈값입니다.");
+        }
         return new QuestionTitle(title);
     }
 }

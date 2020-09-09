@@ -1,9 +1,14 @@
 package underdogs.devbie.acceptance;
 
+import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
+
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.internal.util.collections.Sets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -16,6 +21,13 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.jwt.JwtTokenProvider;
+import underdogs.devbie.notice.domain.JobPosition;
+import underdogs.devbie.notice.domain.Language;
+import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.dto.NoticeCreateRequest;
+import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionResponse;
+import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
@@ -60,6 +72,7 @@ public abstract class AcceptanceTest {
 
     private Long createUser() throws JsonProcessingException {
         UserCreateRequest userCreateRequest = UserCreateRequest.builder()
+            .name("bsdg")
             .email("atdd@atdd.com")
             .build();
         return post("/api/users", objectMapper.writeValueAsString(userCreateRequest), Long.class);
@@ -69,9 +82,56 @@ public abstract class AcceptanceTest {
         delete("/api/users/" + userId);
     }
 
-    protected <T> void post(String path, String inputJson) {
+    protected Long createQuestion(String title) throws JsonProcessingException {
+        QuestionCreateRequest createRequest = QuestionCreateRequest.builder()
+            .title(title)
+            .content(TEST_QUESTION_CONTENT)
+            .hashtags(Sets.newSet("java", "network"))
+            .build();
+        String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
+        String id = post("/api/questions", inputJsonForCreate);
+        return Long.parseLong(id);
+    }
+
+    protected QuestionResponse fetchFirstQuestion() {
+        QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=", QuestionResponses.class);
+        return questions.getQuestions().get(0);
+    }
+
+    protected void createNotice(String title) throws JsonProcessingException {
+        NoticeCreateRequest createRequest = NoticeCreateRequest.builder()
+            .name("underdogs")
+            .title(title)
+            .noticeType(NoticeType.JOB)
+            .salary(50_000_000)
+            .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
+            .jobPosition(JobPosition.BACKEND)
+            .image("/static/image/underdogs")
+            .description("We are hiring!")
+            .startDate("2020-10-10T13:00")
+            .endDate("2020-10-10T14:00")
+            .build();
+        String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
+        post("/api/notices", inputJsonForCreate);
+    }
+
+    protected <T> void post(String path) {
         // @formatter:off
         given().
+            auth().oauth2(bearerToken).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            post(path).
+            then().
+            log().all().
+            statusCode(HttpStatus.CREATED.value());
+        // @formatter:on
+    }
+
+    protected <T> String post(String path, String inputJson) {
+        // @formatter:off
+        String[] locations = given().
             auth().oauth2(bearerToken).
             body(inputJson).
             contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -80,7 +140,9 @@ public abstract class AcceptanceTest {
             post(path).
         then().
             log().all().
-            statusCode(HttpStatus.CREATED.value());
+            statusCode(HttpStatus.CREATED.value()).
+            extract().header("location").split("/");
+        return locations[locations.length -1];
         // @formatter:on
     }
 

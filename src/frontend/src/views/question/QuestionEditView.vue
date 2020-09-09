@@ -1,28 +1,40 @@
 <template>
-  <div class="edit-form">
-    <h2 class="title">질문 수정 페이지</h2>
-    <question-edit id="edit-form"></question-edit>
+  <div>
+    <form-title>
+      <span>질문 수정</span>
+    </form-title>
+    <question-form :editingFlag="true"></question-form>
   </div>
 </template>
 
 <script>
-import QuestionEdit from "../../components/question/QuestionEdit";
+import QuestionForm from "../../components/question/QuestionForm";
+import FormTitle from "../../components/question/FormTitle";
+import { mapGetters } from "vuex";
+import router from "../../router";
 
 export default {
   components: {
-    QuestionEdit
+    FormTitle,
+    QuestionForm
+  },
+
+  computed: {
+    ...mapGetters(["isLoggedIn"])
+  },
+
+  created() {
+    this.checkLoggedIn();
+  },
+
+  methods: {
+    checkLoggedIn() {
+      if (!this.isLoggedIn) {
+        router.push("/");
+      }
+    }
   }
 };
 </script>
 
-<style scoped>
-.title {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#edit-form {
-  margin-top: 15px;
-}
-</style>
+<style scoped></style>

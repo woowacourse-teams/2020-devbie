@@ -8,10 +8,10 @@ export default {
     SET_ANSWERS(state, data) {
       state.answers = data;
     },
-    UPDATE_ANSWER(state, payload) {
+    UPDATE_ANSWER(state, { answerId, updateContent }) {
       state.answers.some(answer => {
-        if (answer.id === payload.answerId) {
-          answer.content = payload.updateContent;
+        if (answer.id === answerId) {
+          answer.content = updateContent;
           return true;
         }
         return false;
@@ -21,12 +21,7 @@ export default {
       state.answers = state.answers.filter(answer => answer.id !== id);
     },
     CREATE_ANSWER(state, payload) {
-      state.answers.push({
-        id: payload.id,
-        userId: payload.userId,
-        questionId: payload.questionId,
-        content: payload.content
-      });
+      state.answers.push(payload);
     }
   },
   actions: {
@@ -41,39 +36,29 @@ export default {
       }
     },
     async UPDATE_ANSWER({ commit }, payload) {
-      try {
-        const updateContent = payload.updateContent;
-        await patchAction(`/api/answers/${payload.answerId}`, {
-          content: updateContent
-        });
-        commit("UPDATE_ANSWER", payload);
-      } catch (error) {
-        console.log(error);
-      }
+      const updateContent = payload.updateContent;
+      const response = await patchAction(`/api/answers/${payload.answerId}`, {
+        content: updateContent
+      });
+      commit("UPDATE_ANSWER", payload);
+      return response;
     },
     async DELETE_ANSWER({ commit }, answerId) {
-      try {
-        await deleteAction(`/api/answers/${answerId}`).then(() => {
-          commit("DELETE_ANSWER", answerId);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await deleteAction(`/api/answers/${answerId}`);
+      commit("DELETE_ANSWER", answerId);
+      return response;
     },
     async CREATE_ANSWER({ commit }, payload) {
-      try {
-        const questionId = payload.questionId;
-        const content = payload.content;
-        const createdResponse = await postAction(`/api/answers`, {
-          questionId,
-          content
-        });
-        const createdAnswerLocation = createdResponse.headers.location;
-        const createdItemResponse = await getAction(createdAnswerLocation);
-        commit("CREATE_ANSWER", createdItemResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
+      const questionId = payload.questionId;
+      const content = payload.content;
+      const createdResponse = await postAction(`/api/answers`, {
+        questionId,
+        content
+      });
+      const createdAnswerLocation = createdResponse.headers.location;
+      const createdItemResponse = await getAction(createdAnswerLocation);
+      commit("CREATE_ANSWER", createdItemResponse.data);
+      return createdResponse;
     }
   },
   getters: {

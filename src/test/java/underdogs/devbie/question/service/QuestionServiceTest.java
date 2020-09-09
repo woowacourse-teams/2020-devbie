@@ -19,8 +19,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import underdogs.devbie.question.domain.Hashtag;
+import underdogs.devbie.question.domain.OrderBy;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtag;
@@ -30,11 +34,14 @@ import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
+import underdogs.devbie.question.dto.QuestionPageRequest;
+import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionServiceTest {
@@ -42,6 +49,9 @@ public class QuestionServiceTest {
     public static final Set<String> TEST_HASHTAGS = Sets.newSet("java", "network");
 
     private QuestionService questionService;
+
+    @Mock
+    private UserService userService;
 
     @Mock
     private QuestionHashtagService questionHashtagService;
@@ -57,10 +67,11 @@ public class QuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionHashtagService, questionRepository);
+        questionService = new QuestionService(userService, questionHashtagService, questionRepository);
 
         user = User.builder()
             .id(1L)
+            .name(TEST_NAME)
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
@@ -74,8 +85,14 @@ public class QuestionServiceTest {
             .build();
 
         questionHashtags = Sets.newSet(
-            QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(1L).tagName(TagName.from("java")).build()).build(),
-            QuestionHashtag.builder().question(question).hashtag(Hashtag.builder().id(2L).tagName(TagName.from("network")).build()).build()
+            QuestionHashtag.builder()
+                .question(question)
+                .hashtag(Hashtag.builder().id(1L).tagName(TagName.from("java")).build())
+                .build(),
+            QuestionHashtag.builder()
+                .question(question)
+                .hashtag(Hashtag.builder().id(2L).tagName(TagName.from("network")).build())
+                .build()
         );
 
         question.setHashtags(QuestionHashtags.from(questionHashtags));
@@ -99,15 +116,16 @@ public class QuestionServiceTest {
     @DisplayName("질문 목록 조회")
     @Test
     void readAll() {
-        List<Question> questions = Lists.newArrayList(question);
-        given(questionRepository.findAll()).willReturn(questions);
+        Page<Question> questions = new PageImpl<>(Lists.newArrayList(question));
+        given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
 
-        QuestionResponses responses = questionService.readAll();
+        QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("").content("").build();
+        QuestionPageRequest questionPageRequest = new QuestionPageRequest(1, OrderBy.CREATED_DATE);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
-            () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
-            () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
+            () -> assertThat(response.getId()).isEqualTo(question.getId()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent()),
@@ -121,12 +139,13 @@ public class QuestionServiceTest {
     @Test
     void read() {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        given(userService.findById(anyLong())).willReturn(user);
 
-        QuestionResponse response = questionService.read(1L);
+        QuestionResponse response = questionService.read(1L, true);
 
         assertAll(
-            () -> assertThat(response.getQuestionId()).isEqualTo(question.getId()),
-            () -> assertThat(response.getUserId()).isEqualTo(question.getUserId()),
+            () -> assertThat(response.getId()).isEqualTo(question.getId()),
+            () -> assertThat(response.getAuthor()).isEqualTo(user.getName()),
             () -> assertThat(response.getVisits()).isEqualTo(question.getVisits().getVisitCount()),
             () -> assertThat(response.getTitle()).isEqualTo(question.getTitle().getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(question.getContent().getContent()),
@@ -158,10 +177,11 @@ public class QuestionServiceTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        given(userService.findById(anyLong())).willReturn(user);
 
         questionService.update(1L, 1L, request);
 
-        QuestionResponse response = questionService.read(1L);
+        QuestionResponse response = questionService.read(1L, true);
         assertAll(
             () -> assertThat(response.getTitle()).isEqualTo(request.getTitle()),
             () -> assertThat(response.getContent()).isEqualTo(request.getContent())
@@ -205,11 +225,63 @@ public class QuestionServiceTest {
             .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
             .build();
 
+        Page<Question> questions = new PageImpl<>(Lists.newArrayList(question1, question2));
+        given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
+
+        QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("스택").content("").build();
+        QuestionPageRequest questionPageRequest = new QuestionPageRequest(1, OrderBy.CREATED_DATE);
+        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
+
+        assertAll(
+            () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
+            () -> assertThat(responses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
+        );
+    }
+
+    @DisplayName("해시태그로 질문 목록 필터링")
+    @Test
+    void searchByHashtag() {
+        Question question1 = Question.builder()
+            .id(100L)
+            .userId(1L)
+            .title(QuestionTitle.from(TEST_QUESTION_TITLE))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(questionHashtags))
+            .build();
+        given(questionHashtagService.findIdsByHashtagName(anyString())).willReturn(Lists.newArrayList(100L));
+        given(questionRepository.findAllById(anyCollection())).willReturn(Lists.newArrayList(question1));
+
+        QuestionResponses responses = questionService.searchByHashtag("java");
+
+        assertAll(
+            () -> assertThat(responses.getQuestions().get(0).getId()).isEqualTo(100L),
+            () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo(TEST_QUESTION_TITLE),
+            () -> assertThat(responses.getQuestions().get(0).getContent()).isEqualTo(TEST_QUESTION_CONTENT)
+        );
+    }
+
+    @DisplayName("질문 아이디로 질문 목록 조회")
+    @Test
+    void findAllByIds() {
+        Question question1 = Question.builder()
+            .userId(1L)
+            .title(QuestionTitle.from("스택과 큐의 차이"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
+            .build();
+
+        Question question2 = Question.builder()
+            .userId(2L)
+            .title(QuestionTitle.from("오버스택플로우"))
+            .content(QuestionContent.from(TEST_QUESTION_CONTENT))
+            .hashtags(QuestionHashtags.from(new LinkedHashSet<>()))
+            .build();
+
         List<Question> questions = Lists.newArrayList(question1, question2);
 
-        given(questionRepository.findByTitleLike(anyString())).willReturn(questions);
+        given(questionRepository.findAllById(any())).willReturn(questions);
 
-        QuestionResponses responses = questionService.searchByTitle("스택");
+        QuestionResponses responses = questionService.findAllByIds(Lists.newArrayList(1L, 2L));
 
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
