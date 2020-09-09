@@ -43,3 +43,5 @@ after_success:
   - docker login -u $DOCKER_USER -p $PASSWORD
   - docker push kimseonggyu1/devbie:latest
 
+after_failure:
+  - cat /home/travis/.npm/_logs/*
