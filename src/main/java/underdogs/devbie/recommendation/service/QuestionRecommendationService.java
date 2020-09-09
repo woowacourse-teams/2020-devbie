@@ -15,10 +15,12 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 @Service
 public class QuestionRecommendationService extends RecommendationService<QuestionRecommendation> {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
-    public QuestionRecommendationService(QuestionRecommendationRepository questionRecommendationRepository,
-        QuestionService questionService) {
+    public QuestionRecommendationService(
+        QuestionRecommendationRepository questionRecommendationRepository,
+        QuestionService questionService
+    ) {
         this.recommendationRepository = questionRecommendationRepository;
         this.questionService = questionService;
     }
@@ -41,12 +43,12 @@ public class QuestionRecommendationService extends RecommendationService<Questio
     }
 
     @Transactional
-    public void deleteRecommendation(Long objectId, Long userId) {
-        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(objectId, userId);
+    public void deleteRecommendation(Long questionId, Long userId) {
+        Optional<Recommendation> optRecommendation = recommendationRepository.findByObjectAndUserId(questionId, userId);
 
         Recommendation recommendation = optRecommendation.orElseThrow(() -> new NotExistException("Recommendation"));
 
         recommendationRepository.delete(recommendation);
-        questionService.decreaseCount(objectId, recommendation.getRecommendationType());
+        questionService.decreaseCount(questionId, recommendation.getRecommendationType());
     }
 }

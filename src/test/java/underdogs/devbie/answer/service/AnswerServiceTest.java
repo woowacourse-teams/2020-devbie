@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.domain.AnswerContent;
-import underdogs.devbie.answer.domain.repository.AnswerRepository;
+import underdogs.devbie.answer.domain.AnswerRepository;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
@@ -258,4 +258,7 @@ class AnswerServiceTest {
         verify(answerRepository).findById(eq(1L));
         verify(answerRepository).deleteById(expectAnswer.getId());
     }
+
+    // TODO: toggleCount
+    // TODO: decreaseCount
 }

@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
+import underdogs.devbie.recommendation.domain.RecommendationCount;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,5 +62,13 @@ public class Answer extends BaseTimeEntity {
 
     public boolean isNotMatched(Long userId) {
         return !this.userId.equals(userId);
+    }
+
+    public void increaseRecommendationCount(RecommendationType recommendationType) {
+        recommendationCount.increaseRecommendationCount(recommendationType);
+    }
+
+    public void decreaseRecommendationCount(RecommendationType recommendationType) {
+        recommendationCount.decreaseRecommendationCount(recommendationType);
     }
 }
