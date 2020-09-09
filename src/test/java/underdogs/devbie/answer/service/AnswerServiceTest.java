@@ -26,6 +26,7 @@ import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.exception.AnswerNotExistedException;
 import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
 
@@ -259,6 +260,56 @@ class AnswerServiceTest {
         verify(answerRepository).deleteById(expectAnswer.getId());
     }
 
-    // TODO: toggleCount
-    // TODO: decreaseCount
+    @DisplayName("추천, 비추천 수 증가")
+    @Test
+    void increaseCount() {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+
+        answerService.toggleCount(expectAnswer.getId(), RecommendationType.RECOMMENDED, false);
+
+        assertThat(expectAnswer.getRecommendationCount().getRecommendedCount()).isEqualTo(1);
+    }
+
+    @DisplayName("추천, 비추천 수 토글")
+    @Test
+    void toggleCount() {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+
+        answerService.toggleCount(expectAnswer.getId(), RecommendationType.RECOMMENDED, false);
+        answerService.toggleCount(expectAnswer.getId(), RecommendationType.NON_RECOMMENDED, true);
+
+        assertAll(
+            () -> assertThat(expectAnswer.getRecommendationCount().getRecommendedCount()).isZero(),
+            () -> assertThat(expectAnswer.getRecommendationCount().getNonRecommendedCount()).isEqualTo(1)
+        );
+    }
+
+    @DisplayName("추천, 비추천 수 감소")
+    @Test
+    void decreaseCount() {
+        Answer expectAnswer = Answer.builder()
+            .id(1L)
+            .userId(USER_ID)
+            .questionId(3L)
+            .content(AnswerContent.from(TEST_ANSWER_CONTENT))
+            .build();
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
+
+        answerService.toggleCount(expectAnswer.getId(), RecommendationType.RECOMMENDED, false);
+        answerService.decreaseCount(expectAnswer.getId(), RecommendationType.RECOMMENDED);
+
+        assertThat(expectAnswer.getRecommendationCount().getRecommendedCount()).isZero();
+    }
 }
