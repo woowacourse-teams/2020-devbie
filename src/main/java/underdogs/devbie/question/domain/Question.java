@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -74,5 +75,13 @@ public class Question extends BaseTimeEntity {
 
     public void setHashtags(QuestionHashtags hashtags) {
         this.hashtags.setHashtags(hashtags.getQuestionHashtags());
+    }
+
+    public void increaseRecommendationCount(RecommendationType recommendationType) {
+        recommendationCount.increaseRecommendationCount(recommendationType);
+    }
+
+    public void decreaseRecommendationCount(RecommendationType recommendationType) {
+        recommendationCount.decreaseRecommendationCount(recommendationType);
     }
 }

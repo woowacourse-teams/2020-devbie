@@ -30,12 +30,11 @@ public class QuestionRepositoryImpl extends QuerydslRepositorySupport implements
     public Page<Question> findAllBy(
         String title, String content, Pageable pageable
     ) {
-        JPAQuery<Question> limit = jpaQueryFactory
+        JPAQuery<Question> result = jpaQueryFactory
             .selectFrom(question)
-            .where(containKeyword(title, content))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize());
-        QueryResults<Question> queryResults = getQuerydsl().applyPagination(pageable, limit).fetchResults();
+            .where(containKeyword(title, content));
+
+        QueryResults<Question> queryResults = getQuerydsl().applyPagination(pageable, result).fetchResults();
         return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
     }
 

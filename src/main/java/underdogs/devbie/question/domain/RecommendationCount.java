@@ -2,14 +2,13 @@ package underdogs.devbie.question.domain;
 
 import javax.persistence.Embeddable;
 
-import org.hibernate.annotations.Formula;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,15 +18,26 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RecommendationCount {
 
-    @Formula(value="(select count(*) from question_recommendation q "
-        + "where q.question_id = question_id and q.recommendation_type = 'RECOMMENDED')")
     private Long recommendedCount;
-
-    @Formula(value="(select count(*) from question_recommendation q "
-        + "where q.question_id = question_id and q.recommendation_type = 'NON_RECOMMENDED')")
     private Long nonRecommendedCount;
 
     public static RecommendationCount init() {
         return new RecommendationCount(0L, 0L);
+    }
+
+    public void increaseRecommendationCount(RecommendationType recommendationType) {
+        if (recommendationType.is(RecommendationType.RECOMMENDED)) {
+            recommendedCount ++;
+            return;
+        }
+        nonRecommendedCount ++;
+    }
+
+    public void decreaseRecommendationCount(RecommendationType recommendationType) {
+        if (recommendationType.is(RecommendationType.RECOMMENDED)) {
+            recommendedCount --;
+            return;
+        }
+        nonRecommendedCount --;
     }
 }
