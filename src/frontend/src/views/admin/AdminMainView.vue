@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a @click="$router.push(`/notices/create`)">글쓰기5</a>
+    <a @click="$router.push(`/notices/create`)">글쓰기 글쓰기</a>
   </div>
 </template>
 

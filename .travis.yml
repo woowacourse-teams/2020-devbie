@@ -6,7 +6,6 @@ branches:
   only:
     - master
     - develop
-    - feature/116-docker
 
 env:
   global:
