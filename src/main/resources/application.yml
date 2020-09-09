@@ -10,8 +10,10 @@ spring:
         default_batch_fetch_size: 100
   datasource:
     url: jdbc:h2:mem:testdb;IFEXISTS=FALSE;
+    
 logging:
   config: classpath:log4j2.yml
+
 cloud:
   aws:
     s3:
