@@ -12,7 +12,7 @@
           >
             <v-card-title
               class="card-title-text"
-              v-text="`${notice.name}`"
+              v-text="sliceText(notice.name, 20)"
             ></v-card-title>
           </v-img>
 
@@ -23,7 +23,7 @@
                 class="big-font notice-title"
                 style="font-weight: bold"
               >
-                {{ notice.title }}
+                {{ sliceText(notice.title, 40) }}
               </div>
               <div class="medium-font">
                 언어 : {{ notice.languages.join(", ") }}
@@ -209,21 +209,34 @@ export default {
         userId: this.fetchedLoginUser.id,
         object: "notice"
       });
+    },
+
+    sliceText(text, maximumLength) {
+      if (text.length > maximumLength) {
+        return text.substr(0, maximumLength) + "...";
+      }
+      return text;
     }
   }
 };
 </script>
 
 <style scoped>
+.v-card {
+  height: 100%;
+}
 .big-font {
   font-size: 17px;
 }
+
 .medium-font {
   font-size: 13px;
 }
+
 .item:last-child {
   margin-right: auto;
 }
+
 .item {
   width: 22%;
   margin: 0 30px 50px 0;
@@ -232,9 +245,11 @@ export default {
 .card-image {
   width: 100%;
 }
+
 .card-image:hover {
   opacity: 0.6;
 }
+
 .card-title-text {
   justify-content: center;
   color: white;
@@ -253,10 +268,12 @@ export default {
   right: 15px;
   bottom: 15px;
 }
+
 .loading-progress {
   text-align: center;
   left: 50%;
 }
+
 .last-item {
   flex-basis: 100%;
 }
