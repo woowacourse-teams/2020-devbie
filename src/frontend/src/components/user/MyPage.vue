@@ -130,6 +130,10 @@ export default {
       formData.append("image", image_files);
       try {
         await this.$store.dispatch("UPDATE_USER_IMAGE", formData);
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "프로필 이미지가 수정되었습니다."
+        );
       } catch (e) {
         console.error(e);
       } finally {
