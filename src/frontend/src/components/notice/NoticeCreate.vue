@@ -2,7 +2,7 @@
   <div class="container">
     <v-form ref="form" lazy-validation class="notice-form">
       <v-card class="mx-auto" max-width="434" tile @click="editImage">
-        <v-img height="100%" :src="image" alt="notice-image">
+        <v-img :src="image" width="300px" height="200px" alt="notice-image">
           <input
             type="file"
             ref="image"
