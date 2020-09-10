@@ -1,47 +1,47 @@
 <template>
-  <div class="question-detail">
-    <div class="inner">
-      <div class="question-header">
-        <div class="left-container">
-          <h1 class="title">Q. {{ fetchedQuestion.title }}</h1>
+  <div class="inner">
+    <div class="question-header" :class="$mq">
+      <div class="left-container" :class="$mq">
+        <div class="title" :class="$mq">
+          Q. {{ fetchedQuestion.title }}
           <favorite-control
             class="favorite"
             :targetObjectId="fetchedQuestion.id"
             :isUserFavorite="isUserQuestionFavorites(fetchedQuestion.id)"
             :isQuestion="true"
           ></favorite-control>
-          <div class="hashtags">
-            <span
-              v-for="hashtag in fetchedQuestion.hashtags"
-              v-bind:key="hashtag.id"
-              class="hashtag"
-              @click="$router.push(`/questions?hashtag=${hashtag.tagName}`)"
-              >#{{ hashtag.tagName }}
-            </span>
-          </div>
         </div>
-        <div class="right-container">
-          <div class="question-info">
-            <p class="infos">
-              <i class="fas fa-user-edit"></i>
-              {{ fetchedQuestion.author }}
-            </p>
-            <p class="infos">
-              <i class="fas fa-eye"></i>
-              {{ fetchedQuestion.visits }}
-            </p>
-          </div>
-          <recommendation-control
-            :targetObject="fetchedQuestion"
-            :isQuestion="true"
-          ></recommendation-control>
+        <div class="hashtags">
+          <span
+            v-for="hashtag in fetchedQuestion.hashtags"
+            v-bind:key="hashtag.id"
+            class="hashtag"
+            @click="$router.push(`/questions?hashtag=${hashtag.tagName}`)"
+            >#{{ hashtag.tagName }}
+          </span>
         </div>
       </div>
-      <markdown-content
-        class="question-content"
-        :content="content"
-      ></markdown-content>
+      <div class="right-container" :class="$mq">
+        <div class="question-info" :class="$mq">
+          <p class="infos" :class="$mq">
+            <i class="fas fa-user-edit"></i>
+            {{ fetchedQuestion.author }}
+          </p>
+          <p class="infos" :class="$mq">
+            <i class="fas fa-eye"></i>
+            {{ fetchedQuestion.visits }}
+          </p>
+        </div>
+        <recommendation-control
+          :targetObject="fetchedQuestion"
+          :isQuestion="true"
+        ></recommendation-control>
+      </div>
     </div>
+    <markdown-content
+      class="question-content"
+      :content="content"
+    ></markdown-content>
   </div>
 </template>
 
@@ -111,22 +111,35 @@ export default {
 </script>
 
 <style scoped>
-.question-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 20px;
-}
-
 .question-header {
   display: flex;
   justify-content: space-between;
-  padding: 18px;
+  padding: 18px 18px 12px 18px;
   border-bottom: solid 1px #e8e8e8;
 }
 
-.left-container h1 {
-  margin-bottom: 12px;
+.question-header.mobile {
+  flex-direction: column;
+  padding: 0 0 12px 0;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.left-container .title {
+  font-size: 34px !important;
+  font-weight: bold;
+}
+
+.left-container .title .mobile {
+  font-size: 21px !important;
+}
+
+.left-container.mobile {
+  order: 2;
 }
 
 .right-container {
@@ -134,8 +147,20 @@ export default {
   margin-top: 7px;
 }
 
+.right-container.mobile {
+  order: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 15px 0;
+}
+
+.hashtags {
+  padding: 12px 0 0 12px;
+}
+
 .hashtag {
-  margin: 3px 9px;
+  margin: 3px 5px;
   color: #0086b3;
 }
 
@@ -153,6 +178,12 @@ export default {
   margin-bottom: 6px;
 }
 
+.question-info.mobile {
+  margin-bottom: 0;
+  justify-content: flex-start;
+  padding-left: 4px;
+}
+
 .question-info .infos {
   font-size: 17px;
   margin-right: 15px;
@@ -165,20 +196,15 @@ export default {
 }
 
 .question-content {
-  padding: 30px 50px;
-  margin-bottom: 50px;
+  padding: 30px 30px;
 }
 
 .inner {
   width: 95%;
   box-sizing: border-box;
-  padding: 10px 0 30px 0;
+  padding: 0;
   border-bottom: solid 1px #e8e8e8;
   min-height: 400px;
-}
-
-.title {
-  display: inline;
 }
 
 .favorite {

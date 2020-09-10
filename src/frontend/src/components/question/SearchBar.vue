@@ -1,7 +1,8 @@
 <template>
-  <div class="search-bar">
+  <div class="search-bar" :class="$mq">
     <v-select
       class="filters"
+      :class="$mq"
       v-model="selectedScope"
       item-text="name"
       item-value="value"
@@ -20,6 +21,8 @@
       placeholder="제목, 내용으로 검색해보세요"
       @keyup.enter="searchByInput"
       append-icon="fas fa-search"
+      class="input-keyword"
+      :class="$mq"
     >
     </v-text-field>
   </div>
@@ -86,16 +89,37 @@ export default {
 </script>
 
 <style scoped>
-.filters {
-  width: 100px;
-  max-width: 16%;
-  margin-right: 15px;
-}
 .search-bar {
   max-width: 60%;
-  margin: 35px auto 0 auto;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: baseline;
+}
+
+.search-bar.tablet {
+  max-width: 80%;
+}
+
+.search-bar.mobile {
+  max-width: 92%;
+}
+
+.filters {
+  max-width: 16%;
+  margin-right: 15px;
+}
+
+.filters.tablet {
+  min-width: 30%;
+}
+
+.filters.mobile {
+  max-width: 29%;
+  font-size: 12px;
+}
+
+.input-keyword.mobile {
+  font-size: 12px;
 }
 </style>
