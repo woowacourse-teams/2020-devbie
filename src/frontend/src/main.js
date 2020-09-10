@@ -5,10 +5,10 @@ import { router } from "./router";
 import { store } from "./store";
 import { editor } from "./utils/editor";
 import VueAnalytics from "vue-analytics";
+import VueMq from "vue-mq";
 
 const isProd = process.env.NODE_ENV === "production";
 
-Vue.config.productionTip = false;
 Vue.use(VueAnalytics, {
   id: "UA-176434466-1",
   debug: {
@@ -17,6 +17,17 @@ Vue.use(VueAnalytics, {
   },
   router
 });
+
+Vue.use(VueMq, {
+  breakpoints: {
+    mobile: 450,
+    tablet: 900,
+    laptop: 1250,
+    desktop: Infinity
+  }
+});
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,

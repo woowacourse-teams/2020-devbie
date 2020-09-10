@@ -1,61 +1,61 @@
 <template>
   <div class="answer-item-box" :class="{ editing: updateEditFlag }">
-    <div class="left-container">
-      <div class="author-name">
-        <p class="infos">
+    <div class="upper-container">
+      <div class="left-container" :class="$mq">
+        <p class="infos" :class="$mq">
           <i class="fas fa-user-edit"></i>
-          작성자: {{ answer.author }}
+          {{ answer.author }}
         </p>
       </div>
-      <div class="answer-temp">
-        <markdown-content
-          class="answer-content-value"
-          v-if="!updateEditFlag"
-          :content="content"
-        ></markdown-content>
-        <v-md-editor
-          v-else
-          class="update-editor"
-          height="250px"
-          v-model="content"
-        ></v-md-editor>
+      <div class="right-container" :class="{ editingButton: updateEditFlag }">
+        <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
+          <div class="author-button" v-if="isAuthor">
+            <v-btn
+              color="#DAEBEA"
+              small
+              class="button answer-btn"
+              v-if="updateEditFlag"
+              @click="update"
+            >
+              수정 확인
+            </v-btn>
+            <v-btn
+              color="#DAEBEA"
+              small
+              class="button answer-btn"
+              v-else
+              @click="updateBtnHandler"
+            >
+              수정
+            </v-btn>
+            <v-btn
+              color="#DAEBEA"
+              class="button answer-btn delete-btn"
+              small
+              @click="deleteBtnHandler"
+            >
+              삭제
+            </v-btn>
+          </div>
+          <recommendation-control
+            :targetObject="answer"
+            :isQuestion="false"
+          ></recommendation-control>
+        </div>
       </div>
     </div>
-    <div class="right-container" :class="{ editingButton: updateEditFlag }">
-      <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
-        <div class="author-button" v-if="isAuthor">
-          <v-btn
-            color="#DAEBEA"
-            small
-            class="button answer-btn"
-            v-if="updateEditFlag"
-            @click="update"
-          >
-            수정 확인
-          </v-btn>
-          <v-btn
-            color="#DAEBEA"
-            small
-            class="button answer-btn"
-            v-else
-            @click="updateBtnHandler"
-          >
-            수정
-          </v-btn>
-          <v-btn
-            color="#DAEBEA"
-            class="button answer-btn delete-btn"
-            small
-            @click="deleteBtnHandler"
-          >
-            삭제
-          </v-btn>
-        </div>
-        <recommendation-control
-          :targetObject="answer"
-          :isQuestion="false"
-        ></recommendation-control>
-      </div>
+    <div class="answer-temp">
+      <markdown-content
+        class="answer-content-value"
+        v-if="!updateEditFlag"
+        :content="content"
+      ></markdown-content>
+      <v-md-editor
+        v-else
+        class="update-editor"
+        height="250px"
+        v-model="content"
+      ></v-md-editor>
     </div>
   </div>
 </template>
@@ -212,23 +212,39 @@ export default {
 </script>
 
 <style scoped>
-.author-name {
+.upper-container {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.left-container {
   color: #6d819c;
-  margin-bottom: 6px;
 }
 
-.author-name .infos {
+.left-container.mobile {
+  margin: 0;
+}
+
+.left-container .infos {
   font-size: 14px;
-  margin: 15px 30px 0 30px;
+  margin: 0 30px;
+}
+
+.left-container .infos .mobile {
 }
 
 .answer-item-box {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
   border-bottom: solid #e8e8e8 1px;
   min-height: 150px;
+}
+
+.answer-item-box.mobile {
+  flex-direction: column;
 }
 
 .editing {
@@ -249,9 +265,8 @@ export default {
 }
 
 .answer-temp {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 15px 20px 30px;
+  min-width: 100%;
+  padding: 20px 30px;
 }
 
 .answer-infos {
@@ -269,6 +284,7 @@ export default {
 .author-button {
   display: flex;
   justify-content: center;
+  margin-bottom: 5px;
 }
 
 .answer-content-value {

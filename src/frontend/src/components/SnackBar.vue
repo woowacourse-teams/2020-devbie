@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div class="inner">
     <v-snackbar
       v-model="fetchedSnackBarState"
       :multi-line="true"
-      top
       timeout="0"
+      top
+      centered
+      class="snack-bar"
+      :class="$mq"
     >
       {{ fetchedSnackBarText }}
 
@@ -33,4 +36,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.snack-bar.mobile {
+  margin: 0 auto;
+}
+</style>
