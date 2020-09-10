@@ -163,16 +163,20 @@ export default {
   justify-content: center !important;
   align-items: center;
 }
+
 .notice-form {
   width: 100%;
   text-align: right;
 }
+
 .duration {
   display: flex;
 }
+
 .duration > input {
   margin-right: 20px;
 }
+
 .duration:first-child {
   padding-right: 20px;
 }

@@ -29,19 +29,21 @@ export default {
     DELETE_NOTICE(state, noticeId) {
       state.notices = state.notices.filter(notice => notice.id !== noticeId);
     },
-    SET_NOTICE_TYPE(state, data) {
+    INIT_NOTICES(state) {
       state.notices = [];
       state.page = 1;
+      state.keyword = "";
+    },
+    SET_NOTICE_TYPE(state, data) {
+      this.commit("INIT_NOTICES", this.state);
       state.noticeType = data;
     },
     SET_JOB_POSITION(state, data) {
-      state.notices = [];
-      state.page = 1;
+      this.commit("INIT_NOTICES", this.state);
       state.jobPosition = data;
     },
     SET_LANGUAGE(state, data) {
-      state.notices = [];
-      state.page = 1;
+      this.commit("INIT_NOTICES", this.state);
       state.language = data;
     },
     UPDATE_NOTICE(state, noticeId, data) {

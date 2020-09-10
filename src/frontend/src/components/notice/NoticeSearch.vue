@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-text-field
-      append-icon="fas fa-search"
-      style="display: inline-block"
-      class="search-bar"
-      v-model="keyword"
-      @keyup.enter="onSearch"
-      placeholder="검색 후 엔터를 누르세요!"
+        append-icon="fas fa-search"
+        style="display: inline-block"
+        class="search-bar"
+        v-model="keyword"
+        @keyup.enter="onSearch"
+        placeholder="검색 후 엔터를 누르세요!"
     ></v-text-field>
   </div>
 </template>
@@ -15,18 +15,17 @@
 export default {
   data() {
     return {
-      keyword: "",
-      previous: "pre"
+      keyword: ""
     };
   },
 
   methods: {
     onSearch() {
-      if (this.keyword === this.previous) {
+      if (this.keyword.trim() === "") {
         return;
       }
-      this.previous = this.keyword;
       this.$store.commit("SET_KEYWORD", this.keyword);
+      this.keyword = "";
     }
   }
 };
@@ -36,6 +35,7 @@ export default {
 .search-bar .input {
   padding: 0;
 }
+
 .search-bar {
   width: 200px;
 }

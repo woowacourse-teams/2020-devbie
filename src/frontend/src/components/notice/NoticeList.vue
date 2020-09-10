@@ -1,5 +1,11 @@
 <template>
   <div>
+    <template v-if="isSearch()">
+      <h2 class="search-message">
+        '{{ fetchedKeyword }}'로 검색한 결과입니다.
+      </h2>
+    </template>
+
     <v-row dense v-scroll="onScroll">
       <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
         <v-card class="v-card">
@@ -12,7 +18,7 @@
           >
             <v-card-title
               class="card-title-text"
-              v-text="sliceText(notice.name, 20)"
+              v-html="addHighlight(sliceText(notice.name, 20))"
             ></v-card-title>
           </v-img>
 
@@ -23,7 +29,7 @@
                 class="big-font notice-title"
                 style="font-weight: bold"
               >
-                {{ sliceText(notice.title, 40) }}
+                <p v-html="addHighlight(sliceText(notice.title, 40))"></p>
               </div>
               <div class="medium-font">
                 언어 : {{ notice.languages.join(", ") }}
@@ -94,6 +100,8 @@ export default {
       this.addNotices();
     },
     fetchedKeyword() {
+      console.log(this.addHighlight("test"));
+      console.log(this.fetchedKeyword);
       this.addNotices();
     },
     isLoggedIn() {
@@ -112,7 +120,6 @@ export default {
     if (this.fetchedNotices.length > 0) {
       return;
     }
-
     await this.addNotices();
   },
 
@@ -216,6 +223,24 @@ export default {
         return text.substr(0, maximumLength) + "...";
       }
       return text;
+    },
+
+    addHighlight(text) {
+      if (this.fetchedKeyword === "") {
+        return text;
+      }
+
+      const regex = new RegExp(this.fetchedKeyword, "g");
+      const highlightingText = text.replace(
+        regex,
+        `<span style="background: #f1c40f">` + this.fetchedKeyword + "</span>"
+      );
+
+      return highlightingText;
+    },
+
+    isSearch() {
+      return this.fetchedKeyword !== "";
     }
   }
 };
@@ -225,6 +250,7 @@ export default {
 .v-card {
   height: 100%;
 }
+
 .big-font {
   font-size: 17px;
 }
@@ -276,5 +302,10 @@ export default {
 
 .last-item {
   flex-basis: 100%;
+}
+
+.search-message {
+  text-align: center;
+  margin-bottom: 50px;
 }
 </style>
