@@ -21,10 +21,10 @@ class ChatRoomTest {
     @Test
     void addNewName() {
         List<ChatName> chatNames = Arrays.asList(
-            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
-            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID),
-            ChatName.of("발그레한 코끼리", TitleColor.DART_CYAN)
+            ChatName.of("하늘하늘한 동글", TitleColor.AMBER),
+            ChatName.of("찬란한 코일", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 유안", TitleColor.DARK_ORCHID),
+            ChatName.of("발그레한 보스독", TitleColor.DART_CYAN)
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
@@ -43,12 +43,12 @@ class ChatRoomTest {
     @DisplayName("ChatName 삭제")
     @Test
     void deleteChatName() {
-        ChatName deleteChatName = ChatName.of("하늘하늘한 곰", TitleColor.AMBER);
+        ChatName deleteChatName = ChatName.of("하늘하늘한 동글", TitleColor.AMBER);
         List<ChatName> chatNames = Arrays.asList(
             deleteChatName,
-            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID),
-            ChatName.of("발그레한 코끼리", TitleColor.DART_CYAN)
+            ChatName.of("찬란한 코일", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 유안", TitleColor.DARK_ORCHID),
+            ChatName.of("발그레한 보스독", TitleColor.DART_CYAN)
         );
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(1L)
