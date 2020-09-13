@@ -41,7 +41,13 @@ export const router = new VueRouter({
     {
       path: "/notices",
       name: "notices",
-      component: NoticeListView
+      component: NoticeListView,
+      props: route => ({
+        noticeType: route.query.noticeType,
+        jobPosition: route.query.jobPosition,
+        keyword: route.query.keyword,
+        language: route.query.language
+      })
     },
     {
       path: "/questions",
