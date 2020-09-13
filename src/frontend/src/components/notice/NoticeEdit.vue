@@ -141,10 +141,7 @@ export default {
     },
     async submit() {
       try {
-        await patchAction(`/api/notices/${this.id}`, {
-          id: this.id,
-          ...this.request
-        });
+        await patchAction(`/api/notices/${this.id}`, this.request);
 
         await this.$router.push(
           `/notices/${this.request.noticeType}/${this.id}`
