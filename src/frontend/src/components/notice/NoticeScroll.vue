@@ -74,14 +74,15 @@ export default {
 
   methods: {
     async onScroll({ target }) {
-      if (!this.isReady) {
-        return;
-      }
-
       if (
         target.scrollTop + target.clientHeight >= target.scrollHeight &&
         this.page <= this.lastPage
       ) {
+        if (!this.isReady) {
+          return;
+        }
+        this.isReady = false;
+
         this.isBottom = true;
         await this.addNotices();
         this.isBottom = false;
@@ -89,14 +90,17 @@ export default {
     },
 
     initNotices() {
+      if (!this.isReady) {
+        return;
+      }
+      this.isReady = false;
+
       this.notices = [];
       this.page = 1;
       this.addNotices();
     },
 
     async addNotices() {
-      this.isReady = false;
-
       const param = createNoticeObj(
         this.noticeType,
         this.keyword,
