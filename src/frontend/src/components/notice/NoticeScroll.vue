@@ -19,12 +19,14 @@
           class="scroll-content"
           @scroll="onScroll"
         >
-          <template v-for="item in fetchedNotices">
+          <template v-for="item in notices">
             <v-list-item :key="item.id">
               <v-list-item-avatar>
                 <v-img :src="item.image" height="50" max-width="50"></v-img>
               </v-list-item-avatar>
-              <v-list-item-content @click="$router.push(`/notices/${item.id}`)">
+              <v-list-item-content
+                @click="$router.push(`/notices/${noticeType}/${item.id}`)"
+              >
                 <v-list-item-title style="font-weight: bold">
                   {{ item.name }}
                 </v-list-item-title>
@@ -42,36 +44,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { createNoticeObj } from "@/utils/noticeUtil";
+import { getAction } from "@/api";
 
 export default {
   data() {
     return {
+      notices: [],
       isBottom: false,
-      isReady: true
+      isReady: true,
+      page: 1,
+      lastPage: 1000,
+      noticeType: this.$route.path.split("/")[2]
     };
   },
 
   watch: {
-    fetchedPage() {
-      this.isReady = true;
+    noticeType() {
+      this.initNotices();
     }
   },
 
-  computed: {
-    ...mapGetters([
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage",
-      "fetchedKeyword",
-      "fetchedPage",
-      "fetchedLastPage"
-    ])
-  },
-
   async created() {
-    if (this.fetchedNotices.length > 0) {
+    if (this.notices.length > 0) {
       return;
     }
     await this.addNotices();
@@ -85,36 +80,46 @@ export default {
 
       if (
         target.scrollTop + target.clientHeight >= target.scrollHeight &&
-        this.fetchedPage <= this.fetchedLastPage
+        this.page <= this.lastPage
       ) {
         this.isBottom = true;
         await this.addNotices();
         this.isBottom = false;
       }
     },
+
+    initNotices() {
+      this.notices = [];
+      this.page = 1;
+      this.addNotices();
+    },
+
     async addNotices() {
       this.isReady = false;
 
-      const param = {
-        noticeType: this.fetchedNoticeType,
-        jobPosition: this.fetchedJobPosition,
-        language: this.fetchedLanguage,
-        page: this.fetchedPage,
-        keyword: this.fetchedKeyword
-      };
+      const param = createNoticeObj(
+        this.noticeType,
+        this.keyword,
+        this.language,
+        this.jobPosition
+      );
+      param["page"] = this.page;
+
       const queryParam = new URLSearchParams(param).toString();
 
       try {
-        await this.$store.dispatch("FETCH_NOTICES", queryParam);
+        const { data } = await getAction(`/api/notices?` + queryParam);
+        this.lastPage = data["lastPage"];
+        this.notices = this.notices.concat(data["noticeResponses"]);
       } catch (error) {
-        console.log(
-          "공고 리스트 불러오기 실패 : " + error.response.data.message
-        );
         await this.$store.dispatch(
           "UPDATE_SNACKBAR_TEXT",
           "공고를 불러오지 못했습니다."
         );
       }
+
+      this.page = this.page + 1;
+      this.isReady = true;
     }
   }
 };
@@ -124,19 +129,23 @@ export default {
 .card-title-text {
   margin: auto;
 }
+
 .back-button {
   position: absolute;
 }
+
 .notice-list {
   min-width: 100px;
   width: 30%;
   flex-basis: auto;
   margin: 50px 100px 100px 0px;
 }
+
 .v-list-item:hover {
   opacity: 0.6;
   cursor: pointer;
 }
+
 .card-title {
   background-color: #daebea;
   font-weight: bold;

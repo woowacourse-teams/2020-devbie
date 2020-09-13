@@ -8,7 +8,9 @@
       <div v-for="notice in notices" :key="notice.id" class="item">
         <v-card class="v-card">
           <v-img
-            @click="$router.push(`/notices/${notice.id}`)"
+            @click="
+              $router.push(`/notices/${noticeType || 'JOB'}/${notice.id}`)
+            "
             :src="notice.image"
             class="white--text align-end card-image"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
@@ -220,7 +222,7 @@ export default {
     },
 
     addHighlight(text) {
-      if (this.keyword === "") {
+      if (this.keyword === undefined || this.keyword === "") {
         return text;
       }
 

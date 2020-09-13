@@ -38,8 +38,6 @@ export default {
       if (e.currentTarget.name === this.fetchedNoticeType) {
         return;
       }
-      await this.$store.commit("SET_NOTICE_TYPE", e.currentTarget.name);
-
       const url = createNoticeUrl(e.currentTarget.name);
       await this.$router.push(url);
     },
