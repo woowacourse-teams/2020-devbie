@@ -42,7 +42,7 @@ export default {
       await this.$router.push(url);
     },
     isJob() {
-      return this.noticeType === "JOB";
+      return this.noticeType === undefined || this.noticeType === "JOB";
     },
     isEducation() {
       return this.noticeType === "EDUCATION";

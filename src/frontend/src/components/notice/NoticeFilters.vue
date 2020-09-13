@@ -48,13 +48,26 @@ export default {
     ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
   },
 
+  watch: {
+    jobPosition() {
+      this.setFilters();
+    },
+    language() {
+      this.setFilters();
+    }
+  },
+
   created() {
     this.$store.dispatch("FETCH_FILTERS");
   },
 
   methods: {
+    setFilters() {
+      (this.selectedPosition = this.$route.query.jobPosition),
+        (this.selectedLanguage = this.$route.query.language);
+    },
+
     async onChange() {
-      this.$store.commit("SET_LANGUAGE", this.selectedLanguage);
       const noticeUrl = await createNoticeUrl(
         this.currentNoticeType,
         this.currentKeyword,

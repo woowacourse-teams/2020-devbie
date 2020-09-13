@@ -30,13 +30,14 @@ export default {
         return;
       }
       console.log(this.noticeType);
-      this.$store.commit("SET_KEYWORD", this.keyword);
       const noticeUrl = await createNoticeUrl(
-        this.noticeType,
+        this.$route.query.noticeType,
         this.keyword,
-        this.language,
-        this.jobPosition
+        this.$route.query.language,
+        this.$route.query.jobPosition
       );
+
+      console.log(noticeUrl);
 
       this.keyword = "";
       await this.$router.push(noticeUrl);

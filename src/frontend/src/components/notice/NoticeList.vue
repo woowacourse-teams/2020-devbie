@@ -76,7 +76,7 @@ export default {
       isBottom: false,
       isReady: true,
       page: 1,
-      lastPage: 1000
+      lastPage: 1
     };
   },
 
@@ -130,7 +130,7 @@ export default {
     },
 
     isEndPage() {
-      return this.fetchedPage > this.fetchedLastPage;
+      return this.page > this.lastPage;
     },
 
     initNotices() {
