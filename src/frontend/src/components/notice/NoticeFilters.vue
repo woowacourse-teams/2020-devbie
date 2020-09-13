@@ -38,9 +38,7 @@ export default {
   data() {
     return {
       selectedPosition: this.jobPosition,
-      selectedLanguage: this.language,
-      currentNoticeType: this.$route.query.noticeType,
-      currentKeyword: this.$route.query.keyword
+      selectedLanguage: this.language
     };
   },
 
@@ -63,14 +61,14 @@ export default {
 
   methods: {
     setFilters() {
-      (this.selectedPosition = this.$route.query.jobPosition),
-        (this.selectedLanguage = this.$route.query.language);
+      this.selectedPosition = this.$route.query.jobPosition;
+      this.selectedLanguage = this.$route.query.language;
     },
 
     async onChange() {
       const noticeUrl = await createNoticeUrl(
-        this.currentNoticeType,
-        this.currentKeyword,
+        this.$route.query.noticeType,
+        this.$route.query.keyword,
         this.selectedLanguage,
         this.selectedPosition
       );

@@ -25,14 +25,6 @@ import { createNoticeUrl } from "@/utils/noticeUtil";
 export default {
   props: ["noticeType"],
 
-  data() {
-    return {
-      jobPosition: this.$route.query.jobPosition,
-      language: this.$route.query.language,
-      keyword: this.$route.query.keyword
-    };
-  },
-
   methods: {
     async changeNoticeType(e) {
       if (e.currentTarget.name === this.fetchedNoticeType) {

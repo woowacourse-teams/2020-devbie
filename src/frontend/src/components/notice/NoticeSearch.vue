@@ -17,10 +17,7 @@ import { createNoticeUrl } from "@/utils/noticeUtil";
 export default {
   data() {
     return {
-      noticeType: this.$route.query.noticeType,
-      keyword: this.$route.query.keyword,
-      language: this.$route.query.language,
-      jobPosition: this.$route.query.jobPosition
+      keyword: this.$route.query.keyword
     };
   },
 
@@ -29,15 +26,12 @@ export default {
       if (this.keyword.trim() === "") {
         return;
       }
-      console.log(this.noticeType);
       const noticeUrl = await createNoticeUrl(
         this.$route.query.noticeType,
         this.keyword,
         this.$route.query.language,
         this.$route.query.jobPosition
       );
-
-      console.log(noticeUrl);
 
       this.keyword = "";
       await this.$router.push(noticeUrl);

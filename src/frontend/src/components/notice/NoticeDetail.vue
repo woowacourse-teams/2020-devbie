@@ -100,7 +100,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser", "fetchedNotice"]),
+    ...mapGetters(["fetchedLoginUser"]),
 
     content() {
       return this.notice.noticeDescription.content.split("\n");
