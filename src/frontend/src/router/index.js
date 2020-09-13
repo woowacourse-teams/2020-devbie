@@ -76,17 +76,16 @@ export const router = new VueRouter({
       component: QuestionEditView
     },
     {
-      path: "/notices",
+      path: "/notices/(JOB|EDUCATION)/",
       name: "notice-detail",
       component: NoticeDetailView,
-      props: route => ({
-        id: route.params.id
-      }),
+      props: true,
       children: [
         {
           path: ":id(\\d+)",
           name: "notice-content",
-          component: NoticeDetail
+          component: NoticeDetail,
+          props: true
         }
       ]
     },
