@@ -74,11 +74,6 @@ export default {
     }
   },
   actions: {
-    async FETCH_NOTICES({ commit }, queryUrl) {
-      const { data } = await getAction(`/api/notices?` + queryUrl);
-      commit("UPDATE_NOTICES", data);
-      return data;
-    },
     async FETCH_NOTICE({ commit }, noticeId) {
       const { data } = await getAction(`/api/notices/${noticeId}`);
       commit("SET_NOTICE", data);

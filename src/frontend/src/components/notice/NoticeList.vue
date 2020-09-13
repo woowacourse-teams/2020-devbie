@@ -1,13 +1,11 @@
 <template>
   <div>
     <template v-if="isSearch()">
-      <h2 class="search-message">
-        '{{ fetchedKeyword }}'로 검색한 결과입니다.
-      </h2>
+      <h2 class="search-message">'{{ keyword }}'로 검색한 결과입니다.</h2>
     </template>
 
     <v-row dense v-scroll="onScroll">
-      <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
+      <div v-for="notice in notices" :key="notice.id" class="item">
         <v-card class="v-card">
           <v-img
             @click="$router.push(`/notices/${notice.id}`)"
@@ -62,26 +60,26 @@
 <script>
 import { mapGetters } from "vuex";
 import FavoriteControl from "../favorite/FavoriteControl";
+import { getAction } from "@/api";
+import { createNoticeObj } from "@/utils/noticeUtil";
 
 export default {
   components: { FavoriteControl },
 
+  props: ["noticeType", "jobPosition", "language", "keyword"],
+
   data() {
     return {
+      notices: [],
       isBottom: false,
-      isReady: true
+      isReady: true,
+      page: 1,
+      lastPage: 1000
     };
   },
 
   computed: {
     ...mapGetters([
-      "fetchedNotices",
-      "fetchedNoticeType",
-      "fetchedJobPosition",
-      "fetchedLanguage",
-      "fetchedKeyword",
-      "fetchedPage",
-      "fetchedLastPage",
       "isLoggedIn",
       "fetchedLoginUser",
       "isUserNoticeFavorites",
@@ -90,25 +88,17 @@ export default {
   },
 
   watch: {
-    fetchedNoticeType() {
-      this.addNotices();
+    noticeType() {
+      this.initNotices();
     },
-    fetchedJobPosition() {
-      this.addNotices();
+    jobPosition() {
+      this.initNotices();
     },
-    fetchedLanguage() {
-      this.addNotices();
+    language() {
+      this.initNotices();
     },
-    fetchedKeyword() {
-      console.log(this.addHighlight("test"));
-      console.log(this.fetchedKeyword);
-      this.addNotices();
-    },
-    isLoggedIn() {
-      this.initFavoriteState();
-    },
-    fetchedPage() {
-      this.isReady = true;
+    keyword() {
+      this.initNotices();
     }
   },
 
@@ -116,11 +106,7 @@ export default {
     if (this.isLoggedIn) {
       await this.initFavoriteState();
     }
-
-    if (this.fetchedNotices.length > 0) {
-      return;
-    }
-    await this.addNotices();
+    await this.initNotices();
   },
 
   methods: {
@@ -134,10 +120,7 @@ export default {
       let componentHeight = scrollHeight - this.$el.lastElementChild.offsetTop;
       const currentState = clientCurrentHeight > componentHeight;
 
-      if (
-        this.isBottom !== currentState &&
-        this.fetchedPage <= this.fetchedLastPage
-      ) {
+      if (this.isBottom !== currentState && this.page <= this.lastPage) {
         this.isBottom = true;
         await this.addNotices();
         this.isBottom = false;
@@ -148,27 +131,38 @@ export default {
       return this.fetchedPage > this.fetchedLastPage;
     },
 
+    initNotices() {
+      this.notices = [];
+      this.page = 1;
+      this.addNotices();
+    },
+
     async addNotices() {
       this.isReady = false;
 
-      const param = {
-        noticeType: this.fetchedNoticeType,
-        jobPosition: this.fetchedJobPosition,
-        language: this.fetchedLanguage,
-        page: this.fetchedPage,
-        keyword: this.fetchedKeyword
-      };
+      const param = createNoticeObj(
+        this.noticeType,
+        this.keyword,
+        this.language,
+        this.jobPosition
+      );
+      param["page"] = this.page;
+
       const queryParam = new URLSearchParams(param).toString();
 
       try {
-        this.$store.dispatch("FETCH_NOTICES", queryParam);
+        const { data } = await getAction(`/api/notices?` + queryParam);
+        this.lastPage = data["lastPage"];
+        this.notices = this.notices.concat(data["noticeResponses"]);
       } catch (error) {
-        console.log("공고 리스트 불러오기 실패 " + error.response.data.message);
-        this.$store.dispatch(
+        await this.$store.dispatch(
           "UPDATE_SNACKBAR_TEXT",
           "공고를 불러오지 못했습니다."
         );
       }
+
+      this.page = this.page + 1;
+      this.isReady = true;
     },
 
     onFavorite(noticeId) {
@@ -226,21 +220,24 @@ export default {
     },
 
     addHighlight(text) {
-      if (this.fetchedKeyword === "") {
+      if (this.keyword === "") {
         return text;
       }
 
-      const regex = new RegExp(this.fetchedKeyword, "g");
+      const regex = new RegExp(this.keyword, "g");
       const highlightingText = text.replace(
         regex,
-        `<span style="background: #f1c40f">` + this.fetchedKeyword + "</span>"
+        `<span style="background: #f1c40f">` + this.keyword + "</span>"
       );
 
       return highlightingText;
     },
 
     isSearch() {
-      return this.fetchedKeyword !== "";
+      if (this.keyword === undefined) {
+        return false;
+      }
+      return this.keyword.trim() !== "";
     }
   }
 };

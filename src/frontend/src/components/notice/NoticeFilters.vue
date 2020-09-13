@@ -4,7 +4,7 @@
     <v-select
       class="filters"
       v-model="selectedPosition"
-      v-on:change="changeJobPosition"
+      v-on:change="onChange"
       item-text="text"
       item-value="key"
       :items="fetchedJobPositions"
@@ -16,7 +16,7 @@
     <v-select
       class="filters"
       v-model="selectedLanguage"
-      v-on:change="changeLanguage"
+      v-on:change="onChange"
       item-text="text"
       item-value="key"
       :items="fetchedLanguages"
@@ -30,12 +30,17 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { createNoticeUrl } from "@/utils/noticeUtil";
 
 export default {
+  props: ["jobPosition", "language"],
+
   data() {
     return {
-      selectedPosition: "",
-      selectedLanguage: ""
+      selectedPosition: this.jobPosition,
+      selectedLanguage: this.language,
+      currentNoticeType: this.$route.query.noticeType,
+      currentKeyword: this.$route.query.keyword
     };
   },
 
@@ -48,11 +53,15 @@ export default {
   },
 
   methods: {
-    changeJobPosition() {
-      this.$store.commit("SET_JOB_POSITION", this.selectedPosition);
-    },
-    changeLanguage() {
+    async onChange() {
       this.$store.commit("SET_LANGUAGE", this.selectedLanguage);
+      const noticeUrl = await createNoticeUrl(
+        this.currentNoticeType,
+        this.currentKeyword,
+        this.selectedLanguage,
+        this.selectedPosition
+      );
+      await this.$router.push(noticeUrl);
     }
   }
 };
