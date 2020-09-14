@@ -40,7 +40,8 @@ public class ChatService {
         Chat savedChat = saveChat(messageSendRequest, chatRoom);
 
         MessageResponse messageResponse = MessageResponse.from(savedChat);
-        simpMessagingTemplate.convertAndSend(PUBLISH_URL + messageSendRequest.getNoticeId(),
+        simpMessagingTemplate.convertAndSend(
+            PUBLISH_URL + messageSendRequest.getNoticeId(),
             StompMessageResponse.of(StompMethodType.TALK, messageResponse));
     }
 
@@ -50,8 +51,10 @@ public class ChatService {
     }
 
     private Chat saveChat(MessageSendRequest messageSendRequest, ChatRoom chatRoom) {
-        Chat chat = Chat.of(messageSendRequest.getName(), TitleColor.from(messageSendRequest.getTitleColor()),
-            messageSendRequest.getMessage(), chatRoom);
+        Chat chat = Chat.of(messageSendRequest.getName(),
+            TitleColor.from(messageSendRequest.getTitleColor()),
+            messageSendRequest.getMessage(),
+            chatRoom);
         return chatRepository.save(chat);
     }
 
