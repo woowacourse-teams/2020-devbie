@@ -107,9 +107,7 @@ export default {
       );
     }
 
-    this.request = {
-      ...(await this.parameterInitialize())
-    };
+    this.request = await this.parameterInitialize();
   },
 
   methods: {
@@ -155,12 +153,14 @@ export default {
         jobPosition: this.fetchedNotice.jobPosition,
         noticeType: this.fetchedNotice.noticeType,
         startDate:
-          this.fetchedNotice.duration === null
-            ? ""
+          this.fetchedNotice.duration === null ||
+          this.fetchedNotice.duration.startDate === null
+            ? null
             : this.fetchedNotice.duration.startDate,
         endDate:
-          this.fetchedNotice.duration === null
-            ? ""
+          this.fetchedNotice.duration === null ||
+          this.fetchedNotice.duration.endDate === null
+            ? null
             : this.fetchedNotice.duration.endDate,
         description: this.fetchedNotice.noticeDescription.content,
         languages: this.fetchedNotice.noticeDescription.languages.map(
@@ -181,13 +181,16 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 .notice-form {
   width: 100%;
   text-align: right;
 }
+
 .duration {
   display: flex;
 }
+
 .duration:first-child {
   padding-right: 20px;
 }
