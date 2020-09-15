@@ -62,7 +62,6 @@ export default {
       state.keyword = data;
     },
     SET_FILTERS(state, data) {
-      // const emptyPair = [{ key: "", text: "무관" }];
       state.languages = data.languages.map(res => res.pair);
       state.jobPositions = data.jobPositions.map(res => res.pair);
     }
