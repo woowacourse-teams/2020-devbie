@@ -12,9 +12,9 @@ import underdogs.devbie.chat.exception.SessionNotExistException;
 @Component
 @NoArgsConstructor
 public class ChatSessionInformation {
-    private Map<String, String> sessionNoticeIdMapping = new HashMap<>();
+    private Map<String, Long> sessionNoticeIdMapping = new HashMap<>();
 
-    public void addSessionInfo(String sessionId, String noticeId) {
+    public void addSessionInfo(String sessionId, Long noticeId) {
         if (sessionNoticeIdMapping.containsKey(sessionId)) {
             throw new SessionIdAlreadyExistException();
         }
@@ -30,7 +30,7 @@ public class ChatSessionInformation {
         sessionNoticeIdMapping.remove(sessionId);
     }
 
-    public long countSessionOn(String noticeId) {
+    public long countSessionOn(Long noticeId) {
         return sessionNoticeIdMapping.values()
             .stream()
             .filter(notice -> notice.equals(noticeId))

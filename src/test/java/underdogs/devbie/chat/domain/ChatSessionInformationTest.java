@@ -15,22 +15,22 @@ class ChatSessionInformationTest {
     void addSession() {
         ChatSessionInformation chatSessionInformation = new ChatSessionInformation();
 
-        chatSessionInformation.addSessionInfo("1", "1");
-        assertThat(chatSessionInformation.countSessionOn("1")).isEqualTo(1L);
+        chatSessionInformation.addSessionInfo("1", 1L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(1L);
 
-        chatSessionInformation.addSessionInfo("2", "1");
-        assertThat(chatSessionInformation.countSessionOn("1")).isEqualTo(2L);
+        chatSessionInformation.addSessionInfo("2", 1L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(2L);
 
-        chatSessionInformation.addSessionInfo("3", "2");
-        assertThat(chatSessionInformation.countSessionOn("2")).isEqualTo(1L);
+        chatSessionInformation.addSessionInfo("3", 2L);
+        assertThat(chatSessionInformation.countSessionOn(2L)).isEqualTo(1L);
     }
 
     @DisplayName("이미 있는 세션Id 추가")
     @Test
     void addAlreadyExistSessionId() {
         ChatSessionInformation chatSessionInformation = new ChatSessionInformation();
-        chatSessionInformation.addSessionInfo("1", "1");
-        assertThatThrownBy(() -> chatSessionInformation.addSessionInfo("1", "2"))
+        chatSessionInformation.addSessionInfo("1", 1L);
+        assertThatThrownBy(() -> chatSessionInformation.addSessionInfo("1", 2L))
             .isInstanceOf(SessionIdAlreadyExistException.class);
     }
 
@@ -39,14 +39,14 @@ class ChatSessionInformationTest {
     void removeSession() {
         ChatSessionInformation chatSessionInformation = new ChatSessionInformation();
 
-        chatSessionInformation.addSessionInfo("1", "1");
-        assertThat(chatSessionInformation.countSessionOn("1")).isEqualTo(1L);
+        chatSessionInformation.addSessionInfo("1", 1L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(1L);
 
-        chatSessionInformation.addSessionInfo("2", "1");
-        assertThat(chatSessionInformation.countSessionOn("1")).isEqualTo(2L);
+        chatSessionInformation.addSessionInfo("2", 1L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(2L);
 
         chatSessionInformation.removeSession("2");
-        assertThat(chatSessionInformation.countSessionOn("1")).isEqualTo(1L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(1L);
     }
 
     @DisplayName("존재하지 않는 세션 제거")
@@ -62,6 +62,6 @@ class ChatSessionInformationTest {
     void countSessionOn() {
         ChatSessionInformation chatSessionInformation = new ChatSessionInformation();
 
-        assertThat(chatSessionInformation.countSessionOn("1")).isEqualTo(0L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(0L);
     }
 }
