@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.chat.domain.Chat;
+import underdogs.devbie.chat.domain.TitleColor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class ChatRoomResponse {
 
     private Integer headCount;
 
-    public static ChatRoomResponse of(List<Chat> chats, String nickName, String titleColor, Integer headCount) {
-        return new ChatRoomResponse(MessageResponses.from(chats), nickName, titleColor, headCount);
+    public static ChatRoomResponse of(List<Chat> chats, String nickName, TitleColor titleColor, Integer headCount) {
+        return new ChatRoomResponse(MessageResponses.from(chats), nickName, titleColor.getColor(), headCount);
     }
 }

@@ -62,6 +62,6 @@ class ChatSessionInformationTest {
     void countSessionOn() {
         ChatSessionInformation chatSessionInformation = new ChatSessionInformation();
 
-        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(0L);
+        assertThat(chatSessionInformation.countSessionOn(1L)).isEqualTo(0);
     }
 }

@@ -1,12 +1,20 @@
 package underdogs.devbie.chat.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
+import org.springframework.web.socket.messaging.SessionConnectedEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
@@ -31,13 +39,38 @@ public class ChatController {
         return ResponseEntity.ok().body(chatService.connect(noticeId));
     }
 
-    @NoValidate
-    @DeleteMapping("/api/chatrooms/{nickName}")
-    public ResponseEntity<Void> disconnect(
-        @PathVariable(name = "nickName") String nickName,
-        @RequestParam(value = "noticeId") Long noticeId
-    ) {
-        chatService.disconnect(nickName, noticeId);
-        return ResponseEntity.noContent().build();
+    @EventListener
+    public void onSessionConnectedEvent(SessionConnectedEvent event) {
+        String sessionId = extractSessionIdFrom(event);
+        long noticeId = extractNoticeIdFrom(event);
+
+        System.err.println("Connection with sessionId: " + sessionId);
+        chatService.addNewSessionInfo(sessionId, noticeId);
+        // System.err.println("sessionId: " + sessionId + System.lineSeparator() + "noticeId: " + noticeId);
+    }
+
+    @EventListener
+    public void onSessionDisconnectedEvent(SessionDisconnectEvent event) {
+        String sessionId = extractSessionIdFrom(event);
+
+        System.err.println("DisConnection with sessionId: " + sessionId);
+        chatService.disconnectSession(sessionId);
+    }
+
+    private String extractSessionIdFrom(AbstractSubProtocolEvent event) {
+        StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
+
+        return (String)messageHeaders.get("simpSessionId");
+    }
+
+    private long extractNoticeIdFrom(AbstractSubProtocolEvent event) {
+        StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
+
+        GenericMessage genericMessage = (GenericMessage)messageHeaders.get("simpConnectMessage");
+        Map<String, List<String>> nativeHeaders = (Map<String, List<String>>)genericMessage.getHeaders().get("nativeHeaders");
+
+        return Long.parseLong(nativeHeaders.get("notice").get(0));
     }
 }

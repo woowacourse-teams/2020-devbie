@@ -10,15 +10,12 @@ import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
-import underdogs.devbie.chat.domain.StompMethodType;
+import underdogs.devbie.chat.domain.ChatSessionInformation;
 import underdogs.devbie.chat.domain.StompMethodType;
 import underdogs.devbie.chat.domain.TitleColor;
-import underdogs.devbie.chat.dto.ChatNameResponse;
-import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
-import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.exception.NotExistException;
 
@@ -32,6 +29,7 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRepository chatRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ChatSessionInformation chatSessionInformation;
 
     @Transactional
     public void sendMessage(MessageSendRequest messageSendRequest) {
@@ -51,7 +49,8 @@ public class ChatService {
     }
 
     private Chat saveChat(MessageSendRequest messageSendRequest, ChatRoom chatRoom) {
-        Chat chat = Chat.of(messageSendRequest.getName(),
+        Chat chat = Chat.of(
+            messageSendRequest.getName(),
             TitleColor.from(messageSendRequest.getTitleColor()),
             messageSendRequest.getMessage(),
             chatRoom);
@@ -64,17 +63,9 @@ public class ChatService {
 
         ChatName name = chatRoom.addNewName();
 
-        sendChatName(noticeId, name, StompMethodType.ENTER);
-
-        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(),
-            name.getColor().getColor(),
-            chatRoom.getChatNames().size());
-    }
-
-    private void sendChatName(Long noticeId, ChatName name, StompMethodType stompMethodType) {
-        ChatNameResponse chatNameResponse = ChatNameResponse.of(name.getChatName(), name.getColor().getColor());
-        simpMessagingTemplate.convertAndSend(PUBLISH_URL + noticeId,
-            StompMessageResponse.of(stompMethodType, chatNameResponse));
+        return ChatRoomResponse.of(
+            chatRoom.getChats(), name.getChatName(), name.getColor(),
+            chatSessionInformation.countSessionOn(noticeId));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
@@ -82,14 +73,20 @@ public class ChatService {
             .orElseGet(() -> chatRoomRepository.save(ChatRoom.from(noticeId)));
     }
 
-    @Transactional
-    public void disconnect(String nickName, Long noticeId) {
-        ChatName chatName = deleteChatName(nickName, noticeId);
-        sendChatName(noticeId, chatName, StompMethodType.QUIT);
+    public void addNewSessionInfo(String sessionId, long noticeId) {
+        chatSessionInformation.addSessionInfo(sessionId, noticeId);
+        sendConnectionInformation(noticeId, StompMethodType.ENTER);
     }
 
-    private ChatName deleteChatName(String nickName, Long noticeId) {
-        ChatRoom chatRoom = getChatRoom(noticeId);
-        return chatRoom.deleteChatName(nickName);
+    public void disconnectSession(String sessionId) {
+        long noticeId = chatSessionInformation.removeSession(sessionId);
+        sendConnectionInformation(noticeId, StompMethodType.QUIT);
+    }
+
+    private void sendConnectionInformation(Long noticeId, StompMethodType stompMethodType) {
+        System.err.println("connection message sendded: " + stompMethodType.name());
+        simpMessagingTemplate.convertAndSend(
+            PUBLISH_URL + noticeId,
+            StompMessageResponse.of(stompMethodType, null));
     }
 }
