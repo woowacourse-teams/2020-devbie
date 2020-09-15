@@ -35,8 +35,8 @@ public class ChatController {
 
     @NoValidate
     @PatchMapping("/api/chatrooms")
-    public ResponseEntity<ChatRoomResponse> connect(@RequestParam("noticeId") Long noticeId) {
-        return ResponseEntity.ok().body(chatService.connect(noticeId));
+    public ResponseEntity<ChatRoomResponse> fetchChatRoomInfo(@RequestParam("noticeId") Long noticeId) {
+        return ResponseEntity.ok().body(chatService.fetchChatRoomInfo(noticeId));
     }
 
     @EventListener

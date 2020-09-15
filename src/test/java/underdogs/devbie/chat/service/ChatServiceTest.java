@@ -20,7 +20,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatName;
-import underdogs.devbie.chat.domain.ChatNames;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
@@ -71,7 +70,6 @@ class ChatServiceTest {
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(chatNames))
             .build();
 
         MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
@@ -100,35 +98,26 @@ class ChatServiceTest {
             Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
         );
 
-        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
-            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID)
-        ));
-
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(chatNames))
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+        given(chatSessionInformation.countSessionOn(anyLong())).willReturn(4);
 
-        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.fetchChatRoomInfo(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRoomRepository, never()).save(any());
-        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
-            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
@@ -144,34 +133,25 @@ class ChatServiceTest {
             Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
         );
 
-        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
-            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID)
-        ));
-
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(chatNames))
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+        given(chatSessionInformation.countSessionOn(anyLong())).willReturn(4);
 
-        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.fetchChatRoomInfo(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
-        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
-            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }

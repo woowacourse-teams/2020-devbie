@@ -65,12 +65,10 @@ class ChatControllerTest extends MvcTest {
                 Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
                 Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
                 Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
-            "우아한 돌고래",
-            TitleColor.AMBER,
             3
         );
 
-        given(chatService.connect(any())).willReturn(chatRoomResponse);
+        given(chatService.fetchChatRoomInfo(any())).willReturn(chatRoomResponse);
 
         MvcResult mvcResult = patchAction(String.format("/api/chatrooms?noticeId=%s", noticeId), "")
             .andDo(print())
@@ -84,11 +82,9 @@ class ChatControllerTest extends MvcTest {
         assertThat(resultResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = resultResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(resultResponse.getNickName(), "우아한 돌고래"),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
-            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
-            () -> assertEquals(resultResponse.getTitleColor(), TitleColor.AMBER.getColor())
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리")
         );
     }
 

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.chat.domain.Chat;
-import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
@@ -58,14 +57,12 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoomResponse connect(Long noticeId) {
+    public ChatRoomResponse fetchChatRoomInfo(Long noticeId) {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
-        ChatName name = chatRoom.addNewName();
+        // ChatName name = chatRoom.addNewName();
 
-        return ChatRoomResponse.of(
-            chatRoom.getChats(), name.getChatName(), name.getColor(),
-            chatSessionInformation.countSessionOn(noticeId));
+        return ChatRoomResponse.of(chatRoom.getChats(), chatSessionInformation.countSessionOn(noticeId));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
