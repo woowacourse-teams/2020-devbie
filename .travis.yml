@@ -17,7 +17,7 @@ git:
   submodules: false
 
 before_install:
-    - if [ "$TRAVIS_PULL_REQUEST" == "260" ]; then
+    - if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then
       echo "test";
       echo "test2";
       fi
@@ -38,13 +38,13 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
-  - 'if [ $TRAVIS_PULL_REQUEST == "true" ]; then
-      cd docker;
-      git add .;
-      git commit -m "updated in travis";
-      git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
-      cd ..;
-      docker build -t kimseonggyu1/devbie:latest .;
-      docker login -u $DOCKER_USER -p $PASSWORD;
-      docker push kimseonggyu1/devbie:latest;
-    fi'
+  - if [ $TRAVIS_PULL_REQUEST == "260" ]; then
+    cd docker;
+    git add .;
+    git commit -m "updated in travis";
+    git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
+    cd ..;
+    docker build -t kimseonggyu1/devbie:latest .;
+    docker login -u $DOCKER_USER -p $PASSWORD;
+    docker push kimseonggyu1/devbie:latest;
+    fi
