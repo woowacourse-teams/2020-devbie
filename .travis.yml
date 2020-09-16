@@ -31,7 +31,8 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+#  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  - if [ true ]; then
     cd docker;
     git add .;
     git commit -m "updated in travis";
