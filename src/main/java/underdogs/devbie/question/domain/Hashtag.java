@@ -2,7 +2,6 @@ package underdogs.devbie.question.domain;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +23,6 @@ import underdogs.devbie.exception.CreateFailException;
 public class Hashtag extends BaseTimeEntity {
 
     @Id
-    @Column(name = "hashtag_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

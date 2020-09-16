@@ -118,7 +118,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
             }),
             dynamicTest("채용공고 중 키워드로 검색한다.", () -> {
                 NoticeResponses noticeResponses = get(
-                    "/api/notices?noticeType=JOB&keyword=bossdog",
+                    "/api/notices?noticeType=JOB&keyword=underdogs",
                     NoticeResponses.class);
 
                 List<NoticeResponse> response = noticeResponses.getNoticeResponses();
@@ -129,7 +129,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                     () -> assertThat(response)
                         .extracting(NoticeResponse::getName)
-                        .contains("bossdog")
+                        .contains("underdogs")
                 );
 
             }),
