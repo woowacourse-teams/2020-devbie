@@ -17,8 +17,9 @@ git:
   submodules: false
 
 before_install:
-    - if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then
+    - if [ "$TRAVIS_PULL_REQUEST" == "260" ]; then
       echo "test";
+      echo "test2";
       fi
     - echo "aaa"
     - echo "$TRAVIS_PULL_REQUEST"
