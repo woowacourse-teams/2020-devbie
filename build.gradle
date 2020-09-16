@@ -138,7 +138,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.60
+                minimum = 0.80
             }
 
             includes = ['*.domain.*']
