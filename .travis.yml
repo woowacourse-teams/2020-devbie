@@ -17,6 +17,7 @@ git:
   submodules: false
 
 before_install:
+    - if [ $TRAVIS_PULL_REQUEST == "false"]; then echo "test" fi
     - echo "aaa"
     - echo "$TRAVIS_PULL_REQUEST"
     - echo 'aaa'
@@ -34,7 +35,7 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
-  - 'if [ ${TRAVIS_PULL_REQUEST} == "true" ]; then
+  - 'if [ $TRAVIS_PULL_REQUEST == "true" ]; then
       cd docker;
       git add .;
       git commit -m "updated in travis";
