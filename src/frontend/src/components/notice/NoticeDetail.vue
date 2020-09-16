@@ -8,6 +8,12 @@
             <h1 class="big-font">
               [ {{ fetchedNotice.noticeType }} ]
               {{ fetchedNotice.title }}
+              <favorite-control
+                class="heart-icon"
+                :targetObjectId="fetchedNotice.id"
+                :isUserFavorite="isUserNoticeFavorites(fetchedNotice.id)"
+                :isQuestion="false"
+              ></favorite-control>
             </h1>
           </div>
           <div class="notice-body">
@@ -88,15 +94,22 @@
 <script>
 import { mapGetters } from "vuex";
 import router from "../../router";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
+  components: { FavoriteControl },
+
   data() {
     return {
       stompClient: {}
     };
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser", "fetchedNotice"]),
+    ...mapGetters([
+      "fetchedLoginUser",
+      "fetchedNotice",
+      "isUserNoticeFavorites"
+    ]),
 
     content() {
       return this.fetchedNotice.noticeDescription.content.split("\n");
@@ -243,5 +256,9 @@ export default {
 
 .big-font {
   font-size: 20px;
+}
+
+.heart-icon {
+  display: inline;
 }
 </style>
