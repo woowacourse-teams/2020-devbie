@@ -22,6 +22,11 @@ import underdogs.devbie.chat.service.ChatService;
 @RequiredArgsConstructor
 public class ChatController {
 
+    private static final String SIMP_SESSION_ID = "simpSessionId";
+    private static final String SIMP_DESTINATION = "simpDestination";
+    private static final String SIMP_DESTINATION_SEPERATOR = "/";
+    private static final int NOTICE_ID_INDEX_HELPER = 1;
+
     private final ChatService chatService;
 
     @MessageMapping("/message")
@@ -40,7 +45,6 @@ public class ChatController {
         String sessionId = extractSessionIdFrom(event);
         long noticeId = extractNoticeIdFrom(event);
 
-        System.err.println("Connection with sessionId: " + sessionId);
         chatService.addNewSessionInfo(sessionId, noticeId);
     }
 
@@ -48,7 +52,6 @@ public class ChatController {
     public void onSessionDisconnectedEvent(SessionDisconnectEvent event) {
         String sessionId = extractSessionIdFrom(event);
 
-        System.err.println("DisConnection with sessionId: " + sessionId);
         chatService.disconnectSession(sessionId);
     }
 
@@ -57,15 +60,15 @@ public class ChatController {
         StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
         MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
 
-        return (String)messageHeaders.get("simpSessionId");
+        return (String)messageHeaders.get(SIMP_SESSION_ID);
     }
 
     private long extractNoticeIdFrom(AbstractSubProtocolEvent event) {
         StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
         MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
 
-        String simpDestination = (String)messageHeaders.get("simpDestination");
-        String[] splitted = simpDestination.split("/");
-        return Long.parseLong(splitted[splitted.length - 1]);
+        String simpDestination = (String)messageHeaders.get(SIMP_DESTINATION);
+        String[] splitted = simpDestination.split(SIMP_DESTINATION_SEPERATOR);
+        return Long.parseLong(splitted[splitted.length - NOTICE_ID_INDEX_HELPER]);
     }
 }

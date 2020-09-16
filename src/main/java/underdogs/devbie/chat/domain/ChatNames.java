@@ -24,23 +24,6 @@ public class ChatNames {
         chatNames.add(chatName);
     }
 
-    public ChatName delete(String chatName) {
-        ChatName target = findByChatName(chatName);
-        chatNames.remove(target);
-        return target;
-    }
-
-    private ChatName findByChatName(String chatName) {
-        return chatNames.stream()
-            .filter(name -> chatName.equals(name.getChatName()))
-            .findFirst()
-            .orElseThrow(RuntimeException::new);
-    }
-
-    public int size() {
-        return chatNames.size();
-    }
-
     public Set<ChatName> getChatNames() {
         return Collections.unmodifiableSet(chatNames);
     }

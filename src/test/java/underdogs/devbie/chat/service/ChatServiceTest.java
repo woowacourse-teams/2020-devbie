@@ -156,26 +156,4 @@ class ChatServiceTest {
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
-
-    @DisplayName("NoticeId와 NickName으로 해당하는 채팅방 NickName 삭제하기")
-    @Test
-    void disconnect() {
-        // String nickName = "하늘하늘한 곰";
-        // Long noticeId = 1L;
-        // ChatName chatName = ChatName.of(nickName, TitleColor.AMBER);
-        //
-        // List<ChatName> chatNames = Collections.singletonList(chatName);
-        //
-        // ChatRoom chatRoom = ChatRoom.builder()
-        //     .noticeId(noticeId)
-        //     .chatNames(ChatNames.from(new HashSet<>(chatNames)))
-        //     .build();
-        //
-        // given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
-        //
-        // chatService.disconnect(nickName, noticeId);
-        //
-        // verify(chatRoomRepository).findByNoticeId(eq(noticeId));
-        // verify(simpMessagingTemplate).convertAndSend(anyString(), any(StompMessageResponse.class));
-    }
 }

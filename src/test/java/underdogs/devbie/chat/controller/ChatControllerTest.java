@@ -87,17 +87,4 @@ class ChatControllerTest extends MvcTest {
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리")
         );
     }
-
-    @DisplayName("Connection 종료 시 NoticeId로 채팅방 찾은 뒤 NickName 삭제 기능")
-    @Test
-    void deleteNickName() throws Exception {
-        // String nickName = "어슴프레한 너구리";
-        // Long noticeId = 1L;
-        //
-        // doNothing().when(chatService).disconnect(anyString(), anyLong());
-        //
-        // deleteAction(String.format("/api/chatrooms/%s?noticeId=%s", nickName, noticeId))
-        //     .andDo(print())
-        //     .andExpect(status().isNoContent());
-    }
 }

@@ -39,14 +39,4 @@ public class ChatRoom {
             .chats(new ArrayList<>())
             .build();
     }
-
-    // public ChatName addNewName() {
-    //     ChatName chatName = ChatNameFactory.createNonOverlappingName(chatNames);
-    //     chatNames.add(chatName);
-    //     return chatName;
-    // }
-    //
-    // public ChatName deleteChatName(String chatName) {
-    //     return chatNames.delete(chatName);
-    // }
 }
