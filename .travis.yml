@@ -17,6 +17,7 @@ git:
   submodules: false
 
 before_install:
+    - echo $TRAVIS_PULL_REQUEST
     - sed -i 's/github.com/'$GITHUB_INFO'@github.com/' .gitmodules
     - git submodule update --init --recursive
     - cd docker
