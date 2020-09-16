@@ -6,12 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.chat.domain.Chat;
+import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
 import underdogs.devbie.chat.domain.ChatSessionInformation;
+import underdogs.devbie.chat.domain.ChatSessionInformations;
 import underdogs.devbie.chat.domain.StompMethodType;
 import underdogs.devbie.chat.domain.TitleColor;
+import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
@@ -28,7 +31,7 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRepository chatRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final ChatSessionInformation chatSessionInformation;
+    private final ChatSessionInformations chatSessionInformations;
 
     @Transactional
     public void sendMessage(MessageSendRequest messageSendRequest) {
@@ -60,9 +63,7 @@ public class ChatService {
     public ChatRoomResponse fetchChatRoomInfo(Long noticeId) {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
-        // ChatName name = chatRoom.addNewName();
-
-        return ChatRoomResponse.of(chatRoom.getChats(), chatSessionInformation.countSessionOn(noticeId));
+        return ChatRoomResponse.of(chatRoom.getChats(), chatSessionInformations.countSessionOn(noticeId));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
@@ -71,19 +72,25 @@ public class ChatService {
     }
 
     public void addNewSessionInfo(String sessionId, long noticeId) {
-        chatSessionInformation.addSessionInfo(sessionId, noticeId);
-        sendConnectionInformation(noticeId, StompMethodType.ENTER);
+        ChatSessionInformation chatSessionInformation = chatSessionInformations.addSessionInfo(sessionId, noticeId);
+        sendConnectionInformation(StompMethodType.ENTER, chatSessionInformation, sessionId);
     }
 
     public void disconnectSession(String sessionId) {
-        long noticeId = chatSessionInformation.removeSession(sessionId);
-        sendConnectionInformation(noticeId, StompMethodType.QUIT);
+        ChatSessionInformation chatSessionInformation = chatSessionInformations.removeSession(sessionId);
+        sendConnectionInformation(StompMethodType.QUIT, chatSessionInformation, sessionId);
     }
 
-    private void sendConnectionInformation(Long noticeId, StompMethodType stompMethodType) {
-        System.err.println("connection message sendded: " + stompMethodType.name());
+    private void sendConnectionInformation(
+        StompMethodType stompMethodType,
+        ChatSessionInformation info,
+        String sessionId
+    ) {
+        long noticeId = info.getNoticeId();
+        ChatName chatName = info.getChatName();
+
         simpMessagingTemplate.convertAndSend(
             PUBLISH_URL + noticeId,
-            StompMessageResponse.of(stompMethodType, null));
+            StompMessageResponse.of(stompMethodType, ChatNameResponse.of(chatName, sessionId)));
     }
 }

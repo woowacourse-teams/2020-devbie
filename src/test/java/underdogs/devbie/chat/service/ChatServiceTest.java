@@ -23,7 +23,7 @@ import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
-import underdogs.devbie.chat.domain.ChatSessionInformation;
+import underdogs.devbie.chat.domain.ChatSessionInformations;
 import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
@@ -45,11 +45,12 @@ class ChatServiceTest {
     SimpMessagingTemplate simpMessagingTemplate;
 
     @Mock
-    ChatSessionInformation chatSessionInformation;
+    ChatSessionInformations chatSessionInformations;
 
     @BeforeEach
     void setUp() {
-        this.chatService = new ChatService(chatRoomRepository, chatRepository, simpMessagingTemplate, chatSessionInformation);
+        this.chatService = new ChatService(chatRoomRepository, chatRepository, simpMessagingTemplate,
+            chatSessionInformations);
     }
 
     @Test
@@ -104,7 +105,7 @@ class ChatServiceTest {
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
-        given(chatSessionInformation.countSessionOn(anyLong())).willReturn(4);
+        given(chatSessionInformations.countSessionOn(anyLong())).willReturn(4);
 
         ChatRoomResponse chatRoomResponse = chatService.fetchChatRoomInfo(noticeId);
 
@@ -139,7 +140,7 @@ class ChatServiceTest {
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
-        given(chatSessionInformation.countSessionOn(anyLong())).willReturn(4);
+        given(chatSessionInformations.countSessionOn(anyLong())).willReturn(4);
 
         ChatRoomResponse chatRoomResponse = chatService.fetchChatRoomInfo(noticeId);
 

@@ -1,20 +1,16 @@
 package underdogs.devbie.chat.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
@@ -40,13 +36,12 @@ public class ChatController {
     }
 
     @EventListener
-    public void onSessionConnectedEvent(SessionConnectedEvent event) {
+    public void onSessionSubscribeEvent(SessionSubscribeEvent event) {
         String sessionId = extractSessionIdFrom(event);
         long noticeId = extractNoticeIdFrom(event);
 
         System.err.println("Connection with sessionId: " + sessionId);
         chatService.addNewSessionInfo(sessionId, noticeId);
-        // System.err.println("sessionId: " + sessionId + System.lineSeparator() + "noticeId: " + noticeId);
     }
 
     @EventListener
@@ -58,6 +53,7 @@ public class ChatController {
     }
 
     private String extractSessionIdFrom(AbstractSubProtocolEvent event) {
+        System.err.println(event);
         StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
         MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
 
@@ -68,9 +64,8 @@ public class ChatController {
         StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
         MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
 
-        GenericMessage genericMessage = (GenericMessage)messageHeaders.get("simpConnectMessage");
-        Map<String, List<String>> nativeHeaders = (Map<String, List<String>>)genericMessage.getHeaders().get("nativeHeaders");
-
-        return Long.parseLong(nativeHeaders.get("notice").get(0));
+        String simpDestination = (String)messageHeaders.get("simpDestination");
+        String[] splitted = simpDestination.split("/");
+        return Long.parseLong(splitted[splitted.length - 1]);
     }
 }
