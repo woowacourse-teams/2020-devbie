@@ -14,6 +14,7 @@ import underdogs.devbie.chat.exception.SessionNotExistException;
 @Component
 @NoArgsConstructor
 public class ChatSessionInformations {
+
     private Map<String, ChatSessionInformation> sessionInformations = new ConcurrentHashMap<>();
 
     public ChatSessionInformation addSessionInfo(String sessionId, Long noticeId) {

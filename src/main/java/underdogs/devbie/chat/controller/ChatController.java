@@ -24,7 +24,7 @@ public class ChatController {
 
     private static final String SIMP_SESSION_ID = "simpSessionId";
     private static final String SIMP_DESTINATION = "simpDestination";
-    private static final String SIMP_DESTINATION_SEPERATOR = "/";
+    private static final String SIMP_DESTINATION_SEPARATOR = "/";
     private static final int NOTICE_ID_INDEX_HELPER = 1;
 
     private final ChatService chatService;
@@ -56,7 +56,6 @@ public class ChatController {
     }
 
     private String extractSessionIdFrom(AbstractSubProtocolEvent event) {
-        System.err.println(event);
         StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
         MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
 
@@ -68,7 +67,7 @@ public class ChatController {
         MessageHeaders messageHeaders = stompHeaderAccessor.getMessageHeaders();
 
         String simpDestination = (String)messageHeaders.get(SIMP_DESTINATION);
-        String[] splitted = simpDestination.split(SIMP_DESTINATION_SEPERATOR);
+        String[] splitted = simpDestination.split(SIMP_DESTINATION_SEPARATOR);
         return Long.parseLong(splitted[splitted.length - NOTICE_ID_INDEX_HELPER]);
     }
 }
