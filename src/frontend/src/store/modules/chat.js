@@ -1,15 +1,26 @@
-import { deleteAction, patchAction } from "../../api";
+import {patchAction} from "../../api";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+
+function setSessionId(state, socket) {
+  const transportUrl = socket._transport.url.split("/");
+  const sessionId = transportUrl[transportUrl.length - 2];
+  state.sessionId = sessionId;
+}
 
 function connectStomp(state) {
   const socket = new SockJS("/chat");
   state.stompClient = Stomp.over(socket);
   state.stompClient.debug = () => {};
-  state.stompClient.connect({}, function() {
+  state.stompClient.connect({ notice: state.noticeId }, function() {
+    setSessionId(state, socket);
     state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
       const data = JSON.parse(tick.body);
       if (data.stompMethodType === "ENTER") {
+        if (state.sessionId === data.data.sessionId) {
+          state.name = data.data.name;
+          state.color = data.data.color;
+        }
         state.userCount = state.userCount + 1;
       } else if (data.stompMethodType === "QUIT") {
         state.userCount = state.userCount - 1;
@@ -21,7 +32,6 @@ function connectStomp(state) {
 }
 
 function disconnect(state) {
-  deleteAction("/api/chatrooms/" + state.name + "?noticeId=" + state.noticeId);
   state.stompClient.disconnect();
   state.stompClient = null;
 }
@@ -29,11 +39,12 @@ function disconnect(state) {
 export default {
   state: {
     stompClient: null,
+    sessionId: "",
     noticeId: "",
     chatTitle: "",
     drawer: false,
-    name: "",
-    color: "",
+    name: "temp",
+    color: "#FFC107",
     chats: [],
     userCount: ""
   },
@@ -86,18 +97,6 @@ export default {
     SEND({ commit }, data) {
       commit("SEND", data);
     },
-    async OPEN_DRAWER({ commit }, notice) {
-      commit("SET_DRAWER", true);
-      commit("CONNECT", notice);
-
-      const { data } = await patchAction(
-        "/api/chatrooms?noticeId=" + notice.id
-      );
-      commit("SET_NAME", data.nickName);
-      commit("SET_CHATS", data.messageResponses.messageResponses);
-      commit("SET_COLOR", data.titleColor);
-      commit("SET_USER_COUNT", data.headCount);
-    },
     OPEN_LATEST({ commit, state }) {
       if (state.noticeId) {
         commit("SET_DRAWER", true);
@@ -112,6 +111,16 @@ export default {
     CLOSE_DRAWER({ commit }) {
       commit("DISCONNECT");
       commit("SET_DRAWER", false);
+    },
+    async OPEN_DRAWER({ commit }, notice) {
+      commit("SET_DRAWER", true);
+      commit("CONNECT", notice);
+
+      const { data } = await patchAction(
+        "/api/chatrooms?noticeId=" + notice.id
+      );
+      commit("SET_CHATS", data.messageResponses.messageResponses);
+      commit("SET_USER_COUNT", data.headCount);
     }
   },
   getters: {
