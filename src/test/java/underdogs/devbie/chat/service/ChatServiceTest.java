@@ -30,6 +30,7 @@ import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
 import underdogs.devbie.chat.dto.StompMessageResponse;
+import underdogs.devbie.exception.NotExistException;
 
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
@@ -84,6 +85,22 @@ class ChatServiceTest {
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRepository).save(any());
         verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
+    }
+
+    @Test
+    void sendMessage_Invalid_ChatRoom_Should_Throw_NotExistException() {
+        Long noticeId = 1L;
+        MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
+            , "하늘하늘한 곰", "메세지", TitleColor.AMBER.getColor());
+
+        NotExistException exception = new NotExistException(
+            String.format("noticeId = %s 를 가진 채팅방이 존재하지 않습니다.", noticeId));
+
+        given(chatRoomRepository.findByNoticeId(anyLong())).willThrow(exception);
+
+        assertThatThrownBy(() -> chatService.sendMessage(messageSendRequest))
+            .isInstanceOf(NotExistException.class)
+            .hasMessageContaining(String.format("noticeId = %s 를 가진 채팅방이 존재하지 않습니다.", noticeId));
     }
 
     @DisplayName("noticeId에 해당하는 Chatroom이 존재할 경우 Chatroom 생성 하지 않음")

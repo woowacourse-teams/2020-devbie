@@ -74,6 +74,15 @@ public abstract class MvcTest {
                 .contentType(MediaType.APPLICATION_JSON));
     }
 
+    protected ResultActions postAction(String url, MockMultipartFile multipartFile) throws Exception {
+        return this.mockMvc
+            .perform(MockMvcRequestBuilders
+                .multipart(url)
+                .file(multipartFile)
+                .accept(MediaType.MULTIPART_FORM_DATA)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
+    }
+
     protected ResultActions putAction(String url, String inputJson, String bearerToken) throws Exception {
         return this.mockMvc
             .perform(put(url)
@@ -92,7 +101,9 @@ public abstract class MvcTest {
     }
 
     protected ResultActions patchAction(String url, MockMultipartFile formdata) throws Exception {
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url).file(formdata);
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders
+            .multipart(url)
+            .file(formdata);
         builder.with(new RequestPostProcessor() {
             @Override
             public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
