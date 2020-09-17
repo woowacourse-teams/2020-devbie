@@ -272,6 +272,7 @@ export default {
 
 .last-item {
   flex-basis: 100%;
+  height: 100px;
 }
 
 .list-parent.mobile {
