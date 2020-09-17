@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-list" style="margin: 50px 150px 50px 150px">
+  <div class="notice-list" :class="$mq">
     <div class="filters">
       <notice-type></notice-type>
       <notice-filters></notice-filters>
@@ -31,6 +31,11 @@ export default {
 <style scoped>
 .notice-list {
   font-family: "Jua", sans-serif;
+  margin: 50px 150px 50px 150px;
+}
+
+.notice-list.mobile {
+  margin: 0 0 0 0;
 }
 
 .filters {
@@ -39,6 +44,7 @@ export default {
   justify-content: center;
   margin-bottom: 50px;
 }
+
 .filters > * {
   margin-right: 120px;
 }

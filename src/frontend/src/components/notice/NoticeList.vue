@@ -1,8 +1,13 @@
 <template>
   <div>
-    <v-row dense v-scroll="onScroll">
-      <div v-for="notice in fetchedNotices" :key="notice.id" class="item">
-        <v-card class="v-card">
+    <v-row dense v-scroll="onScroll" class="list-parent" :class="$mq">
+      <div
+        v-for="notice in fetchedNotices"
+        :key="notice.id"
+        class="item"
+        :class="$mq"
+      >
+        <v-card>
           <v-img
             @click="$router.push(`/notices/${notice.id}`)"
             :src="notice.image"
@@ -218,12 +223,15 @@ export default {
 .big-font {
   font-size: 17px;
 }
+
 .medium-font {
   font-size: 13px;
 }
+
 .item:last-child {
   margin-right: auto;
 }
+
 .item {
   width: 22%;
   margin: 0 30px 50px 0;
@@ -231,10 +239,13 @@ export default {
 
 .card-image {
   width: 100%;
+  min-width: 200px;
 }
+
 .card-image:hover {
   opacity: 0.6;
 }
+
 .card-title-text {
   justify-content: center;
   color: white;
@@ -253,11 +264,23 @@ export default {
   right: 15px;
   bottom: 15px;
 }
+
 .loading-progress {
   text-align: center;
   left: 50%;
 }
+
 .last-item {
   flex-basis: 100%;
+}
+
+.list-parent.mobile {
+  width: 200px;
+  margin: auto;
+}
+
+.item.mobile {
+  width: 100%;
+  margin-right: 100px;
 }
 </style>
