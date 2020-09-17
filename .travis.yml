@@ -31,13 +31,13 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
-#  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    - cd docker;
-    - git add .;
-    - git commit -m "updated in travis";
-    - git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
-    - cd ..;
-
-    - docker build -t kimseonggyu1/devbie:latest .;
-    - docker login -u $DOCKER_USER -p $PASSWORD;
-    - docker push kimseonggyu1/devbie:latest;
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then
+      cd docker;
+      git add .;
+      git commit -m "updated in travis";
+      git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
+      cd ..;
+      docker build -t kimseonggyu1/devbie:latest .;
+      docker login -u $DOCKER_USER -p $PASSWORD;
+      docker push kimseonggyu1/devbie:latest;
+    fi
