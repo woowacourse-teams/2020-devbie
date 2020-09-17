@@ -21,7 +21,7 @@ public class ControllerAdvice {
     @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<ErrorResponse> unauthorizedExceptionHandler(UnAuthorizedException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-        log.warn("UnAuthorizedException : {}", exception.getMessage());
+        log.info("UnAuthorizedException : {}", exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body(errorResponse);
     }
@@ -29,7 +29,7 @@ public class ControllerAdvice {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(BadRequestException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-        log.warn("BadRequestException : {}", exception.getMessage());
+        log.info("BadRequestException : {}", exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(errorResponse);
     }
@@ -37,7 +37,7 @@ public class ControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class, MethodNotAllowedException.class})
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-        log.warn("MethodArgumentNotValidException, MethodNotAllowedException : {}", exception.getMessage());
+        log.info("MethodArgumentNotValidException, MethodNotAllowedException : {}", exception.getMessage());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
             .body(errorResponse);
     }
@@ -45,7 +45,7 @@ public class ControllerAdvice {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorResponse> forbiddenExceptionHandler(ForbiddenException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-        log.warn("ForbiddenException : {}", exception.getMessage());
+        log.info("ForbiddenException : {}", exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
             .body(errorResponse);
     }
@@ -53,7 +53,7 @@ public class ControllerAdvice {
     @ExceptionHandler(IntervalServerException.class)
     public ResponseEntity<ErrorResponse> intervalServerExceptionHandler(IntervalServerException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-        log.warn("IntervalServerException : {}", exception.getMessage());
+        log.info("IntervalServerException : {}", exception.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(errorResponse);
     }
