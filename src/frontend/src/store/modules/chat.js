@@ -32,6 +32,9 @@ function connectStomp(state) {
 }
 
 function disconnect(state) {
+  if (state.stompClient === null) {
+    return;
+  }
   state.stompClient.disconnect();
   state.stompClient = null;
 }
@@ -88,9 +91,6 @@ export default {
     SET_CHATS(state, chats) {
       state.chats = chats;
     },
-    SET_COLOR(state, color) {
-      state.color = color;
-    },
     SET_USER_COUNT(state, userCount) {
       state.userCount = userCount;
     },
@@ -118,22 +118,10 @@ export default {
     SEND({ commit }, data) {
       commit("SEND", data);
     },
-    OPEN_LATEST({ commit, state }) {
-      if (state.noticeId) {
-        commit("SET_DRAWER", true);
-        commit("CONNECT_LATEST");
-      } else {
-        this.dispatch(
-          "UPDATE_SNACKBAR_TEXT",
-          "최근에 들어간 채팅방이 없습니다"
-        );
-      }
-    },
-    CLOSE_DRAWER({ commit }) {
-      commit("DISCONNECT");
+    CLOSE_CHAT_ROOM_DRAWER({ commit }) {
       commit("SET_DRAWER", false);
     },
-    async OPEN_DRAWER({ commit }, notice) {
+    async OPEN_CHAT_DRAWER({ commit }, notice) {
       commit("SET_DRAWER", true);
       commit("CONNECT", notice);
 
@@ -142,13 +130,19 @@ export default {
       );
       commit("SET_CHATS", data.messageResponses.messageResponses);
       commit("SET_USER_COUNT", data.headCount);
+      commit("SET_CHAT_ROOM_DRAWER", false);
       commit("PUT_CHAT_ROOM_HISTORY", {
         noticeId: notice.id,
         chatRoomName: notice.company.name + " - " + notice.title
       });
     },
-    async CHANGE_CHAT_ROOM_DRAWER({ commit }, chatRoomDrawer) {
-      commit("SET_CHAT_ROOM_DRAWER", chatRoomDrawer);
+    async SHOW_CHAT_ROOMS_DRAWER({ commit }) {
+      commit("DISCONNECT");
+      commit("SET_DRAWER", true);
+      commit("SET_CHAT_ROOM_DRAWER", true);
+    },
+    async SHOW_CHAT_DRAWER({ commit }) {
+      commit("SET_CHAT_ROOM_DRAWER", false);
     },
     DELETE_CHAT_ROOM_HISTORY({ commit }, noticeId) {
       commit("DELETE_CHAT_ROOM_HISTORY", noticeId);

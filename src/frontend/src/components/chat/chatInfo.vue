@@ -1,13 +1,13 @@
 <template>
   <div class="default_box">
+    <v-btn icon @click="backToChatRoomDrawer"
+      ><i class="fas fa-chevron-left back-icon"
+    /></v-btn>
     <div class="title_box">
       {{ fetchedChatTitle }}
     </div>
     <v-spacer></v-spacer>
     <div class="count_box">{{ fetchedUserCount }}명</div>
-    <v-btn large icon @click="closeChatDrawer"
-      ><i class="fas fa-times close-icon"
-    /></v-btn>
   </div>
 </template>
 
@@ -16,8 +16,8 @@ import { mapGetters } from "vuex";
 
 export default {
   methods: {
-    closeChatDrawer() {
-      this.$store.dispatch("CLOSE_DRAWER");
+    backToChatRoomDrawer() {
+      this.$store.dispatch("SHOW_CHAT_ROOMS_DRAWER");
     }
   },
   computed: {
@@ -45,10 +45,10 @@ export default {
   display: flex;
   flex-direction: row-reverse;
   flex-basis: 60px;
+  padding-right: 5px;
 }
 
-.close-icon {
+.back-icon {
   padding-top: 2px;
-  font-size: 21px;
 }
 </style>
