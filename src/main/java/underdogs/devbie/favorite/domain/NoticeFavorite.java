@@ -24,12 +24,12 @@ public class NoticeFavorite extends Favorite {
     }
 
     public static NoticeFavorite of(Long noticeId, Long userId) {
-        validateParameters(noticeId, userId);
+        validateParameters(noticeId);
         return new NoticeFavorite(userId, noticeId);
     }
 
-    private static void validateParameters(Long noticeId, Long userId) {
-        if (Objects.isNull(noticeId) || Objects.isNull(userId)) {
+    private static void validateParameters(Long noticeId) {
+        if (Objects.isNull(noticeId)) {
             throw new CreateFailException();
         }
     }
