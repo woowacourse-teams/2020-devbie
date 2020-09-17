@@ -1,6 +1,6 @@
 <template>
   <div class="notice-list" :class="$mq">
-    <div class="filters">
+    <div class="filters" :class="$mq">
       <notice-type></notice-type>
       <notice-filters></notice-filters>
       <notice-search></notice-search>
@@ -45,7 +45,7 @@ export default {
   margin-bottom: 50px;
 }
 
-.filters > * {
-  margin-right: 120px;
+.filters.mobile {
+  flex-wrap: wrap;
 }
 </style>

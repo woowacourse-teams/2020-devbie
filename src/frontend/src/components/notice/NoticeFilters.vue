@@ -1,8 +1,9 @@
 <template>
-  <div class="filter-box">
+  <div class="filter-box" :class="$mq">
     <br />
     <v-select
       class="filters"
+      :class="$mq"
       v-model="selectedPosition"
       v-on:change="changeJobPosition"
       item-text="text"
@@ -15,6 +16,7 @@
     ></v-select>
     <v-select
       class="filters"
+      :class="$mq"
       v-model="selectedLanguage"
       v-on:change="changeLanguage"
       item-text="text"
@@ -64,6 +66,7 @@ export default {
   align-items: center;
   justify-content: center;
   font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
+  margin-right: 120px;
 }
 
 .filters {
@@ -71,5 +74,14 @@ export default {
   margin: 0 50px 0 0;
   width: 12em;
   max-width: 12em;
+}
+
+.filter-box.mobile {
+  margin-right: 0px;
+  flex-flow: column;
+}
+
+.filters.mobile {
+  margin: 0 0 15px 0;
 }
 </style>
