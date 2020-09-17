@@ -15,17 +15,17 @@ function connectStomp(state) {
   state.stompClient.connect({ notice: state.noticeId }, function() {
     setSessionId(state, socket);
     state.stompClient.subscribe("/channel/" + state.noticeId, tick => {
-      const data = JSON.parse(tick.body);
-      if (data.stompMethodType === "ENTER") {
-        if (state.sessionId === data.data.sessionId) {
-          state.name = data.data.name;
-          state.color = data.data.color;
+      const body = JSON.parse(tick.body);
+      if (body.stompMethodType === "ENTER") {
+        if (state.sessionId === body.data.sessionId) {
+          state.name = body.data.name;
+          state.color = body.data.color;
         }
         state.userCount = state.userCount + 1;
-      } else if (data.stompMethodType === "QUIT") {
+      } else if (body.stompMethodType === "QUIT") {
         state.userCount = state.userCount - 1;
-      } else if (data.stompMethodType === "TALK") {
-        state.chats.push(data.data);
+      } else if (body.stompMethodType === "TALK") {
+        state.chats.push(body.data);
       }
     });
   });
@@ -43,8 +43,8 @@ export default {
     noticeId: "",
     chatTitle: "",
     drawer: false,
-    name: "temp",
-    color: "#FFC107",
+    name: "",
+    color: "",
     chats: [],
     userCount: ""
   },

@@ -47,11 +47,11 @@
   </v-row>
 </template>
 <script>
-  import {mapGetters} from "vuex";
-  import validator from "../../utils/validator";
-  import router from "../../router";
+import { mapGetters } from "vuex";
+import validator from "../../utils/validator";
+import router from "../../router";
 
-  export default {
+export default {
   name: "MyPage",
 
   data() {
