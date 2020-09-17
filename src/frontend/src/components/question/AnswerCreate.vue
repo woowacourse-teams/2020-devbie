@@ -1,6 +1,6 @@
 <template>
   <div class="answer-create-item-box">
-    <v-md-editor v-model="content" class="editor" height="350px"></v-md-editor>
+    <v-md-editor v-model="content" class="editor" height="300px"></v-md-editor>
     <v-btn color="#E8E8E8" class="create-btn button" @click="createAnswer"
       >답변하기</v-btn
     >
@@ -57,8 +57,7 @@ export default {
 .answer-create-item-box {
   width: 95%;
   padding: 10px 0 40px 0;
-  border-bottom: solid 1px #e8e8e8;
-  align-self: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
 }

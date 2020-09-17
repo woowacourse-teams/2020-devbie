@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="inner" :class="$mq">
     <div class="hashtag-header" v-if="hashtag">
       "<span>{{ hashtag }}</span
       >" 태그로 검색한 결과입니다.
     </div>
     <search-bar v-else></search-bar>
-    <ul v-scroll="onScroll" class="question-list">
+    <ul v-scroll="onScroll" class="question-items" :class="$mq">
       <div v-if="fetchedQuestions.length === 0" class="no-result">
         <i class="fas fa-exclamation"></i>
         검색 결과가 존재하지 않습니다.
@@ -16,14 +16,21 @@
         v-for="question in fetchedQuestions"
         :key="question.id"
         class="question"
+        :class="$mq"
       >
-        <div class="count-infos">
-          <p class="count visits">조회수 : {{ question.visits }}</p>
-          <p class="count recommendedCount">
+        <div class="count-infos" :class="$mq">
+          <p class="count visits" :class="$mq">
+            조회수 : {{ question.visits }}
+          </p>
+          <p class="count recommendedCount" :class="$mq">
             추천수 : {{ question.recommendedCount }}
           </p>
         </div>
-        <p @click="$router.push(`/questions/${question.id}`)" class="title">
+        <p
+          @click="$router.push(`/questions/${question.id}`)"
+          class="question-title"
+          :class="$mq"
+        >
           Q. {{ question.title }}
         </p>
         <favorite-control
@@ -181,12 +188,25 @@ export default {
 </script>
 
 <style scoped>
-.question-list {
+.inner {
+  margin: 27px auto;
+  border-left: solid 1px #e8e8e8;
+}
+
+.inner.mobile {
+  border-left: none;
+}
+
+.question-items {
   list-style: none;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.question-items.mobile {
+  padding: 0;
 }
 
 .question {
@@ -203,10 +223,19 @@ export default {
   margin-bottom: 40px;
 }
 
+.question.mobile {
+  padding: 0;
+  max-height: 70px;
+}
+
 .count-infos {
   display: flex;
   flex-direction: column;
   min-width: 95px;
+}
+
+.count-infos.mobile {
+  min-width: 50px;
 }
 
 .count {
@@ -215,17 +244,26 @@ export default {
   margin-bottom: 0;
 }
 
-.title {
+.count.mobile {
+  font-size: 12px;
+}
+
+.question-title {
   color: #35495e;
   text-decoration: none;
   margin-bottom: 0;
   margin-right: 7px;
 }
 
-.title:hover {
+.question-title:hover {
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline;
+}
+
+.question-title.mobile {
+  font-size: 18px;
+  margin: 0;
 }
 
 .hashtags {
@@ -239,7 +277,6 @@ export default {
 }
 
 .hashtag-header {
-  margin-top: 15px;
   display: flex;
   justify-content: center;
   align-items: center;

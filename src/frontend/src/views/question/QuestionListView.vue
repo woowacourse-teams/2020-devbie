@@ -1,30 +1,37 @@
 <template>
-  <div class="interview">
-    <div class="inner">
-      <question-filters id="question-filters"></question-filters>
-      <question-list
-        :orderBy="orderBy"
-        :title="title"
-        :content="content"
-        :hashtag="hashtag"
-        id="question-list"
-      ></question-list>
-      <question-control id="question-control"></question-control>
+  <div class="interview" :class="$mq">
+    <div class="question-menu" :class="$mq">
+      <question-filters
+        class="question-filters"
+        :class="$mq"
+      ></question-filters>
+      <question-control
+        class="question-control"
+        :class="$mq"
+      ></question-control>
     </div>
+    <question-list
+      :orderBy="orderBy"
+      :title="title"
+      :content="content"
+      :hashtag="hashtag"
+      class="question-list"
+      :class="$mq"
+    ></question-list>
   </div>
 </template>
 
 <script>
 import QuestionFilters from "../../components/question/QuestionFilters";
-import QuestionList from "../../components/question/QuestionList";
 import QuestionControl from "../../components/question/QuestionControl";
+import QuestionList from "../../components/question/QuestionList";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     QuestionFilters,
-    QuestionList,
-    QuestionControl
+    QuestionControl,
+    QuestionList
   },
 
   props: ["orderBy", "title", "content", "hashtag"],
@@ -97,32 +104,47 @@ export default {
 
 <style scoped>
 .interview {
-  display: flex;
-  justify-content: center;
-  margin: 0;
-}
-
-.inner {
-  width: 95%;
+  margin: 0 auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-#question-filters {
-  flex-grow: 1;
-  min-width: 160px;
+.interview.mobile {
+  max-width: 95%;
+  flex-direction: column;
+  align-items: center;
 }
 
-#question-list {
-  flex-grow: 10;
+.question-menu {
+  max-width: 200px;
+  flex-grow: 1;
 }
 
-#question-control {
-  flex-grow: 1;
+.question-menu.tablet {
+  min-width: 150px;
+}
+
+.question-menu.mobile {
+  min-width: 80% !important;
+}
+
+.question-filters.mobile {
+  flex-direction: row;
+  justify-content: space-between !important;
+}
+
+.question-control {
   margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  text-decoration: none;
+}
+
+.question-control.mobile {
+  flex-direction: row;
+  margin: 20px auto 0 auto;
+  justify-content: space-between !important;
+}
+
+.question-list {
+  flex-grow: 2;
 }
 </style>

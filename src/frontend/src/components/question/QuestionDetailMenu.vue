@@ -1,18 +1,20 @@
 <template>
-  <div class="left-menu">
+  <div class="left-menu" :class="$mq">
     <v-btn
       color="#DAEBEA"
       large
-      @click="$router.push(`/questions`)"
+      @click="$router.push(`/questions?orderBy=CREATED_DATE`)"
       class="menu-btn button"
+      :class="$mq"
       >돌아가기
     </v-btn>
-    <div class="author-btn" v-if="isAuthor">
+    <div class="author-btn" :class="$mq" v-if="isAuthor">
       <v-btn
         color="#DAEBEA"
         large
         @click="$router.push(`/question/edit/${$route.params.id}`)"
         class="menu-btn button"
+        :class="$mq"
         >수정하기
       </v-btn>
       <v-btn
@@ -20,6 +22,7 @@
         large
         color="#DAEBEA"
         class="menu-btn button delete-btn"
+        :class="$mq"
         >삭제하기
       </v-btn>
     </div>
@@ -45,21 +48,36 @@ export default {
 <style scoped>
 .left-menu {
   flex-grow: 1;
-  border-right: solid 1px #e8e8e8;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: 200px;
 }
 
+.left-menu.mobile {
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .menu-btn {
   margin-top: 30px;
+}
+
+.menu-btn.mobile {
+  margin: 0 5px;
+  width: 70px !important;
+  height: 35px !important;
 }
 
 .author-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.author-btn.mobile {
+  flex-direction: row;
 }
 
 .delete-btn:hover {

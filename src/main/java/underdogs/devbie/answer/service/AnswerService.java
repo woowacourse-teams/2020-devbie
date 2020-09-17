@@ -10,13 +10,14 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.domain.AnswerContent;
 import underdogs.devbie.answer.domain.Answers;
-import underdogs.devbie.answer.domain.repository.AnswerRepository;
+import underdogs.devbie.answer.domain.AnswerRepository;
 import underdogs.devbie.answer.dto.AnswerCreateRequest;
 import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.exception.AnswerNotExistedException;
 import underdogs.devbie.answer.exception.NotMatchedAnswerAuthorException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
 
@@ -92,5 +93,18 @@ public class AnswerService {
             .collect(Collectors.toList());
 
         return AnswerResponses.of(answers, users);
+    }
+
+    public void toggleCount(Long answerId, RecommendationType recommendationType, boolean toggle) {
+        Answer answer = readOne(answerId);
+        if (toggle) {
+            answer.decreaseRecommendationCount(recommendationType.toggleType());
+        }
+        answer.increaseRecommendationCount(recommendationType);
+    }
+
+    public void decreaseCount(Long answerId, RecommendationType recommendationType) {
+        Answer answer = readOne(answerId);
+        answer.decreaseRecommendationCount(recommendationType);
     }
 }
