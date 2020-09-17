@@ -8,7 +8,7 @@
             <h1 class="big-font">
               <v-btn
                 icon
-                @click="$router.push(`/notices`)"
+                @click="$router.go(-1)"
                 class="back-button"
                 :class="$mq"
               >
