@@ -2,27 +2,9 @@
   <div>
     <v-navigation-drawer fixed right permanent class="drawer" :class="$mq">
       <div class="chat_components" v-if="fetchedChatRoomDrawer">
-        <div class="default_box">
-          <div class="title_box">{{ "내 채팅" }}</div>
-          <v-btn large icon @click="closeChatRoomDrawer"
-            ><i class="fas fa-times close-icon"
-          /></v-btn>
-        </div>
+        <chat-room-title-box></chat-room-title-box>
         <v-divider></v-divider>
-        <v-list>
-          <v-list-item
-            v-for="item in fetchedChatRoomHistory"
-            :key="item.noticeId"
-            @click="connectChat(item)"
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="item.chatRoomName"></v-list-item-title>
-            </v-list-item-content>
-            <v-btn large icon @click="deleteChatRoomHistory(item.noticeId)"
-              ><i class="fas fa-times close-icon"
-            /></v-btn>
-          </v-list-item>
-        </v-list>
+        <ChatRoomHistoryBox></ChatRoomHistoryBox>
       </div>
       <div class="chat_components" v-else>
         <div id="chat_info_box">
@@ -42,6 +24,8 @@
 </template>
 
 <script>
+import ChatRoomTitleBox from "./ChatRoomTitleBox";
+import ChatRoomHistoryBox from "./ChatRoomHistoryBox";
 import ChatList from "./ChatList";
 import ChatInput from "./ChatInput";
 import ChatInfo from "./chatInfo";
@@ -49,35 +33,14 @@ import { mapGetters } from "vuex";
 
 export default {
   components: {
+    ChatRoomHistoryBox,
+    ChatRoomTitleBox,
     ChatInfo,
     ChatInput,
     ChatList
   },
   computed: {
-    ...mapGetters(["fetchedChatRoomDrawer", "fetchedChatRoomHistory"])
-  },
-  methods: {
-    closeChatRoomDrawer() {
-      this.$store.dispatch("CLOSE_CHAT_ROOM_DRAWER");
-    },
-    deleteChatRoomHistory(noticeId) {
-      this.$store.dispatch("DELETE_CHAT_ROOM_HISTORY", noticeId);
-    },
-    connectChat(chatRoomHistory) {
-      const noticeId = chatRoomHistory.noticeId;
-      const companyName = chatRoomHistory.chatRoomName.split(" - ")[0];
-      const noticeTitle = chatRoomHistory.chatRoomName.split(" - ")[1];
-
-      const notice = {
-        id: noticeId,
-        company: {
-          name: companyName
-        },
-        title: noticeTitle
-      };
-
-      this.$store.dispatch("OPEN_CHAT_DRAWER", notice);
-    }
+    ...mapGetters(["fetchedChatRoomDrawer"])
   }
 };
 </script>
