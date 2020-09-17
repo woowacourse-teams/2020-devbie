@@ -1,11 +1,22 @@
 <template>
-  <div class="notice-detail">
+  <div class="notice-detail" :class="$mq">
     <v-divider></v-divider>
-    <div class="inner">
+    <div class="inner" :class="$mq">
       <div class="notice-detail-main">
         <div class="notice-header">
           <div class="notice-title">
             <h1 class="big-font">
+              <v-btn
+                icon
+                @click="$router.push(`/notices`)"
+                class="back-button"
+                :class="$mq"
+              >
+                <v-icon large>
+                  mdi-arrow-left-bold-circle-outline
+                </v-icon>
+              </v-btn>
+
               [ {{ fetchedNotice.noticeType }} ]
               {{ fetchedNotice.title }}
               <favorite-control
@@ -16,7 +27,7 @@
               ></favorite-control>
             </h1>
           </div>
-          <div class="notice-body">
+          <div class="notice-body" :class="$mq">
             <div class="notice-img">
               <v-img
                 :src="fetchedNotice.image"
@@ -26,7 +37,7 @@
               >
               </v-img>
             </div>
-            <div class="notice-buttons">
+            <div class="notice-buttons" :class="$mq">
               <v-btn id="apply-btn" depressed large color="#DAEBEA"
                 >지원하기</v-btn
               >
@@ -260,5 +271,32 @@ export default {
 
 .heart-icon {
   display: inline;
+}
+
+.back-button {
+  display: none;
+}
+
+.notice-body.mobile {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.notice-detail.mobile {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.notice-buttons.mobile {
+  flex-direction: row;
+}
+
+.inner.mobile {
+  margin: auto;
+}
+
+.back-button.mobile {
+  display: block;
+  margin-bottom: 15px;
 }
 </style>
