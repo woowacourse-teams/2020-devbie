@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-list">
+  <div class="notice-list" :class="$mq">
     <div>
       <v-card elevation="16" max-width="400" class="mx-auto">
         <v-card-title class="darken-4 card-title">
@@ -132,6 +132,9 @@ export default {
   width: 30%;
   flex-basis: auto;
   margin: 50px 100px 100px 0px;
+}
+.notice-list.mobile {
+  display: none;
 }
 .v-list-item:hover {
   opacity: 0.6;
