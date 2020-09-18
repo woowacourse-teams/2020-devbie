@@ -32,6 +32,9 @@ function connectStomp(state) {
 }
 
 function disconnect(state) {
+  if (state.stompClient === null) {
+    return;
+  }
   state.stompClient.disconnect();
   state.stompClient = null;
 }
@@ -46,7 +49,9 @@ export default {
     name: "",
     color: "",
     chats: [],
-    userCount: ""
+    userCount: "",
+    chatRoomDrawer: true,
+    chatRoomsHistory: []
   },
   mutations: {
     CONNECT(state, notice) {
@@ -86,33 +91,37 @@ export default {
     SET_CHATS(state, chats) {
       state.chats = chats;
     },
-    SET_COLOR(state, color) {
-      state.color = color;
-    },
     SET_USER_COUNT(state, userCount) {
       state.userCount = userCount;
+    },
+    PUT_CHAT_ROOM_HISTORY(state, { noticeId, chatRoomName }) {
+      if (
+        state.chatRoomsHistory.some(chatRoom => chatRoom.noticeId === noticeId)
+      ) {
+        return;
+      }
+      state.chatRoomsHistory.push({
+        noticeId: noticeId,
+        chatRoomName: chatRoomName
+      });
+    },
+    DELETE_CHAT_ROOM_HISTORY(state, noticeId) {
+      state.chatRoomsHistory = state.chatRoomsHistory.filter(
+        chatRoom => chatRoom.noticeId !== noticeId
+      );
+    },
+    SET_CHAT_ROOM_DRAWER(state, chatRoomDrawer) {
+      state.chatRoomDrawer = chatRoomDrawer;
     }
   },
   actions: {
     SEND({ commit }, data) {
       commit("SEND", data);
     },
-    OPEN_LATEST({ commit, state }) {
-      if (state.noticeId) {
-        commit("SET_DRAWER", true);
-        commit("CONNECT_LATEST");
-      } else {
-        this.dispatch(
-          "UPDATE_SNACKBAR_TEXT",
-          "최근에 들어간 채팅방이 없습니다"
-        );
-      }
-    },
-    CLOSE_DRAWER({ commit }) {
-      commit("DISCONNECT");
+    CLOSE_CHAT_ROOM_DRAWER({ commit }) {
       commit("SET_DRAWER", false);
     },
-    async OPEN_DRAWER({ commit }, notice) {
+    async OPEN_CHAT_DRAWER({ commit }, notice) {
       commit("SET_DRAWER", true);
       commit("CONNECT", notice);
 
@@ -121,6 +130,22 @@ export default {
       );
       commit("SET_CHATS", data.messageResponses.messageResponses);
       commit("SET_USER_COUNT", data.headCount);
+      commit("SET_CHAT_ROOM_DRAWER", false);
+      commit("PUT_CHAT_ROOM_HISTORY", {
+        noticeId: notice.id,
+        chatRoomName: notice.company.name + " - " + notice.title
+      });
+    },
+    async SHOW_CHAT_ROOMS_DRAWER({ commit }) {
+      commit("DISCONNECT");
+      commit("SET_DRAWER", true);
+      commit("SET_CHAT_ROOM_DRAWER", true);
+    },
+    async SHOW_CHAT_DRAWER({ commit }) {
+      commit("SET_CHAT_ROOM_DRAWER", false);
+    },
+    DELETE_CHAT_ROOM_HISTORY({ commit }, noticeId) {
+      commit("DELETE_CHAT_ROOM_HISTORY", noticeId);
     }
   },
   getters: {
@@ -138,6 +163,12 @@ export default {
     },
     fetchedUserCount(state) {
       return state.userCount;
+    },
+    fetchedChatRoomHistory(state) {
+      return state.chatRoomsHistory;
+    },
+    fetchedChatRoomDrawer(state) {
+      return state.chatRoomDrawer;
     }
   }
 };

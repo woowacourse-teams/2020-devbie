@@ -170,7 +170,7 @@ export default {
       router.push(`/notices/edit/${this.$route.params.id}`);
     },
     openChatDrawer() {
-      this.$store.dispatch("OPEN_DRAWER", this.notice);
+      this.$store.dispatch("OPEN_CHAT_DRAWER", this.notice);
     }
   }
 };
