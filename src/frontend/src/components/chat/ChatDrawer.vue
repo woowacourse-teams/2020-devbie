@@ -13,6 +13,7 @@
           <v-list-item
             v-for="item in fetchedChatRoomHistory"
             :key="item.noticeId"
+            @click="connectChat(item)"
           >
             <v-list-item-content>
               <v-list-item-title v-text="item.chatRoomName"></v-list-item-title>
@@ -45,7 +46,6 @@ import ChatList from "./ChatList";
 import ChatInput from "./ChatInput";
 import ChatInfo from "./chatInfo";
 import { mapGetters } from "vuex";
-
 export default {
   components: {
     ChatInfo,
@@ -61,6 +61,19 @@ export default {
     },
     deleteChatRoomHistory(noticeId) {
       this.$store.dispatch("DELETE_CHAT_ROOM_HISTORY", noticeId);
+    },
+    connectChat(chatRoomHistory) {
+      const noticeId = chatRoomHistory.noticeId;
+      const companyName = chatRoomHistory.chatRoomName.split(" - ")[0];
+      const noticeTitle = chatRoomHistory.chatRoomName.split(" - ")[1];
+      const notice = {
+        id: noticeId,
+        company: {
+          name: companyName
+        },
+        title: noticeTitle
+      };
+      this.$store.dispatch("OPEN_CHAT_DRAWER", notice);
     }
   }
 };
