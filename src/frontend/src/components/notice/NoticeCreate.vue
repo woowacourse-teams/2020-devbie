@@ -97,6 +97,7 @@
 <script>
 import { mapGetters } from "vuex";
 import validator from "../../utils/validator";
+import { postAction } from "@/api";
 
 export default {
   data() {
@@ -182,9 +183,11 @@ export default {
           : this.request.image;
 
       try {
-        await this.$store.dispatch("CREATE_NOTICE", this.request);
-        const id = await this.$store.getters.fetchedNewCreatedNoticeId;
-        await this.$router.push(`/notices/${id}`);
+        const { headers } = await postAction(`/api/notices`, this.request);
+        const nextId = headers.location.split("/")[3];
+        await this.$router.push(
+          `/notices/${this.request.noticeType}/${nextId}`
+        );
       } catch (error) {
         console.log(error);
       }
@@ -200,16 +203,20 @@ export default {
   justify-content: center !important;
   align-items: center;
 }
+
 .notice-form {
   width: 100%;
   text-align: right;
 }
+
 .duration {
   display: flex;
 }
+
 .duration > input {
   margin-right: 20px;
 }
+
 .duration:first-child {
   padding-right: 20px;
 }

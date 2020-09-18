@@ -1,11 +1,19 @@
 <template>
   <div class="notice-list" style="margin: 50px 150px 50px 150px">
     <div class="filters">
-      <notice-type></notice-type>
-      <notice-filters></notice-filters>
+      <notice-type :noticeType="noticeType"></notice-type>
+      <notice-filters
+        :jobPosition="jobPosition"
+        :language="language"
+      ></notice-filters>
       <notice-search></notice-search>
     </div>
-    <notice-list></notice-list>
+    <notice-list
+      :noticeType="noticeType"
+      :jobPosition="jobPosition"
+      :language="language"
+      :keyword="keyword"
+    ></notice-list>
   </div>
 </template>
 
@@ -22,6 +30,9 @@ export default {
     NoticeList,
     NoticeSearch
   },
+
+  props: ["noticeType", "jobPosition", "keyword", "language"],
+
   data() {
     return {};
   }
@@ -39,6 +50,7 @@ export default {
   justify-content: center;
   margin-bottom: 50px;
 }
+
 .filters > * {
   margin-right: 120px;
 }
