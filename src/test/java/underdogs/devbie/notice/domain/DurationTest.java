@@ -22,4 +22,20 @@ class DurationTest {
             .isInstanceOf(InvalidDurationException.class)
             .hasMessage("잘못된 요청입니다: 원인 : 시작일은 종료일 이전이어야 합니다.");
     }
+
+    @DisplayName("Duration 비교 연산 테스트")
+    @Test
+    void equals() {
+        Duration duration1 = new Duration(
+            LocalDateTime.of(2020, 5, 5, 0, 0),
+            LocalDateTime.of(2020, 5, 10, 0, 0)
+        );
+        Duration duration2 = new Duration(
+            LocalDateTime.of(2020, 5, 5, 0, 0),
+            LocalDateTime.of(2020, 5, 10, 0, 0)
+        );
+
+        assertThat(duration1).isEqualTo(duration2);
+
+    }
 }
