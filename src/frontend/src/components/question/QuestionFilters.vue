@@ -1,9 +1,6 @@
 <template>
   <div class="filters" :class="$mq">
-    <router-link
-      class="condition"
-      :class="$mq"
-      to="/questions?orderBy=CREATED_DATE"
+    <router-link class="condition" :class="$mq" to="/questions"
       >전체 질문</router-link
     >
     <router-link class="condition" :class="$mq" to="/questions?orderBy=VISITS"

@@ -12,24 +12,21 @@
         ></v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <a
-        @click="$router.push('/admin')"
+      <router-link
+        :to="`/admin`"
         v-if="isAdmin()"
         class="menu navigation-menu"
         :class="$mq"
-        >관리자</a
+        >관리자</router-link
       >
-      <a
-        @click="$router.push('/notices')"
-        class="menu navigation-menu"
-        :class="$mq"
-        >공고</a
+      <router-link :to="'/notices'" class="menu navigation-menu" :class="$mq"
+        >공고</router-link
       >
-      <a
-        @click="$router.push('/questions?orderBy=CREATED_DATE')"
+      <router-link
+        :to="'/questions'"
         class="menu navigation-menu last"
         :class="$mq"
-        >면접 질문</a
+        >면접 질문</router-link
       >
       <template v-if="isLoggedIn">
         <v-menu transition="slide-y-transition" offset-y bottom>

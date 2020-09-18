@@ -83,7 +83,11 @@ export default {
       "fetchedLoginUser",
       "fetchedQuestionFavorites",
       "isUserQuestionFavorites"
-    ])
+    ]),
+
+    compoundKeyword() {
+      return [this.title, this.content].join();
+    }
   },
 
   watch: {
@@ -93,19 +97,35 @@ export default {
 
     isLoggedIn() {
       this.initFavoriteState();
-    }
-  },
+    },
 
-  async created() {
-    if (this.fetchedQuestions.length > 0) {
-      return;
-    }
+    async hashtag() {
+      await this.$store.commit("INIT_QUESTIONS");
+      if (this.hashtag) {
+        await this.addQuestionByHashtag();
+        return;
+      }
+      await this.addQuestions();
+    },
 
-    await this.addQuestions();
+    async orderBy() {
+      await this.$store.commit("INIT_QUESTIONS");
+      await this.addQuestions();
+    },
+
+    async compoundKeyword() {
+      await this.$store.commit("INIT_QUESTIONS");
+      if (this.title || this.content) {
+        await this.addQuestions();
+      }
+    }
   },
 
   mounted() {
+    this.$store.commit("INIT_QUESTIONS");
+    this.addQuestions();
     if (this.hashtag) {
+      this.$store.commit("INIT_QUESTIONS");
       this.addQuestionByHashtag();
     }
     if (!this.isLoggedIn) {
