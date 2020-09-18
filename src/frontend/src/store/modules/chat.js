@@ -46,7 +46,8 @@ export default {
     name: "",
     color: "",
     chats: [],
-    userCount: ""
+    userCount: "",
+    chatRoomsHistory: []
   },
   mutations: {
     CONNECT(state, notice) {
@@ -91,6 +92,12 @@ export default {
     },
     SET_USER_COUNT(state, userCount) {
       state.userCount = userCount;
+    },
+    PUT_CHAT_ROOM_HISTORY(state, { noticeId, chatRoomName }) {
+      state.chatRoomsHistory.push({
+        noticeId: noticeId,
+        chatRoomName: chatRoomName
+      });
     }
   },
   actions: {
@@ -121,6 +128,10 @@ export default {
       );
       commit("SET_CHATS", data.messageResponses.messageResponses);
       commit("SET_USER_COUNT", data.headCount);
+      commit("PUT_CHAT_ROOM_HISTORY", {
+        noticeId: notice.id,
+        chatRoomName: notice.company.name + " - " + notice.title
+      });
     }
   },
   getters: {
@@ -138,6 +149,9 @@ export default {
     },
     fetchedUserCount(state) {
       return state.userCount;
+    },
+    fetchedChatRoomHistory(state) {
+      return state.chatRoomsHistory;
     }
   }
 };
