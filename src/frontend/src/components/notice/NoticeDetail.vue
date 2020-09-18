@@ -109,10 +109,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "fetchedLoginUser",
-      "isUserNoticeFavorites"
-    ]),
+    ...mapGetters(["fetchedLoginUser", "isUserNoticeFavorites"]),
 
     content() {
       return this.notice.noticeDescription.content.split("\n");
