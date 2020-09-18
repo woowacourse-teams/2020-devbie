@@ -40,6 +40,7 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
 
@@ -287,5 +288,40 @@ public class QuestionServiceTest {
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),
             () -> assertThat(responses.getQuestions().get(1).getTitle()).isEqualTo("오버스택플로우")
         );
+    }
+
+    @DisplayName("추천, 비추천 수 증가")
+    @Test
+    void increaseCount() {
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.toggleCount(question.getId(), RecommendationType.RECOMMENDED, false);
+
+        assertThat(question.getRecommendationCount().getRecommendedCount()).isEqualTo(1);
+    }
+
+    @DisplayName("추천, 비추천 수 토글")
+    @Test
+    void toggleCount() {
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.toggleCount(question.getId(), RecommendationType.RECOMMENDED, false);
+        questionService.toggleCount(question.getId(), RecommendationType.NON_RECOMMENDED, true);
+
+        assertAll(
+            () -> assertThat(question.getRecommendationCount().getRecommendedCount()).isZero(),
+            () -> assertThat(question.getRecommendationCount().getNonRecommendedCount()).isEqualTo(1)
+        );
+    }
+
+    @DisplayName("추천, 비추천 수 감소")
+    @Test
+    void decreaseCount() {
+        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+
+        questionService.toggleCount(question.getId(), RecommendationType.RECOMMENDED, false);
+        questionService.decreaseCount(question.getId(), RecommendationType.RECOMMENDED);
+
+        assertThat(question.getRecommendationCount().getRecommendedCount()).isZero();
     }
 }
