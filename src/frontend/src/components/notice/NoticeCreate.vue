@@ -1,6 +1,29 @@
 <template>
   <div class="container">
     <v-form ref="form" lazy-validation class="notice-form">
+`      <v-card class="mx-auto" max-width="434" tile @click="editImage">
+        <v-img :src="image" width="300px" height="200px" alt="notice-image">
+          <input
+            type="file"
+            ref="image"
+            @change="preview"
+            accept="image/*"
+            style="display:none"
+          />
+          <v-row align="end" class="fill-height">
+            <v-col align-self="start" class="pa-0" cols="12"> </v-col>
+            <v-col class="py-0">
+              <v-list-item color="rgba(0, 0, 0, .4)" dark>
+                <v-list-item-content>
+                  <v-list-item-title class="title"
+                    >공고 이미지 (클릭하여 추가하세요)</v-list-item-title
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </v-col>
+          </v-row>
+        </v-img>
+      </v-card>
       <v-select
         item-text="text"
         item-value="key"
@@ -57,7 +80,6 @@
         required
         :rules="rules.salary"
       ></v-text-field>
-      <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
         v-model="request.description"
@@ -96,7 +118,9 @@ export default {
         startDate: "",
         endDate: "",
         noticeType: ""
-      }
+      },
+      image:
+        "https://images.velog.io/images/sonypark/post/55f4b858-ea9e-4348-ba47-88c2310f8f6c/devie.png"
     };
   },
 
@@ -110,18 +134,31 @@ export default {
   },
 
   methods: {
+    editImage() {
+      this.$refs.image.click();
+    },
+
+    async preview() {
+      const image_files = this.$refs.image.files[0];
+      if (image_files) {
+        const reader = new FileReader();
+
+        reader.onload = e => {
+          this.image = e.target.result;
+        };
+
+        reader.readAsDataURL(image_files);
+        await this.imageUpload(image_files);
+      }
+    },
+
     async checkAdmin() {
       const fetchedLoginUser = await this.$store.getters.fetchedLoginUser;
       if (fetchedLoginUser === null || fetchedLoginUser.roleType !== "ADMIN") {
         await this.$router.push("/");
       }
     },
-    async imageUpload() {
-      const image_files = this.$refs.image.files[0];
-      if (!image_files) {
-        return;
-      }
-
+    async imageUpload(image_files) {
       const formData = new FormData();
       formData.append("image", image_files);
 

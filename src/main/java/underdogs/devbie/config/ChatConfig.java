@@ -14,7 +14,8 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")
             .setAllowedOrigins("*")
-            .withSockJS();
+            .withSockJS()
+            .setClientLibraryUrl("https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js");
     }
 
     @Override
