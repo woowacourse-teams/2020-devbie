@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +20,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import underdogs.devbie.chat.domain.Chat;
 import underdogs.devbie.chat.domain.ChatName;
-import underdogs.devbie.chat.domain.ChatNames;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
+import underdogs.devbie.chat.domain.ChatSessionInformations;
 import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
@@ -45,9 +44,13 @@ class ChatServiceTest {
     @Mock
     SimpMessagingTemplate simpMessagingTemplate;
 
+    @Mock
+    ChatSessionInformations chatSessionInformations;
+
     @BeforeEach
     void setUp() {
-        this.chatService = new ChatService(chatRoomRepository, chatRepository, simpMessagingTemplate);
+        this.chatService = new ChatService(chatRoomRepository, chatRepository, simpMessagingTemplate,
+            chatSessionInformations);
     }
 
     @Test
@@ -68,7 +71,6 @@ class ChatServiceTest {
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(chatNames))
             .build();
 
         MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
@@ -97,35 +99,26 @@ class ChatServiceTest {
             Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
         );
 
-        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("하늘하늘한 동글", TitleColor.AMBER),
-            ChatName.of("찬란한 코일", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 유안", TitleColor.DARK_ORCHID)
-        ));
-
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(chatNames))
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+        given(chatSessionInformations.countSessionOn(anyLong())).willReturn(4);
 
-        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.fetchChatRoomInfo(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
         verify(chatRoomRepository, never()).save(any());
-        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 동글"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 코일"),
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안"),
-            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
@@ -141,57 +134,26 @@ class ChatServiceTest {
             Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
         );
 
-        Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("하늘하늘한 동글", TitleColor.AMBER),
-            ChatName.of("찬란한 코일", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 유안", TitleColor.DARK_ORCHID)
-        ));
-
         ChatRoom chatRoom = ChatRoom.builder()
             .noticeId(noticeId)
             .chats(chats)
-            .chatNames(ChatNames.from(chatNames))
             .build();
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
+        given(chatSessionInformations.countSessionOn(anyLong())).willReturn(4);
 
-        ChatRoomResponse chatRoomResponse = chatService.connect(noticeId);
+        ChatRoomResponse chatRoomResponse = chatService.fetchChatRoomInfo(noticeId);
 
         verify(chatRoomRepository).findByNoticeId(eq(noticeId));
-        verify(simpMessagingTemplate).convertAndSend(any(), any(StompMessageResponse.class));
 
         assertThat(chatRoomResponse).isNotNull();
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertThat(chatRoomResponse.getNickName()).isNotBlank(),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 동글"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 코일"),
             () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안"),
-            () -> assertThat(chatRoomResponse.getTitleColor()).isNotBlank(),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
-    }
-
-    @DisplayName("NoticeId와 NickName으로 해당하는 채팅방 NickName 삭제하기")
-    @Test
-    void disconnect() {
-        String nickName = "하늘하늘한 동글";
-        Long noticeId = 1L;
-        ChatName chatName = ChatName.of(nickName, TitleColor.AMBER);
-
-        List<ChatName> chatNames = Collections.singletonList(chatName);
-
-        ChatRoom chatRoom = ChatRoom.builder()
-            .noticeId(noticeId)
-            .chatNames(ChatNames.from(new HashSet<>(chatNames)))
-            .build();
-
-        given(chatRoomRepository.findByNoticeId(noticeId)).willReturn(Optional.of(chatRoom));
-
-        chatService.disconnect(nickName, noticeId);
-
-        verify(chatRoomRepository).findByNoticeId(eq(noticeId));
-        verify(simpMessagingTemplate).convertAndSend(anyString(), any(StompMessageResponse.class));
     }
 }

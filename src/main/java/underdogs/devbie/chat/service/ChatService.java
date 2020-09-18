@@ -10,15 +10,14 @@ import underdogs.devbie.chat.domain.ChatName;
 import underdogs.devbie.chat.domain.ChatRepository;
 import underdogs.devbie.chat.domain.ChatRoom;
 import underdogs.devbie.chat.domain.ChatRoomRepository;
-import underdogs.devbie.chat.domain.StompMethodType;
+import underdogs.devbie.chat.domain.ChatSessionInformation;
+import underdogs.devbie.chat.domain.ChatSessionInformations;
 import underdogs.devbie.chat.domain.StompMethodType;
 import underdogs.devbie.chat.domain.TitleColor;
-import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatNameResponse;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
-import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.chat.dto.StompMessageResponse;
 import underdogs.devbie.exception.NotExistException;
 
@@ -32,6 +31,7 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRepository chatRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ChatSessionInformations chatSessionInformations;
 
     @Transactional
     public void sendMessage(MessageSendRequest messageSendRequest) {
@@ -40,7 +40,8 @@ public class ChatService {
         Chat savedChat = saveChat(messageSendRequest, chatRoom);
 
         MessageResponse messageResponse = MessageResponse.from(savedChat);
-        simpMessagingTemplate.convertAndSend(PUBLISH_URL + messageSendRequest.getNoticeId(),
+        simpMessagingTemplate.convertAndSend(
+            PUBLISH_URL + messageSendRequest.getNoticeId(),
             StompMessageResponse.of(StompMethodType.TALK, messageResponse));
     }
 
@@ -50,28 +51,19 @@ public class ChatService {
     }
 
     private Chat saveChat(MessageSendRequest messageSendRequest, ChatRoom chatRoom) {
-        Chat chat = Chat.of(messageSendRequest.getName(), TitleColor.from(messageSendRequest.getTitleColor()),
-            messageSendRequest.getMessage(), chatRoom);
+        Chat chat = Chat.of(
+            messageSendRequest.getName(),
+            TitleColor.from(messageSendRequest.getTitleColor()),
+            messageSendRequest.getMessage(),
+            chatRoom);
         return chatRepository.save(chat);
     }
 
     @Transactional
-    public ChatRoomResponse connect(Long noticeId) {
+    public ChatRoomResponse fetchChatRoomInfo(Long noticeId) {
         ChatRoom chatRoom = getOrCreateChatRoom(noticeId);
 
-        ChatName name = chatRoom.addNewName();
-
-        sendChatName(noticeId, name, StompMethodType.ENTER);
-
-        return ChatRoomResponse.of(chatRoom.getChats(), name.getChatName(),
-            name.getColor().getColor(),
-            chatRoom.getChatNames().size());
-    }
-
-    private void sendChatName(Long noticeId, ChatName name, StompMethodType stompMethodType) {
-        ChatNameResponse chatNameResponse = ChatNameResponse.of(name.getChatName(), name.getColor().getColor());
-        simpMessagingTemplate.convertAndSend(PUBLISH_URL + noticeId,
-            StompMessageResponse.of(stompMethodType, chatNameResponse));
+        return ChatRoomResponse.of(chatRoom.getChats(), chatSessionInformations.countSessionOn(noticeId));
     }
 
     private ChatRoom getOrCreateChatRoom(Long noticeId) {
@@ -79,14 +71,26 @@ public class ChatService {
             .orElseGet(() -> chatRoomRepository.save(ChatRoom.from(noticeId)));
     }
 
-    @Transactional
-    public void disconnect(String nickName, Long noticeId) {
-        ChatName chatName = deleteChatName(nickName, noticeId);
-        sendChatName(noticeId, chatName, StompMethodType.QUIT);
+    public void addNewSessionInfo(String sessionId, long noticeId) {
+        ChatSessionInformation chatSessionInformation = chatSessionInformations.addSessionInfo(sessionId, noticeId);
+        sendConnectionInformation(StompMethodType.ENTER, chatSessionInformation, sessionId);
     }
 
-    private ChatName deleteChatName(String nickName, Long noticeId) {
-        ChatRoom chatRoom = getChatRoom(noticeId);
-        return chatRoom.deleteChatName(nickName);
+    public void disconnectSession(String sessionId) {
+        ChatSessionInformation chatSessionInformation = chatSessionInformations.removeSession(sessionId);
+        sendConnectionInformation(StompMethodType.QUIT, chatSessionInformation, sessionId);
+    }
+
+    private void sendConnectionInformation(
+        StompMethodType stompMethodType,
+        ChatSessionInformation info,
+        String sessionId
+    ) {
+        long noticeId = info.getNoticeId();
+        ChatName chatName = info.getChatName();
+
+        simpMessagingTemplate.convertAndSend(
+            PUBLISH_URL + noticeId,
+            StompMessageResponse.of(stompMethodType, ChatNameResponse.of(chatName, sessionId)));
     }
 }

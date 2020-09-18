@@ -14,8 +14,10 @@ public class StompMessageResponse<T extends StompMessageResponseData> {
     private StompMethodType stompMethodType;
     private T data;
 
-    public static <T extends StompMessageResponseData> StompMessageResponse of(StompMethodType stompMethodType,
-        T data) {
+    public static <T extends StompMessageResponseData> StompMessageResponse of(
+        StompMethodType stompMethodType,
+        T data
+    ) {
         return new StompMessageResponse(stompMethodType, data);
     }
 }

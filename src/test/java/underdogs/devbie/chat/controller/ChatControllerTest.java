@@ -65,12 +65,10 @@ class ChatControllerTest extends MvcTest {
                 Chat.of("하늘하늘한 동글", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
                 Chat.of("찬란한 코일", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
                 Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
-            "우아한 소니",
-            TitleColor.AMBER.getColor(),
             3
         );
 
-        given(chatService.connect(any())).willReturn(chatRoomResponse);
+        given(chatService.fetchChatRoomInfo(any())).willReturn(chatRoomResponse);
 
         MvcResult mvcResult = patchAction(String.format("/api/chatrooms?noticeId=%s", noticeId), "")
             .andDo(print())
@@ -84,24 +82,9 @@ class ChatControllerTest extends MvcTest {
         assertThat(resultResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = resultResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(resultResponse.getNickName(), "우아한 소니"),
             () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 동글"),
             () -> assertEquals(messageResponses.get(1).getName(), "찬란한 코일"),
-            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안"),
-            () -> assertEquals(resultResponse.getTitleColor(), TitleColor.AMBER.getColor())
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안")
         );
-    }
-
-    @DisplayName("Connection 종료 시 NoticeId로 채팅방 찾은 뒤 NickName 삭제 기능")
-    @Test
-    void deleteNickName() throws Exception {
-        String nickName = "어슴프레한 너구리";
-        Long noticeId = 1L;
-
-        doNothing().when(chatService).disconnect(anyString(), anyLong());
-
-        deleteAction(String.format("/api/chatrooms/%s?noticeId=%s", nickName, noticeId))
-            .andDo(print())
-            .andExpect(status().isNoContent());
     }
 }
