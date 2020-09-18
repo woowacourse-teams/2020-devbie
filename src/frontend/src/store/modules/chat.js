@@ -47,6 +47,7 @@ export default {
     color: "",
     chats: [],
     userCount: "",
+    chatRoomDrawer: true,
     chatRoomsHistory: []
   },
   mutations: {
@@ -94,10 +95,23 @@ export default {
       state.userCount = userCount;
     },
     PUT_CHAT_ROOM_HISTORY(state, { noticeId, chatRoomName }) {
+      if (
+        state.chatRoomsHistory.some(chatRoom => chatRoom.noticeId === noticeId)
+      ) {
+        return;
+      }
       state.chatRoomsHistory.push({
         noticeId: noticeId,
         chatRoomName: chatRoomName
       });
+    },
+    DELETE_CHAT_ROOM_HISTORY(state, noticeId) {
+      state.chatRoomsHistory = state.chatRoomsHistory.filter(
+        chatRoom => chatRoom.noticeId !== noticeId
+      );
+    },
+    SET_CHAT_ROOM_DRAWER(state, chatRoomDrawer) {
+      state.chatRoomDrawer = chatRoomDrawer;
     }
   },
   actions: {
@@ -132,6 +146,12 @@ export default {
         noticeId: notice.id,
         chatRoomName: notice.company.name + " - " + notice.title
       });
+    },
+    async CHANGE_CHAT_ROOM_DRAWER({ commit }, chatRoomDrawer) {
+      commit("SET_CHAT_ROOM_DRAWER", chatRoomDrawer);
+    },
+    DELETE_CHAT_ROOM_HISTORY({ commit }, noticeId) {
+      commit("DELETE_CHAT_ROOM_HISTORY", noticeId);
     }
   },
   getters: {
@@ -152,6 +172,9 @@ export default {
     },
     fetchedChatRoomHistory(state) {
       return state.chatRoomsHistory;
+    },
+    fetchedChatRoomDrawer(state) {
+      return state.chatRoomDrawer;
     }
   }
 };
