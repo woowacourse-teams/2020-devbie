@@ -10,8 +10,8 @@
               {{ notice.title }}
               <favorite-control
                 class="heart-icon"
-                :targetObjectId="fetchedNotice.id"
-                :isUserFavorite="isUserNoticeFavorites(fetchedNotice.id)"
+                :targetObjectId="notice.id"
+                :isUserFavorite="isUserNoticeFavorites(notice.id)"
                 :isQuestion="false"
               ></favorite-control>
             </h1>
@@ -170,7 +170,7 @@ export default {
       router.push(`/notices/edit/${this.$route.params.id}`);
     },
     openChatDrawer() {
-      this.$store.dispatch("OPEN_DRAWER", this.fetchedNotice);
+      this.$store.dispatch("OPEN_DRAWER", this.notice);
     }
   }
 };
