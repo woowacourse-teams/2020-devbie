@@ -3,7 +3,11 @@
     <div>
       <v-card elevation="16" max-width="400" class="mx-auto">
         <v-card-title class="darken-4 card-title">
-          <v-btn icon @click="$router.go(-1)" class="back-button">
+          <v-btn
+            icon
+            @click="$router.push(`/notices?noticeType=${noticeType}`)"
+            class="back-button"
+          >
             <v-icon large>
               mdi-arrow-left-bold-circle-outline
             </v-icon>
