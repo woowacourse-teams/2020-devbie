@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-navigation-drawer fixed right permanent class="drawer" :class="$mq">
-      <div class="chat_components">
+      <div class="chat_components" v-if="fetchedChatRoomDrawer">
         <div class="default_box">
           <div class="title_box">{{ "내 채팅" }}</div>
-          <v-btn large icon @click="closeChatDrawer"
+          <v-btn large icon @click="closeChatRoomDrawer"
             ><i class="fas fa-times close-icon"
           /></v-btn>
         </div>
@@ -23,7 +23,7 @@
           </v-list-item>
         </v-list>
       </div>
-      <div class="chat_components">
+      <div class="chat_components" v-else>
         <div id="chat_info_box">
           <chat-info></chat-info>
         </div>
@@ -56,8 +56,8 @@ export default {
     ...mapGetters(["fetchedChatRoomDrawer", "fetchedChatRoomHistory"])
   },
   methods: {
-    closeChatDrawer() {
-      this.$store.dispatch("CLOSE_DRAWER");
+    closeChatRoomDrawer() {
+      this.$store.dispatch("CLOSE_CHAT_ROOM_DRAWER");
     },
     deleteChatRoomHistory(noticeId) {
       this.$store.dispatch("DELETE_CHAT_ROOM_HISTORY", noticeId);
