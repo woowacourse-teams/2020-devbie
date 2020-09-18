@@ -7,10 +7,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  datasource:
-    url: jdbc:h2:mem:testdb;IFEXISTS=FALSE;
-logging:
-  config: classpath:log4j2.yml
+        default_batch_fetch_size: 100
+
 cloud:
   aws:
     s3:

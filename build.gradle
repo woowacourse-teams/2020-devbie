@@ -43,8 +43,9 @@ task buildFrontend(type: NpmTask, dependsOn: setUp) {
     args = ['run', 'build']
 }
 
-if ("$System.env.DEVBIE_ENVIRONMENT" == "product"
-        || "$System.env.DEVBIE_ENVIRONMENT" == "develop") {
+//if ("$System.env.DEVBIE_ENVIRONMENT" == "product"
+//        || "$System.env.DEVBIE_ENVIRONMENT" == "develop") {
+if (true) {
     processResources.dependsOn 'buildFrontend'
 }
 
