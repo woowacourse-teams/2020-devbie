@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 
 class ChatNamesTest {
 
-    @Test
-    void from() {
-        assertThat(ChatNames.from(Collections.EMPTY_SET)).isInstanceOf(ChatNames.class);
-    }
+	@Test
+	void from() {
+		assertThat(ChatNames.from(Collections.EMPTY_SET)).isInstanceOf(ChatNames.class);
+	}
 
-    @Test
-    void add() {
-        ChatNames chatNames = ChatNames.from(new HashSet<>());
-        chatNames.add(ChatName.of("하늘하늘한 곰", TitleColor.AMBER));
+	@Test
+	void add() {
+		ChatNames chatNames = ChatNames.from(new HashSet<>());
+		chatNames.add(ChatName.of("하늘하늘한 동글", TitleColor.AMBER));
 
         assertThat(chatNames.getChatNames()).hasSize(1);
     }

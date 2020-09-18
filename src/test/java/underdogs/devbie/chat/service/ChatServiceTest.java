@@ -58,14 +58,14 @@ class ChatServiceTest {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-            Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-            Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
+            Chat.of("하늘하늘한 동글", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("찬란한 코일", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId)));
 
         Set<ChatName> chatNames = new HashSet<>(Arrays.asList(
-            ChatName.of("하늘하늘한 곰", TitleColor.AMBER),
-            ChatName.of("찬란한 문어", TitleColor.BAROSSA),
-            ChatName.of("어슴프레한 너구리", TitleColor.DARK_ORCHID)
+            ChatName.of("하늘하늘한 동글", TitleColor.AMBER),
+            ChatName.of("찬란한 코일", TitleColor.BAROSSA),
+            ChatName.of("어슴프레한 유안", TitleColor.DARK_ORCHID)
         ));
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -74,11 +74,11 @@ class ChatServiceTest {
             .build();
 
         MessageSendRequest messageSendRequest = new MessageSendRequest(noticeId
-            , "하늘하늘한 곰", "메세지", TitleColor.AMBER.getColor());
+            , "하늘하늘한 동글", "메세지", TitleColor.AMBER.getColor());
 
         given(chatRoomRepository.findByNoticeId(anyLong())).willReturn(Optional.of(chatRoom));
         given(chatRepository.save(any(Chat.class))).willReturn(
-            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "메세지", chatRoom));
+            Chat.of("하늘하늘한 동글", TitleColor.AMBER, "메세지", chatRoom));
         doNothing().when(simpMessagingTemplate).convertAndSend(any(String.class), any(StompMessageResponse.class));
 
         chatService.sendMessage(messageSendRequest);
@@ -94,9 +94,9 @@ class ChatServiceTest {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-            Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-            Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
+            Chat.of("하늘하늘한 동글", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("찬란한 코일", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
         );
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -116,9 +116,9 @@ class ChatServiceTest {
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
-            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
-            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
+            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 동글"),
+            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 코일"),
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안"),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
@@ -129,9 +129,9 @@ class ChatServiceTest {
         Long noticeId = 1L;
 
         List<Chat> chats = Arrays.asList(
-            Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-            Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-            Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
+            Chat.of("하늘하늘한 동글", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+            Chat.of("찬란한 코일", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+            Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))
         );
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -150,9 +150,9 @@ class ChatServiceTest {
         assertThat(chatRoomResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = chatRoomResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
-            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
-            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
+            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 동글"),
+            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 코일"),
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안"),
             () -> assertThat(chatRoomResponse.getHeadCount()).isEqualTo(4)
         );
     }
