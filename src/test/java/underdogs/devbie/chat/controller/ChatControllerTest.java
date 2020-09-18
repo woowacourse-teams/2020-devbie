@@ -62,10 +62,10 @@ class ChatControllerTest extends MvcTest {
         Long noticeId = 1L;
         ChatRoomResponse chatRoomResponse = ChatRoomResponse.of(
             Arrays.asList(
-                Chat.of("하늘하늘한 곰", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
-                Chat.of("찬란한 문어", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
-                Chat.of("어슴프레한 너구리", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
-            "우아한 돌고래",
+                Chat.of("하늘하늘한 동글", TitleColor.AMBER, "message1", ChatRoom.from(noticeId)),
+                Chat.of("찬란한 코일", TitleColor.BAROSSA, "message2", ChatRoom.from(noticeId)),
+                Chat.of("어슴프레한 유안", TitleColor.DARK_ORCHID, "message3", ChatRoom.from(noticeId))),
+            "우아한 소니",
             TitleColor.AMBER.getColor(),
             3
         );
@@ -84,10 +84,10 @@ class ChatControllerTest extends MvcTest {
         assertThat(resultResponse.getMessageResponses()).isNotNull();
         List<MessageResponse> messageResponses = resultResponse.getMessageResponses().getMessageResponses();
         assertAll(
-            () -> assertEquals(resultResponse.getNickName(), "우아한 돌고래"),
-            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 곰"),
-            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 문어"),
-            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 너구리"),
+            () -> assertEquals(resultResponse.getNickName(), "우아한 소니"),
+            () -> assertEquals(messageResponses.get(0).getName(), "하늘하늘한 동글"),
+            () -> assertEquals(messageResponses.get(1).getName(), "찬란한 코일"),
+            () -> assertEquals(messageResponses.get(2).getName(), "어슴프레한 유안"),
             () -> assertEquals(resultResponse.getTitleColor(), TitleColor.AMBER.getColor())
         );
     }
