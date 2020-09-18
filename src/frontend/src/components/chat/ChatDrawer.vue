@@ -4,7 +4,7 @@
       <div class="chat_components" v-if="fetchedChatRoomDrawer">
         <chat-room-title-box></chat-room-title-box>
         <v-divider></v-divider>
-        <ChatRoomHistoryBox></ChatRoomHistoryBox>
+        <chat-room-history-box></chat-room-history-box>
       </div>
       <div class="chat_components" v-else>
         <div id="chat_info_box">
@@ -28,7 +28,7 @@ import ChatRoomTitleBox from "./ChatRoomTitleBox";
 import ChatRoomHistoryBox from "./ChatRoomHistoryBox";
 import ChatList from "./ChatList";
 import ChatInput from "./ChatInput";
-import ChatInfo from "./chatInfo";
+import ChatInfo from "./ChatInfo";
 import { mapGetters } from "vuex";
 export default {
   components: {
