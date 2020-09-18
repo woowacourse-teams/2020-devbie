@@ -1,14 +1,13 @@
 <template>
-  <div id="default_box">
-    <div id="title_box">
+  <div class="default_box">
+    <div class="title_box">
       {{ fetchedChatTitle }}
     </div>
-    <div id="count_box">{{ fetchedUserCount }}명</div>
-    <div id="button_box">
-      <v-btn large icon @click="closeChatDrawer"
-        ><i class="fas fa-times"
-      /></v-btn>
-    </div>
+    <v-spacer></v-spacer>
+    <div class="count_box">{{ fetchedUserCount }}명</div>
+    <v-btn large icon @click="closeChatDrawer"
+      ><i class="fas fa-times close-icon"
+    /></v-btn>
   </div>
 </template>
 
@@ -28,24 +27,28 @@ export default {
 </script>
 
 <style scoped>
-#default_box {
+.default_box {
   height: 50px;
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 5%;
+  justify-content: space-between;
 }
-#title_box {
+.title_box {
   flex-basis: 180px;
-  font-size: 16px;
+  font-size: 19px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-#count_box {
-  padding-left: 14px;
+.count_box {
+  display: flex;
+  flex-direction: row-reverse;
   flex-basis: 60px;
 }
-#button_box {
-  flex-basis: 40px;
+
+.close-icon {
+  padding-top: 2px;
+  font-size: 21px;
 }
 </style>

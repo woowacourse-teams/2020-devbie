@@ -8,6 +8,12 @@
             <h1 class="big-font">
               [ {{ notice.noticeType }} ]
               {{ notice.title }}
+              <favorite-control
+                class="heart-icon"
+                :targetObjectId="fetchedNotice.id"
+                :isUserFavorite="isUserNoticeFavorites(fetchedNotice.id)"
+                :isQuestion="false"
+              ></favorite-control>
             </h1>
           </div>
           <div class="notice-body">
@@ -89,9 +95,12 @@
 import { mapGetters } from "vuex";
 import router from "../../router";
 import { getAction } from "@/api";
+import FavoriteControl from "../favorite/FavoriteControl";
 
 export default {
   props: ["id"],
+
+  components: { FavoriteControl },
 
   data() {
     return {
@@ -100,7 +109,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["fetchedLoginUser"]),
+    ...mapGetters([
+      "fetchedLoginUser",
+      "isUserNoticeFavorites"
+    ]),
 
     content() {
       return this.notice.noticeDescription.content.split("\n");
@@ -257,5 +269,9 @@ export default {
 
 .big-font {
   font-size: 20px;
+}
+
+.heart-icon {
+  display: inline;
 }
 </style>

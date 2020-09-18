@@ -6,7 +6,7 @@
         class="button"
         large
         color="#DAEBEA"
-        @click="$router.push(`/questions`)"
+        @click="$router.push(redirectUrl)"
       >
         <span>돌아가기</span>
       </v-btn>
@@ -16,7 +16,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["editingFlag"],
+
+  computed: {
+    redirectUrl() {
+      if (this.editingFlag) {
+        return `/questions/${this.$route.params.id}`;
+      }
+      return `/questions?orderBy=CREATED_DATE`;
+    }
+  }
+};
 </script>
 
 <style scoped></style>

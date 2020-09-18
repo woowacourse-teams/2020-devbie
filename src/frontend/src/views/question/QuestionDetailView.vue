@@ -1,7 +1,7 @@
 <template>
-  <div class="detail">
+  <div class="detail" :class="$mq">
     <question-detail-menu :isAuthor="isAuthor"></question-detail-menu>
-    <div class="question-box">
+    <div class="question-box" :class="$mq">
       <question-detail
         :loginUser="fetchedLoginUser"
         class="detail-items"
@@ -55,7 +55,10 @@ a {
 .detail {
   display: flex;
   justify-content: center;
-  margin: 20px 30px 0 0;
+}
+
+.detail.mobile {
+  flex-direction: column;
 }
 
 .detail-items {
@@ -63,8 +66,16 @@ a {
 }
 
 .question-box {
+  margin: 27px auto;
+  border-left: solid 1px #e8e8e8;
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex-grow: 8;
+}
+
+.question-box.mobile {
+  margin: 20px 0 0 0;
+  border-left: none;
 }
 </style>

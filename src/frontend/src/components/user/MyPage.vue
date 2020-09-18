@@ -123,6 +123,10 @@ export default {
 
       await this.$store.dispatch("UPDATE_USER_INFO", updated_info);
       this.$store.dispatch("FETCH_LOGIN_USER");
+      await this.$store.dispatch(
+        "UPDATE_SNACKBAR_TEXT",
+        "회원 정보가 수정되었습니다."
+      );
     },
 
     async updateUserImage(image_files) {
@@ -130,6 +134,10 @@ export default {
       formData.append("image", image_files);
       try {
         await this.$store.dispatch("UPDATE_USER_IMAGE", formData);
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "프로필 이미지가 수정되었습니다."
+        );
       } catch (e) {
         console.error(e);
       } finally {

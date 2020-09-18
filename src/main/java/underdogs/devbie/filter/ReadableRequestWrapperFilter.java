@@ -56,8 +56,8 @@ public class ReadableRequestWrapperFilter implements Filter {
 
     public static class ReadableRequestWrapper extends HttpServletRequestWrapper {
         private final Charset encoding;
-        private byte[] rawData;
         private final Map<String, String[]> params = new HashMap<>();
+        private byte[] rawData;
 
         public ReadableRequestWrapper(HttpServletRequest request) {
             super(request);
@@ -86,7 +86,7 @@ public class ReadableRequestWrapperFilter implements Filter {
                     JSONObject jsonObject = (JSONObject)jsonParser.parse(collect);
                     for (Object o : jsonObject.keySet()) {
                         String key = (String)o;
-                        setParameter(key, jsonObject.get(key).toString().replace("\"", "\\\""));
+                        setParameter(key, String.valueOf(jsonObject.get(key)).replace("\"", "\\\""));
                     }
                 }
             } catch (Exception e) {

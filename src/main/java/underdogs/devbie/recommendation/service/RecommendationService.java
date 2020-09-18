@@ -24,5 +24,5 @@ public abstract class RecommendationService<T extends Recommendation> {
     public abstract void deleteRecommendation(Long objectId, Long userId);
 
     @Transactional
-    public abstract void createOrUpdateRecommendation(Long objectId, Long id, RecommendationType recommendationType);
+    public abstract void createOrUpdateRecommendation(Long objectId, Long userId, RecommendationType recommendationType);
 }

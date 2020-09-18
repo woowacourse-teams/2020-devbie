@@ -1,11 +1,12 @@
 <template>
-  <div class="question-control">
+  <div class="controller" :class="$mq">
     <hashtag-list></hashtag-list>
     <v-btn
       large
       class="control-btn question-create button"
       @click="onCreateForm"
       color="#DAEBEA"
+      :class="$mq"
       >질문 하기
     </v-btn>
   </div>
@@ -38,7 +39,7 @@ export default {
 </script>
 
 <style scoped>
-.question-control {
+.controller {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,8 +47,23 @@ export default {
   max-width: 200px;
 }
 
+.controller.mobile {
+  margin-top: 5px;
+}
+
 .control-btn {
   width: 95px;
-  margin-top: 20px;
+  margin-top: 25px;
+}
+
+.control-btn.mobile {
+  margin: 0 5px;
+  width: 60px !important;
+  height: 40px !important;
+  font-size: 10px !important;
+}
+
+.control-btn.mobile {
+  margin-top: 0;
 }
 </style>

@@ -1,12 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer
-      fixed
-      right
-      permanent
-      width="260"
-      style="height: 100vh"
-    >
+    <v-navigation-drawer fixed right permanent class="drawer" :class="$mq">
       <div id="chat_components">
         <div id="chat_info_box">
           <chat-info></chat-info>
@@ -47,5 +41,14 @@ export default {
 #chat_list_box {
   flex-grow: 1;
   position: relative;
+}
+
+.drawer {
+  height: 100vh;
+  width: 260px;
+}
+
+.drawer.mobile {
+  width: 100vw !important;
 }
 </style>

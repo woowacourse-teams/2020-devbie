@@ -1,5 +1,5 @@
 <template>
-  <div class="inner">
+  <div class="inner" :class="$mq">
     <v-form ref="form" v-model="valid" lazy-validation class="question-form">
       <v-text-field
         class="input-box"
@@ -15,8 +15,8 @@
       ></hashtag-box>
       <div class="control-box">
         <div class="content-title">질문 내용</div>
-        <v-md-editor v-model="content" height="250px"></v-md-editor>
-        <form-button>
+        <v-md-editor v-model="content" height="350px"></v-md-editor>
+        <form-button :editingFlag="editingFlag">
           <v-btn
             v-if="editingFlag"
             large
@@ -198,6 +198,10 @@ export default {
   max-width: 50%;
   padding: 25px;
   margin: 0 auto;
+}
+
+.inner.mobile {
+  min-width: 100%;
 }
 
 .input-box {
