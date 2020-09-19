@@ -5,10 +5,10 @@
       class="filters"
       :class="$mq"
       v-model="selectedPosition"
-      v-on:change="changeJobPosition"
+      v-on:change="onChange"
       item-text="text"
       item-value="key"
-      :items="fetchedJobPositions"
+      :items="fetchedFilterByJobPositions"
       hide-details
       label="직군"
       menu-props="auto"
@@ -18,10 +18,10 @@
       class="filters"
       :class="$mq"
       v-model="selectedLanguage"
-      v-on:change="changeLanguage"
+      v-on:change="onChange"
       item-text="text"
       item-value="key"
-      :items="fetchedLanguages"
+      :items="fetchedFilterByLanguages"
       menu-props="auto"
       label="언어"
       hide-details
@@ -32,17 +32,29 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { createNoticeUrl } from "@/utils/noticeUtil";
 
 export default {
+  props: ["jobPosition", "language"],
+
   data() {
     return {
-      selectedPosition: "",
-      selectedLanguage: ""
+      selectedPosition: this.jobPosition,
+      selectedLanguage: this.language
     };
   },
 
   computed: {
-    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
+    ...mapGetters(["fetchedFilterByJobPositions", "fetchedFilterByLanguages"])
+  },
+
+  watch: {
+    jobPosition() {
+      this.setFilters();
+    },
+    language() {
+      this.setFilters();
+    }
   },
 
   created() {
@@ -50,11 +62,19 @@ export default {
   },
 
   methods: {
-    changeJobPosition() {
-      this.$store.commit("SET_JOB_POSITION", this.selectedPosition);
+    setFilters() {
+      this.selectedPosition = this.$route.query.jobPosition;
+      this.selectedLanguage = this.$route.query.language;
     },
-    changeLanguage() {
-      this.$store.commit("SET_LANGUAGE", this.selectedLanguage);
+
+    async onChange() {
+      const noticeUrl = await createNoticeUrl(
+        this.$route.query.noticeType,
+        this.$route.query.keyword,
+        this.selectedLanguage,
+        this.selectedPosition
+      );
+      await this.$router.push(noticeUrl);
     }
   }
 };

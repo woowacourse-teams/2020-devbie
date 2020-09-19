@@ -16,13 +16,12 @@
                   mdi-arrow-left-bold-circle-outline
                 </v-icon>
               </v-btn>
-
-              [ {{ fetchedNotice.noticeType }} ]
-              {{ fetchedNotice.title }}
+              [ {{ notice.noticeType }} ]
+              {{ notice.title }}
               <favorite-control
                 class="heart-icon"
-                :targetObjectId="fetchedNotice.id"
-                :isUserFavorite="isUserNoticeFavorites(fetchedNotice.id)"
+                :targetObjectId="notice.id"
+                :isUserFavorite="isUserNoticeFavorites(notice.id)"
                 :isQuestion="false"
               ></favorite-control>
             </h1>
@@ -30,7 +29,7 @@
           <div class="notice-body" :class="$mq">
             <div class="notice-img">
               <v-img
-                :src="fetchedNotice.image"
+                :src="notice.image"
                 class="white--text align-end"
                 width="300px"
                 height="200px"
@@ -74,11 +73,11 @@
           <div class="notice-info">
             <p class="infos">
               <i class="fas fa-user-edit"></i>
-              회사명: {{ fetchedNotice.company.name }}
+              회사명: {{ notice.company.name }}
             </p>
             <p class="infos">
               <i class="fas fa-won-sign"></i>
-              연봉: {{ fetchedNotice.company.salary }} 만원
+              연봉: {{ notice.company.salary }} 만원
             </p>
             <p class="infos">
               <i class="fas fa-calendar-alt"></i>
@@ -86,7 +85,7 @@
             </p>
             <p class="infos">
               <i class="fas fa-keyboard"></i>
-              포지션: {{ fetchedNotice.jobPosition }}
+              포지션: {{ notice.jobPosition }}
             </p>
             <p class="infos"><i class="fas fa-burn"></i>언어:</p>
             <p class="infos">
@@ -106,60 +105,70 @@
 import { mapGetters } from "vuex";
 import router from "../../router";
 import FavoriteControl from "../favorite/FavoriteControl";
+import { getAction } from "@/api";
 
 export default {
+  props: ["id"],
+
   components: { FavoriteControl },
 
   data() {
     return {
+      notice: {},
       stompClient: {}
     };
   },
   computed: {
-    ...mapGetters([
-      "fetchedLoginUser",
-      "fetchedNotice",
-      "isUserNoticeFavorites"
-    ]),
+    ...mapGetters(["fetchedLoginUser", "isUserNoticeFavorites"]),
 
     content() {
-      return this.fetchedNotice.noticeDescription.content.split("\n");
+      return this.notice.noticeDescription.content.split("\n");
     },
 
     setDuration() {
-      if (this.fetchedNotice.duration === null) {
+      if (this.notice.duration === null) {
         return "상시모집";
       }
 
       const startDate = new Date(
-        this.fetchedNotice.duration.startDate
+        this.notice.duration.startDate
       ).toLocaleDateString();
       const endDate = new Date(
-        this.fetchedNotice.duration.endDate
+        this.notice.duration.endDate
       ).toLocaleDateString();
 
       return (
-        (this.fetchedNotice.duration.startDate === null ? "" : startDate) +
+        (this.notice.duration.startDate === null ? "" : startDate) +
         " ~ " +
-        (this.fetchedNotice.duration.endDate === null ? "모집시" : endDate)
+        (this.notice.duration.endDate === null ? "모집시" : endDate)
       );
     }
   },
 
-  created() {
-    const noticeId = this.$route.params.id;
-    try {
-      this.$store.dispatch("FETCH_NOTICE", noticeId);
-    } catch (error) {
-      console.log("공고 불러오기 실패 " + error.response.data.message);
-      this.$store.dispatch(
-        "UPDATE_SNACKBAR_TEXT",
-        "공고를 불러오지 못했습니다."
-      );
+  watch: {
+    async id() {
+      await this.initialize();
     }
+  },
+
+  async created() {
+    await this.initialize();
   },
 
   methods: {
+    async initialize() {
+      try {
+        const { data } = await getAction(`/api/notices/${this.id}`);
+        this.notice = data;
+      } catch (error) {
+        console.log("공고 불러오기 실패 " + error.response.data.message);
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "공고를 불러오지 못했습니다."
+        );
+      }
+    },
+
     isAdmin() {
       return this.fetchedLoginUser.roleType === "ADMIN";
     },
@@ -171,7 +180,7 @@ export default {
       router.push(`/notices/edit/${this.$route.params.id}`);
     },
     openChatDrawer() {
-      this.$store.dispatch("OPEN_DRAWER", this.fetchedNotice);
+      this.$store.dispatch("OPEN_CHAT_DRAWER", this.notice);
     }
   }
 };
@@ -289,6 +298,7 @@ export default {
 
 .notice-buttons.mobile {
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .inner.mobile {

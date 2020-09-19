@@ -22,8 +22,8 @@ public class ChatName {
     @Enumerated(value = EnumType.STRING)
     private TitleColor color;
 
-    public static ChatName of(Adjective adjective, Animal animal, TitleColor titleColor) {
-        return new ChatName(String.format("%s %s", adjective.name(), animal.name()), titleColor);
+    public static ChatName of(Adjective adjective, CrewName crewName, TitleColor titleColor) {
+        return new ChatName(String.format("%s %s", adjective.name(), crewName.name()), titleColor);
     }
 
     public static ChatName of(String name, TitleColor titleColor) {
