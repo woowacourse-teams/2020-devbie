@@ -97,11 +97,14 @@ export default {
 }
 
 .filter-box.mobile {
-  margin-right: 0px;
-  flex-flow: column;
+  margin-top: 30px;
+  justify-content: center;
+  margin-right: 0;
+  /*flex-flow: row;*/
 }
 
 .filters.mobile {
-  margin: 0 0 15px 0;
+  max-width: 100px;
+  margin: 0 10px 15px 0;
 }
 </style>
