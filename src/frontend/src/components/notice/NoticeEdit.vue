@@ -50,11 +50,6 @@
         label="회사이름"
         :rules="rules.text"
       ></v-text-field>
-      <v-text-field
-        v-model="request.salary"
-        label="연봉"
-        :rules="rules.salary"
-      ></v-text-field>
       <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
@@ -150,18 +145,19 @@ export default {
       }
     },
     parameterInitialize() {
+      const duration = this.notice.duration || "";
+      console.log(duration);
       return {
         title: this.notice.title,
         name: this.notice.company.name,
         jobPosition: this.notice.jobPosition,
         noticeType: this.notice.noticeType,
-        startDate: this.notice.duration.startDate || null,
-        endDate: this.notice.duration.endDate || null,
+        startDate: duration.startDate || "",
+        endDate: duration.endDate || "",
         description: this.notice.noticeDescription.content,
         languages: this.notice.noticeDescription.languages.map(language =>
           languageTranslator(language)
         ),
-        salary: this.notice.company.salary,
         image: this.notice.image
       };
     }

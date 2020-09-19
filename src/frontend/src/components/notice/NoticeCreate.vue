@@ -74,12 +74,6 @@
         required
         :rules="rules.text"
       ></v-text-field>
-      <v-text-field
-        v-model="request.salary"
-        label="연봉"
-        required
-        :rules="rules.salary"
-      ></v-text-field>
       <v-textarea
         outlined
         v-model="request.description"
@@ -113,7 +107,6 @@ export default {
         image: "",
         title: "",
         name: "",
-        salary: 0,
         languages: [],
         description: "",
         startDate: "",

@@ -76,10 +76,6 @@
               회사명: {{ notice.company.name }}
             </p>
             <p class="infos">
-              <i class="fas fa-won-sign"></i>
-              연봉: {{ notice.company.salary }} 만원
-            </p>
-            <p class="infos">
               <i class="fas fa-calendar-alt"></i>
               지원기간: {{ setDuration }}
             </p>
@@ -116,7 +112,7 @@ export default {
     return {
       notice: {
         id: -1,
-        company: { name: "", salary: 1 },
+        company: { name: "" },
         title: "",
         noticeType: "",
         duration: null,
