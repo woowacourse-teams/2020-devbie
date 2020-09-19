@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
-import underdogs.devbie.question.domain.QuestionHashtagRepository;
+import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
 
 @Service

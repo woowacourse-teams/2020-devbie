@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Question;
-import underdogs.devbie.question.domain.QuestionRepository;
+import underdogs.devbie.question.domain.repository.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
