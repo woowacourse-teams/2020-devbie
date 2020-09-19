@@ -14,11 +14,11 @@ class ChatNameFactoryTest {
     @Test
     void createNonOverlappingName() {
         Set<ChatName> chatNames = new HashSet<>();
-        chatNames.add(ChatName.of(Adjective.깜찍한, CrewName.동글, TitleColor.AMBER));
+        chatNames.add(ChatName.of(Adjective.찬란한, CrewName.동글, TitleColor.AMBER));
         ChatName actual = ChatNameFactory.createNonOverlappingName(ChatNames.from(chatNames));
 
         assertThat(actual).isNotNull();
-        assertThat(actual.getChatName()).isNotEqualTo("깜찍한 동글");
+        assertThat(actual.getChatName()).isNotEqualTo("찬란한 동글");
     }
 
     @DisplayName("존재하는 모든 ChatName이 존재할 때 IndexOutOfBoundsException 발생")
