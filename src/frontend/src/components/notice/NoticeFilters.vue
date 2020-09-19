@@ -7,7 +7,7 @@
       v-on:change="onChange"
       item-text="text"
       item-value="key"
-      :items="fetchedJobPositions"
+      :items="fetchedFilterByJobPositions"
       hide-details
       label="직군"
       menu-props="auto"
@@ -19,7 +19,7 @@
       v-on:change="onChange"
       item-text="text"
       item-value="key"
-      :items="fetchedLanguages"
+      :items="fetchedFilterByLanguages"
       menu-props="auto"
       label="언어"
       hide-details
@@ -43,7 +43,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
+    ...mapGetters(["fetchedFilterByJobPositions", "fetchedFilterByLanguages"])
   },
 
   watch: {

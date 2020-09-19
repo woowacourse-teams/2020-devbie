@@ -10,13 +10,8 @@ export default {
       state.noticeId = data;
     },
     SET_FILTERS(state, data) {
-      const languages = [{ key: "", text: "무관" }];
-      state.languages = languages.concat(data.languages.map(res => res.pair));
-
-      const jobPositions = [{ key: "", text: "무관" }];
-      state.jobPositions = jobPositions.concat(
-        data.jobPositions.map(res => res.pair)
-      );
+      state.languages = data.languages.map(res => res.pair);
+      state.jobPositions = data.jobPositions.map(res => res.pair);
     }
   },
   actions: {
@@ -53,6 +48,17 @@ export default {
     },
     fetchedJobPositions(state) {
       return state.jobPositions;
+    },
+    fetchedKeyword(state) {
+      return state.keyword;
+    },
+    fetchedFilterByJobPositions(state) {
+      const emptyPair = [{ key: "", text: "무관" }];
+      return emptyPair.concat(state.jobPositions);
+    },
+    fetchedFilterByLanguages(state) {
+      const emptyPair = [{ key: "", text: "무관" }];
+      return emptyPair.concat(state.languages);
     }
   }
 };
