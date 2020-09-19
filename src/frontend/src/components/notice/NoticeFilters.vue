@@ -1,8 +1,9 @@
 <template>
-  <div class="filter-box">
+  <div class="filter-box" :class="$mq">
     <br />
     <v-select
       class="filters"
+      :class="$mq"
       v-model="selectedPosition"
       v-on:change="onChange"
       item-text="text"
@@ -15,6 +16,7 @@
     ></v-select>
     <v-select
       class="filters"
+      :class="$mq"
       v-model="selectedLanguage"
       v-on:change="onChange"
       item-text="text"
@@ -88,8 +90,23 @@ export default {
 
 .filters {
   padding: 0;
-  margin: 0 50px 0 0;
-  width: 12em;
+  width: 10em;
   max-width: 12em;
+  margin-right: 50px;
+}
+
+.filters:last-child {
+  margin-right: 0;
+}
+
+.filter-box.mobile {
+  margin-top: 30px;
+  justify-content: center;
+  margin-right: 0;
+}
+
+.filters.mobile {
+  max-width: 100px;
+  margin: 0 10px 15px 0;
 }
 </style>

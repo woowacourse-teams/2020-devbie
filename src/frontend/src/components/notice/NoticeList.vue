@@ -3,10 +3,9 @@
     <template v-if="isSearch()">
       <h2 class="search-message">'{{ keyword }}'로 검색한 결과입니다.</h2>
     </template>
-
-    <v-row dense v-scroll="onScroll">
-      <div v-for="notice in notices" :key="notice.id" class="item">
-        <v-card class="v-card">
+    <v-row dense v-scroll="onScroll" class="list-parent" :class="$mq">
+      <div v-for="notice in notices" :key="notice.id" class="item" :class="$mq">
+        <v-card>
           <v-img
             @click="
               $router.push(`/notices/${noticeType || 'JOB'}/${notice.id}`)
@@ -262,10 +261,6 @@ export default {
   font-size: 13px;
 }
 
-.item:last-child {
-  margin-right: auto;
-}
-
 .item {
   width: 22%;
   margin: 0 30px 50px 0;
@@ -305,10 +300,30 @@ export default {
 
 .last-item {
   flex-basis: 100%;
+  height: 100px;
+}
+
+.list-parent {
+  justify-content: center;
+  margin: 0;
+  padding-left: 2%;
+}
+
+.list-parent.mobile {
+  width: 80%;
+  margin: auto;
+}
+
+.item.mobile {
+  width: 100%;
+  margin: 0 0 50px 0;
 }
 
 .search-message {
   text-align: center;
   margin-bottom: 50px;
+}
+.notice-info {
+  width: 100%;
 }
 </style>

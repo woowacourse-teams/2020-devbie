@@ -95,4 +95,3 @@ INSERT INTO answer (recommended_count, non_recommended_count, answer_id, user_id
 
 INSERT INTO user (id, oauth_id, email, image, name) VALUES (100, 123456, 'test@test.com', 'test_image', 'bsdg');
 INSERT INTO user (id, oauth_id, email, image, name) VALUES (54, 234567, 'admin@admin.com', 'test_image', '김앨런');
-INSERT INTO user (id, oauth_id, email, image, name, role_type) VALUES (101, 33685054, 'khbasd@gmail.com	', 'test_image', '김앨런2', 'ADMIN');

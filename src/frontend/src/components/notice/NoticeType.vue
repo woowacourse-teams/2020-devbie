@@ -1,5 +1,5 @@
 <template>
-  <div class="select-box">
+  <div class="select-box" :class="$mq">
     <v-btn
       large
       name="JOB"
@@ -64,5 +64,10 @@ export default {
 
 .button-active {
   background-color: rgb(218, 235, 234) !important;
+}
+
+.select-box.mobile {
+  margin-top: 30px;
+  margin-right: 0;
 }
 </style>

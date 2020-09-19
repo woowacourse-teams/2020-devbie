@@ -1,11 +1,21 @@
 <template>
-  <div class="notice-detail">
+  <div class="notice-detail" :class="$mq">
     <v-divider></v-divider>
-    <div class="inner">
+    <div class="inner" :class="$mq">
       <div class="notice-detail-main">
         <div class="notice-header">
           <div class="notice-title">
             <h1 class="big-font">
+              <v-btn
+                icon
+                @click="$router.go(-1)"
+                class="back-button"
+                :class="$mq"
+              >
+                <v-icon large>
+                  mdi-arrow-left-bold-circle-outline
+                </v-icon>
+              </v-btn>
               [ {{ notice.noticeType }} ]
               {{ notice.title }}
               <favorite-control
@@ -16,7 +26,7 @@
               ></favorite-control>
             </h1>
           </div>
-          <div class="notice-body">
+          <div class="notice-body" :class="$mq">
             <div class="notice-img">
               <v-img
                 :src="notice.image"
@@ -26,7 +36,7 @@
               >
               </v-img>
             </div>
-            <div class="notice-buttons">
+            <div class="notice-buttons" :class="$mq">
               <v-btn id="apply-btn" depressed large color="#DAEBEA"
                 >지원하기</v-btn
               >
@@ -94,8 +104,8 @@
 <script>
 import { mapGetters } from "vuex";
 import router from "../../router";
-import { getAction } from "@/api";
 import FavoriteControl from "../favorite/FavoriteControl";
+import { getAction } from "@/api";
 
 export default {
   props: ["id"],
@@ -104,8 +114,16 @@ export default {
 
   data() {
     return {
-      notice: {},
-      stompClient: {}
+      notice: {
+        id: -1,
+        company: { name: "", salary: 1 },
+        title: "",
+        noticeType: "",
+        duration: null,
+        jobPosition: "",
+        noticeDescription: { languages: [], content: "" },
+        image: ""
+      }
     };
   },
   computed: {
@@ -141,7 +159,7 @@ export default {
     }
   },
 
-  async created() {
+  async mounted() {
     await this.initialize();
   },
 
@@ -270,5 +288,33 @@ export default {
 
 .heart-icon {
   display: inline;
+}
+
+.back-button {
+  display: none;
+}
+
+.notice-body.mobile {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.notice-detail.mobile {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.notice-buttons.mobile {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.inner.mobile {
+  margin: auto;
+}
+
+.back-button.mobile {
+  display: block;
+  margin-bottom: 15px;
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <div class="notice-list" style="margin: 50px 150px 50px 150px">
-    <div class="filters">
-      <notice-type :noticeType="noticeType"></notice-type>
+  <div class="notice-list" :class="$mq">
+    <div class="filters" :class="$mq">
+      <notice-type :noticeType="noticeType" class="item"></notice-type>
       <notice-filters
         :jobPosition="jobPosition"
         :language="language"
+        class="item"
       ></notice-filters>
       <notice-search></notice-search>
     </div>
@@ -42,16 +43,28 @@ export default {
 <style scoped>
 .notice-list {
   font-family: "Jua", sans-serif;
+  margin: 50px auto;
+  max-width: 90%;
+}
+
+.notice-list.mobile {
+  margin: 0 0 0 0;
 }
 
 .filters {
   display: flex;
-  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
   margin-bottom: 50px;
 }
 
-.filters > * {
-  margin-right: 120px;
+.item {
+  margin-right: 10%;
+  margin-bottom: 10px;
+}
+
+.filters.mobile {
+  flex-wrap: wrap;
 }
 </style>
