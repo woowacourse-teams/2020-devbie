@@ -37,7 +37,12 @@
               </v-img>
             </div>
             <div class="notice-buttons" :class="$mq">
-              <v-btn id="apply-btn" depressed large color="#DAEBEA"
+              <v-btn
+                id="apply-btn"
+                depressed
+                large
+                color="#DAEBEA"
+                @click="onApply"
                 >지원하기</v-btn
               >
               <v-btn
@@ -185,6 +190,9 @@ export default {
     },
     openChatDrawer() {
       this.$store.dispatch("OPEN_CHAT_DRAWER", this.notice);
+    },
+    onApply() {
+      window.open(this.notice.noticeDescription.applyUrl, "_blank");
     }
   }
 };

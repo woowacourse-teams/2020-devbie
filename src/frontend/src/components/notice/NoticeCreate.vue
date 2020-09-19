@@ -56,6 +56,11 @@
         label="공고 이름"
         :rules="rules.text"
       ></v-text-field>
+      <v-text-field
+        v-model="request.applyUrl"
+        label="지원 URL"
+        :rules="rules.url"
+      ></v-text-field>
       <div class="duration">
         <input
           aria-label="시작일"
@@ -111,7 +116,8 @@ export default {
         description: "",
         startDate: "",
         endDate: "",
-        noticeType: ""
+        noticeType: "",
+        applyUrl: ""
       },
       image:
         "https://images.velog.io/images/sonypark/post/55f4b858-ea9e-4348-ba47-88c2310f8f6c/devie.png"

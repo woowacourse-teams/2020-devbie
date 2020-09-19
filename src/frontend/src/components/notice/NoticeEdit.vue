@@ -50,6 +50,11 @@
         label="회사이름"
         :rules="rules.text"
       ></v-text-field>
+      <v-text-field
+        v-model="request.applyUrl"
+        label="지원 URL"
+        :rules="rules.url"
+      ></v-text-field>
       <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
         outlined
@@ -146,7 +151,6 @@ export default {
     },
     parameterInitialize() {
       const duration = this.notice.duration || "";
-      console.log(duration);
       return {
         title: this.notice.title,
         name: this.notice.company.name,
@@ -158,7 +162,8 @@ export default {
         languages: this.notice.noticeDescription.languages.map(language =>
           languageTranslator(language)
         ),
-        image: this.notice.image
+        image: this.notice.image,
+        applyUrl: this.notice.noticeDescription.applyUrl
       };
     }
   }
