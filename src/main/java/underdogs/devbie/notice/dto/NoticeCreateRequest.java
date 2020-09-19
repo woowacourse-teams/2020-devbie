@@ -1,11 +1,11 @@
 package underdogs.devbie.notice.dto;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -59,7 +59,6 @@ public class NoticeCreateRequest {
     @URL
     private String applyUrl;
 
-    @NotNull
     private RecruitmentType recruitmentType;
 
     public Notice toEntity() {
@@ -79,10 +78,10 @@ public class NoticeCreateRequest {
         LocalDate startLocalDate = null;
         LocalDate endLocalDate = null;
 
-        if (!startDate.isEmpty()) {
+        if (Objects.nonNull(startDate) && !startDate.isEmpty()) {
             startLocalDate = LocalDate.parse(startDate);
         }
-        if (!endDate.isEmpty()) {
+        if (Objects.nonNull(startDate) && !endDate.isEmpty()) {
             endLocalDate = LocalDate.parse(endDate);
         }
 
