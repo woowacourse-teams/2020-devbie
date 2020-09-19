@@ -1,10 +1,11 @@
 <template>
   <div class="notice-list" :class="$mq">
     <div class="filters" :class="$mq">
-      <notice-type :noticeType="noticeType"></notice-type>
+      <notice-type :noticeType="noticeType" class="item"></notice-type>
       <notice-filters
         :jobPosition="jobPosition"
         :language="language"
+        class="item"
       ></notice-filters>
       <notice-search></notice-search>
     </div>
@@ -51,9 +52,15 @@ export default {
 
 .filters {
   display: flex;
-  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
   margin-bottom: 50px;
+}
+
+.item {
+  margin-right: 10%;
+  margin-bottom: 10px;
 }
 
 .filters.mobile {

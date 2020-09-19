@@ -48,7 +48,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 120px;
 }
 
 .select-btn {

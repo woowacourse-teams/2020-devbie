@@ -86,14 +86,17 @@ export default {
   align-items: center;
   justify-content: center;
   font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
-  margin-right: 120px;
 }
 
 .filters {
   padding: 0;
-  margin: 0 50px 0 0;
   width: 12em;
   max-width: 12em;
+  margin-right: 50px;
+}
+
+.filters:last-child {
+  margin-right: 0;
 }
 
 .filter-box.mobile {
