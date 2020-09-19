@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import underdogs.devbie.exception.CreateFailException;
+
 public class NoticeTest {
 
     @DisplayName("공고 업데이트")
@@ -51,5 +53,19 @@ public class NoticeTest {
             () -> assertThat(notice.getNoticeDescription()).isEqualTo(expectedDetail),
             () -> assertThat(notice.getImage()).isEqualTo(expectedImage)
         );
+    }
+
+    @Test
+    void validate_Invalid_Parameters_Should_Throw_CreateFailException() {
+
+        assertThatThrownBy(() -> Notice.builder()
+            .id(1L)
+            .title("우테코 모집")
+            .noticeType(NoticeType.EDUCATION)
+            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .build())
+            .isInstanceOf(CreateFailException.class)
+            .hasMessageContaining("생성 인자가 올바르지 않습니다.");
+
     }
 }

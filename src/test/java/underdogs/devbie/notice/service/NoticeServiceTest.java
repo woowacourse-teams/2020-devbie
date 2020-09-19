@@ -38,6 +38,7 @@ import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
+import underdogs.devbie.notice.expception.NoticeNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class NoticeServiceTest {
@@ -197,6 +198,17 @@ public class NoticeServiceTest {
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getContent()).isEqualTo("We are hiring!"),
             () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
         );
+    }
+
+    @DisplayName("없는 공고 조회 시 예외 발생")
+    @Test
+    void read_Invalid_Notice_Should_Throw_NoticeNotFoundException() {
+
+        given(noticeRepository.findById(anyLong())).willThrow(new NoticeNotFoundException());
+
+        assertThatThrownBy(() -> noticeService.read(anyLong()))
+            .isInstanceOf(NoticeNotFoundException.class)
+            .hasMessageContaining("해당 공고를 찾을 수 없습니다.");
     }
 
     @DisplayName("공고 아이디로 공고 조회")

@@ -108,7 +108,8 @@ class AnswerServiceTest {
             .questionId(3L)
             .content(AnswerContent.from(TEST_ANSWER_CONTENT))
             .build();
-        given(answerRepository.findByQuestionIdOrderByRecommendationCount(anyLong())).willReturn(Collections.singletonList(expectAnswer));
+        given(answerRepository.findByQuestionIdOrderByRecommendationCount(anyLong())).willReturn(
+            Collections.singletonList(expectAnswer));
         given(userService.findById(anyLong())).willReturn(user);
 
         AnswerResponses answerResponses = answerService.readByQuestionId(expectAnswer.getQuestionId());
@@ -146,6 +147,17 @@ class AnswerServiceTest {
             () -> assertThat(actual.getQuestionId()).isEqualTo(3L),
             () -> assertThat(actual.getContent()).isEqualTo(TEST_ANSWER_CONTENT)
         );
+    }
+
+    @DisplayName("답변 없을 때 조회 시 예외 발생")
+    @Test
+    void read_When_Answer_Not_Exist_Should_Throw_AnswerNotExistedException() {
+
+        given(answerRepository.findById(anyLong())).willThrow(new AnswerNotExistedException());
+
+        assertThatThrownBy(() -> answerService.read(anyLong()))
+            .isInstanceOf(AnswerNotExistedException.class)
+            .hasMessageContaining("답변이 존재하지 않습니다.");
     }
 
     @DisplayName("하나의 면접 답 조회 실패 - 존재하지 않는 Answer")
@@ -208,7 +220,8 @@ class AnswerServiceTest {
             .build();
         given(answerRepository.findById(anyLong())).willReturn(Optional.of(expectAnswer));
 
-        assertThatThrownBy(() -> answerService.update(user, 1L, answerUpdateRequest)).isInstanceOf(NotMatchedAnswerAuthorException.class);
+        assertThatThrownBy(() -> answerService.update(user, 1L, answerUpdateRequest)).isInstanceOf(
+            NotMatchedAnswerAuthorException.class);
     }
 
     @DisplayName("면접 답변 삭제 실패 - 권한 없는 요청")

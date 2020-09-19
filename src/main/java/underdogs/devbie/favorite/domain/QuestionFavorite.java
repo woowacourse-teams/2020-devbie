@@ -24,12 +24,12 @@ public class QuestionFavorite extends Favorite {
     }
 
     public static QuestionFavorite of(Long questionId, Long userId) {
-        validateParameters(questionId, userId);
+        validateParameters(questionId);
         return new QuestionFavorite(userId, questionId);
     }
 
-    private static void validateParameters(Long questionId, Long userId) {
-        if (Objects.isNull(questionId) || Objects.isNull(userId)) {
+    private static void validateParameters(Long questionId) {
+        if (Objects.isNull(questionId)) {
             throw new CreateFailException();
         }
     }
