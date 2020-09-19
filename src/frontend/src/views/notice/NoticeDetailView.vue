@@ -9,8 +9,11 @@
 import NoticeScroll from "../../components/notice/NoticeScroll";
 
 export default {
-  props: ["id"],
-
+  data() {
+    return {
+      id: this.$route.params.id
+    };
+  },
   components: {
     NoticeScroll
   }

@@ -1,7 +1,12 @@
 <template>
   <div>
     <v-navigation-drawer fixed right permanent class="drawer" :class="$mq">
-      <div id="chat_components">
+      <div class="chat_components" v-if="fetchedChatRoomDrawer">
+        <chat-room-title-box></chat-room-title-box>
+        <v-divider></v-divider>
+        <chat-room-history-box></chat-room-history-box>
+      </div>
+      <div class="chat_components" v-else>
         <div id="chat_info_box">
           <chat-info></chat-info>
         </div>
@@ -19,21 +24,28 @@
 </template>
 
 <script>
+import ChatRoomTitleBox from "./ChatRoomTitleBox";
+import ChatRoomHistoryBox from "./ChatRoomHistoryBox";
 import ChatList from "./ChatList";
 import ChatInput from "./ChatInput";
-import ChatInfo from "./chatInfo";
-
+import ChatInfo from "./ChatInfo";
+import { mapGetters } from "vuex";
 export default {
   components: {
+    ChatRoomHistoryBox,
+    ChatRoomTitleBox,
     ChatInfo,
     ChatInput,
     ChatList
+  },
+  computed: {
+    ...mapGetters(["fetchedChatRoomDrawer"])
   }
 };
 </script>
 
 <style scoped>
-#chat_components {
+.chat_components {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -42,12 +54,10 @@ export default {
   flex-grow: 1;
   position: relative;
 }
-
 .drawer {
   height: 100vh;
   width: 260px;
 }
-
 .drawer.mobile {
   width: 100vw !important;
 }

@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <a @click="$router.push(`/notices/create`)">글쓰기 글쓰기</a>
+  <div class="inner">
+    <div class="notice-upload-btn">
+      <v-btn x-large color="teal" dark @click="$router.push(`/notices/create`)"
+        >글쓰기</v-btn
+      >
+    </div>
   </div>
 </template>
 
@@ -21,4 +25,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

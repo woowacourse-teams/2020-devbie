@@ -4,7 +4,7 @@
     <v-select
       class="filters"
       v-model="selectedPosition"
-      v-on:change="changeJobPosition"
+      v-on:change="onChange"
       item-text="text"
       item-value="key"
       :items="fetchedFilterByJobPositions"
@@ -16,7 +16,7 @@
     <v-select
       class="filters"
       v-model="selectedLanguage"
-      v-on:change="changeLanguage"
+      v-on:change="onChange"
       item-text="text"
       item-value="key"
       :items="fetchedFilterByLanguages"
@@ -30,12 +30,15 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { createNoticeUrl } from "@/utils/noticeUtil";
 
 export default {
+  props: ["jobPosition", "language"],
+
   data() {
     return {
-      selectedPosition: "",
-      selectedLanguage: ""
+      selectedPosition: this.jobPosition,
+      selectedLanguage: this.language
     };
   },
 
@@ -43,16 +46,33 @@ export default {
     ...mapGetters(["fetchedFilterByJobPositions", "fetchedFilterByLanguages"])
   },
 
+  watch: {
+    jobPosition() {
+      this.setFilters();
+    },
+    language() {
+      this.setFilters();
+    }
+  },
+
   created() {
     this.$store.dispatch("FETCH_FILTERS");
   },
 
   methods: {
-    changeJobPosition() {
-      this.$store.commit("SET_JOB_POSITION", this.selectedPosition);
+    setFilters() {
+      this.selectedPosition = this.$route.query.jobPosition;
+      this.selectedLanguage = this.$route.query.language;
     },
-    changeLanguage() {
-      this.$store.commit("SET_LANGUAGE", this.selectedLanguage);
+
+    async onChange() {
+      const noticeUrl = await createNoticeUrl(
+        this.$route.query.noticeType,
+        this.$route.query.keyword,
+        this.selectedLanguage,
+        this.selectedPosition
+      );
+      await this.$router.push(noticeUrl);
     }
   }
 };

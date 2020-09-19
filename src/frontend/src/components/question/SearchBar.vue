@@ -77,7 +77,8 @@ export default {
   },
 
   methods: {
-    searchByInput() {
+    searchByInput(event) {
+      event.preventDefault();
       this.$router.push(
         `/questions?title=${this.title}&content=${this.content}`
       );

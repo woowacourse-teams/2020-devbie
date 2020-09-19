@@ -30,7 +30,7 @@ export default {
   methods: {
     checkLoggedIn() {
       if (!this.isLoggedIn) {
-        router.push("/");
+        router.push("/questions");
       }
     }
   }

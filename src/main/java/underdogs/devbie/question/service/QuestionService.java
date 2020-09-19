@@ -17,6 +17,7 @@ import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.question.exception.QuestionNotExistedException;
+import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
 
@@ -97,5 +98,18 @@ public class QuestionService {
     public QuestionResponses findAllByIds(List<Long> questionIds) {
         List<Question> questions = questionRepository.findAllById(questionIds);
         return QuestionResponses.from(questions);
+    }
+
+    public void toggleCount(Long questionId, RecommendationType recommendationType, boolean toggle) {
+        Question question = readOne(questionId);
+        if (toggle) {
+            question.decreaseRecommendationCount(recommendationType.toggleType());
+        }
+        question.increaseRecommendationCount(recommendationType);
+    }
+
+    public void decreaseCount(Long questionId, RecommendationType recommendationType) {
+        Question question = readOne(questionId);
+        question.decreaseRecommendationCount(recommendationType);
     }
 }

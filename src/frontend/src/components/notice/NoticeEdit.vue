@@ -74,10 +74,12 @@
 import { mapGetters } from "vuex";
 import { languageTranslator } from "@/utils/noticeUtil";
 import validator from "../../utils/validator";
+import { getAction, patchAction } from "@/api";
 
 export default {
   data() {
     return {
+      notice: {},
       rules: { ...validator.notice },
       id: "",
       noticeTypeItems: [
@@ -89,7 +91,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["fetchedNotice", "fetchedLanguages", "fetchedJobPositions"])
+    ...mapGetters(["fetchedLanguages", "fetchedJobPositions"])
   },
 
   async created() {
@@ -98,12 +100,13 @@ export default {
 
     this.id = this.$route.params.id;
     try {
-      await this.$store.dispatch("FETCH_NOTICE", this.id);
+      const { data } = await getAction(`/api/notices/${this.id}`);
+      this.notice = data;
     } catch (error) {
       console.log("공고 불러오기 실패 " + error.response.data.message);
-      return this.$store.dispatch(
+      await this.$store.dispatch(
         "UPDATE_SNACKBAR_TEXT",
-        "공고 불러오기 실패했습니다. "
+        "공고를 불러오지 못했습니다."
       );
     }
 
@@ -137,37 +140,31 @@ export default {
     },
     async submit() {
       try {
-        await this.$store.dispatch("EDIT_NOTICE", {
-          id: this.id,
-          params: this.request
-        });
-        await this.$router.push(`/notices/${this.id}`);
+        await patchAction(`/api/notices/${this.id}`, this.request);
+
+        await this.$router.push(
+          `/notices/${this.request.noticeType}/${this.id}`
+        );
       } catch (error) {
         console.log(error);
       }
     },
     parameterInitialize() {
       return {
-        title: this.fetchedNotice.title,
-        name: this.fetchedNotice.company.name,
-        jobPosition: this.fetchedNotice.jobPosition,
-        noticeType: this.fetchedNotice.noticeType,
+        title: this.notice.title,
+        name: this.notice.company.name,
+        jobPosition: this.notice.jobPosition,
+        noticeType: this.notice.noticeType,
         startDate:
-          this.fetchedNotice.duration === null ||
-          this.fetchedNotice.duration.startDate === null
-            ? null
-            : this.fetchedNotice.duration.startDate,
+          this.notice.duration === null ? "" : this.notice.duration.startDate,
         endDate:
-          this.fetchedNotice.duration === null ||
-          this.fetchedNotice.duration.endDate === null
-            ? null
-            : this.fetchedNotice.duration.endDate,
-        description: this.fetchedNotice.noticeDescription.content,
-        languages: this.fetchedNotice.noticeDescription.languages.map(
-          language => languageTranslator(language)
+          this.notice.duration === null ? "" : this.notice.duration.endDate,
+        description: this.notice.noticeDescription.content,
+        languages: this.notice.noticeDescription.languages.map(language =>
+          languageTranslator(language)
         ),
-        salary: this.fetchedNotice.company.salary,
-        image: this.fetchedNotice.image
+        salary: this.notice.company.salary,
+        image: this.notice.image
       };
     }
   }

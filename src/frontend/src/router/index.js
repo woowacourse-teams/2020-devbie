@@ -21,6 +21,7 @@ Vue.use(VueRouter);
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => {
+    window.location.reload();
     return err;
   });
 };
@@ -41,7 +42,13 @@ export const router = new VueRouter({
     {
       path: "/notices",
       name: "notices",
-      component: NoticeListView
+      component: NoticeListView,
+      props: route => ({
+        noticeType: route.query.noticeType,
+        jobPosition: route.query.jobPosition,
+        keyword: route.query.keyword,
+        language: route.query.language
+      })
     },
     {
       path: "/questions",
@@ -70,17 +77,16 @@ export const router = new VueRouter({
       component: QuestionEditView
     },
     {
-      path: "/notices",
+      path: "/notices/(JOB|EDUCATION)/",
       name: "notice-detail",
       component: NoticeDetailView,
-      props: route => ({
-        id: route.params.id
-      }),
+      props: true,
       children: [
         {
           path: ":id(\\d+)",
           name: "notice-content",
-          component: NoticeDetail
+          component: NoticeDetail,
+          props: true
         }
       ]
     },
