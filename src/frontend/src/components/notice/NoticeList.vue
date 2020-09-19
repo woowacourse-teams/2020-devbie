@@ -261,10 +261,6 @@ export default {
   font-size: 13px;
 }
 
-.item:last-child {
-  margin-right: auto;
-}
-
 .item {
   width: 22%;
   margin: 0 30px 50px 0;
@@ -309,6 +305,8 @@ export default {
 
 .list-parent {
   justify-content: center;
+  margin: 0;
+  padding-left: 2%;
 }
 
 .list-parent.mobile {

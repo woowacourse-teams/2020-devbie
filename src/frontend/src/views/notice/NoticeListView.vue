@@ -43,7 +43,8 @@ export default {
 <style scoped>
 .notice-list {
   font-family: "Jua", sans-serif;
-  margin: 50px 150px 50px 150px;
+  margin: 50px auto;
+  max-width: 90%;
 }
 
 .notice-list.mobile {
