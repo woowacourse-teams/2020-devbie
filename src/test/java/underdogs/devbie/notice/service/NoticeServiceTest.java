@@ -194,7 +194,8 @@ public class NoticeServiceTest {
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getLanguages()).contains(
                 Language.JAVA.getText(), Language.JAVASCRIPT.getText()),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getContent()).isEqualTo("We are hiring!"),
-            () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
+            () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
+            () -> assertThat(noticeDetailResponse.getNoticeDescription().getApplyUrl()).isEqualTo("https://devbie.kr")
         );
     }
 

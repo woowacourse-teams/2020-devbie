@@ -251,7 +251,8 @@ public class NoticeControllerTest extends MvcTest {
             () -> assertThat(noticeDetailResponse1.getCompany().getName()).isEqualTo("bossdog"),
             () -> assertThat(noticeDetailResponse1.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(noticeDetailResponse1.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
-            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!")
+            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
+            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getApplyUrl()).isEqualTo("https://devbie.kr")
         );
     }
 

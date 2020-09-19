@@ -19,11 +19,11 @@ import underdogs.devbie.exception.CreateFailException;
 @EqualsAndHashCode
 public class ApplyUrl {
 
-    private String url;
+    private String applyUrl;
 
     public ApplyUrl(String url) {
         validate(url);
-        this.url = url;
+        this.applyUrl = url;
     }
 
     private void validate(String url) {

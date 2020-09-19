@@ -1,5 +1,6 @@
 package underdogs.devbie.notice.dto;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ public class NoticeDescriptionResponse {
 
     private Set<String> languages;
     private String content;
+    private String applyUrl;
 
     public static NoticeDescriptionResponse from(NoticeDescription noticeDescription) {
         Set<String> languages = noticeDescription.getLanguages()
@@ -28,6 +30,12 @@ public class NoticeDescriptionResponse {
             .map(Language::getText)
             .collect(Collectors.toSet());
 
-        return new NoticeDescriptionResponse(languages, noticeDescription.getContent());
+        String applyUrl = "";
+        if (Objects.nonNull(noticeDescription.getApplyUrl())) {
+            applyUrl = noticeDescription.getApplyUrl().getApplyUrl();
+        }
+
+        return new NoticeDescriptionResponse(languages, noticeDescription.getContent(),
+            applyUrl);
     }
 }

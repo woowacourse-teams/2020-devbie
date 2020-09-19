@@ -161,6 +161,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
                     () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
                     () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
+                    () -> assertThat(result.getNoticeDescription().getApplyUrl()).isEqualTo("https://devbie.kr"),
                     () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getText(),
                         Language.JAVASCRIPT.getText(), Language.CPP.getText())
                 );
