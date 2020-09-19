@@ -135,7 +135,10 @@ export default {
     },
 
     setDuration() {
-      if (this.notice.duration === null) {
+      if (
+        this.notice.duration === null ||
+        this.notice.duration.recruitmentType === "ANY"
+      ) {
         return "상시모집";
       }
 
@@ -146,11 +149,7 @@ export default {
         this.notice.duration.endDate
       ).toLocaleDateString();
 
-      return (
-        (this.notice.duration.startDate === null ? "" : startDate) +
-        " ~ " +
-        (this.notice.duration.endDate === null ? "모집시" : endDate)
-      );
+      return startDate + " ~ " + endDate;
     }
   },
 

@@ -11,13 +11,13 @@
             style="display:none"
           />
           <v-row align="end" class="fill-height">
-            <v-col align-self="start" class="pa-0" cols="12"> </v-col>
+            <v-col align-self="start" class="pa-0" cols="12"></v-col>
             <v-col class="py-0">
               <v-list-item color="rgba(0, 0, 0, .4)" dark>
                 <v-list-item-content>
                   <v-list-item-title class="title"
-                    >공고 이미지 (클릭하여 추가하세요)</v-list-item-title
-                  >
+                    >공고 이미지 (클릭하여 추가하세요)
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-col>
@@ -61,17 +61,13 @@
         label="지원 URL"
         :rules="rules.url"
       ></v-text-field>
-      <div class="duration">
-        <input
-          aria-label="시작일"
-          v-model="request.startDate"
-          type="datetime-local"
-        />
-        <input
-          aria-labelledby="종료일"
-          v-model="request.endDate"
-          type="datetime-local"
-        />
+      <v-radio-group row mandatory v-model="recruitmentState">
+        <v-radio label="상시채용"></v-radio>
+        <v-radio label="공개채용"></v-radio>
+      </v-radio-group>
+      <div class="duration" v-if="isPublicRecruitment()">
+        <input aria-label="시작일" v-model="request.startDate" type="date" />
+        <input aria-labelledby="종료일" v-model="request.endDate" type="date" />
       </div>
       <v-text-field
         v-model="request.name"
@@ -102,6 +98,7 @@ export default {
   data() {
     return {
       rules: { ...validator.notice },
+      recruitmentState: 0,
       noticeTypeItems: [
         { text: "채용", key: "JOB" },
         { text: "교육", key: "EDUCATION" }
@@ -112,10 +109,11 @@ export default {
         image: "",
         title: "",
         name: "",
+        recruitmentType: "ANY",
         languages: [],
         description: "",
-        startDate: "",
-        endDate: "",
+        startDate: null,
+        endDate: null,
         noticeType: "",
         applyUrl: ""
       },
@@ -181,6 +179,9 @@ export default {
           ? "https://cdn.vuetifyjs.com/images/cards/plane.jpg"
           : this.request.image;
 
+      this.request.recruitmentType =
+        this.recruitmentState === 0 ? "ANY" : "OPEN";
+
       try {
         const { headers } = await postAction(`/api/notices`, this.request);
         const nextId = headers.location.split("/")[3];
@@ -190,6 +191,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    isPublicRecruitment() {
+      return this.recruitmentState === 1;
     }
   }
 };
