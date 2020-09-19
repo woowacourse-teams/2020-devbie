@@ -3,7 +3,6 @@ package underdogs.devbie.chat.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,24 +31,10 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom")
     private List<Chat> chats = new ArrayList<>();
 
-    @Embedded
-    private ChatNames chatNames = new ChatNames();
-
     public static ChatRoom from(Long noticeId) {
         return ChatRoom.builder()
             .noticeId(noticeId)
             .chats(new ArrayList<>())
-            .chatNames(new ChatNames())
             .build();
-    }
-
-    public ChatName addNewName() {
-        ChatName chatName = ChatNameFactory.createNonOverlappingName(chatNames);
-        chatNames.add(chatName);
-        return chatName;
-    }
-
-    public ChatName deleteChatName(String chatName) {
-        return chatNames.delete(chatName);
     }
 }
