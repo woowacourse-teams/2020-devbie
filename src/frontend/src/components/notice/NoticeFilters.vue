@@ -103,7 +103,6 @@ export default {
   margin-top: 30px;
   justify-content: center;
   margin-right: 0;
-  /*flex-flow: row;*/
 }
 
 .filters.mobile {
