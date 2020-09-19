@@ -44,5 +44,9 @@ public class Duration {
         if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
             throw new CreateFailException();
         }
+
+        if (startDate.isAfter(endDate)) {
+            throw new CreateFailException();
+        }
     }
 }
