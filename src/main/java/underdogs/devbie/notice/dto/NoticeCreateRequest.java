@@ -42,9 +42,6 @@ public class NoticeCreateRequest {
     @NotBlank
     private String name;
 
-    @Min(1)
-    private Integer salary;
-
     @NotEmpty
     private Set<Language> languages;
 
@@ -60,7 +57,7 @@ public class NoticeCreateRequest {
         return Notice.builder()
             .title(title)
             .noticeType(noticeType)
-            .company(new Company(name, salary))
+            .company(new Company(name))
             .duration(duration)
             .jobPosition(jobPosition)
             .noticeDescription(new NoticeDescription(languages, description))

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
@@ -43,9 +42,6 @@ public class NoticeUpdateRequest {
     @NotBlank
     private String name;
 
-    @Min(1)
-    private Integer salary;
-
     @NotEmpty
     private Set<Language> languages;
 
@@ -63,7 +59,7 @@ public class NoticeUpdateRequest {
             .id(id)
             .title(title)
             .noticeType(noticeType)
-            .company(new Company(name, salary))
+            .company(new Company(name))
             .duration(duration)
             .jobPosition(jobPosition)
             .noticeDescription(new NoticeDescription(languages, description))

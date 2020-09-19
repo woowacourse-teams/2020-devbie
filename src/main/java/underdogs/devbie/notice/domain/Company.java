@@ -22,19 +22,13 @@ public class Company {
 
     private String name;
 
-    private Integer salary;
-
-    public Company(String name, Integer salary) {
-        validateParameters(name, salary);
+    public Company(String name) {
+        validateParameters(name);
         this.name = name;
-        this.salary = salary;
     }
 
-    private void validateParameters(String name, int salary) throws CreateFailException {
+    private void validateParameters(String name) throws CreateFailException {
         if (checkEmpty(name)) {
-            throw new CreateFailException();
-        }
-        if (salary <= SALARY_MINIMUM_VALUE) {
             throw new CreateFailException();
         }
     }

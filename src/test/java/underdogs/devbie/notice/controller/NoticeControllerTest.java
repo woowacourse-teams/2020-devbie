@@ -81,7 +81,6 @@ public class NoticeControllerTest extends MvcTest {
             .name("underdogs")
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
@@ -94,7 +93,6 @@ public class NoticeControllerTest extends MvcTest {
             .name("underdogs")
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
@@ -121,13 +119,6 @@ public class NoticeControllerTest extends MvcTest {
     @Test
     void saveRequestWithInvalidName() throws Exception {
         noticeCreateRequest.setName("");
-        validateNoticeCreateRequest();
-    }
-
-    @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 연봉")
-    @Test
-    void saveRequestWithInvalidSalary() throws Exception {
-        noticeCreateRequest.setSalary(0);
         validateNoticeCreateRequest();
     }
 
@@ -165,13 +156,6 @@ public class NoticeControllerTest extends MvcTest {
         validateUpdateRequest();
     }
 
-    @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 연봉")
-    @Test
-    void updateRequestWithInvalidSalary() throws Exception {
-        noticeUpdateRequest.setSalary(0);
-        validateUpdateRequest();
-    }
-
     @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 프로그래밍 언어")
     @Test
     void updateRequestWithInvalidLanguages() throws Exception {
@@ -203,7 +187,7 @@ public class NoticeControllerTest extends MvcTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 2000))
+            .company(new Company("underdogs"))
             .image("/static/image/underdogs")
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(
@@ -239,7 +223,7 @@ public class NoticeControllerTest extends MvcTest {
         LocalDateTime endDate = LocalDateTime.now();
         NoticeDetailResponse noticeDetailResponse = NoticeDetailResponse.builder()
             .id(1L)
-            .company(new Company("bossdog", 60_000_000))
+            .company(new Company("bossdog"))
             .duration(new Duration(startDate, endDate))
             .jobPosition(JobPosition.FRONTEND)
             .image("/static/image/bossdog")
@@ -263,7 +247,6 @@ public class NoticeControllerTest extends MvcTest {
         assertAll(
             () -> assertThat(noticeDetailResponse1.getId()).isEqualTo(1L),
             () -> assertThat(noticeDetailResponse1.getCompany().getName()).isEqualTo("bossdog"),
-            () -> assertThat(noticeDetailResponse1.getCompany().getSalary()).isEqualTo(60_000_000),
             () -> assertThat(noticeDetailResponse1.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(noticeDetailResponse1.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
             () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!")

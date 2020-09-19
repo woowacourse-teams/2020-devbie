@@ -138,7 +138,6 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .name("bossdog")
                     .title("우테코 모집")
                     .noticeType(NoticeType.EDUCATION)
-                    .salary(60_000_000)
                     .languages(
                         Stream.of(Language.JAVA, Language.JAVASCRIPT, Language.CPP).collect(Collectors.toSet()))
                     .jobPosition(JobPosition.FRONTEND)
@@ -155,7 +154,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                 assertAll(
                     () -> assertThat(result.getId()).isEqualTo(1L),
-                    () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
+                    () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog")),
                     () -> assertThat(result.getTitle()).isEqualTo("우테코 모집"),
                     () -> assertThat(result.getNoticeType()).isEqualTo(NoticeType.EDUCATION),
                     () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),

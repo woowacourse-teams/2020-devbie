@@ -22,14 +22,14 @@ public class NoticeTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
 
-        final Company expectedCompany = new Company("bossdog", 45_000_000);
+        final Company expectedCompany = new Company("bossdog");
         NoticeDescription expectedDetail = new NoticeDescription(languages, "You are hired");
         String expectedImage = "/static/image/bossdog";
         JobPosition expectedJobPosition = JobPosition.FRONTEND;

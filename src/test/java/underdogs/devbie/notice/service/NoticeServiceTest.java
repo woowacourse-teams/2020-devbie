@@ -61,7 +61,7 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
@@ -74,7 +74,6 @@ public class NoticeServiceTest {
             .name("underdogs")
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
@@ -96,7 +95,6 @@ public class NoticeServiceTest {
             .name("underdogs")
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
@@ -131,7 +129,7 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
@@ -176,7 +174,7 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
@@ -190,7 +188,6 @@ public class NoticeServiceTest {
         assertAll(
             () -> assertThat(noticeDetailResponse.getId()).isEqualTo(1L),
             () -> assertThat(noticeDetailResponse.getCompany().getName()).isEqualTo("underdogs"),
-            () -> assertThat(noticeDetailResponse.getCompany().getSalary()).isEqualTo(50_000_000),
             () -> assertThat(noticeDetailResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getLanguages()).contains(
                 Language.JAVA.getText(), Language.JAVASCRIPT.getText()),
@@ -209,7 +206,7 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")
@@ -220,7 +217,7 @@ public class NoticeServiceTest {
             .id(2L)
             .title("보스독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("bossdogs", 50_000_000))
+            .company(new Company("bossdogs"))
             .jobPosition(JobPosition.FRONTEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
             .image("/static/image/underdogs")

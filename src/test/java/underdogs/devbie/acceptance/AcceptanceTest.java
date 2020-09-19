@@ -103,7 +103,6 @@ public abstract class AcceptanceTest {
             .name("underdogs")
             .title(title)
             .noticeType(NoticeType.JOB)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
