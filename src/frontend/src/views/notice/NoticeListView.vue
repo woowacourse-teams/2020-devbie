@@ -1,11 +1,20 @@
 <template>
-  <div class="notice-list" style="margin: 50px 150px 50px 150px">
-    <div class="filters">
-      <notice-type></notice-type>
-      <notice-filters></notice-filters>
+  <div class="notice-list" :class="$mq">
+    <div class="filters" :class="$mq">
+      <notice-type :noticeType="noticeType" class="item"></notice-type>
+      <notice-filters
+        :jobPosition="jobPosition"
+        :language="language"
+        class="item"
+      ></notice-filters>
       <notice-search></notice-search>
     </div>
-    <notice-list></notice-list>
+    <notice-list
+      :noticeType="noticeType"
+      :jobPosition="jobPosition"
+      :language="language"
+      :keyword="keyword"
+    ></notice-list>
   </div>
 </template>
 
@@ -22,6 +31,9 @@ export default {
     NoticeList,
     NoticeSearch
   },
+
+  props: ["noticeType", "jobPosition", "keyword", "language"],
+
   data() {
     return {};
   }
@@ -31,15 +43,28 @@ export default {
 <style scoped>
 .notice-list {
   font-family: "Jua", sans-serif;
+  margin: 50px auto;
+  max-width: 90%;
+}
+
+.notice-list.mobile {
+  margin: 0 0 0 0;
 }
 
 .filters {
   display: flex;
-  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
   margin-bottom: 50px;
 }
-.filters > * {
-  margin-right: 120px;
+
+.item {
+  margin-right: 10%;
+  margin-bottom: 10px;
+}
+
+.filters.mobile {
+  flex-wrap: wrap;
 }
 </style>

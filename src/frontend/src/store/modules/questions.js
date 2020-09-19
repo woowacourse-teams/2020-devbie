@@ -36,6 +36,10 @@ export default {
       state.questions = [];
       state.questionPage = 1;
       state.questionLastPage = 1000;
+    },
+    DELETE_QUESTION(state, data) {
+      const idx = state.questions.findIndex(q => q.id === data);
+      state.questions.splice(idx, 1);
     }
   },
   actions: {
@@ -62,8 +66,10 @@ export default {
         hashtags: payload.hashtags
       });
     },
-    async DELETE_QUESTION(state, questionId) {
-      return await deleteAction(`/api/questions/${questionId}`);
+    async DELETE_QUESTION({ commit }, questionId) {
+      const response = await deleteAction(`/api/questions/${questionId}`);
+      commit("DELETE_QUESTION", questionId);
+      return response;
     },
     async FETCH_QUESTIONS_BY_HASHTAG({ commit }, hashtag) {
       const { data } = await getAction(`/api/questions?hashtag=${hashtag}`);

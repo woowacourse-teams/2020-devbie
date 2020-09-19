@@ -46,10 +46,10 @@ export default {
       this.$store.commit("DELETE_LOGIN_USER");
     },
     openDrawer() {
-      this.$store.dispatch("OPEN_LATEST");
+      this.$store.dispatch("SHOW_CHAT_ROOMS_DRAWER");
     },
     closeDrawer() {
-      this.$store.dispatch("CLOSE_DRAWER");
+      this.$store.dispatch("CLOSE_CHAT_ROOM_DRAWER");
     }
   },
   computed: {

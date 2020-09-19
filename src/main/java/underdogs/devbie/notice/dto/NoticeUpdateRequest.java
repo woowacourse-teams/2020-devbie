@@ -1,6 +1,7 @@
 package underdogs.devbie.notice.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.constraints.Min;
@@ -74,10 +75,10 @@ public class NoticeUpdateRequest {
         LocalDateTime startLocalDate = null;
         LocalDateTime endLocalDate = null;
 
-        if (!startDate.isEmpty()) {
+        if (Objects.nonNull(startDate) && !startDate.isEmpty()) {
             startLocalDate = LocalDateTime.parse(startDate);
         }
-        if (!endDate.isEmpty()) {
+        if (Objects.nonNull(endDate) && !endDate.isEmpty()) {
             endLocalDate = LocalDateTime.parse(endDate);
         }
 

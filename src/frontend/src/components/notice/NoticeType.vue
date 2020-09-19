@@ -1,44 +1,43 @@
 <template>
-  <div class="select-box">
+  <div class="select-box" :class="$mq">
     <v-btn
       large
       name="JOB"
       class="select-btn"
       :class="{ 'button-active': isJob() }"
       @click="changeNoticeType"
-      >채용</v-btn
-    >
+      >채용
+    </v-btn>
     <v-btn
       large
       name="EDUCATION"
       class="select-btn"
       :class="{ 'button-active': isEducation() }"
       @click="changeNoticeType"
-      >교육</v-btn
-    >
+      >교육
+    </v-btn>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { createNoticeUrl } from "@/utils/noticeUtil";
 
 export default {
-  computed: {
-    ...mapGetters(["fetchedNoticeType"])
-  },
+  props: ["noticeType"],
 
   methods: {
     async changeNoticeType(e) {
       if (e.currentTarget.name === this.fetchedNoticeType) {
         return;
       }
-      await this.$store.commit("SET_NOTICE_TYPE", e.currentTarget.name);
+      const url = createNoticeUrl(e.currentTarget.name);
+      await this.$router.push(url);
     },
     isJob() {
-      return this.fetchedNoticeType === "JOB";
+      return this.noticeType === undefined || this.noticeType === "JOB";
     },
     isEducation() {
-      return this.fetchedNoticeType === "EDUCATION";
+      return this.noticeType === "EDUCATION";
     }
   }
 };
@@ -65,5 +64,10 @@ export default {
 
 .button-active {
   background-color: rgb(218, 235, 234) !important;
+}
+
+.select-box.mobile {
+  margin-top: 30px;
+  margin-right: 0;
 }
 </style>

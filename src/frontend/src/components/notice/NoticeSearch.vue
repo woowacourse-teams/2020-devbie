@@ -12,21 +12,29 @@
 </template>
 
 <script>
+import { createNoticeUrl } from "@/utils/noticeUtil";
+
 export default {
   data() {
     return {
-      keyword: "",
-      previous: "pre"
+      keyword: this.$route.query.keyword
     };
   },
 
   methods: {
-    onSearch() {
-      if (this.keyword === this.previous) {
+    async onSearch() {
+      if (this.keyword.trim() === "") {
         return;
       }
-      this.previous = this.keyword;
-      this.$store.commit("SET_KEYWORD", this.keyword);
+      const noticeUrl = await createNoticeUrl(
+        this.$route.query.noticeType,
+        this.keyword,
+        this.$route.query.language,
+        this.$route.query.jobPosition
+      );
+
+      this.keyword = "";
+      await this.$router.push(noticeUrl);
     }
   }
 };
@@ -36,7 +44,8 @@ export default {
 .search-bar .input {
   padding: 0;
 }
+
 .search-bar {
-  width: 200px;
+  width: 13em;
 }
 </style>
