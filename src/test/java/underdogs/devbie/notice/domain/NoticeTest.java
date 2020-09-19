@@ -24,13 +24,13 @@ public class NoticeTest {
             .noticeType(NoticeType.JOB)
             .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
 
         final Company expectedCompany = new Company("bossdog");
-        NoticeDescription expectedDetail = new NoticeDescription(languages, "You are hired");
+        NoticeDescription expectedDetail = new NoticeDescription(languages, "You are hired", "https://devbie.kr");
         String expectedImage = "/static/image/bossdog";
         JobPosition expectedJobPosition = JobPosition.FRONTEND;
         Notice updatedNotice = Notice.builder()

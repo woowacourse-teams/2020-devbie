@@ -87,6 +87,7 @@ public class NoticeControllerTest extends MvcTest {
             .description("We are hiring!")
             .startDate("2020-10-10T13:00")
             .endDate("2020-10-20T14:00")
+            .applyUrl("https://devbie.kr")
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -99,6 +100,7 @@ public class NoticeControllerTest extends MvcTest {
             .description("We are hiring!")
             .startDate("2020-10-20T13:00")
             .endDate("2020-10-20T14:00")
+            .applyUrl("https://devbie.kr")
             .build();
         ;
     }
@@ -192,7 +194,7 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(
                 Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet())
-                , "hi"))
+                , "hi", "https://devbie.kr"))
             .build());
 
         given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
@@ -231,7 +233,7 @@ public class NoticeControllerTest extends MvcTest {
                 NoticeDescriptionResponse.from(
                     new NoticeDescription(
                         Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()),
-                        "You are hired!")))
+                        "You are hired!", "https://devbie.kr")))
             .build();
 
         given(noticeService.read(anyLong())).willReturn(noticeDetailResponse);

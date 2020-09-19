@@ -3,9 +3,10 @@ package underdogs.devbie.notice.dto;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.URL;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,10 @@ public class NoticeCreateRequest {
 
     private String image;
 
+    @NotEmpty
+    @URL
+    private String applyUrl;
+
     public Notice toEntity() {
         Duration duration = createDuration();
         return Notice.builder()
@@ -60,7 +65,7 @@ public class NoticeCreateRequest {
             .company(new Company(name))
             .duration(duration)
             .jobPosition(jobPosition)
-            .noticeDescription(new NoticeDescription(languages, description))
+            .noticeDescription(new NoticeDescription(languages, description, applyUrl))
             .image(image)
             .build();
     }

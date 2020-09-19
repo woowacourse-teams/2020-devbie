@@ -35,9 +35,8 @@ import underdogs.devbie.user.dto.UserCreateRequest;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
-    protected Long userId;
     protected final ObjectMapper objectMapper = new ObjectMapper();
-
+    protected Long userId;
     @LocalServerPort
     protected int port;
 
@@ -94,7 +93,8 @@ public abstract class AcceptanceTest {
     }
 
     protected QuestionResponse fetchFirstQuestion() {
-        QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=", QuestionResponses.class);
+        QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=",
+            QuestionResponses.class);
         return questions.getQuestions().get(0);
     }
 
@@ -109,6 +109,7 @@ public abstract class AcceptanceTest {
             .description("We are hiring!")
             .startDate("2020-10-10T13:00")
             .endDate("2020-10-10T14:00")
+            .applyUrl("https://devbie.kr")
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
         post("/api/notices", inputJsonForCreate);

@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.URL;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +54,10 @@ public class NoticeUpdateRequest {
 
     private String image;
 
+    @NotEmpty
+    @URL
+    private String applyUrl;
+
     public Notice toEntity(Long id) {
         Duration duration = createDuration();
 
@@ -62,7 +68,7 @@ public class NoticeUpdateRequest {
             .company(new Company(name))
             .duration(duration)
             .jobPosition(jobPosition)
-            .noticeDescription(new NoticeDescription(languages, description))
+            .noticeDescription(new NoticeDescription(languages, description, applyUrl))
             .image(image)
             .build();
     }

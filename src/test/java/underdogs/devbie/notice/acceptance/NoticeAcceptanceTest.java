@@ -145,6 +145,7 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .description("You are hired!")
                     .startDate("2020-10-21T13:00")
                     .endDate("2020-10-21T14:00")
+                    .applyUrl("https://devbie.kr")
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));

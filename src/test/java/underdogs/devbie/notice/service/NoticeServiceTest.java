@@ -63,7 +63,7 @@ public class NoticeServiceTest {
             .noticeType(NoticeType.JOB)
             .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.of(2020, 10, 10, 14, 0),
                 LocalDateTime.of(2020, 10, 10, 15, 0)))
@@ -80,6 +80,7 @@ public class NoticeServiceTest {
             .description("We are hiring!")
             .startDate("2020-10-10T14:00")
             .endDate("2020-10-10T15:00")
+            .applyUrl("https://devbie.kr")
             .build();
 
         Long noticeId = noticeService.save(noticeRequest);
@@ -101,6 +102,7 @@ public class NoticeServiceTest {
             .description("We are hiring!")
             .startDate("2020-10-20T13:00")
             .endDate("2020-10-20T14:00")
+            .applyUrl("https://devbie.kr")
             .build();
 
         given(noticeRepository.findById(anyLong())).willReturn(Optional.of(request.toEntity(2L)));
@@ -131,7 +133,7 @@ public class NoticeServiceTest {
             .noticeType(NoticeType.JOB)
             .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
@@ -176,7 +178,7 @@ public class NoticeServiceTest {
             .noticeType(NoticeType.JOB)
             .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
@@ -208,7 +210,7 @@ public class NoticeServiceTest {
             .noticeType(NoticeType.JOB)
             .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
@@ -219,7 +221,7 @@ public class NoticeServiceTest {
             .noticeType(NoticeType.JOB)
             .company(new Company("bossdogs"))
             .jobPosition(JobPosition.FRONTEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
             .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
             .build();
