@@ -309,13 +309,14 @@ export default {
 }
 
 .list-parent.mobile {
-  width: 200px;
+  width: 80%;
   margin: auto;
 }
 
 .item.mobile {
   width: 100%;
-  margin-right: 100px;
+  /*margin-right: 100px;*/
+  margin: 0 0 50px 0;
 }
 
 .search-message {
