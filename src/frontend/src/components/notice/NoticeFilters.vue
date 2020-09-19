@@ -90,7 +90,7 @@ export default {
 
 .filters {
   padding: 0;
-  width: 12em;
+  width: 10em;
   max-width: 12em;
   margin-right: 50px;
 }

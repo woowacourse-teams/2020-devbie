@@ -46,6 +46,6 @@ export default {
 }
 
 .search-bar {
-  width: 200px;
+  width: 13em;
 }
 </style>
