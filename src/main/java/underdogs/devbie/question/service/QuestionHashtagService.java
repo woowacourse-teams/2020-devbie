@@ -35,7 +35,7 @@ public class QuestionHashtagService {
 
         List<Long> deleteTargetIds = questionHashtags.findDeleteTargetIds(
             questionHashtagRepository.findAllByQuestionId(question.getId()));
-        questionHashtagRepository.deleteAllByHashtagIds(deleteTargetIds);
+        questionHashtagRepository.deleteAllByHashtagIds(deleteTargetIds, question.getId());
     }
 
     private QuestionHashtags mapToQuestionHashtags(Question question, Set<String> hashtags) {

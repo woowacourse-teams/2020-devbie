@@ -20,10 +20,11 @@ public class QuestionHashtagRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public void deleteAllByHashtagIds(List<Long> hashtagIds) {
+    public void deleteAllByHashtagIds(List<Long> hashtagIds, Long questionId) {
         jpaQueryFactory
             .delete(questionHashtag)
-            .where(questionHashtag.hashtag.id.in(hashtagIds))
+            .where(questionHashtag.hashtag.id.in(hashtagIds),
+                questionHashtag.question.id.eq(questionId))
             .execute();
     }
 
