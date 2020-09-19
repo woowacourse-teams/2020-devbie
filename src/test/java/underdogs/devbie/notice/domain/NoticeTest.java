@@ -3,7 +3,7 @@ package underdogs.devbie.notice.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,7 +26,7 @@ public class NoticeTest {
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build();
 
         final Company expectedCompany = new Company("bossdog");
@@ -41,7 +41,7 @@ public class NoticeTest {
             .noticeDescription(expectedDetail)
             .image(expectedImage)
             .jobPosition(expectedJobPosition)
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build();
 
         notice.update(updatedNotice);

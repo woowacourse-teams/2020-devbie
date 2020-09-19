@@ -2,12 +2,10 @@ package underdogs.devbie.notice.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.notice.expception.InvalidDurationException;
+import underdogs.devbie.exception.CreateFailException;
 
 class DurationTest {
 
@@ -16,10 +14,9 @@ class DurationTest {
     void constructorInvalidDate() {
         assertThatThrownBy(() ->
             new Duration(
-                LocalDateTime.of(2020, 5, 5, 0, 0),
-                LocalDateTime.of(2020, 5, 4, 0, 0)
+                RecruitmentType.OPEN,
+                null, null
             ))
-            .isInstanceOf(InvalidDurationException.class)
-            .hasMessage("잘못된 요청입니다: 원인 : 시작일은 종료일 이전이어야 합니다.");
+            .isInstanceOf(CreateFailException.class);
     }
 }

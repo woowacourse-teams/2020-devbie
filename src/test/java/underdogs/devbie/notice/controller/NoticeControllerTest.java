@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +37,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
@@ -85,9 +86,10 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10T13:00")
-            .endDate("2020-10-20T14:00")
+            .startDate("2020-10-10")
+            .endDate("2020-10-20")
             .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
@@ -98,9 +100,10 @@ public class NoticeControllerTest extends MvcTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-20T13:00")
-            .endDate("2020-10-20T14:00")
+            .startDate("2020-10-20")
+            .endDate("2020-10-20")
             .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
         ;
     }
@@ -221,12 +224,12 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 게시글 하나 조회")
     @Test
     void read() throws Exception {
-        LocalDateTime startDate = LocalDateTime.now();
-        LocalDateTime endDate = LocalDateTime.now();
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
         NoticeDetailResponse noticeDetailResponse = NoticeDetailResponse.builder()
             .id(1L)
             .company(new Company("bossdog"))
-            .duration(new Duration(startDate, endDate))
+            .duration(new Duration(RecruitmentType.OPEN, startDate, endDate))
             .jobPosition(JobPosition.FRONTEND)
             .image("/static/image/bossdog")
             .noticeDescription(

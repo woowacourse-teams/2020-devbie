@@ -24,6 +24,7 @@ import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -107,9 +108,10 @@ public abstract class AcceptanceTest {
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10T13:00")
-            .endDate("2020-10-10T14:00")
+            .startDate("2020-10-10")
+            .endDate("2020-10-10")
             .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
         post("/api/notices", inputJsonForCreate);
