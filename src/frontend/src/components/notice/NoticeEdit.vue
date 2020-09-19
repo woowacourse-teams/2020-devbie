@@ -155,10 +155,8 @@ export default {
         name: this.notice.company.name,
         jobPosition: this.notice.jobPosition,
         noticeType: this.notice.noticeType,
-        startDate:
-          this.notice.duration === null ? "" : this.notice.duration.startDate,
-        endDate:
-          this.notice.duration === null ? "" : this.notice.duration.endDate,
+        startDate: this.notice.duration.startDate || null,
+        endDate: this.notice.duration.endDate || null,
         description: this.notice.noticeDescription.content,
         languages: this.notice.noticeDescription.languages.map(language =>
           languageTranslator(language)
