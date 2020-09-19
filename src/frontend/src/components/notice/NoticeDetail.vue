@@ -114,8 +114,16 @@ export default {
 
   data() {
     return {
-      notice: {},
-      stompClient: {}
+      notice: {
+        id: -1,
+        company: { name: "", salary: 1 },
+        title: "",
+        noticeType: "",
+        duration: null,
+        jobPosition: "",
+        noticeDescription: { languages: [], content: "" },
+        image: ""
+      }
     };
   },
   computed: {
@@ -151,7 +159,7 @@ export default {
     }
   },
 
-  async created() {
+  async mounted() {
     await this.initialize();
   },
 
