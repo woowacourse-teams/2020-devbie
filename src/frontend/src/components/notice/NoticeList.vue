@@ -272,7 +272,6 @@ export default {
 
 .card-image {
   width: 100%;
-  min-width: 200px;
 }
 
 .card-image:hover {
@@ -308,6 +307,10 @@ export default {
   height: 100px;
 }
 
+.list-parent {
+  justify-content: center;
+}
+
 .list-parent.mobile {
   width: 80%;
   margin: auto;
@@ -315,12 +318,14 @@ export default {
 
 .item.mobile {
   width: 100%;
-  /*margin-right: 100px;*/
   margin: 0 0 50px 0;
 }
 
 .search-message {
   text-align: center;
   margin-bottom: 50px;
+}
+.notice-info {
+  width: 100%;
 }
 </style>
