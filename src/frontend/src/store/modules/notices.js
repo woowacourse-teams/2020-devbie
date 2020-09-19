@@ -53,11 +53,11 @@ export default {
       return state.keyword;
     },
     fetchedFilterByJobPositions(state) {
-      const emptyPair = [{ key: "", text: "무관" }];
+      const emptyPair = [{ key: "", text: "포지션" }];
       return emptyPair.concat(state.jobPositions);
     },
     fetchedFilterByLanguages(state) {
-      const emptyPair = [{ key: "", text: "무관" }];
+      const emptyPair = [{ key: "", text: "언어" }];
       return emptyPair.concat(state.languages);
     }
   }
