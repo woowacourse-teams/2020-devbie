@@ -32,4 +32,20 @@ class DurationTest {
             ))
             .isInstanceOf(CreateFailException.class);
     }
+
+    @DisplayName("Duration 비교 연산 테스트")
+    @Test
+    void equals() {
+        Duration duration1 = new Duration(
+            LocalDateTime.of(2020, 5, 5, 0, 0),
+            LocalDateTime.of(2020, 5, 10, 0, 0)
+        );
+        Duration duration2 = new Duration(
+            LocalDateTime.of(2020, 5, 5, 0, 0),
+            LocalDateTime.of(2020, 5, 10, 0, 0)
+        );
+
+        assertThat(duration1).isEqualTo(duration2);
+
+    }
 }

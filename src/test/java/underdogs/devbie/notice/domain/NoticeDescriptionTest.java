@@ -35,4 +35,15 @@ class NoticeDescriptionTest {
             Stream.of(Language.CPP).collect(Collectors.toSet()), "가족같은 회사입니다.", ""))
             .isInstanceOf(CreateFailException.class);
     }
+
+    @DisplayName("비교 연산 테스트")
+    @Test
+    void equals() {
+        HashSet<Language> languages = new HashSet<>();
+        languages.add(Language.valueOf("JAVA"));
+        NoticeDescription noticeDescription1 = new NoticeDescription(languages, "가족같은 회사입니다.");
+        NoticeDescription noticeDescription2 = new NoticeDescription(languages, "가족같은 회사입니다.");
+
+        assertThat(noticeDescription1).isEqualTo(noticeDescription2);
+    }
 }

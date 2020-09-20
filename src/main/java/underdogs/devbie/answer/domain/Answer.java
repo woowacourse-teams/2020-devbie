@@ -2,7 +2,6 @@ package underdogs.devbie.answer.domain;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +25,6 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 public class Answer extends BaseTimeEntity {
 
     @Id
-    @Column(name = "answer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

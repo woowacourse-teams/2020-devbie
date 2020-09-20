@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static underdogs.devbie.user.domain.UserTest.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,11 +14,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
+import underdogs.devbie.user.dto.UserUpdateImageRequest;
+import underdogs.devbie.user.dto.UserUpdateInfoRequest;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -80,5 +86,41 @@ class UserServiceTest {
         Long userId = userService.saveWithoutOAuthId(request);
 
         assertThat(userId).isEqualTo(user.getId());
+    }
+
+    @DisplayName("유저 정보 수정")
+    @Test
+    void updateUserInfo() {
+        UserUpdateInfoRequest request = UserUpdateInfoRequest.builder()
+            .name("underdogs")
+            .email("underdogs@devbie.com")
+            .build();
+        userService.updateUserInfo(user, request);
+    }
+
+    @DisplayName("유저 프로필 수정")
+    @Test
+    void updateUserImage() throws IOException {
+        ClassPathResource fileResource = new ClassPathResource(
+            "/devbie.png");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+            "image", fileResource.getFilename(),
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            fileResource.getInputStream());
+
+        UserUpdateImageRequest.builder()
+            .image(mockMultipartFile)
+            .build();
+
+        userService.updateUserImage(user, "imagePath");
+    }
+
+    @DisplayName("유저 삭제")
+    @Test
+    void deleteById() {
+        doNothing().when(userRepository).deleteById(anyLong());
+        userService.deleteById(1L);
+        verify(userRepository).deleteById(eq(1L));
     }
 }

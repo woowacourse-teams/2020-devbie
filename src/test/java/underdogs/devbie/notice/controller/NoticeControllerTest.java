@@ -20,7 +20,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -288,6 +291,24 @@ public class NoticeControllerTest extends MvcTest {
             () -> assertThat(actual.getJobPositions())
                 .containsAll(expectJobPositions)
         );
+    }
+
+    @DisplayName("공고 이미지 수정")
+    @Test
+    void updateImage() throws Exception {
+        given(s3Service.upload(any())).willReturn("imagePath");
+
+        ClassPathResource fileResource = new ClassPathResource(
+            "/devbie.png");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+            "image", fileResource.getFilename(),
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            fileResource.getInputStream());
+
+        postAction("/api/notices/image", mockMultipartFile)
+            .andExpect(status().isCreated())
+            .andDo(print());
     }
 
     private void validateNoticeCreateRequest() throws Exception {

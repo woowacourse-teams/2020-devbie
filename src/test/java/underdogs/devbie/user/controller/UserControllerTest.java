@@ -12,6 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
@@ -20,6 +23,7 @@ import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.aws.S3Service;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
+import underdogs.devbie.user.dto.UserUpdateInfoRequest;
 import underdogs.devbie.user.service.UserService;
 
 @WebMvcTest(UserController.class)
@@ -75,5 +79,36 @@ class UserControllerTest extends MvcTest {
             .andExpect(status().isCreated())
             .andExpect(header().stringValues("location", "/api/users/" + 1L))
             .andDo(print());
+    }
+
+    @DisplayName("유저 정보 수정")
+    @Test
+    void updateUser() throws Exception {
+        UserUpdateInfoRequest request = UserUpdateInfoRequest.builder()
+            .name("underdogs")
+            .email("underdogs@devbie.com")
+            .build();
+        String inputJson = objectMapper.writeValueAsString(request);
+
+        patchAction("/api/users/me", inputJson)
+            .andExpect(status().isNoContent())
+            .andDo(print());
+    }
+
+    @DisplayName("유저 프로필 이미지 수정")
+    @Test
+    void updateUserImage() throws Exception {
+        ClassPathResource fileResource = new ClassPathResource(
+            "/devbie.png");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+            "image", fileResource.getFilename(),
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            fileResource.getInputStream());
+
+        patchAction("/api/users/me/image", mockMultipartFile)
+            .andExpect(status().isNoContent())
+            .andDo(print());
+
     }
 }

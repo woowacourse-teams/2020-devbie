@@ -40,6 +40,7 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
+import underdogs.devbie.question.exception.QuestionNotExistedException;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
@@ -154,6 +155,18 @@ public class QuestionServiceTest {
                 HashtagResponse.builder().id(1L).tagName("java").build(),
                 HashtagResponse.builder().id(2L).tagName("network").build())
         );
+    }
+
+    @DisplayName("존재하지 않는 질문 예외처리")
+    @Test
+    void read_When_Invalid_Hashtag_Should_Throw_HashtagNotExistedException() {
+
+        given(questionRepository.findById(anyLong())).willThrow(new QuestionNotExistedException());
+
+        assertThatThrownBy(() -> questionService.read(1L, false))
+            .isInstanceOf(QuestionNotExistedException.class)
+            .hasMessageContaining("존재하지 않는 질문입니다.");
+
     }
 
     @DisplayName("질문 수정 실패 - 질문 작성자가 아닐 경우 예외 발생")

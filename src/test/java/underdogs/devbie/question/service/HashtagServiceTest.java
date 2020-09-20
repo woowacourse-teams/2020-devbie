@@ -24,6 +24,7 @@ import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
 import underdogs.devbie.question.dto.HashtagUpdateRequest;
+import underdogs.devbie.question.exception.HashtagNotExistedException;
 
 @ExtendWith(MockitoExtension.class)
 class HashtagServiceTest {
@@ -84,6 +85,18 @@ class HashtagServiceTest {
             () -> assertThat(response.getId()).isEqualTo(hashtag.getId()),
             () -> assertThat(response.getTagName()).isEqualTo(hashtag.getTagName().getName())
         );
+    }
+
+    @DisplayName("존재하지 않는 해시태그 예외처리")
+    @Test
+    void read_When_Invalid_Hashtag_Should_Throw_HashtagNotExistedException() {
+
+        given(hashtagRepository.findById(anyLong())).willThrow(new HashtagNotExistedException());
+
+        assertThatThrownBy(() -> hashtagService.read(1L))
+            .isInstanceOf(HashtagNotExistedException.class)
+            .hasMessage("존재하지 않는 해시태그입니다.");
+
     }
 
     @DisplayName("이름으로 해시태그 조회")

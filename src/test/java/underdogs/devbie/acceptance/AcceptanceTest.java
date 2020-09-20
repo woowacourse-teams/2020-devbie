@@ -9,11 +9,13 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.internal.util.collections.Sets;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +36,7 @@ import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("acceptance")
 public abstract class AcceptanceTest {
 
     protected final ObjectMapper objectMapper = new ObjectMapper();
@@ -49,13 +52,20 @@ public abstract class AcceptanceTest {
     @Value("${security.jwt.token.expire-length:300000}")
     private long seconds;
 
+    @Autowired
+    private DatabaseCleanup databaseCleanup;
+
     private static RequestSpecification given() {
         return RestAssured.given().log().all();
     }
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
-        RestAssured.port = port;
+        if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
+            RestAssured.port = port;
+            databaseCleanup.afterPropertiesSet();
+        }
+        databaseCleanup.execute();
 
         userId = createUser();
         UserTokenDto userTokenDto = UserTokenDto.from(User.builder()
