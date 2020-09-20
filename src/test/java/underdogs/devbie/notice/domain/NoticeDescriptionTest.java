@@ -41,8 +41,8 @@ class NoticeDescriptionTest {
     void equals() {
         HashSet<Language> languages = new HashSet<>();
         languages.add(Language.valueOf("JAVA"));
-        NoticeDescription noticeDescription1 = new NoticeDescription(languages, "가족같은 회사입니다.");
-        NoticeDescription noticeDescription2 = new NoticeDescription(languages, "가족같은 회사입니다.");
+        NoticeDescription noticeDescription1 = new NoticeDescription(languages, "가족같은 회사입니다.", "https://devbie.kr");
+        NoticeDescription noticeDescription2 = new NoticeDescription(languages, "가족같은 회사입니다.", "https://devbie.kr");
 
         assertThat(noticeDescription1).isEqualTo(noticeDescription2);
     }

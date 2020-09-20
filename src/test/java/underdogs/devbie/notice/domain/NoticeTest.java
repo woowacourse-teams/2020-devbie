@@ -62,7 +62,7 @@ public class NoticeTest {
             .id(1L)
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build())
             .isInstanceOf(CreateFailException.class)
             .hasMessageContaining("생성 인자가 올바르지 않습니다.");

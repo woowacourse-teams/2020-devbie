@@ -37,12 +37,14 @@ class DurationTest {
     @Test
     void equals() {
         Duration duration1 = new Duration(
-            LocalDateTime.of(2020, 5, 5, 0, 0),
-            LocalDateTime.of(2020, 5, 10, 0, 0)
+            RecruitmentType.OPEN,
+            LocalDate.of(2020, 5, 5),
+            LocalDate.of(2020, 5, 10)
         );
         Duration duration2 = new Duration(
-            LocalDateTime.of(2020, 5, 5, 0, 0),
-            LocalDateTime.of(2020, 5, 10, 0, 0)
+            RecruitmentType.OPEN,
+            LocalDate.of(2020, 5, 5),
+            LocalDate.of(2020, 5, 10)
         );
 
         assertThat(duration1).isEqualTo(duration2);
