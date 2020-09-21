@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="empty-list" v-if="fetchedChatRoomHistory.length === 0">
-      채팅 이력이 없습니다.
+      채팅 이력이 존재하지 않습니다.
     </div>
     <v-list v-else>
       <v-list-item
@@ -51,6 +51,6 @@ export default {
 .empty-list {
   position: absolute;
   top: 50%;
-  left: 25%;
+  left: 10%;
 }
 </style>
