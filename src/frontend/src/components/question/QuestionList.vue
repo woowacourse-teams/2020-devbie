@@ -121,12 +121,12 @@ export default {
     }
   },
 
-  mounted() {
-    this.$store.commit("INIT_QUESTIONS");
-    this.addQuestions();
+  async mounted() {
+    await this.$store.commit("INIT_QUESTIONS");
+    await this.addQuestions();
     if (this.hashtag) {
-      this.$store.commit("INIT_QUESTIONS");
-      this.addQuestionByHashtag();
+      await this.$store.commit("INIT_QUESTIONS");
+      await this.addQuestionByHashtag();
     }
     if (!this.isLoggedIn) {
       this.$store.commit("DELETE_QUESTION_FAVORITES");

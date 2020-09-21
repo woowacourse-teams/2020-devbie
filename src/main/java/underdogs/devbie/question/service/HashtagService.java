@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.HashtagRepository;
+import underdogs.devbie.question.domain.repository.HashtagRepository;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
@@ -27,7 +27,7 @@ public class HashtagService {
 
     @Transactional
     public Long save(HashtagCreateRequest request) {
-        Hashtag hashtag = hashtagRepository.findByTagName(request.getTagName())
+        Hashtag hashtag = hashtagRepository.findByTagName(TagName.from(request.getTagName()))
             .orElse(request.toEntity());
 
         Hashtag savedHashtag = hashtagRepository.save(hashtag);
@@ -51,7 +51,7 @@ public class HashtagService {
     }
 
     public HashtagResponse readByTagName(String tagName) {
-        Hashtag hashtag = hashtagRepository.findByTagName(tagName)
+        Hashtag hashtag = hashtagRepository.findByTagName(TagName.from(tagName))
             .orElseThrow(HashtagNotExistedException::new);
         return HashtagResponse.from(hashtag);
     }
@@ -72,7 +72,7 @@ public class HashtagService {
 
     @Transactional
     public Hashtag findOrCreateHashtag(String tagName) {
-        Hashtag hashtag = hashtagRepository.findByTagName(tagName)
+        Hashtag hashtag = hashtagRepository.findByTagName(TagName.from(tagName))
             .orElse(Hashtag.builder()
                 .tagName(TagName.from(tagName))
                 .build());

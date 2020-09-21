@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.HashtagRepository;
+import underdogs.devbie.question.domain.repository.HashtagRepository;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
@@ -102,7 +102,7 @@ class HashtagServiceTest {
     @DisplayName("이름으로 해시태그 조회")
     @Test
     void readByTagName() {
-        given(hashtagRepository.findByTagName(anyString())).willReturn(Optional.of(hashtag));
+        given(hashtagRepository.findByTagName(any(TagName.class))).willReturn(Optional.of(hashtag));
 
         HashtagResponse response = hashtagService.readByTagName(hashtag.getTagName().getName());
 

@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
-import underdogs.devbie.question.domain.QuestionHashtagRepository;
+import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.TagName;
 

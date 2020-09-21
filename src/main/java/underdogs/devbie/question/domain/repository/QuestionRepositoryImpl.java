@@ -1,4 +1,4 @@
-package underdogs.devbie.question.domain;
+package underdogs.devbie.question.domain.repository;
 
 import static underdogs.devbie.question.domain.QQuestion.*;
 
@@ -14,6 +14,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import underdogs.devbie.question.domain.Question;
 
 public class QuestionRepositoryImpl extends QuerydslRepositorySupport implements QuestionRepositoryCustom {
 

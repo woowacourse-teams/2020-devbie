@@ -29,7 +29,7 @@ import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtags;
-import underdogs.devbie.question.domain.QuestionRepository;
+import underdogs.devbie.question.domain.repository.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagResponse;
