@@ -8,6 +8,9 @@
     </div>
     <v-spacer></v-spacer>
     <div class="count_box">{{ fetchedUserCount }}명</div>
+    <v-btn large icon @click="closeChatDrawer"
+      ><i class="fas fa-times close-icon"
+    /></v-btn>
   </div>
 </template>
 
@@ -18,6 +21,9 @@ export default {
   methods: {
     backToChatRoomDrawer() {
       this.$store.dispatch("SHOW_CHAT_ROOMS_DRAWER");
+    },
+    closeChatDrawer() {
+      this.$store.dispatch("CLOSE_CHAT_DRAWER");
     }
   },
   computed: {
