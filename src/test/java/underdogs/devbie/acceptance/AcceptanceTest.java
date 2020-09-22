@@ -26,6 +26,7 @@ import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
@@ -38,9 +39,8 @@ import underdogs.devbie.user.dto.UserCreateRequest;
 @ActiveProfiles("acceptance")
 public abstract class AcceptanceTest {
 
-    protected Long userId;
     protected final ObjectMapper objectMapper = new ObjectMapper();
-
+    protected Long userId;
     @LocalServerPort
     protected int port;
 
@@ -104,7 +104,8 @@ public abstract class AcceptanceTest {
     }
 
     protected QuestionResponse fetchFirstQuestion() {
-        QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=", QuestionResponses.class);
+        QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=",
+            QuestionResponses.class);
         return questions.getQuestions().get(0);
     }
 
@@ -113,13 +114,14 @@ public abstract class AcceptanceTest {
             .name("underdogs")
             .title(title)
             .noticeType(NoticeType.JOB)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10T13:00")
-            .endDate("2020-10-10T14:00")
+            .startDate("2020-10-10")
+            .endDate("2020-10-10")
+            .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
         String inputJsonForCreate = objectMapper.writeValueAsString(createRequest);
         post("/api/notices", inputJsonForCreate);

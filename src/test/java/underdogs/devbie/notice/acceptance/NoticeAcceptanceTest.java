@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,10 +17,10 @@ import org.springframework.test.context.jdbc.Sql;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.notice.domain.Company;
-import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;
@@ -30,8 +29,6 @@ import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 @Sql(value = "/notice_create.sql")
 @Sql(value = "/notice_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class NoticeAcceptanceTest extends AcceptanceTest {
-    private static final Duration updatedDuration = new Duration(LocalDateTime.now(), LocalDateTime.now());
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${security.jwt.token.secret-key:sample}")
@@ -138,14 +135,15 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
                     .name("bossdog")
                     .title("우테코 모집")
                     .noticeType(NoticeType.EDUCATION)
-                    .salary(60_000_000)
                     .languages(
                         Stream.of(Language.JAVA, Language.JAVASCRIPT, Language.CPP).collect(Collectors.toSet()))
                     .jobPosition(JobPosition.FRONTEND)
                     .image("/static/image/bossdog")
                     .description("You are hired!")
-                    .startDate("2020-10-21T13:00")
-                    .endDate("2020-10-21T14:00")
+                    .startDate("2020-10-21")
+                    .endDate("2020-10-21")
+                    .applyUrl("https://devbie.kr")
+                    .recruitmentType(RecruitmentType.OPEN)
                     .build();
 
                 patch("/api/notices/1", objectMapper.writeValueAsString(noticeUpdateRequest));
@@ -155,12 +153,13 @@ public class NoticeAcceptanceTest extends AcceptanceTest {
 
                 assertAll(
                     () -> assertThat(result.getId()).isEqualTo(1L),
-                    () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog", 60_000_000)),
+                    () -> assertThat(result.getCompany()).isEqualTo(new Company("bossdog")),
                     () -> assertThat(result.getTitle()).isEqualTo("우테코 모집"),
                     () -> assertThat(result.getNoticeType()).isEqualTo(NoticeType.EDUCATION),
                     () -> assertThat(result.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
                     () -> assertThat(result.getImage()).isEqualTo("/static/image/bossdog"),
                     () -> assertThat(result.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
+                    () -> assertThat(result.getNoticeDescription().getApplyUrl()).isEqualTo("https://devbie.kr"),
                     () -> assertThat(result.getNoticeDescription().getLanguages()).contains(Language.JAVA.getText(),
                         Language.JAVASCRIPT.getText(), Language.CPP.getText())
                 );

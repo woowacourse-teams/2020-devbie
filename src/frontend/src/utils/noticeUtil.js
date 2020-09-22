@@ -23,3 +23,12 @@ export const createNoticeObj = (noticeType, keyword, language, jobPosition) => {
     jobPosition: jobPosition || ""
   };
 };
+
+export const urlValidator = url => {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

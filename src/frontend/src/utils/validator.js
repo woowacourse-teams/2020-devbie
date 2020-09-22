@@ -1,3 +1,5 @@
+import { urlValidator } from "@/utils/noticeUtil";
+
 const validator = {
   member: {
     name: [v => !!v || "닉네임 입력이 필요합니다."],
@@ -12,14 +14,14 @@ const validator = {
       v => v.trim() !== "" || "공백은 입력이 불가능합니다."
     ],
     selected: [v => !!v || "항목을 선택해주세요."],
-    salary: [
-      v => !!v || "입력이 필요합니다.",
-      v => parseInt(v) || "숫자만 입력 가능합니다.",
-      v => Number(v) > 0 || "양수만 입력가능합니다."
-    ],
     language: [
       v => !!v || "항목을 선택해주세요.",
       v => v.length !== 0 || "1개이상 선택해주세요."
+    ],
+    url: [
+      v => !!v || "URL 입력이 필요합니다.",
+      v => v.trim() !== "" || "공백은 입력이 불가능합니다.",
+      v => !!urlValidator(v) || "옳바른 URL을 입력해야합니다."
     ]
   },
   hashtag: {

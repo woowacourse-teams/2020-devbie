@@ -33,17 +33,13 @@
         label="공고 이름"
         :rules="rules.text"
       ></v-text-field>
-      <div class="duration">
-        <input
-          aria-label="시작일"
-          v-model="request.startDate"
-          type="datetime-local"
-        />
-        <input
-          aria-labelledby="종료일"
-          v-model="request.endDate"
-          type="datetime-local"
-        />
+      <v-radio-group row mandatory v-model="recruitmentState">
+        <v-radio label="상시채용"></v-radio>
+        <v-radio label="공개채용"></v-radio>
+      </v-radio-group>
+      <div class="duration" v-if="isPublicRecruitment()">
+        <input aria-label="시작일" v-model="request.startDate" type="date" />
+        <input aria-labelledby="종료일" v-model="request.endDate" type="date" />
       </div>
       <v-text-field
         v-model="request.name"
@@ -51,9 +47,9 @@
         :rules="rules.text"
       ></v-text-field>
       <v-text-field
-        v-model="request.salary"
-        label="연봉"
-        :rules="rules.salary"
+        v-model="request.applyUrl"
+        label="지원 URL"
+        :rules="rules.url"
       ></v-text-field>
       <input type="file" ref="image" @change="imageUpload" />
       <v-textarea
@@ -79,6 +75,7 @@ import { getAction, patchAction } from "@/api";
 export default {
   data() {
     return {
+      recruitmentState: 0,
       notice: {},
       rules: { ...validator.notice },
       id: "",
@@ -111,6 +108,8 @@ export default {
     }
 
     this.request = await this.parameterInitialize();
+    this.recruitmentState =
+      this.request.duration.recruitmentType === "0" ? "ANY" : "OPEN";
   },
 
   methods: {
@@ -140,6 +139,9 @@ export default {
     },
     async submit() {
       try {
+        this.request.recruitmentType =
+          this.recruitmentState === 0 ? "ANY" : "OPEN";
+
         await patchAction(`/api/notices/${this.id}`, this.request);
 
         await this.$router.push(
@@ -150,20 +152,25 @@ export default {
       }
     },
     parameterInitialize() {
+      const duration = this.notice.duration || "";
       return {
         title: this.notice.title,
         name: this.notice.company.name,
         jobPosition: this.notice.jobPosition,
         noticeType: this.notice.noticeType,
-        startDate: this.notice.duration.startDate || null,
-        endDate: this.notice.duration.endDate || null,
+        startDate: duration.startDate || null,
+        endDate: duration.endDate || null,
         description: this.notice.noticeDescription.content,
         languages: this.notice.noticeDescription.languages.map(language =>
           languageTranslator(language)
         ),
-        salary: this.notice.company.salary,
-        image: this.notice.image
+        image: this.notice.image,
+        applyUrl: this.notice.noticeDescription.applyUrl,
+        recruitmentType: duration.recruitmentType || "ANY"
       };
+    },
+    isPublicRecruitment() {
+      return this.recruitmentState === 1;
     }
   }
 };

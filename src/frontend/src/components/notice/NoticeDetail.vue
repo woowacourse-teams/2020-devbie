@@ -37,7 +37,12 @@
               </v-img>
             </div>
             <div class="notice-buttons" :class="$mq">
-              <v-btn id="apply-btn" depressed large color="#DAEBEA"
+              <v-btn
+                id="apply-btn"
+                depressed
+                large
+                color="#DAEBEA"
+                @click="onApply"
                 >지원하기</v-btn
               >
               <v-btn
@@ -76,10 +81,6 @@
               회사명: {{ notice.company.name }}
             </p>
             <p class="infos">
-              <i class="fas fa-won-sign"></i>
-              연봉: {{ notice.company.salary }} 만원
-            </p>
-            <p class="infos">
               <i class="fas fa-calendar-alt"></i>
               지원기간: {{ setDuration }}
             </p>
@@ -116,7 +117,7 @@ export default {
     return {
       notice: {
         id: -1,
-        company: { name: "", salary: 1 },
+        company: { name: "" },
         title: "",
         noticeType: "",
         duration: null,
@@ -134,7 +135,10 @@ export default {
     },
 
     setDuration() {
-      if (this.notice.duration === null) {
+      if (
+        this.notice.duration === null ||
+        this.notice.duration.recruitmentType === "ANY"
+      ) {
         return "상시모집";
       }
 
@@ -145,11 +149,7 @@ export default {
         this.notice.duration.endDate
       ).toLocaleDateString();
 
-      return (
-        (this.notice.duration.startDate === null ? "" : startDate) +
-        " ~ " +
-        (this.notice.duration.endDate === null ? "모집시" : endDate)
-      );
+      return startDate + " ~ " + endDate;
     }
   },
 
@@ -189,6 +189,9 @@ export default {
     },
     openChatDrawer() {
       this.$store.dispatch("OPEN_CHAT_DRAWER", this.notice);
+    },
+    onApply() {
+      window.open(this.notice.noticeDescription.applyUrl, "_blank");
     }
   }
 };

@@ -1,16 +1,18 @@
 package underdogs.devbie.notice.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import underdogs.devbie.notice.expception.InvalidDurationException;
+import underdogs.devbie.exception.CreateFailException;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,23 +21,32 @@ import underdogs.devbie.notice.expception.InvalidDurationException;
 @EqualsAndHashCode
 public class Duration {
 
-    private LocalDateTime startDate;
+    @Enumerated(value = EnumType.STRING)
+    private RecruitmentType recruitmentType;
 
-    private LocalDateTime endDate;
+    private LocalDate startDate;
 
-    public Duration(LocalDateTime startDate, LocalDateTime endDate) {
-        validateParameters(startDate, endDate);
+    private LocalDate endDate;
+
+    public Duration(RecruitmentType recruitmentType, LocalDate startDate, LocalDate endDate) {
+        validateParameters(recruitmentType, startDate, endDate);
+        this.recruitmentType = recruitmentType;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    private void validateParameters(LocalDateTime startDate, LocalDateTime endDate) {
-        if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
+    private void validateParameters(RecruitmentType recruitmentType, LocalDate startDate,
+        LocalDate endDate) {
+        if (recruitmentType.isAnyTimeRecruitment()) {
             return;
         }
 
+        if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
+            throw new CreateFailException();
+        }
+
         if (startDate.isAfter(endDate)) {
-            throw new InvalidDurationException();
+            throw new CreateFailException();
         }
     }
 }

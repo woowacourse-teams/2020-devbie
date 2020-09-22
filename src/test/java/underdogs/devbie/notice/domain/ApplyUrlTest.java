@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import underdogs.devbie.exception.CreateFailException;
 
-class CompanyTest {
+class ApplyUrlTest {
 
-    @DisplayName("Company 생성 테스트 - 빈 이름 입력시 예외 발생")
+    @DisplayName("Company 생성 테스트 - 잘못된 형식의 URL 입력")
     @Test
-    void constructorWithEmptyName() {
-        assertThatThrownBy(() -> new Company(""))
+    void constructorWithWrongUrl() {
+        assertThatThrownBy(() -> new ApplyUrl("잘못된URL.com"))
             .isInstanceOf(CreateFailException.class);
     }
 }
