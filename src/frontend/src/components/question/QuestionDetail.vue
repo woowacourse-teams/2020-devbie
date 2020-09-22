@@ -99,6 +99,7 @@ export default {
       );
       this.content = this.fetchedQuestion.content;
     },
+
     async initFavoriteState() {
       await this.$store.dispatch("FETCH_LOGIN_USER");
       await this.$store.dispatch("FETCH_MY_FAVORITES", {

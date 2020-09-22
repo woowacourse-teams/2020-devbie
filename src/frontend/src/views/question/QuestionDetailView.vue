@@ -1,6 +1,9 @@
 <template>
   <div class="detail" :class="$mq">
-    <question-detail-menu :isAuthor="isAuthor"></question-detail-menu>
+    <question-detail-menu
+      :isAuthor="isAuthor"
+      :isAdmin="isAdmin"
+    ></question-detail-menu>
     <div class="question-box" :class="$mq">
       <question-detail
         :loginUser="fetchedLoginUser"
@@ -38,6 +41,10 @@ export default {
         this.isLoggedIn &&
         this.fetchedQuestion.userId === this.fetchedLoginUser.id
       );
+    },
+
+    isAdmin() {
+      return this.isLoggedIn && this.fetchedLoginUser.roleType === "ADMIN";
     }
   },
 
