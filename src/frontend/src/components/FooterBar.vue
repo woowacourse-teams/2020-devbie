@@ -3,26 +3,20 @@
     <v-footer dark padless color="#9FD0D4" id="footer">
       <v-card flat tile color="#9FD0D4" class="lighten-1 white--text">
         <v-card-text>
-          <v-btn
-            v-for="icon in icons"
-            :key="icon"
-            class="mx-4 white--text"
-            icon
+          <a
+            href="https://www.facebook.com/Devbie-101790985021306/?notif_id=1600704082047732&notif_t=page_fan&ref=notif"
+            ><v-icon class="sns" size="30px">{{ "mdi-facebook" }}</v-icon></a
           >
-            <v-icon size="24px">{{ icon }}</v-icon>
-          </v-btn>
-        </v-card-text>
-
-        <v-card-text class="white--text pt-0">
-          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-          Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-          accumsan id ultrices nunc.
+          <a href="https://github.com/woowacourse-teams/2020-devbie"
+            ><v-icon class="sns" size="30px">{{ "mdi-github" }}</v-icon></a
+          >
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} — <strong>Underdogs</strong>
+          Copyright © {{ new Date().getFullYear() }} —
+          <strong>Underdogs</strong>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -40,6 +34,9 @@ export default {
 </script>
 
 <style scoped>
+.sns {
+  margin: 0 10px;
+}
 #footer {
   text-align: center;
   display: flex;

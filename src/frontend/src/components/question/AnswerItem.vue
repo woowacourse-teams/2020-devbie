@@ -265,7 +265,7 @@ export default {
 }
 
 .answer-temp {
-  min-width: 100%;
+  max-width: 100%;
   padding: 20px 30px;
 }
 

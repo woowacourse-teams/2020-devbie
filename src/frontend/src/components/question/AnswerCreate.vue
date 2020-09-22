@@ -18,7 +18,10 @@ export default {
   methods: {
     createAnswer: async function() {
       if (this.content.trim() === "") {
-        this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "답변을 채워주세요."
+        );
         return;
       }
       try {
@@ -29,14 +32,17 @@ export default {
       } catch (error) {
         console.log(error);
         if (error.response.status === 401) {
-          this.$store.dispatch(
+          await this.$store.dispatch(
             "UPDATE_SNACKBAR_TEXT",
             "로그인 후 사용할 수 있습니다."
           );
         } else if (error.response.status === 405) {
-          this.$store.dispatch("UPDATE_SNACKBAR_TEXT", "답변을 채워주세요.");
+          await this.$store.dispatch(
+            "UPDATE_SNACKBAR_TEXT",
+            "답변을 채워주세요."
+          );
         } else {
-          this.$store.dispatch(
+          await this.$store.dispatch(
             "UPDATE_SNACKBAR_TEXT",
             "요청 실패했습니다. 원인 : " + error.response.data.message
           );
