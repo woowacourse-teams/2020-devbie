@@ -1,11 +1,13 @@
 package underdogs.devbie.notice.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.URL;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,9 +45,6 @@ public class NoticeCreateRequest {
     @NotBlank
     private String name;
 
-    @Min(1)
-    private Integer salary;
-
     @NotEmpty
     private Set<Language> languages;
 
@@ -55,30 +55,36 @@ public class NoticeCreateRequest {
 
     private String image;
 
+    @NotEmpty
+    @URL
+    private String applyUrl;
+
+    private RecruitmentType recruitmentType;
+
     public Notice toEntity() {
         Duration duration = createDuration();
         return Notice.builder()
             .title(title)
             .noticeType(noticeType)
-            .company(new Company(name, salary))
+            .company(new Company(name))
             .duration(duration)
             .jobPosition(jobPosition)
-            .noticeDescription(new NoticeDescription(languages, description))
+            .noticeDescription(new NoticeDescription(languages, description, applyUrl))
             .image(image)
             .build();
     }
 
     private Duration createDuration() {
-        LocalDateTime startLocalDate = null;
-        LocalDateTime endLocalDate = null;
+        LocalDate startLocalDate = null;
+        LocalDate endLocalDate = null;
 
-        if (!startDate.isEmpty()) {
-            startLocalDate = LocalDateTime.parse(startDate);
+        if (Objects.nonNull(startDate) && !startDate.isEmpty()) {
+            startLocalDate = LocalDate.parse(startDate);
         }
-        if (!endDate.isEmpty()) {
-            endLocalDate = LocalDateTime.parse(endDate);
+        if (Objects.nonNull(startDate) && !endDate.isEmpty()) {
+            endLocalDate = LocalDate.parse(endDate);
         }
 
-        return new Duration(startLocalDate, endLocalDate);
+        return new Duration(recruitmentType, startLocalDate, endLocalDate);
     }
 }

@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +40,7 @@ import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDescriptionResponse;
@@ -84,26 +85,28 @@ public class NoticeControllerTest extends MvcTest {
             .name("underdogs")
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10T13:00")
-            .endDate("2020-10-20T14:00")
+            .startDate("2020-10-10")
+            .endDate("2020-10-20")
+            .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
 
         noticeUpdateRequest = NoticeUpdateRequest.builder()
             .name("underdogs")
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-20T13:00")
-            .endDate("2020-10-20T14:00")
+            .startDate("2020-10-20")
+            .endDate("2020-10-20")
+            .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
         ;
     }
@@ -124,13 +127,6 @@ public class NoticeControllerTest extends MvcTest {
     @Test
     void saveRequestWithInvalidName() throws Exception {
         noticeCreateRequest.setName("");
-        validateNoticeCreateRequest();
-    }
-
-    @DisplayName("사용자 요청을 받아 게시글 저장 예외 발생 - 유효하지 않은 연봉")
-    @Test
-    void saveRequestWithInvalidSalary() throws Exception {
-        noticeCreateRequest.setSalary(0);
         validateNoticeCreateRequest();
     }
 
@@ -168,13 +164,6 @@ public class NoticeControllerTest extends MvcTest {
         validateUpdateRequest();
     }
 
-    @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 연봉")
-    @Test
-    void updateRequestWithInvalidSalary() throws Exception {
-        noticeUpdateRequest.setSalary(0);
-        validateUpdateRequest();
-    }
-
     @DisplayName("사용자 요청을 받아 게시글 업데이트 예외 발생 - 유효하지 않은 프로그래밍 언어")
     @Test
     void updateRequestWithInvalidLanguages() throws Exception {
@@ -206,12 +195,12 @@ public class NoticeControllerTest extends MvcTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 2000))
+            .company(new Company("underdogs"))
             .image("/static/image/underdogs")
             .jobPosition(JobPosition.BACKEND)
             .noticeDescription(new NoticeDescription(
                 Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet())
-                , "hi"))
+                , "hi", "https://devbie.kr"))
             .build());
 
         given(noticeService.filteredRead(any(NoticeReadRequest.class), any(Pageable.class)))
@@ -238,19 +227,19 @@ public class NoticeControllerTest extends MvcTest {
     @DisplayName("사용자 요청을 받아 게시글 하나 조회")
     @Test
     void read() throws Exception {
-        LocalDateTime startDate = LocalDateTime.now();
-        LocalDateTime endDate = LocalDateTime.now();
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
         NoticeDetailResponse noticeDetailResponse = NoticeDetailResponse.builder()
             .id(1L)
-            .company(new Company("bossdog", 60_000_000))
-            .duration(new Duration(startDate, endDate))
+            .company(new Company("bossdog"))
+            .duration(new Duration(RecruitmentType.OPEN, startDate, endDate))
             .jobPosition(JobPosition.FRONTEND)
             .image("/static/image/bossdog")
             .noticeDescription(
                 NoticeDescriptionResponse.from(
                     new NoticeDescription(
                         Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()),
-                        "You are hired!")))
+                        "You are hired!", "https://devbie.kr")))
             .build();
 
         given(noticeService.read(anyLong())).willReturn(noticeDetailResponse);
@@ -266,10 +255,10 @@ public class NoticeControllerTest extends MvcTest {
         assertAll(
             () -> assertThat(noticeDetailResponse1.getId()).isEqualTo(1L),
             () -> assertThat(noticeDetailResponse1.getCompany().getName()).isEqualTo("bossdog"),
-            () -> assertThat(noticeDetailResponse1.getCompany().getSalary()).isEqualTo(60_000_000),
             () -> assertThat(noticeDetailResponse1.getImage()).isEqualTo("/static/image/bossdog"),
             () -> assertThat(noticeDetailResponse1.getJobPosition()).isEqualTo(JobPosition.FRONTEND),
-            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!")
+            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getContent()).isEqualTo("You are hired!"),
+            () -> assertThat(noticeDetailResponse1.getNoticeDescription().getApplyUrl()).isEqualTo("https://devbie.kr")
         );
     }
 

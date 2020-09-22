@@ -36,10 +36,13 @@ public class NoticeDescription {
     @Column(columnDefinition = "CLOB")
     private String content;
 
-    public NoticeDescription(Set<Language> languages, String content) {
+    private ApplyUrl applyUrl;
+
+    public NoticeDescription(Set<Language> languages, String content, String applyUrl) {
         validateParameters(languages, content);
         this.languages = new HashSet<>(languages);
         this.content = content;
+        this.applyUrl = new ApplyUrl(applyUrl);
     }
 
     private void validateParameters(Set<Language> languages, String description) {

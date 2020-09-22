@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +31,7 @@ import underdogs.devbie.notice.domain.Notice;
 import underdogs.devbie.notice.domain.NoticeDescription;
 import underdogs.devbie.notice.domain.NoticeRepository;
 import underdogs.devbie.notice.domain.NoticeType;
+import underdogs.devbie.notice.domain.RecruitmentType;
 import underdogs.devbie.notice.dto.CustomPageRequest;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
@@ -62,12 +63,12 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.of(2020, 10, 10, 14, 0),
-                LocalDateTime.of(2020, 10, 10, 15, 0)))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.of(2020, 10, 10),
+                LocalDate.of(2020, 10, 10)))
             .build();
         given(noticeRepository.save(any(Notice.class))).willReturn(expected);
 
@@ -75,13 +76,14 @@ public class NoticeServiceTest {
             .name("underdogs")
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-10T14:00")
-            .endDate("2020-10-10T15:00")
+            .startDate("2020-10-10")
+            .endDate("2020-10-10")
+            .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
 
         Long noticeId = noticeService.save(noticeRequest);
@@ -97,13 +99,14 @@ public class NoticeServiceTest {
             .name("underdogs")
             .title("우테코 모집")
             .noticeType(NoticeType.EDUCATION)
-            .salary(50_000_000)
             .languages(Stream.of(Language.JAVA, Language.JAVASCRIPT).collect(Collectors.toSet()))
             .jobPosition(JobPosition.BACKEND)
             .image("/static/image/underdogs")
             .description("We are hiring!")
-            .startDate("2020-10-20T13:00")
-            .endDate("2020-10-20T14:00")
+            .startDate("2020-10-20")
+            .endDate("2020-10-20")
+            .applyUrl("https://devbie.kr")
+            .recruitmentType(RecruitmentType.OPEN)
             .build();
 
         given(noticeRepository.findById(anyLong())).willReturn(Optional.of(request.toEntity(2L)));
@@ -132,11 +135,11 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build();
 
         CustomPageRequest customPageRequest = new CustomPageRequest(1);
@@ -177,11 +180,11 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build();
 
         given(noticeRepository.findById(anyLong())).willReturn(Optional.of(expected));
@@ -191,12 +194,12 @@ public class NoticeServiceTest {
         assertAll(
             () -> assertThat(noticeDetailResponse.getId()).isEqualTo(1L),
             () -> assertThat(noticeDetailResponse.getCompany().getName()).isEqualTo("underdogs"),
-            () -> assertThat(noticeDetailResponse.getCompany().getSalary()).isEqualTo(50_000_000),
             () -> assertThat(noticeDetailResponse.getImage()).isEqualTo("/static/image/underdogs"),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getLanguages()).contains(
                 Language.JAVA.getText(), Language.JAVASCRIPT.getText()),
             () -> assertThat(noticeDetailResponse.getNoticeDescription().getContent()).isEqualTo("We are hiring!"),
-            () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND)
+            () -> assertThat(noticeDetailResponse.getJobPosition()).isEqualTo(JobPosition.BACKEND),
+            () -> assertThat(noticeDetailResponse.getNoticeDescription().getApplyUrl()).isEqualTo("https://devbie.kr")
         );
     }
 
@@ -221,22 +224,22 @@ public class NoticeServiceTest {
             .id(1L)
             .title("언더독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("underdogs", 50_000_000))
+            .company(new Company("underdogs"))
             .jobPosition(JobPosition.BACKEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build();
 
         Notice notice2 = Notice.builder()
             .id(2L)
             .title("보스독스 채용")
             .noticeType(NoticeType.JOB)
-            .company(new Company("bossdogs", 50_000_000))
+            .company(new Company("bossdogs"))
             .jobPosition(JobPosition.FRONTEND)
-            .noticeDescription(new NoticeDescription(languages, "We are hiring!"))
+            .noticeDescription(new NoticeDescription(languages, "We are hiring!", "https://devbie.kr"))
             .image("/static/image/underdogs")
-            .duration(new Duration(LocalDateTime.now(), LocalDateTime.now()))
+            .duration(new Duration(RecruitmentType.OPEN, LocalDate.now(), LocalDate.now()))
             .build();
 
         List<Notice> notices = Lists.newArrayList(notice1, notice2);
