@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-list>
+    <div class="empty-list" v-if="fetchedChatRoomHistory.length === 0">
+      채팅 이력이 존재하지 않습니다.
+    </div>
+    <v-list v-else>
       <v-list-item
         v-for="item in fetchedChatRoomHistory"
         :key="item.noticeId"
@@ -44,4 +47,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.empty-list {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+}
+</style>
