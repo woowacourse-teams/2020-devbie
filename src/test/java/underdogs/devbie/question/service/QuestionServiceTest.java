@@ -208,7 +208,7 @@ public class QuestionServiceTest {
     void deleteFailWithoutLogin() {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
-        assertThatThrownBy(() -> questionService.delete(2L, 1L))
+        assertThatThrownBy(() -> questionService.delete(User.builder().id(10L).build(), 1L))
             .isInstanceOf(NotMatchedQuestionAuthorException.class);
     }
 
@@ -217,7 +217,7 @@ public class QuestionServiceTest {
     void delete() {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
-        questionService.delete(1L, 1L);
+        questionService.delete(user, 1L);
 
         verify(questionRepository).findById(eq(1L));
     }
