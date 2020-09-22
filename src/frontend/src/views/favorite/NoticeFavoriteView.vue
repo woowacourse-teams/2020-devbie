@@ -1,6 +1,6 @@
 <template>
   <div
-    class="notice-fovorite-list"
+    class="notice-favorite-list"
     :class="$mq"
     style="margin: 50px 150px 50px 150px"
   >
@@ -35,7 +35,7 @@ export default {
   margin-right: 120px;
 }
 
-.notice-fovorite-list.mobile {
+.notice-favorite-list.mobile {
   margin: 0 !important;
 }
 </style>
