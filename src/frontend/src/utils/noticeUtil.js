@@ -1,6 +1,6 @@
 const dict = {
   "C++": "CPP",
-  Java: "JAVA",
+  JAVA: "JAVA",
   C: "C",
   "C#": "C_SHARP",
   JAVASCRIPT: "JAVASCRIPT",
