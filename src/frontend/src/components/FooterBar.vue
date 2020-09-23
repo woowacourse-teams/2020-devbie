@@ -38,7 +38,7 @@ export default {
   margin: 0 10px;
 }
 #footer {
-  min-height: 165px;
+  min-height: 155px;
   text-align: center;
   display: flex;
   flex-direction: column;

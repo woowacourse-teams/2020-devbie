@@ -80,9 +80,15 @@ public class AnswerService {
     public void delete(User user, Long id) {
         Answer answer = readOne(id);
 
-        validateAuthentication(user, answer);
+        validateAuthenticationOrAdmin(user, answer);
 
         answerRepository.deleteById(answer.getId());
+    }
+
+    private void validateAuthenticationOrAdmin(User user, Answer answer) {
+        if (isNotAuthorOfQuestion(user, answer) && user.isNotAdmin()) {
+            throw new NotMatchedAnswerAuthorException();
+        }
     }
 
     public AnswerResponses readByQuestionId(Long questionId) {

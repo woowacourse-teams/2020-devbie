@@ -81,12 +81,18 @@ public class QuestionService {
     }
 
     @Transactional
-    public void delete(Long userId, Long questionId) {
+    public void delete(User user, Long questionId) {
         Question question = readOne(questionId);
 
-        validateQuestionAuthor(userId, question);
+        validateQuestionAuthorOrAdmin(user, question);
 
         questionRepository.deleteById(questionId);
+    }
+
+    private void validateQuestionAuthorOrAdmin(User user, Question question) {
+        if (isNotAuthorOfQuestion(user.getId(), question) && user.isNotAdmin()) {
+            throw new NotMatchedQuestionAuthorException();
+        }
     }
 
     public QuestionResponses searchByHashtag(String hashtag) {

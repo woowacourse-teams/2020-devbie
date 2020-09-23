@@ -8,7 +8,7 @@
       :class="$mq"
       >돌아가기
     </v-btn>
-    <div class="author-btn" :class="$mq" v-if="isAuthor">
+    <div class="author-btn" :class="$mq" v-if="isAuthor || isAdmin">
       <v-btn
         color="#DAEBEA"
         large
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  props: ["isAuthor"],
+  props: ["isAuthor", "isAdmin"],
 
   methods: {
     async onDeleteQuestion() {

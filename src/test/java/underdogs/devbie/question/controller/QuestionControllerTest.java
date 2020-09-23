@@ -159,7 +159,7 @@ class QuestionControllerTest extends MvcTest {
         deleteAction("/api/questions/1", TEST_TOKEN)
             .andExpect(status().isNoContent());
 
-        verify(questionService).delete(eq(1L), eq(1L));
+        verify(questionService).delete(any(User.class), eq(1L));
     }
 
     @DisplayName("질문 검색 - 제목에 포함된 키워드")

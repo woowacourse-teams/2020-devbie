@@ -61,4 +61,8 @@ public class User extends BaseTimeEntity {
                 + " User =" + this);
         }
     }
+
+    public boolean isNotAdmin() {
+        return this.roleType != RoleType.ADMIN;
+    }
 }

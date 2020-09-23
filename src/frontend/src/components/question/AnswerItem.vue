@@ -9,7 +9,7 @@
       </div>
       <div class="right-container" :class="{ editingButton: updateEditFlag }">
         <div :class="{ 'vertical-center': !isAuthor }" class="answer-infos">
-          <div class="author-button" v-if="isAuthor">
+          <div class="author-button" v-if="isAuthor || isAdmin">
             <v-btn
               color="#DAEBEA"
               small
@@ -84,6 +84,10 @@ export default {
     ...mapGetters(["isLoggedIn"]),
     isAuthor() {
       return this.isLoggedIn && this.answer.userId === this.loginUser.id;
+    },
+
+    isAdmin() {
+      return this.isLoggedIn && this.loginUser.roleType === "ADMIN";
     }
   },
 
