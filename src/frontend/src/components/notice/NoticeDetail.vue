@@ -88,7 +88,10 @@
               <i class="fas fa-keyboard"></i>
               포지션: {{ notice.jobPosition }}
             </p>
-            <p class="infos"><i class="fas fa-burn"></i>언어:</p>
+            <p class="infos">
+              <i class="fas fa-burn"></i>언어:
+              {{ notice.noticeDescription.languages.join(", ") }}
+            </p>
             <p class="infos">
               <template v-for="(line, index) in content">
                 {{ line }}
