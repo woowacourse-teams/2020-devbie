@@ -20,30 +20,37 @@
       >
         <div class="count-infos" :class="$mq">
           <p class="count visits" :class="$mq">
-            조회수 : {{ question.visits }}
+            <i class="fas fa-eye"></i> {{ question.visits }}
           </p>
           <p class="count recommendedCount" :class="$mq">
-            추천수 : {{ question.recommendedCount }}
+            <i class="far fa-thumbs-up"></i> {{ question.recommendedCount }}
           </p>
         </div>
-        <p
-          @click="$router.push(`/questions/${question.id}`)"
-          class="question-title"
-          :class="$mq"
-        >
-          Q. {{ question.title }}
-        </p>
-        <favorite-control
-          :targetObjectId="question.id"
-          :isUserFavorite="isUserQuestionFavorites(question.id)"
-          :isQuestion="true"
-        ></favorite-control>
-        <div
-          class="hashtags"
-          v-for="hashtag in question.hashtags"
-          :key="hashtag.id"
-        >
-          #{{ hashtag.tagName }}
+        <div class="question-hashtag" :class="$mq">
+          <div class="question-favorite" :class="$mq">
+            <p
+              @click="$router.push(`/questions/${question.id}`)"
+              class="question-title"
+              :class="$mq"
+            >
+              Q. {{ question.title }}
+            </p>
+            <favorite-control
+              :targetObjectId="question.id"
+              :isUserFavorite="isUserQuestionFavorites(question.id)"
+              :isQuestion="true"
+            ></favorite-control>
+          </div>
+          <div class="hashtag-group" :class="$mq">
+            <div
+              class="hashtags"
+              :class="$mq"
+              v-for="hashtag in question.hashtags"
+              :key="hashtag.id"
+            >
+              #{{ hashtag.tagName }}
+            </div>
+          </div>
         </div>
       </li>
     </ul>
@@ -273,6 +280,8 @@ export default {
   text-decoration: none;
   margin-bottom: 0;
   margin-right: 7px;
+  display: flex;
+  align-items: center;
 }
 
 .question-title:hover {
@@ -282,18 +291,52 @@ export default {
 }
 
 .question-title.mobile {
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
   margin: 0;
+}
+
+.question-hashtag {
+  display: flex;
+}
+
+.question-hashtag.mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-favorite {
+  display: flex;
+}
+
+.question-favorite.mobile {
+  display: flex;
 }
 
 .hashtags {
   margin: 0 3px;
-  font-size: 13px;
+  font-size: 0.7em;
   color: #60c5ba;
+  display: flex;
+  align-items: center;
 }
 
 .hashtags:first-child {
   margin-left: 7px;
+}
+
+.hashtag-group {
+  display: flex;
+}
+
+.hashtag-group.mobile {
+  display: flex;
+}
+
+.hashtags.mobile {
+  display: flex;
+  align-items: center;
 }
 
 .hashtag-header {
