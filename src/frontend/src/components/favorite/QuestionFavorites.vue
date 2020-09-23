@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="question-list">
+    <ul class="question-list" :class="$mq">
       <li
         v-for="question in fetchedQuestionFavorites"
         v-bind:key="question.id"

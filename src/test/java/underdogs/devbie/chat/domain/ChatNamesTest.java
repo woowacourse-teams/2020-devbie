@@ -17,7 +17,7 @@ class ChatNamesTest {
 	@Test
 	void add() {
 		ChatNames chatNames = ChatNames.from(new HashSet<>());
-		chatNames.add(ChatName.of("하늘하늘한 동글", TitleColor.AMBER));
+		chatNames.add(ChatName.of("찬란한 동글", TitleColor.AMBER));
 
         assertThat(chatNames.getChatNames()).hasSize(1);
     }

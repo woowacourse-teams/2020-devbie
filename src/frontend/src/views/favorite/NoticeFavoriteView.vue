@@ -1,5 +1,9 @@
 <template>
-  <div class="notice-fovorite-list" style="margin: 50px 150px 50px 150px">
+  <div
+    class="notice-favorite-list"
+    :class="$mq"
+    style="margin: 50px 150px 50px 150px"
+  >
     <div class="filters">
       <favorite-type :isNoticeFavorite="true"></favorite-type>
     </div>
@@ -29,5 +33,9 @@ export default {
 
 .filters > * {
   margin-right: 120px;
+}
+
+.notice-favorite-list.mobile {
+  margin: 0 !important;
 }
 </style>

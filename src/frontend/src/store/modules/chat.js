@@ -141,7 +141,9 @@ export default {
       commit("SET_DRAWER", true);
       commit("SET_CHAT_ROOM_DRAWER", true);
     },
-    async SHOW_CHAT_DRAWER({ commit }) {
+    CLOSE_CHAT_DRAWER({ commit }) {
+      commit("DISCONNECT");
+      commit("SET_DRAWER", false);
       commit("SET_CHAT_ROOM_DRAWER", false);
     },
     DELETE_CHAT_ROOM_HISTORY({ commit }, noticeId) {

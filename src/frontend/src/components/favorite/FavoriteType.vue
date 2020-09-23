@@ -1,5 +1,5 @@
 <template>
-  <div class="select-box">
+  <div class="select-box" :class="$mq">
     <v-btn
       name="NOTICE_FAVORITE"
       class="select-btn"
@@ -40,6 +40,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.select-box.mobile {
+  margin: 40px auto 0 auto;
 }
 
 .select-btn {
