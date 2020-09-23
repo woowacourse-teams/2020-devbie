@@ -24,9 +24,7 @@ import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.service.AnswerService;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
-import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @RestController
@@ -75,7 +73,6 @@ public class AnswerController {
 
     @ApiImplicitParams({
         @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
-    @Role(role = {RoleType.ADMIN, RoleType.USER})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable(value = "id") Long id) {
         answerService.delete(user, id);
