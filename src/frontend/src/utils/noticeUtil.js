@@ -1,7 +1,14 @@
 const dict = {
   "C++": "CPP",
-  JAVA: "JAVA",
-  C: "C"
+  Java: "JAVA",
+  C: "C",
+  "C#": "C_SHARP",
+  JAVASCRIPT: "JAVASCRIPT",
+  TYPESCRIPT: "TYPESCRIPT",
+  PYTHON: "PYTHON",
+  RUBY: "RUBY",
+  PHP: "PHP",
+  SWIFT: "SWIFT"
 };
 
 export const languageTranslator = language => {
