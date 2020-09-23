@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
+import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionPageRequest;
@@ -28,6 +29,7 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.service.QuestionService;
+import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @RestController
@@ -86,6 +88,7 @@ public class QuestionController {
 
     @ApiImplicitParams({
         @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
+    @Role(role = {RoleType.ADMIN, RoleType.USER})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @LoginUser User user,
