@@ -255,6 +255,7 @@ export default {
 
 .notice-content {
   padding: 30px 15px;
+  word-break: break-all;
 }
 
 .notice-buttons {
