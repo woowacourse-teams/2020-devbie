@@ -19,17 +19,15 @@ public class InterceptorValidator {
         return Objects.nonNull(noValidate);
     }
 
-    public boolean validateRole(Object handler, String role) {
+    public void validateRole(Object handler, String role) {
         Role methodAnnotation = ((HandlerMethod)handler).getMethodAnnotation(Role.class);
         RoleType roleType = RoleType.valueOf(role);
 
         if (Objects.isNull(methodAnnotation)) {
-            return true;
+            return;
         }
 
         validateUserRole(methodAnnotation, roleType);
-
-        return true;
     }
 
     private void validateUserRole(Role methodAnnotation, RoleType roleType) {
