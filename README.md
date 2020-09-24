@@ -1,4 +1,4 @@
-# Devbie (Developer + Newbie)
+# Devbie (Developer + Newbie) [![Build Status](https://travis-ci.org/woowacourse-teams/2020-devbie.svg?branch=develop)](https://travis-ci.org/woowacourse-teams/2020-devbie)
 > 예비 개발자를 위한 채용 정보 공유 플랫폼
 >
 > 슬로건: "예비 개발자 devbie로 데뷔하자!"
@@ -15,7 +15,7 @@
 
 개발자 커뮤니티는 많지만 예비 개발자들의 질문을 들어주고 예비 개발자들이 필요한 정보를 제공하는 창구는 많지 않습니다.
 
-그런 의미에서 저희 서비스는 **예비 개발자들이 궁금해하고 필요할만한 정보를 한 곳에서 제공하는 사이트**를 만들었습니다.
+그래서 저희는 **예비 개발자들이 궁금해하고 필요할만한 정보를 한 곳에서 제공하는 사이트**를 만들었습니다.
 
 ## 주요 기능
 - 현재 모집 중인 개발자 **채용/교육 공고** 정보 제공
