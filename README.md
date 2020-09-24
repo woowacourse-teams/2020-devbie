@@ -5,7 +5,7 @@
 
 서비스 링크: https://devbie.kr/
 
-![](https://images.velog.io/images/sonypark/post/ec7935f5-d66e-4313-a0ff-a56e64612c1d/devbie0.png)
+<img src="https://images.velog.io/images/sonypark/post/ec7935f5-d66e-4313-a0ff-a56e64612c1d/devbie0.png" alt="Devbie 서비스 소개1" width="50%" />
 
 ## 서비스 소개
 
@@ -22,9 +22,9 @@
 - **공고 관련 주제**로 자유롭게 채팅할 수 있는 **채팅방**
 - **면접**에 나온 질문과 답변을 공유하는 게시판
 
-![](https://images.velog.io/images/sonypark/post/2a63e4d4-c5a6-46bc-9a9e-72c4f509d636/devbie1.png)
-![](https://images.velog.io/images/sonypark/post/d69c441b-9c57-4ece-89c3-80ffc2724d9a/devbie3.png)
-![](https://images.velog.io/images/sonypark/post/23b7a14a-68ca-4dd0-8a2b-fd5683b50fae/devbie4.png)
+<img src="https://images.velog.io/images/sonypark/post/2a63e4d4-c5a6-46bc-9a9e-72c4f509d636/devbie1.png" alt="Devbie 서비스 소개1" width="50%" />
+<img src="https://images.velog.io/images/sonypark/post/d69c441b-9c57-4ece-89c3-80ffc2724d9a/devbie3.png" alt="Devbie 서비스 소개1" width="50%" />
+<img src="https://images.velog.io/images/sonypark/post/23b7a14a-68ca-4dd0-8a2b-fd5683b50fae/devbie4.png" alt="Devbie 서비스 소개1" width="50%" />
 
 ## 기술 스택
 
