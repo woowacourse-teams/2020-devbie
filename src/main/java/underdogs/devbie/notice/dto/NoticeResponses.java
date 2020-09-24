@@ -33,6 +33,7 @@ public class NoticeResponses {
                 .image(notice.getImage())
                 .languages(collectLanguageName(notice))
                 .jobPosition(notice.getJobPosition())
+                .isFinished(notice.isFinished())
                 .build())
             .collect(Collectors.toList());
 

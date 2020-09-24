@@ -25,4 +25,5 @@ public class NoticeResponse {
     private Set<String> languages;
     private JobPosition jobPosition;
     private String image;
+    private Boolean isFinished;
 }
