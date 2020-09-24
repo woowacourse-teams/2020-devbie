@@ -12,9 +12,13 @@
             "
             :src="notice.image"
             class="white--text align-end card-image"
+            :class="{ 'notice-finished': notice.isFinished }"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
           >
+            <h1 v-if="notice.isFished" class="notice-finish-text">
+              마감된 공고입니다
+            </h1>
             <v-card-title
               class="card-title-text"
               v-html="addHighlight(sliceText(notice.name, 20))"
@@ -325,5 +329,16 @@ export default {
 }
 .notice-info {
   width: 100%;
+}
+
+.notice-finished {
+  opacity: 0.6;
+}
+
+.notice-finish-text {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 17px;
+  font-weight: bold;
 }
 </style>
