@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.querydsl.core.annotations.QueryInit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,5 +90,9 @@ public class Notice extends BaseTimeEntity {
         this.jobPosition = notice.jobPosition;
         this.noticeDescription = notice.noticeDescription;
         this.image = notice.image;
+    }
+
+    public Boolean isFinished() {
+        return duration.isFinished();
     }
 }

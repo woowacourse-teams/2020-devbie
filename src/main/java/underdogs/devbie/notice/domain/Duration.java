@@ -49,4 +49,11 @@ public class Duration {
             throw new CreateFailException();
         }
     }
+
+    public Boolean isFinished() {
+        if (recruitmentType.isAnyTimeRecruitment()) {
+            return Boolean.FALSE;
+        }
+        return endDate.isBefore(LocalDate.now());
+    }
 }
