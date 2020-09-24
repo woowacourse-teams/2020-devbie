@@ -2,27 +2,33 @@ package underdogs.devbie.notice.domain;
 
 import static underdogs.devbie.notice.domain.QNotice.*;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.StringUtils;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
+public class NoticeRepositoryImpl extends QuerydslRepositorySupport implements NoticeRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    public NoticeRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+        super(Notice.class);
+        this.jpaQueryFactory = jpaQueryFactory;
+    }
 
     @Override
     public Page<Notice> findAllBy(
         NoticeType noticeType, JobPosition jobPosition,
         Language language, String keyword, Pageable pageable
     ) {
-        QueryResults<Notice> queryResults = jpaQueryFactory
+        JPAQuery<Notice> query = jpaQueryFactory
             .selectFrom(notice)
             .leftJoin(notice.noticeDescription.languages)
             .fetchJoin()
@@ -32,10 +38,12 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 containKeyword(keyword)
             )
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetchResults();
+            .limit(pageable.getPageSize());
 
-        return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
+        List<Notice> notices = getQuerydsl().applyPagination(pageable, query)
+            .fetch();
+
+        return new PageImpl<>(notices, pageable, query.fetchCount());
     }
 
     private BooleanExpression equalNoticeType(NoticeType noticeType) {
