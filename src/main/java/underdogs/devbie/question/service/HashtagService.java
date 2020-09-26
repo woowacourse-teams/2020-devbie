@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.repository.HashtagRepository;
+import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.domain.repository.HashtagRepository;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
@@ -77,5 +78,10 @@ public class HashtagService {
                 .tagName(TagName.from(tagName))
                 .build());
         return hashtagRepository.save(hashtag);
+    }
+
+    public void deleteEmptyRefHashtag(QuestionHashtags questionHashtags) {
+        List<Hashtag> hashtags = questionHashtags.toPureHashtags();
+        hashtagRepository.deleteEmptyRefHashtag(hashtags);
     }
 }

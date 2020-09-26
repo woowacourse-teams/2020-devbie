@@ -46,4 +46,10 @@ public class QuestionHashtags {
         this.questionHashtags.clear();
         this.questionHashtags.addAll(questionHashtags);
     }
+
+    public List<Hashtag> toPureHashtags() {
+        return this.questionHashtags.stream()
+            .map(QuestionHashtag::getHashtag)
+            .collect(Collectors.toList());
+    }
 }

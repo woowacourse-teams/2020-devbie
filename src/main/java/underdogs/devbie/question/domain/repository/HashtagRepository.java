@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.TagName;
 
-public interface HashtagRepository extends JpaRepository<Hashtag, Long>  {
+public interface HashtagRepository extends JpaRepository<Hashtag, Long>, HashtagRepositoryCustom {
 
     Optional<Hashtag> findByTagName(TagName tagName);
 }
