@@ -49,12 +49,11 @@ public class QuestionHashtagService {
     }
 
     private QuestionHashtag findOrCreateQuestionHashtag(Question question, Hashtag hashtag) {
-        QuestionHashtag questionHashtag = questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
+        return questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
             .orElse(QuestionHashtag.builder()
                 .question(question)
                 .hashtag(hashtag)
                 .build());
-        return questionHashtagRepository.save(questionHashtag);
     }
 
     public List<Long> findIdsByHashtagName(String hashtag) {

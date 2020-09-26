@@ -1,5 +1,6 @@
 package underdogs.devbie.question.domain;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 import java.util.LinkedHashSet;
@@ -23,7 +24,7 @@ import lombok.ToString;
 @ToString
 public class QuestionHashtags {
 
-    @OneToMany(fetch = LAZY, orphanRemoval = true, mappedBy = "question")
+    @OneToMany(fetch = LAZY, cascade = ALL, orphanRemoval = true, mappedBy = "question")
     private Set<QuestionHashtag> questionHashtags = new LinkedHashSet<>();
 
     public static QuestionHashtags from(Set<QuestionHashtag> questionHashtags) {
