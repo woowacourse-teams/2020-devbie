@@ -8,6 +8,7 @@ import static underdogs.devbie.question.domain.QuestionTest.*;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +22,9 @@ import com.google.common.collect.Lists;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
-import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionHashtagServiceTest {
@@ -61,13 +62,6 @@ class QuestionHashtagServiceTest {
     @Test
     void saveHashtags() {
         given(hashtagService.findOrCreateHashtag(anyString())).willReturn(hashtag);
-        given(questionHashtagRepository.save(any(QuestionHashtag.class))).willReturn(
-            QuestionHashtag.builder()
-                .id(1L)
-                .question(question)
-                .hashtag(hashtag)
-                .build()
-        );
 
         questionHashtagService.saveHashtags(question, Sets.newSet("java"));
 
@@ -86,14 +80,12 @@ class QuestionHashtagServiceTest {
             .id(3L)
             .tagName(TagName.from("kotlin"))
             .build();
+        QuestionHashtag questionHashtag = QuestionHashtag.builder()
+            .question(question)
+            .hashtag(updateHashtag)
+            .build();
         given(hashtagService.findOrCreateHashtag(anyString())).willReturn(hashtag);
-        given(questionHashtagRepository.save(any(QuestionHashtag.class))).willReturn(
-            QuestionHashtag.builder()
-                .id(1L)
-                .question(question)
-                .hashtag(updateHashtag)
-                .build()
-        );
+        given(questionHashtagRepository.findByQuestionIdAndHashtagId(any(), any())).willReturn(Optional.of(questionHashtag));
 
         questionHashtagService.updateHashtags(question, Sets.newSet("kotlin"));
 
