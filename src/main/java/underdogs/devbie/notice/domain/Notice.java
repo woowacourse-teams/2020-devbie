@@ -22,7 +22,7 @@ import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
-@Table(indexes = @Index(name = "i_notice", columnList = "notice_type, job_position, languages"))
+@Table(indexes = @Index(name = "i_notice", columnList = "job_position, languages, notice_type"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
