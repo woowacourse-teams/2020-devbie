@@ -4,3 +4,6 @@
 [submodule "src/main/resources/properties"]
 	path = src/main/resources/properties
 	url = https://github.com/KimSeongGyu1/devbie_properties
+[submodule "src/main/resources/db"]
+	path = src/main/resources/db
+	url = https://github.com/sonypark/devbie_db_migration.git
