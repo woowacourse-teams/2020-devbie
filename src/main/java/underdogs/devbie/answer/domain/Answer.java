@@ -21,7 +21,7 @@ import underdogs.devbie.recommendation.domain.RecommendationCount;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Entity
-@Table(indexes = @Index(name = "i_answer", columnList = "question_id"))
+@Table(indexes = @Index(name = "i_answer", columnList = "questionId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString

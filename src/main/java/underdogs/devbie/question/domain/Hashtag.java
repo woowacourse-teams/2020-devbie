@@ -19,7 +19,7 @@ import underdogs.devbie.config.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
-@Table(indexes = @Index(name = "i_hashtag", columnList = "tag_name"))
+@Table(indexes = @Index(name = "i_hashtag", columnList = "name"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString

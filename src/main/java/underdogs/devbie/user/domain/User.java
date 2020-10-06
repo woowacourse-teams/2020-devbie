@@ -19,7 +19,7 @@ import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.config.BaseTimeEntity;
 
 @Entity
-@Table(indexes = @Index(name = "i_user", columnList = "oauth_id"))
+@Table(indexes = @Index(name = "i_user", columnList = "oauthId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

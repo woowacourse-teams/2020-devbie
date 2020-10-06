@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(indexes = @Index(name = "i_chat_room", columnList = "notice_id"))
+@Table(indexes = @Index(name = "i_chat_room", columnList = "noticeId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder

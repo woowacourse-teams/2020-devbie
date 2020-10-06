@@ -13,7 +13,7 @@ import lombok.ToString;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
-@Table(indexes = @Index(name = "i_answer_recommendation", columnList = "user_id, answer_id"))
+@Table(indexes = @Index(name = "i_answer_recommendation", columnList = "userId, answerId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
