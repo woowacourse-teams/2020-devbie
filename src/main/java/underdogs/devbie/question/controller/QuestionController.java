@@ -109,4 +109,12 @@ public class QuestionController {
         return ResponseEntity
             .ok(responses);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<QuestionResponses> search(
+        @RequestParam("q") String keyword
+    ) {
+        return ResponseEntity
+            .ok(questionService.search(keyword));
+    }
 }

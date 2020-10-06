@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import underdogs.devbie.question.domain.EsQuestion;
 import underdogs.devbie.question.domain.Question;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +29,12 @@ public class QuestionResponses {
     public static QuestionResponses from(List<Question> questions) {
         return new QuestionResponses(questions.stream()
             .map(QuestionResponse::from)
+            .collect(Collectors.toList()), 1000);
+    }
+
+    public static QuestionResponses fromEsQuestion(List<EsQuestion> questions) {
+        return new QuestionResponses(questions.stream()
+            .map(QuestionResponse::fromEsQuestion)
             .collect(Collectors.toList()), 1000);
     }
 }

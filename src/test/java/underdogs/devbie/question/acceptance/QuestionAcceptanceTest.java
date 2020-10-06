@@ -81,6 +81,15 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                         TEST_TITLE_FOR_SEARCH)
                 );
             }),
+            dynamicTest("엘라스틱 서치 키워드로 질문 검색", () -> {
+                QuestionResponses searchedQuestions = get("/api/questions/search?q=" + SEARCH_KEYWORD, QuestionResponses.class);
+
+                assertAll(
+                    () -> assertThat(searchedQuestions.getQuestions()).hasSize(1),
+                    () -> assertThat(searchedQuestions.getQuestions().get(0).getTitle()).isEqualTo(
+                        TEST_TITLE_FOR_SEARCH)
+                );
+            }),
             dynamicTest("질문 조회", () -> {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
 
