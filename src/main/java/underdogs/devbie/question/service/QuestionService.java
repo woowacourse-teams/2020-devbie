@@ -83,6 +83,8 @@ public class QuestionService {
 
         question.updateQuestionInfo(request.toEntity(userId));
         questionHashtagService.updateHashtags(question, request.getHashtags());
+
+        elasticsearchOperations.save(EsQuestion.from(question));
     }
 
     private void validateQuestionAuthor(Long userId, Question question) {
@@ -102,6 +104,8 @@ public class QuestionService {
         validateQuestionAuthorOrAdmin(user, question);
 
         questionRepository.deleteById(questionId);
+
+        elasticsearchOperations.delete(EsQuestion.from(question));
     }
 
     private void validateQuestionAuthorOrAdmin(User user, Question question) {
