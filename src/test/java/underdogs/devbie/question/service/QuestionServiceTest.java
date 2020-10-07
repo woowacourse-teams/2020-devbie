@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -63,6 +64,9 @@ public class QuestionServiceTest {
     private QuestionRepository questionRepository;
 
     @Mock
+    private ApplicationEventPublisher publisher;
+
+    @Mock
     private ElasticsearchOperations elasticsearchOperations;
 
     private User user;
@@ -73,7 +77,7 @@ public class QuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(userService, questionHashtagService, questionRepository, elasticsearchOperations);
+        questionService = new QuestionService(userService, questionHashtagService, questionRepository, publisher, elasticsearchOperations);
 
         user = User.builder()
             .id(1L)

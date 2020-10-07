@@ -18,7 +18,7 @@ import underdogs.devbie.question.domain.repository.QuestionRepository;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EsSynchronizer implements ApplicationRunner {
+public class InitialEsSynchronizer implements ApplicationRunner {
 
     private final QuestionRepository questionRepository;
     private final ElasticsearchOperations elasticsearchOperations;

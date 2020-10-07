@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -41,6 +42,7 @@ public class QuestionService {
     private final QuestionHashtagService questionHashtagService;
     private final QuestionRepository questionRepository;
 
+    private final ApplicationEventPublisher publisher;
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Transactional
@@ -48,7 +50,7 @@ public class QuestionService {
         Question savedQuestion = questionRepository.save(request.toEntity(userId));
         questionHashtagService.saveHashtags(savedQuestion, request.getHashtags());
 
-        elasticsearchOperations.save(EsQuestion.from(savedQuestion));
+        publisher.publishEvent(new QuestionUpsertEvent(this, savedQuestion));
         return savedQuestion.getId();
     }
 
@@ -84,7 +86,7 @@ public class QuestionService {
         question.updateQuestionInfo(request.toEntity(userId));
         questionHashtagService.updateHashtags(question, request.getHashtags());
 
-        elasticsearchOperations.save(EsQuestion.from(question));
+        publisher.publishEvent(new QuestionUpsertEvent(this, question));
     }
 
     private void validateQuestionAuthor(Long userId, Question question) {
@@ -105,7 +107,7 @@ public class QuestionService {
 
         questionRepository.deleteById(questionId);
 
-        elasticsearchOperations.delete(EsQuestion.from(question));
+        publisher.publishEvent(new QuestionUpsertEvent(this, question));
     }
 
     private void validateQuestionAuthorOrAdmin(User user, Question question) {
