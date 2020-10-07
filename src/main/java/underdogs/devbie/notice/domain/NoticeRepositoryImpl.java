@@ -36,9 +36,7 @@ public class NoticeRepositoryImpl extends QuerydslRepositorySupport implements N
                 equalJobPosition(jobPosition),
                 containLanguage(language),
                 containKeyword(keyword)
-            )
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize());
+            );
 
         List<Notice> notices = getQuerydsl().applyPagination(pageable, query)
             .fetch();
