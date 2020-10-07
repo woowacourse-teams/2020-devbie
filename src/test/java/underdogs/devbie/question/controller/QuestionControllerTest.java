@@ -31,7 +31,6 @@ import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
-import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -93,7 +92,7 @@ class QuestionControllerTest extends MvcTest {
             .build();
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question));
 
-        given(questionService.readAll(any(QuestionReadRequest.class), any())).willReturn(responses);
+        given(questionService.readAll(any())).willReturn(responses);
 
         MvcResult mvcResult = getAction("/api/questions?title=&content=&page=1&orderBy=CREATED_DATE")
             .andExpect(status().isOk())
@@ -183,7 +182,7 @@ class QuestionControllerTest extends MvcTest {
 
         QuestionResponses responses = QuestionResponses.from(Lists.newArrayList(question1, question2));
 
-        given(questionService.readAll(any(QuestionReadRequest.class), any())).willReturn(responses);
+        given(questionService.readAll(any())).willReturn(responses);
 
         MvcResult mvcResult = getAction("/api/questions?page=1&orderBy=CREATED_DATE&title=스택&content=")
             .andExpect(status().isOk())
