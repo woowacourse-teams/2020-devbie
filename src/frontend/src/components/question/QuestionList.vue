@@ -72,7 +72,7 @@ import FavoriteControl from "../favorite/FavoriteControl";
 export default {
   components: { SearchBar, FavoriteControl },
 
-  props: ["orderBy", "title", "content", "hashtag"],
+  props: ["orderBy", "hashtag", "keyword"],
 
   data() {
     return {
@@ -90,11 +90,7 @@ export default {
       "fetchedLoginUser",
       "fetchedQuestionFavorites",
       "isUserQuestionFavorites"
-    ]),
-
-    compoundKeyword() {
-      return [this.title, this.content].join();
-    }
+    ])
   },
 
   watch: {
@@ -104,6 +100,15 @@ export default {
 
     isLoggedIn() {
       this.initFavoriteState();
+    },
+
+    async keyword() {
+      await this.$store.commit("INIT_QUESTIONS");
+      if (this.keyword) {
+        await this.searchQuestions();
+        return;
+      }
+      await this.addQuestions();
     },
 
     async hashtag() {
@@ -118,13 +123,6 @@ export default {
     async orderBy() {
       await this.$store.commit("INIT_QUESTIONS");
       await this.addQuestions();
-    },
-
-    async compoundKeyword() {
-      await this.$store.commit("INIT_QUESTIONS");
-      if (this.title || this.content) {
-        await this.addQuestions();
-      }
     }
   },
 
@@ -135,6 +133,10 @@ export default {
       await this.$store.commit("INIT_QUESTIONS");
       await this.addQuestionByHashtag();
     }
+    if (this.keyword) {
+      await this.$store.commit("INIT_QUESTIONS");
+      await this.searchQuestions();
+    }
     if (!this.isLoggedIn) {
       this.$store.commit("DELETE_QUESTION_FAVORITES");
     }
@@ -143,6 +145,10 @@ export default {
   methods: {
     async onScroll({ target }) {
       if (!this.isReady) {
+        return;
+      }
+
+      if (this.keyword || this.hashtag) {
         return;
       }
 
@@ -170,9 +176,7 @@ export default {
 
       const param = {
         page: this.fetchedQuestionPage,
-        orderBy: this.orderBy || "CREATED_DATE",
-        title: this.title || "",
-        content: this.content || ""
+        orderBy: this.orderBy || "CREATED_DATE"
       };
       const queryParam = new URLSearchParams(param).toString();
       try {
@@ -187,6 +191,19 @@ export default {
 
       if (this.isLoggedIn) {
         await this.initFavoriteState();
+      }
+    },
+
+    async searchQuestions() {
+      try {
+        await this.$store.commit("INIT_QUESTIONS");
+        await this.$store.dispatch("SEARCH_QUESTIONS", this.keyword);
+      } catch (error) {
+        console.log("질문 검색 실패");
+        await this.$store.dispatch(
+          "UPDATE_SNACKBAR_TEXT",
+          "질문을 불러오지 못했습니다."
+        );
       }
     },
 

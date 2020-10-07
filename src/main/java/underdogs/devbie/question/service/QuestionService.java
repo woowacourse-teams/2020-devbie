@@ -54,11 +54,8 @@ public class QuestionService {
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAll(QuestionReadRequest questionReadRequest, Pageable pageable) {
-        Page<Question> questions = questionRepository.findAllBy(
-            questionReadRequest.getTitle(),
-            questionReadRequest.getContent(),
-            pageable);
+    public QuestionResponses readAll(Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllBy(pageable);
         return QuestionResponses.of(questions.getContent(), questions.getTotalPages());
     }
 

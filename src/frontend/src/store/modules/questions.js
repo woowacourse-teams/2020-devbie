@@ -5,10 +5,8 @@ export default {
     questions: [],
     question: [],
     questionId: [],
-    searchScope: [],
     questionPage: 1,
     questionLastPage: 1000,
-    questionKeyword: "",
     questionByHashtag: []
   },
   mutations: {
@@ -26,12 +24,6 @@ export default {
     CLEAR_HASHTAGS(state) {
       state.question.hashtags = [];
     },
-    SET_SEARCH_SCOPE(state, data) {
-      state.searchScope = [data];
-    },
-    SET_KEYWORD(state, data) {
-      state.questionKeyword = data;
-    },
     INIT_QUESTIONS(state) {
       state.questions = [];
       state.questionPage = 1;
@@ -40,6 +32,10 @@ export default {
     DELETE_QUESTION(state, data) {
       const idx = state.questions.findIndex(q => q.id === data);
       state.questions.splice(idx, 1);
+    },
+    SET_SEARCHED_QUESTIONS(state, data) {
+      state.questions = [];
+      state.questions = data["questions"];
     }
   },
   actions: {
@@ -80,6 +76,10 @@ export default {
         `/api/questions/${questionId}?visit=false`
       );
       commit("SET_QUESTION", data);
+    },
+    async SEARCH_QUESTIONS({ commit }, keyword) {
+      const { data } = await getAction(`/api/questions/search?q=${keyword}`);
+      commit("SET_SEARCHED_QUESTIONS", data);
     }
   },
   getters: {

@@ -12,9 +12,8 @@
     </div>
     <question-list
       :orderBy="orderBy"
-      :title="title"
-      :content="content"
       :hashtag="hashtag"
+      :keyword="keyword"
       class="question-list"
       :class="$mq"
     ></question-list>
@@ -33,7 +32,7 @@ export default {
     QuestionList
   },
 
-  props: ["orderBy", "title", "content", "hashtag"]
+  props: ["orderBy", "hashtag", "keyword"]
 };
 </script>
 

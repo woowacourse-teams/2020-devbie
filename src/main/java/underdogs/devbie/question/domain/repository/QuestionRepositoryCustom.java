@@ -7,5 +7,5 @@ import underdogs.devbie.question.domain.Question;
 
 public interface QuestionRepositoryCustom {
 
-    Page<Question> findAllBy(String title, String content, Pageable pageable);
+    Page<Question> findAllBy(Pageable pageable);
 }
