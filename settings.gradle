@@ -4,4 +4,4 @@ include 'devbie-core'
 include 'devbie-s3-client'
 include 'devbie-app-chat'
 include 'devbie-app-api'
-
+include 'devbie-frontend'
