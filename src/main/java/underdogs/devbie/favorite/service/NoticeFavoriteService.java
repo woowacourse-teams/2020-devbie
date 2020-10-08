@@ -11,17 +11,15 @@ import underdogs.devbie.favorite.domain.NoticeFavorite;
 import underdogs.devbie.favorite.domain.NoticeFavoriteRepository;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.service.NoticeService;
-import underdogs.devbie.user.service.UserService;
 
 @Service
 public class NoticeFavoriteService extends FavoriteService {
 
     private NoticeService noticeService;
 
-    public NoticeFavoriteService(NoticeFavoriteRepository noticeFavoriteRepository, UserService userService,
+    public NoticeFavoriteService(NoticeFavoriteRepository noticeFavoriteRepository,
         NoticeService noticeService) {
         this.favoriteRepository = noticeFavoriteRepository;
-        this.userService = userService;
         this.noticeService = noticeService;
     }
 
