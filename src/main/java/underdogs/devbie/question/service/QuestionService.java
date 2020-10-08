@@ -1,13 +1,25 @@
 package underdogs.devbie.question.service;
 
-import java.util.List;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import underdogs.devbie.question.domain.EsQuestion;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.repository.QuestionRepository;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
@@ -30,18 +42,20 @@ public class QuestionService {
     private final QuestionHashtagService questionHashtagService;
     private final QuestionRepository questionRepository;
 
+    private final ApplicationEventPublisher publisher;
+    private final ElasticsearchOperations elasticsearchOperations;
+
     @Transactional
     public Long save(Long userId, QuestionCreateRequest request) {
         Question savedQuestion = questionRepository.save(request.toEntity(userId));
         questionHashtagService.saveHashtags(savedQuestion, request.getHashtags());
+
+        publisher.publishEvent(new QuestionUpsertEvent(this, savedQuestion));
         return savedQuestion.getId();
     }
 
-    public QuestionResponses readAll(QuestionReadRequest questionReadRequest, Pageable pageable) {
-        Page<Question> questions = questionRepository.findAllBy(
-            questionReadRequest.getTitle(),
-            questionReadRequest.getContent(),
-            pageable);
+    public QuestionResponses readAll(Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllBy(pageable);
         return QuestionResponses.of(questions.getContent(), questions.getTotalPages());
     }
 
@@ -68,6 +82,8 @@ public class QuestionService {
 
         question.updateQuestionInfo(request.toEntity(userId));
         questionHashtagService.updateHashtags(question, request.getHashtags());
+
+        publisher.publishEvent(new QuestionUpsertEvent(this, question));
     }
 
     private void validateQuestionAuthor(Long userId, Question question) {
@@ -87,6 +103,8 @@ public class QuestionService {
         validateQuestionAuthorOrAdmin(user, question);
 
         questionRepository.deleteById(questionId);
+
+        publisher.publishEvent(new QuestionUpsertEvent(this, question));
     }
 
     private void validateQuestionAuthorOrAdmin(User user, Question question) {
@@ -117,5 +135,16 @@ public class QuestionService {
     public void decreaseCount(Long questionId, RecommendationType recommendationType) {
         Question question = readOne(questionId);
         question.decreaseRecommendationCount(recommendationType);
+    }
+
+    public QuestionResponses search(String keyword) {
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+            .withQuery(multiMatchQuery(keyword)
+                .field("title")
+                .field("content")
+                .type(MultiMatchQueryBuilder.Type.BEST_FIELDS))
+            .build();
+        SearchHits<EsQuestion> results = elasticsearchOperations.search(query, EsQuestion.class, IndexCoordinates.of("question"));
+        return QuestionResponses.fromEsQuestion(results.get().map(SearchHit::getContent).collect(Collectors.toList()));
     }
 }

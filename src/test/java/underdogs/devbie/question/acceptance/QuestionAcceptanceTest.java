@@ -70,10 +70,8 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                     () -> assertThat(firstQuestion.getContent()).isEqualTo(TEST_QUESTION_CONTENT)
                 );
             }),
-            dynamicTest("특정 질문 검색", () -> {
-                QuestionResponses searchedQuestions = get("/api/questions?title=" + SEARCH_KEYWORD + "&content=" + SEARCH_KEYWORD
-                    + "&page=1&orderBy=CREATED_DATE",
-                    QuestionResponses.class);
+            dynamicTest("엘라스틱 서치 키워드로 질문 검색", () -> {
+                QuestionResponses searchedQuestions = get("/api/questions/search?q=" + SEARCH_KEYWORD, QuestionResponses.class);
 
                 assertAll(
                     () -> assertThat(searchedQuestions.getQuestions()).hasSize(1),

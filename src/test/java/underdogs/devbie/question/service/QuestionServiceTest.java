@@ -19,9 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.OrderBy;
@@ -29,13 +31,12 @@ import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtag;
 import underdogs.devbie.question.domain.QuestionHashtags;
-import underdogs.devbie.question.domain.repository.QuestionRepository;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.domain.repository.QuestionRepository;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionPageRequest;
-import underdogs.devbie.question.dto.QuestionReadRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
@@ -61,6 +62,12 @@ public class QuestionServiceTest {
     @Mock
     private QuestionRepository questionRepository;
 
+    @Mock
+    private ApplicationEventPublisher publisher;
+
+    @Mock
+    private ElasticsearchOperations elasticsearchOperations;
+
     private User user;
 
     private Question question;
@@ -69,7 +76,7 @@ public class QuestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(userService, questionHashtagService, questionRepository);
+        questionService = new QuestionService(userService, questionHashtagService, questionRepository, publisher, elasticsearchOperations);
 
         user = User.builder()
             .id(1L)
@@ -119,11 +126,10 @@ public class QuestionServiceTest {
     @Test
     void readAll() {
         Page<Question> questions = new PageImpl<>(Lists.newArrayList(question));
-        given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
+        given(questionRepository.findAllBy(any(Pageable.class))).willReturn(questions);
 
-        QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("").content("").build();
         QuestionPageRequest questionPageRequest = new QuestionPageRequest(1, OrderBy.CREATED_DATE);
-        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
+        QuestionResponses responses = questionService.readAll(questionPageRequest.toPageRequest());
 
         QuestionResponse response = responses.getQuestions().get(0);
         assertAll(
@@ -240,11 +246,10 @@ public class QuestionServiceTest {
             .build();
 
         Page<Question> questions = new PageImpl<>(Lists.newArrayList(question1, question2));
-        given(questionRepository.findAllBy(anyString(), anyString(), any(Pageable.class))).willReturn(questions);
+        given(questionRepository.findAllBy(any(Pageable.class))).willReturn(questions);
 
-        QuestionReadRequest questionReadRequest = QuestionReadRequest.builder().title("스택").content("").build();
         QuestionPageRequest questionPageRequest = new QuestionPageRequest(1, OrderBy.CREATED_DATE);
-        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
+        QuestionResponses responses = questionService.readAll(questionPageRequest.toPageRequest());
 
         assertAll(
             () -> assertThat(responses.getQuestions().get(0).getTitle()).isEqualTo("스택과 큐의 차이"),

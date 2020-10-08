@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import underdogs.devbie.question.domain.EsQuestion;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.user.domain.User;
 
@@ -54,6 +55,19 @@ public class QuestionResponse {
             .title(question.getTitle().getTitle())
             .content(question.getContent().getContent())
             .hashtags(HashtagResponse.listFrom(question.getHashtags()))
+            .build();
+    }
+
+    public static QuestionResponse fromEsQuestion(EsQuestion esQuestion) {
+        return QuestionResponse.builder()
+            .id(Long.parseLong(esQuestion.getId()))
+            .userId(Long.parseLong(esQuestion.getUserId()))
+            .visits(Long.parseLong(esQuestion.getVisits()))
+            .recommendedCount(Long.parseLong(esQuestion.getRecommendedCount()))
+            .nonRecommendedCount(Long.parseLong(esQuestion.getNonRecommendedCount()))
+            .title(esQuestion.getTitle())
+            .content(esQuestion.getContent())
+            .hashtags(esQuestion.getHashtags())
             .build();
     }
 }

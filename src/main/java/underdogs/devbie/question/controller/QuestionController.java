@@ -54,10 +54,9 @@ public class QuestionController {
     @NoValidate
     @GetMapping
     public ResponseEntity<QuestionResponses> readAll(
-        @ModelAttribute QuestionReadRequest questionReadRequest,
         @ModelAttribute QuestionPageRequest questionPageRequest
     ) {
-        QuestionResponses responses = questionService.readAll(questionReadRequest, questionPageRequest.toPageRequest());
+        QuestionResponses responses = questionService.readAll(questionPageRequest.toPageRequest());
         return ResponseEntity
             .ok(responses);
     }
@@ -108,5 +107,14 @@ public class QuestionController {
         QuestionResponses responses = questionService.searchByHashtag(hashtag);
         return ResponseEntity
             .ok(responses);
+    }
+
+    @NoValidate
+    @GetMapping("/search")
+    public ResponseEntity<QuestionResponses> search(
+        @RequestParam String q
+    ) {
+        return ResponseEntity
+            .ok(questionService.search(q));
     }
 }

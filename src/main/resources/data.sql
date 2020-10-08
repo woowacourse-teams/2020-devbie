@@ -86,6 +86,19 @@ INSERT INTO question (recommended_count, non_recommended_count, created_date, id
 INSERT INTO question (recommended_count, non_recommended_count, created_date, id, user_id, title, content, visit_count) VALUES (17, 5, '2020-08-28 02:35:42', 38, 100, 'h2방언','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 500);
 INSERT INTO question (recommended_count, non_recommended_count, created_date, id, user_id, title, content, visit_count) VALUES (10, 5, '2020-08-28 02:35:43', 39, 54, '도커가 무엇인가요?','PUT과 PATCH가 둘다 수정을 위한 HTTP METHOD로 알고 있는데, 어떤 차이가 있나요?', 211);
 
+INSERT INTO hashtag (name) VALUES ('java');
+INSERT INTO hashtag (name) VALUES ('network');
+INSERT INTO hashtag (name) VALUES ('database');
+INSERT INTO hashtag (name) VALUES ('elastic');
+INSERT INTO hashtag (name) VALUES ('event');
+INSERT INTO hashtag (name) VALUES ('programming');
+
+INSERT INTO question_hashtag (question_id, hashtag_id) VALUES (1, 1);
+INSERT INTO question_hashtag (question_id, hashtag_id) VALUES (1, 2);
+INSERT INTO question_hashtag (question_id, hashtag_id) VALUES (2, 3);
+INSERT INTO question_hashtag (question_id, hashtag_id) VALUES (2, 4);
+INSERT INTO question_hashtag (question_id, hashtag_id) VALUES (1, 5);
+INSERT INTO question_hashtag (question_id, hashtag_id) VALUES (3, 6);
 
 INSERT INTO answer (recommended_count, non_recommended_count, id, user_id, question_id, content) VALUES (11, 4, 1, 100, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');
 INSERT INTO answer (recommended_count, non_recommended_count, id, user_id, question_id, content) VALUES (12, 4, 2, 54, 1,'가비지 컬렉션 중요합니다. 기본적인 작동 원리는 알아야 합니다. 자세한 내용은 구글링 해보세요');
