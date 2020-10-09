@@ -15,7 +15,7 @@ import underdogs.devbie.question.dto.QuestionResponses;
 
 public class QuestionFavoriteAcceptanceTest extends AcceptanceTest {
 
-    public static final String QUESTION_FAVORITE_URI = "/api/favorite-question?objectType=question";
+    public static final String QUESTION_FAVORITE_URI = "/api/favorite-underdogs.devbie.question?objectType=underdogs.devbie.question";
     private Long question1Id;
     private Long question2Id;
     private Long question3Id;

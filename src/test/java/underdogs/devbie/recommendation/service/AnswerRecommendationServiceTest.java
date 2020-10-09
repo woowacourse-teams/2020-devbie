@@ -1,8 +1,8 @@
 package underdogs.devbie.recommendation.service;
 
+import static domain.AnswerTest.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
-import static underdogs.devbie.answer.domain.AnswerTest.*;
 
 import java.util.Optional;
 
@@ -14,21 +14,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import underdogs.devbie.answer.domain.Answer;
+import underdogs.devbie.answer.domain.AnswerRecommendation;
+import underdogs.devbie.answer.domain.AnswerRecommendationRepository;
 import underdogs.devbie.answer.service.AnswerService;
-import underdogs.devbie.recommendation.domain.AnswerRecommendation;
-import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @ExtendWith(MockitoExtension.class)
 class AnswerRecommendationServiceTest {
 
-    private AnswerRecommendationService answerRecommendationService;
-
     @Mock
     AnswerRecommendationRepository answerRecommendations;
-
     @Mock
     AnswerService answerService;
+    private AnswerRecommendationService answerRecommendationService;
 
     @BeforeEach
     void setUp() {

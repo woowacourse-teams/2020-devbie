@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import exception.NotExistException;
+import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.question.service.QuestionService;
 import underdogs.devbie.recommendation.domain.QuestionRecommendation;
 import underdogs.devbie.recommendation.domain.QuestionRecommendationRepository;

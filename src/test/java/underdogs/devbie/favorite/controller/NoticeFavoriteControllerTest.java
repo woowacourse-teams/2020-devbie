@@ -19,7 +19,7 @@ import underdogs.devbie.user.domain.User;
 @WebMvcTest(NoticeFavoriteController.class)
 class NoticeFavoriteControllerTest extends MvcTest {
 
-    private static String URL = "/api/favorite-notice?objectType=notice";
+    private static String URL = "/api/favorite-underdogs.devbie.notice?objectType=underdogs.devbie.notice";
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;

@@ -23,16 +23,13 @@ import underdogs.devbie.user.service.UserService;
 @ExtendWith(MockitoExtension.class)
 class QuestionFavoriteServiceTest {
 
-    private QuestionFavoriteService questionFavoriteService;
-
     @Mock
     QuestionFavoriteRepository questionFavoriteRepository;
-
     @Mock
     UserService userService;
-
     @Mock
     QuestionService questionService;
+    private QuestionFavoriteService questionFavoriteService;
 
     @BeforeEach
     void setUp() {

@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
-import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
+import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -49,7 +49,8 @@ public class QuestionHashtagService {
     }
 
     private QuestionHashtag findOrCreateQuestionHashtag(Question question, Hashtag hashtag) {
-        QuestionHashtag questionHashtag = questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(), hashtag.getId())
+        QuestionHashtag questionHashtag = questionHashtagRepository.findByQuestionIdAndHashtagId(question.getId(),
+            hashtag.getId())
             .orElse(QuestionHashtag.builder()
                 .question(question)
                 .hashtag(hashtag)

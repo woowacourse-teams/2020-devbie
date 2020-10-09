@@ -21,9 +21,9 @@ import com.google.common.collect.Lists;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionHashtag;
-import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.TagName;
+import underdogs.devbie.question.domain.repository.QuestionHashtagRepository;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionHashtagServiceTest {
@@ -74,7 +74,8 @@ class QuestionHashtagServiceTest {
         verify(hashtagService).findOrCreateHashtag(eq("java"));
         assertAll(
             () -> assertThat(question.getHashtags().getQuestionHashtags()).hasSize(1),
-            () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
+            () -> assertThat(
+                new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
                 .isEqualTo(hashtag.getTagName())
         );
     }
@@ -100,7 +101,8 @@ class QuestionHashtagServiceTest {
         verify(hashtagService).findOrCreateHashtag(eq("kotlin"));
         assertAll(
             () -> assertThat(question.getHashtags().getQuestionHashtags()).hasSize(1),
-            () -> assertThat(new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
+            () -> assertThat(
+                new ArrayList<>(question.getHashtags().getQuestionHashtags()).get(0).getHashtag().getTagName())
                 .isEqualTo(updateHashtag.getTagName())
         );
     }

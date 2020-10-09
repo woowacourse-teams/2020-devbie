@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 import underdogs.devbie.auth.dto.AccessTokenRequest;
 import underdogs.devbie.auth.dto.AccessTokenResponse;
 import underdogs.devbie.auth.exception.AccessTokenLoadException;
-import underdogs.devbie.auth.dto.UserInfoDto;
+import underdogs.devbie.user.dto.UserInfoDto;
 
 @Getter
 @Component

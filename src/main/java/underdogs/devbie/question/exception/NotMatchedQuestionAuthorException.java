@@ -1,6 +1,6 @@
 package underdogs.devbie.question.exception;
 
-import exception.ForbiddenException;
+import underdogs.devbie.exception.ForbiddenException;
 
 public class NotMatchedQuestionAuthorException extends ForbiddenException {
 

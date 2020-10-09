@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import underdogs.devbie.answer.domain.AnswerRecommendation;
+import underdogs.devbie.answer.domain.AnswerRecommendationRepositoryImpl;
 
 @SpringBootTest
 class AnswerRecommendationRepositoryImplTest {

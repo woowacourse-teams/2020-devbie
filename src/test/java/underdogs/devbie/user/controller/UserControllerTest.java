@@ -21,27 +21,23 @@ import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.aws.S3Service;
-import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserUpdateInfoRequest;
 import underdogs.devbie.user.service.UserService;
+import underdogs.devbie.user.domain.User;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest extends MvcTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
-
     @MockBean
     private LoginUserArgumentResolver loginUserArgumentResolver;
-
     @MockBean
     private UserService userService;
-
     @MockBean
     private S3Service s3Service;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {

@@ -23,17 +23,16 @@ import underdogs.devbie.recommendation.domain.RecommendationType;
 @ExtendWith(MockitoExtension.class)
 class QuestionRecommendationServiceTest {
 
-    private QuestionRecommendationService questionRecommendationService;
-
     @Mock
     QuestionRecommendationRepository questionRecommendationRepository;
-
     @Mock
     QuestionService questionService;
+    private QuestionRecommendationService questionRecommendationService;
 
     @BeforeEach
     void setUp() {
-        this.questionRecommendationService = new QuestionRecommendationService(questionRecommendationRepository, questionService);
+        this.questionRecommendationService = new QuestionRecommendationService(questionRecommendationRepository,
+            questionService);
     }
 
     @DisplayName("추천 생성")

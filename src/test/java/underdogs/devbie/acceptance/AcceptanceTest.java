@@ -21,19 +21,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import underdogs.devbie.auth.dto.UserTokenDto;
-import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.domain.RecruitmentType;
+import underdogs.devbie.auth.dto.UserTokenDto;
+import underdogs.devbie.auth.jwt.JwtTokenProvider;
 import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
+import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.domain.RoleType;
 import underdogs.devbie.user.domain.User;
-import underdogs.devbie.user.dto.UserCreateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("acceptance")

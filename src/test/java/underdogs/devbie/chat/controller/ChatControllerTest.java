@@ -16,13 +16,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
 
+import underdogs.devbie.chat.domain.Chat;
+import underdogs.devbie.chat.domain.ChatRoom;
+import underdogs.devbie.chat.domain.TitleColor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
-import underdogs.devbie.chat.domain.Chat;
-import underdogs.devbie.chat.domain.ChatRoom;
-import underdogs.devbie.chat.domain.TitleColor;
 import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.service.ChatService;

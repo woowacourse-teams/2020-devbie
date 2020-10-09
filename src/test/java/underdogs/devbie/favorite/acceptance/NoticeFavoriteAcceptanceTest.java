@@ -15,7 +15,7 @@ import underdogs.devbie.notice.dto.NoticeResponses;
 
 public class NoticeFavoriteAcceptanceTest extends AcceptanceTest {
 
-    public static final String NOTICE_FAVORITE_URI = "/api/favorite-notice?objectType=notice";
+    public static final String NOTICE_FAVORITE_URI = "/api/favorite-underdogs.devbie.notice?objectType=underdogs.devbie.notice";
 
     @DisplayName("즐겨찾기 인수 테스트")
     @TestFactory

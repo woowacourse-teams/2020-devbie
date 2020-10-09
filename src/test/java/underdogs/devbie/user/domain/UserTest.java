@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.auth.dto.UserInfoDto;
+import underdogs.devbie.user.dto.UserInfoDto;
 
 public class UserTest {
 
@@ -24,7 +24,8 @@ public class UserTest {
             .oauthId(TEST_OAUTH_ID)
             .email(TEST_USER_EMAIL)
             .build();
-        UserInfoDto userInfoDto = new UserInfoDto("Different Oauth Id", TEST_USER_EMAIL, TEST_GITHUB_ID, TEST_AVATAR_URL);
+        UserInfoDto userInfoDto = new UserInfoDto("Different Oauth Id", TEST_USER_EMAIL, TEST_GITHUB_ID,
+            TEST_AVATAR_URL);
 
         assertThatThrownBy(() -> user.updateOauthInfo(userInfoDto))
             .isInstanceOf(IllegalArgumentException.class);

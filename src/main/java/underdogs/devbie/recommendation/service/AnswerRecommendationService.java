@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import underdogs.devbie.answer.domain.AnswerRecommendation;
+import underdogs.devbie.answer.domain.AnswerRecommendationRepository;
 import underdogs.devbie.answer.service.AnswerService;
-import exception.NotExistException;
-import underdogs.devbie.recommendation.domain.AnswerRecommendation;
-import underdogs.devbie.recommendation.domain.AnswerRecommendationRepository;
+import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.recommendation.domain.Recommendation;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 

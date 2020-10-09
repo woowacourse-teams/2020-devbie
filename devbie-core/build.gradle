@@ -1,14 +1,50 @@
-plugins {
-    id 'java'
-}
+bootJar { enabled = false }
+jar { enabled = true }
 
-group 'underdogs'
-version '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+apply plugin: 'com.ewerk.gradle.plugins.querydsl'
 
 dependencies {
+//    implementation project(':devbie-underdogs.devbie.common')
+    implementation project(path: ':devbie-common', configuration: 'default')
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile("com.querydsl:querydsl-jpa") // querydsl
+    compile("com.querydsl:querydsl-apt") // querydsl
+
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation('org.springframework.boot:spring-boot-starter-validation')
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    compileOnly 'org.projectlombok:lom bok'
+    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
+
+
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }

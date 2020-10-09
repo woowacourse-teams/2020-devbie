@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import exception.CreateFailException;
+import underdogs.devbie.answer.domain.AnswerRecommendation;
 
 class AnswerRecommendationTest {
 

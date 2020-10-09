@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import exception.NotExistException;
+import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.favorite.domain.Favorite;
 import underdogs.devbie.favorite.domain.FavoriteRepository;
 import underdogs.devbie.user.service.UserService;

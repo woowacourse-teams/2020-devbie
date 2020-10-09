@@ -22,13 +22,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
+import underdogs.devbie.MvcTest;
+import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionReadRequest;
@@ -144,7 +144,7 @@ class QuestionControllerTest extends MvcTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
-        
+
         willDoNothing().given(questionService).update(anyLong(), anyLong(), any(QuestionUpdateRequest.class));
 
         patchAction("/api/questions/1", inputJson, TEST_TOKEN)

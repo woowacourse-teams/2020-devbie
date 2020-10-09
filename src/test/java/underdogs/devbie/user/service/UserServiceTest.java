@@ -18,12 +18,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import underdogs.devbie.auth.dto.UserInfoDto;
-import underdogs.devbie.user.domain.User;
-import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserUpdateImageRequest;
 import underdogs.devbie.user.dto.UserUpdateInfoRequest;
+import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.domain.UserRepository;
+import underdogs.devbie.user.dto.UserInfoDto;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {

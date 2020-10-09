@@ -22,12 +22,12 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
 import underdogs.devbie.aws.S3Service;
-import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserResponse;
 import underdogs.devbie.user.dto.UserUpdateImageRequest;
 import underdogs.devbie.user.dto.UserUpdateInfoRequest;
 import underdogs.devbie.user.service.UserService;
+import underdogs.devbie.user.domain.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +37,8 @@ public class UserController {
     private final UserService userService;
     private final S3Service s3Service;
 
-    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "Bearer devieToken", required = true, dataType = "String", paramType = "header")})
     @GetMapping
     public ResponseEntity<UserResponse> findUser(@LoginUser User user) {
         return ResponseEntity

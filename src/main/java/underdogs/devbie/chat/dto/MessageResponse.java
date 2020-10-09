@@ -1,10 +1,10 @@
 package underdogs.devbie.chat.dto;
 
+import underdogs.devbie.chat.domain.Chat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import underdogs.devbie.chat.domain.Chat;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

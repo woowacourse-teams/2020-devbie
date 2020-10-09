@@ -20,7 +20,7 @@ import underdogs.devbie.user.domain.User;
 @WebMvcTest(QuestionRecommendationController.class)
 class QuestionRecommendationControllerTest extends MvcTest {
 
-    private static final String URL = "/api/recommendation-question?objectId=1";
+    private static final String URL = "/api/recommendation-underdogs.devbie.question?objectId=1";
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;

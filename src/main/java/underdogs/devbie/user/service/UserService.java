@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import underdogs.devbie.auth.dto.UserInfoDto;
-import underdogs.devbie.user.domain.User;
-import underdogs.devbie.user.domain.UserRepository;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserUpdateInfoRequest;
+import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.domain.UserRepository;
+import underdogs.devbie.user.dto.UserInfoDto;
 
 @Service
 @Transactional(readOnly = true)

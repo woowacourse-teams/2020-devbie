@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.JobPosition;
 import underdogs.devbie.notice.domain.Language;
 import underdogs.devbie.notice.domain.NoticeType;
 import underdogs.devbie.notice.domain.RecruitmentType;
+import underdogs.devbie.acceptance.AcceptanceTest;
 import underdogs.devbie.notice.dto.NoticeDetailResponse;
 import underdogs.devbie.notice.dto.NoticeResponse;
 import underdogs.devbie.notice.dto.NoticeResponses;

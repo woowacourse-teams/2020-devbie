@@ -33,19 +33,15 @@ import underdogs.devbie.chat.dto.StompMessageResponse;
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
 
-    private ChatService chatService;
-
     @Mock
     ChatRoomRepository chatRoomRepository;
-
     @Mock
     ChatRepository chatRepository;
-
     @Mock
     SimpMessagingTemplate simpMessagingTemplate;
-
     @Mock
     ChatSessionInformations chatSessionInformations;
+    private ChatService chatService;
 
     @BeforeEach
     void setUp() {
