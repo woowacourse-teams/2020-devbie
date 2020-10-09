@@ -1,14 +1,9 @@
-plugins {
-    id 'java'
-}
-
-group 'underdogs'
-version '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+bootJar { enabled = false }
+jar { enabled = true }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.820')
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
 }

@@ -11,7 +11,7 @@ module.exports = {
         changeOrigin: true
       },
       "/chat": {
-        target: "http://localhost:9000",
+        target: "http://localhost:9001",
         ws: true,
         changeOrigin: true
       }

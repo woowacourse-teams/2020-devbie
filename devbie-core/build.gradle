@@ -15,7 +15,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation('org.springframework.boot:spring-boot-starter-validation')
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    compileOnly 'org.projectlombok:lom bok'
+    compileOnly 'org.projectlombok:lombok'
     compile 'org.springframework.boot:spring-boot-starter-log4j2'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
