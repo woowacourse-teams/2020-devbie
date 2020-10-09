@@ -1,6 +1,5 @@
 package underdogs.devbie.answer.acceptance;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.*;
 

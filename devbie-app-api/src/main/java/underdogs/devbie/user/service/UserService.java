@@ -1,0 +1,55 @@
+package underdogs.devbie.user.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import underdogs.devbie.user.domain.User;
+import underdogs.devbie.user.domain.UserRepository;
+import underdogs.devbie.user.dto.UserCreateRequest;
+import underdogs.devbie.user.dto.UserInfoDto;
+import underdogs.devbie.user.dto.UserUpdateInfoRequest;
+
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    @Transactional
+    public User saveOrUpdateUser(UserInfoDto userInfoDto) {
+        User user = userRepository.findByOauthId(userInfoDto.getId())
+            .map(u -> u.updateOauthInfo(userInfoDto))
+            .orElse(userInfoDto.toEntity());
+
+        userRepository.save(user);
+        return user;
+    }
+
+    @Transactional
+    public void updateUserInfo(User user, UserUpdateInfoRequest request) {
+        user.updateUserInfo(request.toEntity());
+    }
+
+    @Transactional
+    public void updateUserImage(User user, String imagePath) {
+        user.updateUserImage(imagePath);
+    }
+
+    public User findById(long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 유저입니다. id=" + userId));
+    }
+
+    @Transactional
+    public Long saveWithoutOAuthId(UserCreateRequest request) {
+        User savedUser = userRepository.save(request.toEntity());
+        return savedUser.getId();
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+}

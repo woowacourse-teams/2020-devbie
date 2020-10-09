@@ -1,6 +1,5 @@
 package underdogs.devbie.question.controller;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -17,11 +16,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import underdogs.devbie.question.domain.Hashtag;
-import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.MvcTest;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
 import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.question.domain.Hashtag;
+import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
 import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
