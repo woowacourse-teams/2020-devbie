@@ -19,7 +19,7 @@ import underdogs.devbie.chat.dto.ChatRoomResponse;
 import underdogs.devbie.chat.dto.MessageResponse;
 import underdogs.devbie.chat.dto.MessageSendRequest;
 import underdogs.devbie.chat.dto.StompMessageResponse;
-import underdogs.devbie.exception.NotExistException;
+import exception.NotExistException;
 
 @Service
 @Transactional(readOnly = true)

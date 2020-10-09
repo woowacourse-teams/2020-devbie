@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import underdogs.devbie.exception.BadRequestException;
+import exception.BadRequestException;
 import underdogs.devbie.favorite.domain.Favorite;
 import underdogs.devbie.favorite.domain.QuestionFavorite;
 import underdogs.devbie.favorite.domain.QuestionFavoriteRepository;

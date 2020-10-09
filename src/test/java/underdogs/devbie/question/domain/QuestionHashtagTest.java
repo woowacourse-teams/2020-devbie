@@ -9,7 +9,7 @@ import java.util.LinkedHashSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 class QuestionHashtagTest {
 

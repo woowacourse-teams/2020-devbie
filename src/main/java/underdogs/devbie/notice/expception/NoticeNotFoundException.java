@@ -1,6 +1,6 @@
 package underdogs.devbie.notice.expception;
 
-import underdogs.devbie.exception.NotExistException;
+import exception.NotExistException;
 
 public class NoticeNotFoundException extends NotExistException {
 

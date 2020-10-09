@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

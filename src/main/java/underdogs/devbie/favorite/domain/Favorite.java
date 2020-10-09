@@ -11,7 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import underdogs.devbie.config.BaseTimeEntity;
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

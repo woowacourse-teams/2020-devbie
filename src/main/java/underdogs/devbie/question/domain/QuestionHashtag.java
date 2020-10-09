@@ -14,7 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 @Entity
 @Table(name = "question_hashtag")

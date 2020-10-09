@@ -9,9 +9,9 @@ import org.springframework.web.server.MethodNotAllowedException;
 
 import lombok.extern.log4j.Log4j2;
 import underdogs.devbie.advice.dto.ErrorResponse;
-import underdogs.devbie.exception.BadRequestException;
-import underdogs.devbie.exception.ForbiddenException;
-import underdogs.devbie.exception.UnAuthorizedException;
+import exception.BadRequestException;
+import exception.ForbiddenException;
+import exception.UnAuthorizedException;
 
 @RestControllerAdvice
 @Log4j2

@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.config.BaseTimeEntity;
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 import underdogs.devbie.recommendation.domain.RecommendationCount;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 

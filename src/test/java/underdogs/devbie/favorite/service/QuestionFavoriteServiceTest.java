@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import underdogs.devbie.exception.BadRequestException;
+import exception.BadRequestException;
 import underdogs.devbie.favorite.domain.QuestionFavorite;
 import underdogs.devbie.favorite.domain.QuestionFavoriteRepository;
 import underdogs.devbie.question.service.QuestionService;

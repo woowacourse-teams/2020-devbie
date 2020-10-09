@@ -1,6 +1,6 @@
 package underdogs.devbie.auth.exception;
 
-import underdogs.devbie.exception.ForbiddenException;
+import exception.ForbiddenException;
 
 public class InvalidAuthenticationException extends ForbiddenException {
 

@@ -1,4 +1,4 @@
-package underdogs.devbie.exception;
+package exception;
 
 public class ForbiddenException extends RuntimeException {
 

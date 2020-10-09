@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 public class AnswerTest {
 

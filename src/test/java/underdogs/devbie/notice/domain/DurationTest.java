@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 class DurationTest {
 

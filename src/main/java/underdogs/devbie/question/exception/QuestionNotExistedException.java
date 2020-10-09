@@ -1,6 +1,6 @@
 package underdogs.devbie.question.exception;
 
-import underdogs.devbie.exception.NotExistException;
+import exception.NotExistException;
 
 public class QuestionNotExistedException extends NotExistException {
 

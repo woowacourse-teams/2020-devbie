@@ -1,6 +1,6 @@
 package underdogs.devbie.question.exception;
 
-import underdogs.devbie.exception.BadRequestException;
+import exception.BadRequestException;
 
 public class QuestionNotMeetingEssentialsException extends BadRequestException {
 

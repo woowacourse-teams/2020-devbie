@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 class NoticeDescriptionTest {
 

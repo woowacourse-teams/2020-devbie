@@ -1,4 +1,4 @@
-package underdogs.devbie.exception;
+package exception;
 
 public class UnAuthorizedException extends RuntimeException {
 

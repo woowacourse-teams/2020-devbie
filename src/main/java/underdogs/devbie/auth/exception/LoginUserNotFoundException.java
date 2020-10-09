@@ -1,6 +1,6 @@
 package underdogs.devbie.auth.exception;
 
-import underdogs.devbie.exception.UnAuthorizedException;
+import exception.UnAuthorizedException;
 
 public class LoginUserNotFoundException extends UnAuthorizedException {
 

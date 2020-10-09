@@ -51,9 +51,12 @@ subprojects {
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
+
 }
 
 dependencies {
+    implementation project(':devbie-common')
+
     compile("com.querydsl:querydsl-jpa") // querydsl
     compile("com.querydsl:querydsl-apt") // querydsl
 

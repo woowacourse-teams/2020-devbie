@@ -1,6 +1,6 @@
 package underdogs.devbie.chat.exception;
 
-import underdogs.devbie.exception.NotExistException;
+import exception.NotExistException;
 
 public class SessionNotExistException extends NotExistException {
 

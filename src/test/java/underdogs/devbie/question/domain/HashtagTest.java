@@ -6,7 +6,7 @@ import static underdogs.devbie.question.domain.TagNameTest.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import underdogs.devbie.exception.CreateFailException;
+import exception.CreateFailException;
 
 class HashtagTest {
 
