@@ -133,12 +133,10 @@ jacocoTestCoverageVerification {
 
     violationRules {
         rule {
-            element = 'CLASS'
-
             limit {
                 counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.90
             }
 
             includes = ['*.domain.*']
