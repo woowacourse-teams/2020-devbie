@@ -1,5 +1,6 @@
 package underdogs.devbie.answer.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;
 
@@ -19,6 +20,7 @@ import lombok.ToString;
 public class AnswerContent {
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     public static AnswerContent from(String content) {

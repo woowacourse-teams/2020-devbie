@@ -21,7 +21,7 @@ import underdogs.devbie.question.exception.QuestionNotMeetingEssentialsException
 public class QuestionContent {
 
     @Lob
-    @Column(columnDefinition = "CLOB")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     public static QuestionContent from(String content) {

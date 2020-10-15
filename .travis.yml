@@ -17,11 +17,11 @@ git:
   submodules: false
 
 before_install:
-    - sed -i 's/github.com/'$GITHUB_INFO'@github.com/' .gitmodules
-    - git submodule update --init --recursive
-    - cd docker
-    - git checkout master
-    - cd ..
+  - sed -i 's/github.com/'$GITHUB_INFO'@github.com/' .gitmodules
+  - git submodule update --init --recursive
+  - cd docker
+  - git checkout master
+  - cd ..
 
 cache:
   directories:
@@ -32,12 +32,12 @@ script: "./gradlew clean build"
 
 after_success:
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then
-      cd docker;
-      git add .;
-      git commit -m "updated in travis";
-      git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
-      cd ..;
-      docker build -t kimseonggyu1/devbie:latest .;
-      docker login -u $DOCKER_USER -p $PASSWORD;
-      docker push kimseonggyu1/devbie:latest;
+    cd docker;
+    git add .;
+    git commit -m "updated in travis";
+    git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
+    cd ..;
+    docker build -t kimseonggyu1/devbie:latest .;
+    docker login -u $DOCKER_USER -p $PASSWORD;
+    docker push kimseonggyu1/devbie:latest;
     fi
