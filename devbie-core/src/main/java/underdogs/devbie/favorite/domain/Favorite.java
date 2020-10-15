@@ -10,6 +10,7 @@ import javax.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import underdogs.devbie.common.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
 @MappedSuperclass
