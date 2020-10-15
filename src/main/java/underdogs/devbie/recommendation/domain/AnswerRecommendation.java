@@ -3,6 +3,8 @@ package underdogs.devbie.recommendation.domain;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,6 +13,7 @@ import lombok.ToString;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
+@Table(indexes = @Index(name = "i_answer_recommendation", columnList = "userId, answerId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString

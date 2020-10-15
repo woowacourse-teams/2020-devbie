@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,6 +21,7 @@ import underdogs.devbie.recommendation.domain.RecommendationCount;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 
 @Entity
+@Table(indexes = @Index(name = "i_answer", columnList = "questionId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
