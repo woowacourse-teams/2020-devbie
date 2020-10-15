@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import underdogs.devbie.user.domain.RoleType;
+import underdogs.devbie.user.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

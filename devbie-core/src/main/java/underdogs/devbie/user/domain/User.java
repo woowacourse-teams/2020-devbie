@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import underdogs.devbie.auth.dto.UserInfoDto;
 import underdogs.devbie.common.BaseTimeEntity;
+import underdogs.devbie.user.RoleType;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
