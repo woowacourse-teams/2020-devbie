@@ -43,23 +43,6 @@ task buildFrontend(type: NpmTask, dependsOn: setUp) {
     args = ['run', 'build']
 }
 
-//if ("$System.env.DEVBIE_ENVIRONMENT" == "product"
-//        || "$System.env.DEVBIE_ENVIRONMENT" == "develop") {
-if (true) {
-    processResources.dependsOn 'buildFrontend'
-}
-
-def environment = '';
-
-if ("$System.env.DEVBIE_ENVIRONMENT" == "product") {
-    environment = 'product'
-}
-if ("$System.env.DEVBIE_ENVIRONMENT" == "develop") {
-    environment = 'develop'
-}
-
-applicationDefaultJvmArgs = ["-Dspring.profiles.active=" + environment];
-
 configurations {
     all {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
@@ -71,6 +54,31 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+subprojects {
+    group '2020-devbie'
+    version '1.0'
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        runtimeOnly 'com.h2database:h2:1.4.199'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
 }
 
 dependencies {

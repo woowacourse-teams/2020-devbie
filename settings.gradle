@@ -1,1 +1,5 @@
 rootProject.name = 'devbie'
+include 'devbie-common'
+include 'devbie-app-api'
+include 'devbie-core'
+
