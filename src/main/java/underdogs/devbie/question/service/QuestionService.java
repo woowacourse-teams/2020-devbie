@@ -2,6 +2,7 @@ package underdogs.devbie.question.service;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.exception.NotMatchedQuestionAuthorException;
 import underdogs.devbie.question.exception.QuestionNotExistedException;
+import underdogs.devbie.question.service.event.QuestionDeleteEvent;
 import underdogs.devbie.recommendation.domain.RecommendationType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.service.UserService;
@@ -29,6 +31,7 @@ public class QuestionService {
     private final UserService userService;
     private final QuestionHashtagService questionHashtagService;
     private final QuestionRepository questionRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long save(Long userId, QuestionCreateRequest request) {
@@ -87,6 +90,8 @@ public class QuestionService {
         validateQuestionAuthorOrAdmin(user, question);
 
         questionRepository.deleteById(questionId);
+
+        eventPublisher.publishEvent(new QuestionDeleteEvent(this, question.getHashtags()));
     }
 
     private void validateQuestionAuthorOrAdmin(User user, Question question) {
