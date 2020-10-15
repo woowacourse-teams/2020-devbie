@@ -18,7 +18,6 @@ import underdogs.devbie.exception.BadRequestException;
 import underdogs.devbie.favorite.domain.QuestionFavorite;
 import underdogs.devbie.favorite.domain.QuestionFavoriteRepository;
 import underdogs.devbie.question.service.QuestionService;
-import underdogs.devbie.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionFavoriteServiceTest {
@@ -29,14 +28,11 @@ class QuestionFavoriteServiceTest {
     QuestionFavoriteRepository questionFavoriteRepository;
 
     @Mock
-    UserService userService;
-
-    @Mock
     QuestionService questionService;
 
     @BeforeEach
     void setUp() {
-        questionFavoriteService = new QuestionFavoriteService(questionFavoriteRepository, userService, questionService);
+        questionFavoriteService = new QuestionFavoriteService(questionFavoriteRepository, questionService);
     }
 
     @DisplayName("질문 즐겨찾기 조회")

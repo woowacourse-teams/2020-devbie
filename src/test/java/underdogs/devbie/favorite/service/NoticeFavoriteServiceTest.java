@@ -18,7 +18,6 @@ import underdogs.devbie.exception.BadRequestException;
 import underdogs.devbie.favorite.domain.NoticeFavorite;
 import underdogs.devbie.favorite.domain.NoticeFavoriteRepository;
 import underdogs.devbie.notice.service.NoticeService;
-import underdogs.devbie.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class NoticeFavoriteServiceTest {
@@ -27,16 +26,13 @@ class NoticeFavoriteServiceTest {
 
     @Mock
     NoticeFavoriteRepository noticeFavoriteRepository;
-
-    @Mock
-    UserService userService;
-
+    
     @Mock
     NoticeService noticeService;
 
     @BeforeEach
     void setUp() {
-        noticeFavoriteService = new NoticeFavoriteService(noticeFavoriteRepository, userService, noticeService);
+        noticeFavoriteService = new NoticeFavoriteService(noticeFavoriteRepository, noticeService);
     }
 
     @DisplayName("공고 즐겨찾기 조회")

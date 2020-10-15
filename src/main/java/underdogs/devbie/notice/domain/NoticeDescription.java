@@ -33,7 +33,7 @@ public class NoticeDescription {
     private Set<Language> languages;
 
     @Lob
-    @Column(columnDefinition = "CLOB")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private ApplyUrl applyUrl;

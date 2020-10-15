@@ -3,6 +3,7 @@ package underdogs.devbie.notice.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,8 +25,10 @@ public class Duration {
     @Enumerated(value = EnumType.STRING)
     private RecruitmentType recruitmentType;
 
+    @Column(columnDefinition = "DATETIME")
     private LocalDate startDate;
 
+    @Column(columnDefinition = "DATETIME")
     private LocalDate endDate;
 
     public Duration(RecruitmentType recruitmentType, LocalDate startDate, LocalDate endDate) {

@@ -172,3 +172,6 @@ logs
 
 # infra
 nohup.out
+
+# local docker
+docker/local/**
