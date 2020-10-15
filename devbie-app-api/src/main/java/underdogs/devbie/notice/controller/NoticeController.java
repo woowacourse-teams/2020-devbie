@@ -32,7 +32,7 @@ import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @RestController

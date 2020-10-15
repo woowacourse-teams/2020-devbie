@@ -29,7 +29,7 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.service.QuestionService;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @RestController

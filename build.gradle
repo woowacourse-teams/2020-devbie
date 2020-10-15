@@ -54,6 +54,8 @@ subprojects {
 dependencies {
     implementation project(':devbie-common')
     implementation project(':devbie-core')
+    implementation project(':devbie-app-api')
+    implementation project(':devbie-app-chat')
 
     compile("com.querydsl:querydsl-jpa") // querydsl
     compile("com.querydsl:querydsl-apt") // querydsl

@@ -1,4 +1,4 @@
-package underdogs.devbie.user.domain;
+package type;
 
 public enum RoleType {
 

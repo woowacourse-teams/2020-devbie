@@ -23,7 +23,7 @@ import underdogs.devbie.question.dto.HashtagResponse;
 import underdogs.devbie.question.dto.HashtagResponses;
 import underdogs.devbie.question.dto.HashtagUpdateRequest;
 import underdogs.devbie.question.service.HashtagService;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 
 @RestController
 @RequiredArgsConstructor

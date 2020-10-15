@@ -9,7 +9,7 @@ import org.springframework.web.method.HandlerMethod;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.exception.NotExistUserRoleException;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 
 @Component
 public class InterceptorValidator {

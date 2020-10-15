@@ -32,7 +32,7 @@ import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.user.dto.UserCreateRequest;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

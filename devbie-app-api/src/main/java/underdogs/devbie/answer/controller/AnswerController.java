@@ -26,7 +26,7 @@ import underdogs.devbie.answer.service.AnswerService;
 import underdogs.devbie.auth.controller.interceptor.annotation.NoValidate;
 import underdogs.devbie.auth.controller.interceptor.annotation.Role;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 import underdogs.devbie.user.domain.User;
 
 @RestController

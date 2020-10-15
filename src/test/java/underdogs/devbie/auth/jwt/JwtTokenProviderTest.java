@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import io.jsonwebtoken.Claims;
 import underdogs.devbie.auth.dto.UserTokenDto;
 import underdogs.devbie.auth.exception.AccessTokenLoadException;
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 import underdogs.devbie.user.domain.User;
 
 class JwtTokenProviderTest {

@@ -1,4 +1,4 @@
-package underdogs.devbie.auth.exception;
+package underdogs.devbie.answer.exception;
 
 import underdogs.devbie.exception.ForbiddenException;
 

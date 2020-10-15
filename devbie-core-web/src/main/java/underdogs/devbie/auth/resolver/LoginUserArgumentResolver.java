@@ -1,4 +1,4 @@
-package underdogs.devbie.auth.controller.resolver;
+package underdogs.devbie.auth.resolver;
 
 import static org.springframework.web.context.request.RequestAttributes.*;
 

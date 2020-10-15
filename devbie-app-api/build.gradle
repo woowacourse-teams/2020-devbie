@@ -2,8 +2,8 @@ dependencies {
     implementation project(':devbie-core')
     implementation project(':devbie-common')
     implementation project(':devbie-s3-client')
+    implementation project(':devbie-core-web')
 
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'

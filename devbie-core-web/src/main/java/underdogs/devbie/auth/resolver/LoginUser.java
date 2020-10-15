@@ -1,4 +1,4 @@
-package underdogs.devbie.auth.controller.resolver;
+package underdogs.devbie.auth.resolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

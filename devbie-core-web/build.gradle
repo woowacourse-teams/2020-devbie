@@ -1,0 +1,11 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation project(':devbie-common')
+    implementation project(':devbie-core')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile 'org.springframework.boot:spring-boot-starter-web'
+}

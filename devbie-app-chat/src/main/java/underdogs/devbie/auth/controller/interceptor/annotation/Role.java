@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import underdogs.devbie.user.domain.RoleType;
+import type.RoleType;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

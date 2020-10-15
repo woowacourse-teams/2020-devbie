@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import underdogs.devbie.auth.controller.resolver.LoginUser;
-import underdogs.devbie.auth.exception.InvalidAuthenticationException;
+import underdogs.devbie.answer.exception.InvalidAuthenticationException;
 import underdogs.devbie.favorite.service.FavoriteService;
 import underdogs.devbie.user.domain.User;
 
