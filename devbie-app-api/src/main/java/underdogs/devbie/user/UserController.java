@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.LoginUser;
 import underdogs.devbie.auth.NoValidate;
-import underdogs.devbie.aws.S3Service;
+import underdogs.devbie.s3.S3Service;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserResponse;

@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.LoginUser;
 import underdogs.devbie.auth.NoValidate;
 import underdogs.devbie.auth.Role;
-import underdogs.devbie.aws.S3Service;
 import underdogs.devbie.notice.dto.CustomPageRequest;
 import underdogs.devbie.notice.dto.FilterResponses;
 import underdogs.devbie.notice.dto.ImageUploadRequest;
@@ -32,6 +31,7 @@ import underdogs.devbie.notice.dto.NoticeReadRequest;
 import underdogs.devbie.notice.dto.NoticeResponses;
 import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
+import underdogs.devbie.s3.S3Service;
 import underdogs.devbie.user.RoleType;
 import underdogs.devbie.user.domain.User;
 

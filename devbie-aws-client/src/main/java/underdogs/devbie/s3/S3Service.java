@@ -1,4 +1,4 @@
-package underdogs.devbie.aws;
+package underdogs.devbie.s3;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 @Service
 public class S3Service {
-    //todo 내부모듈로 가야할듯
+
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.region.static:sample}")

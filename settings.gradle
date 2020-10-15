@@ -3,4 +3,5 @@ include 'devbie-common'
 include 'devbie-app-api'
 include 'devbie-core'
 include 'devbie-core-web'
+include 'devbie-aws-client'
 

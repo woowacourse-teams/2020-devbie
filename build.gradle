@@ -43,15 +43,6 @@ task buildFrontend(type: NpmTask, dependsOn: setUp) {
     args = ['run', 'build']
 }
 
-configurations {
-    all {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -72,75 +63,75 @@ subprojects {
 
     dependencies {
         compileOnly 'org.projectlombok:lombok'
+        compile 'org.springframework.boot:spring-boot-starter-log4j2'
         annotationProcessor 'org.projectlombok:lombok'
-        runtimeOnly 'com.h2database:h2:1.4.199'
+        runtimeOnly 'com.h2database:h2'
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
     }
 
+    configurations {
+        all {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        }
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "failed"
+            exceptionFormat "full"
+        }
+        finalizedBy 'jacocoTestReport'
+    }
+
+    jacoco {
+        toolVersion = "0.8.5"
+    }
+
+    jacocoTestReport {
+        reports {
+            html.enabled true
+        }
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        def Qdomains = []
+        for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
+            Qdomains.add(qPattern + "*")
+        }
+
+        violationRules {
+            rule {
+                element = 'CLASS'
+
+                limit {
+                    counter = 'INSTRUCTION'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+
+                includes = ['*.domain.*']
+                excludes = [] + Qdomains
+            }
+        }
+    }
 }
 
 dependencies {
-
-
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    compileOnly 'org.projectlombok:lombok'
-    compile 'org.springframework.boot:spring-boot-starter-log4j2'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'
-
-    compile "org.flywaydb:flyway-core"
     compile 'mysql:mysql-connector-java'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'io.rest-assured:rest-assured:3.3.0'
-
 }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "failed"
-        exceptionFormat "full"
-    }
-    finalizedBy 'jacocoTestReport'
-}
-
-jacoco {
-    toolVersion = "0.8.5"
-}
-
-jacocoTestReport {
-    reports {
-        html.enabled true
-    }
-    finalizedBy 'jacocoTestCoverageVerification'
-}
-
-jacocoTestCoverageVerification {
-    def Qdomains = []
-    for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
-        Qdomains.add(qPattern + "*")
-    }
-
-    violationRules {
-        rule {
-            element = 'CLASS'
-
-            limit {
-                counter = 'INSTRUCTION'
-                value = 'COVEREDRATIO'
-                minimum = 0.80
-            }
-
-            includes = ['*.domain.*']
-            excludes = [] + Qdomains
-        }
-    }
-}
 
