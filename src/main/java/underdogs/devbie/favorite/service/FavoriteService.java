@@ -8,14 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import underdogs.devbie.exception.NotExistException;
 import underdogs.devbie.favorite.domain.Favorite;
 import underdogs.devbie.favorite.domain.FavoriteRepository;
-import underdogs.devbie.user.service.UserService;
 
 @Service
 @Transactional(readOnly = true)
 public abstract class FavoriteService<T extends Favorite> {
 
     protected FavoriteRepository favoriteRepository;
-    protected UserService userService;
 
     public abstract Object findFavorites(Long userId);
 

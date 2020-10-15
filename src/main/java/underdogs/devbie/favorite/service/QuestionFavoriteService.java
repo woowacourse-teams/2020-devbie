@@ -11,17 +11,15 @@ import underdogs.devbie.favorite.domain.QuestionFavorite;
 import underdogs.devbie.favorite.domain.QuestionFavoriteRepository;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.service.QuestionService;
-import underdogs.devbie.user.service.UserService;
 
 @Service
 public class QuestionFavoriteService extends FavoriteService {
 
     private QuestionService questionService;
 
-    public QuestionFavoriteService(QuestionFavoriteRepository questionFavoriteRepository, UserService userService,
+    public QuestionFavoriteService(QuestionFavoriteRepository questionFavoriteRepository,
         QuestionService questionService) {
         this.favoriteRepository = questionFavoriteRepository;
-        this.userService = userService;
         this.questionService = questionService;
     }
 
