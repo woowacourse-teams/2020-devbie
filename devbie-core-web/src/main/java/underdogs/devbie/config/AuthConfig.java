@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
 
 @Configuration
 @RequiredArgsConstructor
