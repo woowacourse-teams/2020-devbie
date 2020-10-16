@@ -17,6 +17,13 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'application'
+    id "org.sonarqube" version "2.7"
+}
+
+sonarqube {
+    properties {
+        property "sonar.exclusions", "**/src/test/**/*.java, **/src/frontend/**/*"
+    }
 }
 
 group = 'underdogs'

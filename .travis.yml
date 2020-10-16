@@ -31,13 +31,14 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
+  - ./gradlew sonarqube -Dsonar.projectKey=devbie-sonarqube -Dsonar.host.url=http://3.34.66.245:8000 -Dsonar.login=$SONAR_TOKEN
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then
-    cd docker;
-    git add .;
-    git commit -m "updated in travis";
-    git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
-    cd ..;
-    docker build -t kimseonggyu1/devbie:latest .;
-    docker login -u $DOCKER_USER -p $PASSWORD;
-    docker push kimseonggyu1/devbie:latest;
-    fi
+  cd docker;
+  git add .;
+  git commit -m "updated in travis";
+  git push https://$GITHUB_INFO@github.com/KimSeongGyu1/devbie_docker;
+  cd ..;
+  docker build -t kimseonggyu1/devbie:latest .;
+  docker login -u $DOCKER_USER -p $PASSWORD;
+  docker push kimseonggyu1/devbie:latest;
+  fi
