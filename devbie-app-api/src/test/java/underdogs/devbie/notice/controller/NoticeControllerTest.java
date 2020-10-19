@@ -30,9 +30,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
-import underdogs.devbie.aws.S3Service;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.notice.NoticeController;
 import underdogs.devbie.notice.domain.Company;
 import underdogs.devbie.notice.domain.Duration;
 import underdogs.devbie.notice.domain.JobPosition;
@@ -52,6 +52,7 @@ import underdogs.devbie.notice.dto.NoticeUpdateRequest;
 import underdogs.devbie.notice.service.NoticeService;
 import underdogs.devbie.notice.vo.JobPositionPair;
 import underdogs.devbie.notice.vo.LanguagePair;
+import underdogs.devbie.s3.S3Service;
 
 @WebMvcTest(controllers = NoticeController.class)
 public class NoticeControllerTest extends MvcTest {

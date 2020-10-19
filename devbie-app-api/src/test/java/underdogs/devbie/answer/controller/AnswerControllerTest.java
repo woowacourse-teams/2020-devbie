@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
+import underdogs.devbie.answer.AnswerController;
 import underdogs.devbie.answer.domain.Answer;
 import underdogs.devbie.answer.domain.AnswerContent;
 import underdogs.devbie.answer.domain.Answers;
@@ -28,8 +29,8 @@ import underdogs.devbie.answer.dto.AnswerResponse;
 import underdogs.devbie.answer.dto.AnswerResponses;
 import underdogs.devbie.answer.dto.AnswerUpdateRequest;
 import underdogs.devbie.answer.service.AnswerService;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.user.domain.User;
 
 @WebMvcTest(controllers = AnswerController.class)

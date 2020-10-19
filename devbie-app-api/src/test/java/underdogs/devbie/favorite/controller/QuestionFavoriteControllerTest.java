@@ -1,10 +1,9 @@
-package underdogs.devbie.recommendation.controller;
+package underdogs.devbie.favorite.controller;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static underdogs.devbie.recommendation.acceptance.RecommendationAcceptanceTest.*;
-import static underdogs.devbie.user.domain.UserTest.*;
+import static underdogs.devbie.user.controller.UserControllerTest.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,15 +11,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
-import underdogs.devbie.recommendation.service.AnswerRecommendationService;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.favorite.QuestionFavoriteController;
+import underdogs.devbie.favorite.service.QuestionFavoriteService;
 import underdogs.devbie.user.domain.User;
 
-@WebMvcTest(AnswerRecommendationController.class)
-class AnswerRecommendationControllerTest extends MvcTest {
+@WebMvcTest(QuestionFavoriteController.class)
+class QuestionFavoriteControllerTest extends MvcTest {
 
-    private static final String URL = "/api/recommendation-answer?objectId=1";
+    private static String URL = "/api/favorite-question?objectType=question";
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
@@ -29,11 +29,11 @@ class AnswerRecommendationControllerTest extends MvcTest {
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @MockBean
-    private AnswerRecommendationService answerRecommendationService;
+    private QuestionFavoriteService questionFavoriteService;
 
-    @DisplayName("추천")
+    @DisplayName("질문 즐겨 찾기 추가")
     @Test
-    void createRecommendation() throws Exception {
+    void createFavorite() throws Exception {
         User user = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
@@ -44,15 +44,12 @@ class AnswerRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        String inputJson = String.format(RECOMMENDATION_TYPE_FORMAT, RECOMMENDATION);
-
-        putAction(URL, inputJson, "")
-            .andExpect(status().isNoContent());
+        postAction(URL + "&objectId=" + 1L).andExpect(status().isCreated());
     }
 
-    @DisplayName("추천 삭제")
+    @DisplayName("질문 즐겨 찾기 삭제")
     @Test
-    void deleteRecommendation() throws Exception {
+    public void deleteFavorite() throws Exception {
         User user = User.builder()
             .id(1L)
             .oauthId(TEST_OAUTH_ID)
@@ -63,7 +60,8 @@ class AnswerRecommendationControllerTest extends MvcTest {
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        deleteAction(URL, "")
+        deleteAction(URL + "&objectId=" + 1L, "")
             .andExpect(status().isNoContent());
     }
+
 }

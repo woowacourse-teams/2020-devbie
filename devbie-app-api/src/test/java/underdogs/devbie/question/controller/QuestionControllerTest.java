@@ -5,12 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static underdgos.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
-import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
-import static underdogs.devbie.question.service.QuestionServiceTest.*;
-import static underdogs.devbie.user.domain.UserTest.*;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +22,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.question.QuestionController;
 import underdogs.devbie.question.domain.Question;
 import underdogs.devbie.question.domain.QuestionContent;
 import underdogs.devbie.question.domain.QuestionHashtags;
@@ -36,10 +36,13 @@ import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
 import underdogs.devbie.question.dto.QuestionUpdateRequest;
 import underdogs.devbie.question.service.QuestionService;
+import underdogs.devbie.user.controller.UserControllerTest;
 import underdogs.devbie.user.domain.User;
 
 @WebMvcTest(QuestionController.class)
 class QuestionControllerTest extends MvcTest {
+
+    private static final Set<String> TEST_HASHTAGS = Sets.newSet("java", "network");
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -56,8 +59,8 @@ class QuestionControllerTest extends MvcTest {
     void setUp() {
         User user = User.builder()
             .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
+            .oauthId(UserControllerTest.TEST_OAUTH_ID)
+            .email(UserControllerTest.TEST_USER_EMAIL)
             .build();
         given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
@@ -144,7 +147,7 @@ class QuestionControllerTest extends MvcTest {
             .hashtags(Sets.newSet("kotlin"))
             .build();
         String inputJson = objectMapper.writeValueAsString(request);
-        
+
         willDoNothing().given(questionService).update(anyLong(), anyLong(), any(QuestionUpdateRequest.class));
 
         patchAction("/api/questions/1", inputJson, TEST_TOKEN)

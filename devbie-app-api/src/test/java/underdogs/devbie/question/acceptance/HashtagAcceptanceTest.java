@@ -71,7 +71,8 @@ public class HashtagAcceptanceTest extends AcceptanceTest {
             dynamicTest("이름으로 해시태그 조회", () -> {
                 HashtagResponses hashtagResponses = get("/api/hashtags", HashtagResponses.class);
                 HashtagResponse firstHashtag = hashtagResponses.getHashtags().get(0);
-                HashtagResponse hashtagResponse = get("/api/hashtags?tagName=" + firstHashtag.getTagName(), HashtagResponse.class);
+                HashtagResponse hashtagResponse = get("/api/hashtags?tagName=" + firstHashtag.getTagName(),
+                    HashtagResponse.class);
 
                 assertAll(
                     () -> assertThat(hashtagResponse.getId()).isEqualTo(firstHashtag.getId()),

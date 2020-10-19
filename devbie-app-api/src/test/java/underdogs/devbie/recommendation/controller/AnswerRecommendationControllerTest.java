@@ -1,9 +1,8 @@
-package underdogs.devbie.favorite.controller;
+package underdogs.devbie.recommendation.controller;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,15 +10,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
-import underdogs.devbie.favorite.service.QuestionFavoriteService;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.recommendation.AnswerRecommendationController;
+import underdogs.devbie.recommendation.acceptance.RecommendationAcceptanceTest;
+import underdogs.devbie.recommendation.service.AnswerRecommendationService;
+import underdogs.devbie.user.controller.UserControllerTest;
 import underdogs.devbie.user.domain.User;
 
-@WebMvcTest(QuestionFavoriteController.class)
-class QuestionFavoriteControllerTest extends MvcTest {
+@WebMvcTest(AnswerRecommendationController.class)
+class AnswerRecommendationControllerTest extends MvcTest {
 
-    private static String URL = "/api/favorite-question?objectType=question";
+    private static final String URL = "/api/recommendation-answer?objectId=1";
 
     @MockBean
     private BearerAuthInterceptor bearerAuthInterceptor;
@@ -28,39 +30,42 @@ class QuestionFavoriteControllerTest extends MvcTest {
     private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @MockBean
-    private QuestionFavoriteService questionFavoriteService;
+    private AnswerRecommendationService answerRecommendationService;
 
-    @DisplayName("질문 즐겨 찾기 추가")
+    @DisplayName("추천")
     @Test
-    void createFavorite() throws Exception {
+    void createRecommendation() throws Exception {
         User user = User.builder()
             .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
+            .oauthId(UserControllerTest.TEST_OAUTH_ID)
+            .email(UserControllerTest.TEST_USER_EMAIL)
             .build();
 
         given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
         given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        postAction(URL + "&objectId=" + 1L).andExpect(status().isCreated());
-    }
+        String inputJson = String.format(RecommendationAcceptanceTest.RECOMMENDATION_TYPE_FORMAT,
+            RecommendationAcceptanceTest.RECOMMENDATION);
 
-    @DisplayName("질문 즐겨 찾기 삭제")
-    @Test
-    public void deleteFavorite() throws Exception {
-        User user = User.builder()
-            .id(1L)
-            .oauthId(TEST_OAUTH_ID)
-            .email(TEST_USER_EMAIL)
-            .build();
-
-        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
-        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
-        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-
-        deleteAction(URL + "&objectId=" + 1L, "")
+        putAction(URL, inputJson, "")
             .andExpect(status().isNoContent());
     }
 
+    @DisplayName("추천 삭제")
+    @Test
+    void deleteRecommendation() throws Exception {
+        User user = User.builder()
+            .id(1L)
+            .oauthId(UserControllerTest.TEST_OAUTH_ID)
+            .email(UserControllerTest.TEST_USER_EMAIL)
+            .build();
+
+        given(bearerAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        given(loginUserArgumentResolver.supportsParameter(any())).willReturn(true);
+        given(loginUserArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        deleteAction(URL, "")
+            .andExpect(status().isNoContent());
+    }
 }

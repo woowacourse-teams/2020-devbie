@@ -61,7 +61,8 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 createQuestion(TEST_QUESTION_TITLE);
             }),
             dynamicTest("전체 질문 조회", () -> {
-                QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=", QuestionResponses.class);
+                QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=",
+                    QuestionResponses.class);
 
                 QuestionResponse firstQuestion = questions.getQuestions().get(0);
                 assertAll(
@@ -71,8 +72,9 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 );
             }),
             dynamicTest("특정 질문 검색", () -> {
-                QuestionResponses searchedQuestions = get("/api/questions?title=" + SEARCH_KEYWORD + "&content=" + SEARCH_KEYWORD
-                    + "&page=1&orderBy=CREATED_DATE",
+                QuestionResponses searchedQuestions = get(
+                    "/api/questions?title=" + SEARCH_KEYWORD + "&content=" + SEARCH_KEYWORD
+                        + "&page=1&orderBy=CREATED_DATE",
                     QuestionResponses.class);
 
                 assertAll(
@@ -118,7 +120,8 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 QuestionResponse firstQuestion = fetchFirstQuestion();
                 delete("/api/questions/" + firstQuestion.getId());
 
-                QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=", QuestionResponses.class);
+                QuestionResponses questions = get("/api/questions?page=1&orderBy=CREATED_DATE&title=&content=",
+                    QuestionResponses.class);
 
                 assertThat(questions.getQuestions()).hasSize(1);
             })

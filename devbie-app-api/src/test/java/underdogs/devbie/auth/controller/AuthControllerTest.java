@@ -12,9 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.MvcTest;
+import underdogs.devbie.auth.AuthController;
 import underdogs.devbie.auth.dto.JwtTokenResponse;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
 import underdogs.devbie.auth.service.AuthService;
 
 @WebMvcTest(AuthController.class)

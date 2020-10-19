@@ -5,7 +5,6 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
-import static underdogs.devbie.user.domain.UserTest.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,30 +17,30 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
-import underdogs.devbie.aws.S3Service;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.s3.S3Service;
+import underdogs.devbie.user.UserController;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 import underdogs.devbie.user.dto.UserUpdateInfoRequest;
 import underdogs.devbie.user.service.UserService;
 
 @WebMvcTest(UserController.class)
-class UserControllerTest extends MvcTest {
+public class UserControllerTest extends MvcTest {
 
-    @MockBean
-    private BearerAuthInterceptor bearerAuthInterceptor;
-
-    @MockBean
-    private LoginUserArgumentResolver loginUserArgumentResolver;
-
-    @MockBean
-    private UserService userService;
-
-    @MockBean
-    private S3Service s3Service;
+    public static final String TEST_USER_EMAIL = "underdogs@devbie.link";
+    public static final String TEST_OAUTH_ID = "TEST_OAUTH_ID";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @MockBean
+    private BearerAuthInterceptor bearerAuthInterceptor;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
+    @MockBean
+    private UserService userService;
+    @MockBean
+    private S3Service s3Service;
 
     @BeforeEach
     void setUp() {

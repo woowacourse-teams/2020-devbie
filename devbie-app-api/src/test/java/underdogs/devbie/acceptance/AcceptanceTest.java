@@ -1,6 +1,6 @@
 package underdogs.devbie.acceptance;
 
-import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
+import static underdgos.devbie.question.acceptance.QuestionAcceptanceTest.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ import underdogs.devbie.notice.dto.NoticeCreateRequest;
 import underdogs.devbie.question.dto.QuestionCreateRequest;
 import underdogs.devbie.question.dto.QuestionResponse;
 import underdogs.devbie.question.dto.QuestionResponses;
-import underdogs.devbie.user.domain.RoleType;
+import underdogs.devbie.user.RoleType;
 import underdogs.devbie.user.domain.User;
 import underdogs.devbie.user.dto.UserCreateRequest;
 
