@@ -1,6 +1,6 @@
 package underdogs.devbie.acceptance;
 
-import static underdgos.devbie.question.acceptance.QuestionAcceptanceTest.*;
+import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 
 import java.util.List;
 import java.util.stream.Collectors;

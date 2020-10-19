@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@Profile(value="production")
+@Profile(value = "production")
 @PropertySource({"classpath:properties/production/application.properties"})
 public class ProfileProduction {
 }

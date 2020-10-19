@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
-import static underdogs.devbie.question.domain.TagNameTest.*;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +17,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import underdogs.devbie.MvcTest;
-import underdogs.devbie.auth.controller.interceptor.BearerAuthInterceptor;
-import underdogs.devbie.auth.controller.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.auth.interceptor.BearerAuthInterceptor;
+import underdogs.devbie.auth.resolver.LoginUserArgumentResolver;
+import underdogs.devbie.question.HashtagController;
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.TagName;
 import underdogs.devbie.question.dto.HashtagCreateRequest;
@@ -30,6 +30,8 @@ import underdogs.devbie.question.service.HashtagService;
 
 @WebMvcTest(HashtagController.class)
 class HashtagControllerTest extends MvcTest {
+
+    private static final String TEST_HASHTAG_NAME = "test tagname";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static underdgos.devbie.question.acceptance.QuestionAcceptanceTest.*;
 import static underdogs.devbie.auth.controller.AuthControllerTest.*;
+import static underdogs.devbie.question.acceptance.QuestionAcceptanceTest.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
