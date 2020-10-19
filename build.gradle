@@ -22,7 +22,15 @@ plugins {
 
 sonarqube {
     properties {
-        property "sonar.exclusions", "**/src/test/**/*.java, **/src/frontend/**/*"
+        property "sonar.host.url", "http://3.34.66.245:8000"
+        property "sonar.login", "34546e1ca530e25c6d1481fd76fc4ad32d7cfdf0"        // 로그인 id 또는 인증토큰
+        property "sonar.sources", "src"
+        property "sonar.language", "java"
+        property "sonar.projectVersion", "1.0"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.profile", "Sonar way"
+        property "sonar.test.inclusions", "**/*Test.java"
+        property "sonar.exclusions", "**/src/frontend/**/*"
     }
 }
 
