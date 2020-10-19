@@ -1,6 +1,11 @@
 buildscript {
+    def props = new Properties()
+    file('src/main/resources/properties/local/application.properties').withInputStream {
+        props.load(it)
+    }
     ext {
         querydslPluginVersion = '1.0.10'
+        sonarToken = props['sonar.token']
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
@@ -23,7 +28,7 @@ plugins {
 sonarqube {
     properties {
         property "sonar.host.url", "http://3.34.66.245:8000"
-        property "sonar.login", "34546e1ca530e25c6d1481fd76fc4ad32d7cfdf0"        // 로그인 id 또는 인증토큰
+        property "sonar.login", "${sonarToken}"
         property "sonar.sources", "src"
         property "sonar.language", "java"
         property "sonar.projectVersion", "1.0"
