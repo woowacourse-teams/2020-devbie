@@ -1,6 +1,11 @@
 buildscript {
+    def props = new Properties()
+    file('src/main/resources/properties/local/application.properties').withInputStream {
+        props.load(it)
+    }
     ext {
         querydslPluginVersion = '1.0.10'
+        sonarToken = props['sonar.token']
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
@@ -17,6 +22,21 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'application'
+    id "org.sonarqube" version "2.7"
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "http://3.34.66.245:8000"
+        property "sonar.login", "${sonarToken}"
+        property "sonar.sources", "src"
+        property "sonar.language", "java"
+        property "sonar.projectVersion", "1.0"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.profile", "Sonar way"
+        property "sonar.test.inclusions", "**/*Test.java"
+        property "sonar.exclusions", "**/src/frontend/**/*"
+    }
 }
 
 group = 'underdogs'
