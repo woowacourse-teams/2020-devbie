@@ -1,0 +1,6 @@
+[submodule "docker"]
+	path = docker
+	url = https://github.com/KimSeongGyu1/devbie_docker
+[submodule "devbie-app-api/src/main/resources/properties"]
+	path = devbie-app-api/src/main/resources/properties
+	url = https://github.com/KimSeongGyu1/devbie_properties
