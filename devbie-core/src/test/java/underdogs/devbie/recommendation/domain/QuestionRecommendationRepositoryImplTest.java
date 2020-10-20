@@ -3,27 +3,23 @@ package underdogs.devbie.recommendation.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-@SpringBootTest
+@DataJpaTest
 class QuestionRecommendationRepositoryImplTest {
-
-    @Autowired
-    private EntityManager em;
 
     @Qualifier("questionRecommendationRepository")
     @Autowired
     private RecommendationRepository repository;
 
+    @Autowired
     private JPAQueryFactory jpaQueryFactory;
     private QuestionRecommendationRepositoryImpl repositoryImpl;
 
@@ -31,7 +27,6 @@ class QuestionRecommendationRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        jpaQueryFactory = new JPAQueryFactory(em);
         repositoryImpl = new QuestionRecommendationRepositoryImpl(jpaQueryFactory);
 
         recommendation = QuestionRecommendation.of(1L, 1L, RecommendationType.RECOMMENDED);

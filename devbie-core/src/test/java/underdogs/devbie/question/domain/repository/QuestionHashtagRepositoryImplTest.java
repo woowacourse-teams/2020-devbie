@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.assertj.core.util.Lists;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import underdogs.devbie.question.domain.Hashtag;
 import underdogs.devbie.question.domain.Question;
@@ -24,14 +25,14 @@ import underdogs.devbie.question.domain.QuestionHashtags;
 import underdogs.devbie.question.domain.QuestionTitle;
 import underdogs.devbie.question.domain.TagName;
 
-@SpringBootTest
+@DataJpaTest
 @Transactional
 class QuestionHashtagRepositoryImplTest {
 
     @Autowired
     private QuestionHashtagRepository questionHashtagRepository;
 
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
 
     private Question question1;
