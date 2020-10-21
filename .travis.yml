@@ -31,6 +31,7 @@ cache:
 script: "./gradlew clean build"
 
 after_success:
+  - ./gradlew sonarqube -Dsonar.projectKey=devbie-sonarqube -Dsonar.host.url=http://3.34.66.245:8000 -Dsonar.login=$SONAR_TOKEN
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then
     cd docker;
     git add .;

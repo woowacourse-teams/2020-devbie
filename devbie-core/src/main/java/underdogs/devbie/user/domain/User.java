@@ -6,6 +6,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ import underdogs.devbie.common.BaseTimeEntity;
 import underdogs.devbie.user.RoleType;
 
 @Entity
+@Table(indexes = @Index(name = "i_user", columnList = "oauthId"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

@@ -10,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,6 +22,7 @@ import underdogs.devbie.common.BaseTimeEntity;
 import underdogs.devbie.exception.CreateFailException;
 
 @Entity
+@Table(indexes = @Index(name = "i_notice", columnList = "noticeType, jobPosition"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
