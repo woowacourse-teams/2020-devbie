@@ -54,6 +54,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
 
     sourceCompatibility = 1.8
 
@@ -80,48 +81,48 @@ subprojects {
             extendsFrom annotationProcessor
         }
     }
-//
-//    test {
-//        useJUnitPlatform()
-//        testLogging {
-//            events "failed"
-//            exceptionFormat "full"
-//        }
-//        finalizedBy 'jacocoTestReport'
-//    }
-//
-//    jacoco {
-//        toolVersion = "0.8.5"
-//    }
-//
-//    jacocoTestReport {
-//        reports {
-//            html.enabled true
-//        }
-//        finalizedBy 'jacocoTestCoverageVerification'
-//    }
-//
-//    jacocoTestCoverageVerification {
-//        def Qdomains = []
-//        for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
-//            Qdomains.add(qPattern + "*")
-//        }
-//
-//        violationRules {
-//            rule {
-//                element = 'CLASS'
-//
-//                limit {
-//                    counter = 'INSTRUCTION'
-//                    value = 'COVEREDRATIO'
-//                    minimum = 0.80
-//                }
-//
-//                includes = ['*.domain.*']
-//                excludes = [] + Qdomains
-//            }
-//        }
-//    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "failed"
+            exceptionFormat "full"
+        }
+        finalizedBy 'jacocoTestReport'
+    }
+
+    jacoco {
+        toolVersion = "0.8.5"
+    }
+
+    jacocoTestReport {
+        reports {
+            html.enabled true
+        }
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        def Qdomains = []
+        for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
+            Qdomains.add(qPattern + "*")
+        }
+
+        violationRules {
+            rule {
+                element = 'CLASS'
+
+                limit {
+                    counter = 'INSTRUCTION'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+
+                includes = ['*.domain.*']
+                excludes = ['*.domain.*Impl*'] + Qdomains
+            }
+        }
+    }
 }
 
 dependencies {
