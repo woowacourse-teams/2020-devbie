@@ -1,6 +1,6 @@
 buildscript {
     def props = new Properties()
-    file('src/main/resources/properties/local/application.properties').withInputStream {
+    file('devbie-app-api/src/main/resources/properties/local/application.properties').withInputStream {
         props.load(it)
     }
     ext {
