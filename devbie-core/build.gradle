@@ -5,7 +5,6 @@ dependencies {
     compile("com.querydsl:querydsl-jpa") // querydsl
     compile("com.querydsl:querydsl-apt") // querydsl
 
-    implementation project(path: ':devbie-common', configuration: 'default')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -13,8 +12,6 @@ dependencies {
     // 고민되는 것들
 
     implementation('org.springframework.boot:spring-boot-starter-validation')
-
-    
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }

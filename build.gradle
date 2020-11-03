@@ -6,12 +6,15 @@ buildscript {
     ext {
         querydslPluginVersion = '1.0.10'
         sonarToken = props['sonar.token']
+        springBootVersion = '2.3.1.RELEASE'
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
     }
     dependencies {
         classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
     }
 }
 
@@ -38,10 +41,6 @@ sonarqube {
         property "sonar.exclusions", "**/src/frontend/**/*"
     }
 }
-
-group = 'underdogs'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
 
 node {
     version = '12.16.2'
@@ -75,6 +74,8 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
+    apply plugin: 'application'
+//    mainClassName = 'underdogs.devbie.DevbieApplication'
 
     sourceCompatibility = 1.8
 
@@ -142,6 +143,33 @@ subprojects {
                 excludes = ['*.domain.*Impl*'] + Qdomains
             }
         }
+    }
+}
+
+project(':devbie-app-api') {
+    dependencies {
+        compile project(':devbie-common')
+        compile project(':devbie-aws-client')
+        compile project(':devbie-core-web')
+        compile project(':devbie-core')
+    }
+}
+
+project(':devbie-aws-client') {
+    dependencies {
+        compile project(':devbie-common')
+    }
+}
+
+project(':devbie-core-web') {
+    dependencies {
+        compile project(':devbie-common')
+    }
+}
+
+project(':devbie-core') {
+    dependencies {
+        implementation project(path: ':devbie-common', configuration: 'default')
     }
 }
 
