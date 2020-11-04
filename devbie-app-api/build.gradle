@@ -1,9 +1,4 @@
 dependencies {
-    implementation project(':devbie-common')
-    implementation project(':devbie-core')
-    implementation project(':devbie-core-web')
-    implementation project(':devbie-aws-client')
-
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
