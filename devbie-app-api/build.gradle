@@ -9,7 +9,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-//    testImplementation 'io.rest-assured:restassured:3.3.0'
+
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
 
     // todo 고민되는 것
