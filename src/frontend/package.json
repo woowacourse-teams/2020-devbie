@@ -20,7 +20,7 @@
     "vue-analytics": "^5.22.1",
     "vue-mq": "^1.0.1",
     "vue-router": "^3.3.4",
-    "vuetify": "^2.3.4",
+    "vuetify": "^2.6.10",
     "vuex": "^3.5.1",
     "webstomp-client": "^1.2.6"
   },
